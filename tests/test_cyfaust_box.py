@@ -15,10 +15,11 @@ def test_create_source_from_boxes():
         assert "class mydsp : public dsp" in code
         print(code)
 
-# mixed functional / object-oriented way
+# mixed functional / object-oriented wa
+# note use of `par` abd `b.create_source()`
 def test_box_create_source():
     with box_context():
-        b = box_par(box_int(7), box_float(3.14))
+        b = box_int(7).par(box_float(3.14))
         assert b.is_valid, "box is not valid"
         print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
         code = b.create_source("test_dsp", "cpp")
