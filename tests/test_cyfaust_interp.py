@@ -46,8 +46,8 @@ def test_interp_from_file():
 
 
 
-def test_interp_from_string():
-    print_entry("test_interp_from_string")
+def test_interp_from_string1():
+    print_entry("test_interp_from_string1")
 
     # For bitcode file write/read test
     
@@ -76,6 +76,37 @@ def test_interp_from_string():
 
     audio.start()
     time.sleep(1)
+
+def test_interp_from_string2():
+    print_entry("test_interp_from_string2")
+
+    factory = interp.create_dsp_factory_from_string("FaustDSP", 
+        """process = 0,0 : soundfile("sound[url:{'tests/amen.wav'}]", 0);""")
+
+    assert factory
+        
+    print("compile options:", factory.get_compile_options())
+    print("library list:", factory.get_library_list())
+    print("include pathnames:", factory.get_include_pathnames())
+    print("name:", factory.get_name())
+    print("sha key", factory.get_sha_key())
+
+    dsp = factory.create_dsp_instance()
+
+    assert dsp
+    
+    dsp.build_user_interface()
+
+    audio = interp.RtAudioDriver(48000, 256)
+
+    audio.init(dsp)
+
+    audio.start()
+    # FIXME: sleep causes crash!
+    # time.sleep(1)
+    # audio.stop() 
+
+
 
 def test_interp_warning_message():
     print_entry("test_interp_warning_message")
@@ -122,7 +153,8 @@ def test_interp_from_bitcode_file():
 if __name__ == '__main__':
     print_section("testing cyfaust.interp")
     test_interp_from_file()
-    test_interp_from_string()
+    test_interp_from_string1()
+    test_interp_from_string2()
     test_interp_warning_message()
     test_interp_from_bitcode_file()
 

@@ -18,7 +18,7 @@ def test_create_source_from_boxes():
         code = create_source_from_boxes("test_dsp", b, "cpp")
         assert len(code) == 1960
         assert "class mydsp : public dsp" in code
-        print(code)
+        # print(code)
 
 # mixed functional / object-oriented wa
 # note use of `par` abd `b.create_source()`
@@ -33,7 +33,7 @@ def test_box_create_source():
         code = b.create_source("test_dsp", "cpp")
         assert len(code) == 1960
         assert "class mydsp : public dsp" in code
-        print(code)
+        # print(code)
 
 if __name__ == '__main__':
     print_section("testing cyfaust.box")
