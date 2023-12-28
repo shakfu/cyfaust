@@ -16,3 +16,7 @@ def print_section(msg):
 	print_line()
 	print(f"{BOLD_CYAN}>> {msg}{RESET}")
 
+def print_entry(msg):
+	print_line()
+	print(f"{BOLD}{msg}{RESET}")
+

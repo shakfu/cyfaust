@@ -200,7 +200,7 @@ cdef class InterpreterDspFactory:
     
     def get_warning_messages(self) -> list[str]:
         """Get warning messages list for a given compilation."""
-        return self.ptr.getWarningMessages()
+        return [msg.decode() for msg in self.ptr.getWarningMessages()]
 
     def create_dsp_instance(self) -> InterpreterDsp:
         """Create a new DSP instance, to be deleted with C++ 'delete'"""
@@ -317,7 +317,7 @@ cdef class InterpreterDspFactory:
             bit_code_path.encode('utf8'),
             error_msg,
         )
-        if error_msg.empty():
+        if not error_msg.empty():
             print(error_msg.decode())
             return
         return factory
@@ -338,7 +338,7 @@ cdef class InterpreterDspFactory:
             params.argv,
             error_msg,
         )
-        if error_msg.empty():
+        if not error_msg.empty():
             print(error_msg.decode())
             return
         return factory
