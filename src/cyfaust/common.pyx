@@ -24,10 +24,16 @@ cdef class ParamArray:
         for i in range(self.argc):
             self.argv[i] = PyUnicode_AsUTF8(ptuple[i])
 
+    def __iter__(self):
+        for i in range(self.argc):
+            yield self.argv[i].decode()
+
     def dump(self):
-        if self.argv:
-            for i in range(self.argc):
-                print(self.argv[i].decode())
+        for i in self:
+            print(i)
+
+    def as_list(self):
+        return list(self)
 
     def __dealloc__(self):
         if self.argv:

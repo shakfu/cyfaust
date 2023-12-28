@@ -16,7 +16,6 @@ from .signal cimport SignalVector
 from .signal import SignalVector
 
 
-
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust
 ##
@@ -345,7 +344,17 @@ cdef class InterpreterDspFactory:
 
     @staticmethod
     def from_bitcode(str bitcode) -> InterpreterDspFactory:
-        """Create a Faust DSP factory from a bitcode string."""
+        """Create a Faust DSP factory from a bitcode string.
+
+        Note that the library keeps an internal cache of all allocated factories so that
+        the compilation of the same DSP code (that is the same bitcode code string) will return
+        the same (reference counted) factory pointer.
+
+        bitcode - the bitcode string
+        error_msg - the error string to be filled
+
+        returns the DSP factory on success, otherwise a null pointer.
+        """
         cdef string error_msg
         error_msg.reserve(4096)
         cdef InterpreterDspFactory factory = InterpreterDspFactory.__new__(
@@ -422,7 +431,11 @@ cdef class InterpreterDsp:
         return InterpreterDsp.from_ptr(dsp)
 
     def build_user_interface(self):
-        """Trigger the ui_interface parameter with instance specific calls."""
+        """Trigger the ui_interface parameter with instance specific calls
+        to 'openTabBox', 'addButton', 'addVerticalSlider'... in order to build the UI.
+        
+        ui_interface - the user interface builder
+        """
         cdef fi.PrintUI ui_interface
         self.ptr.buildUserInterface(<fi.UI*>&ui_interface)
 
@@ -447,6 +460,14 @@ def create_dsp_factory_from_string(name_app: str, code: str, *args) -> Interpret
     """Create a Faust DSP factory from a DSP source code as a string."""
     return InterpreterDspFactory.from_string(name_app, code, *args)
 
+def create_dsp_factory_from_signals(str name_app, SignalVector signals, *args) -> InterpreterDspFactory:
+    """Create a Faust DSP factory from a vector of output signals."""
+    return InterpreterDspFactory.from_signals(name_app, signals, *args)
+
+def create_dsp_factory_from_boxes(str name_app, Box box, *args) -> InterpreterDspFactory:
+    """Create a Faust DSP factory from boxes."""
+    return InterpreterDspFactory.from_boxes(name_app, box, *args)
+
 def delete_all_dsp_factories():
     """Delete all Faust DSP factories kept in the library cache."""
     fi.deleteAllInterpreterDSPFactories()
@@ -463,50 +484,11 @@ def stop_multithreaded_access_mode():
     """Stop multi-thread access mode."""
     fi.stopMTDSPFactories()
 
-def create_interpreter_dsp_factory_from_signals(str name_app, SignalVector signals, *args) -> InterpreterDspFactory:
-    """Create a Faust DSP factory from a vector of output signals."""
-    cdef ParamArray params = ParamArray(args)
-    cdef string error_msg
-    error_msg.reserve(4096)
-    cdef fi.interpreter_dsp_factory *factory = fi.createInterpreterDSPFactoryFromSignals(
-        name_app.encode('utf8'),
-        <fs.tvec>signals.ptr, 
-        params.argc,
-        params.argv,
-        error_msg)
-    if not error_msg.empty():
-        print(error_msg.decode())
-        return
-    return InterpreterDspFactory.from_ptr(factory)
+def read_dsp_factory_from_bitcode(str bitcode) -> InterpreterDspFactory:
+    """Create a Faust DSP factory from a bitcode string."""
+    return InterpreterDspFactory.from_bitcode(bitcode)
 
-def create_interpreter_dsp_factory_from_boxes(str name_app, Box box, *args) -> InterpreterDspFactory:
-    """Create a Faust DSP factory from boxes."""
-    cdef ParamArray params = ParamArray(args)
-    cdef string error_msg
-    error_msg.reserve(4096)
-    cdef fi.interpreter_dsp_factory *factory = fi.createInterpreterDSPFactoryFromBoxes(
-        name_app.encode('utf8'),
-        box.ptr,
-        params.argc,
-        params.argv,
-        error_msg)
-    if not error_msg.empty():
-        print(error_msg.decode())
-        return
-    return InterpreterDspFactory.from_ptr(factory)
-
-## ---------------------------------------------------------------------------
-## faust/dsp/libfaust-box
-##
-
-# include "faust_box.pxi"
-
-
-
-## ---------------------------------------------------------------------------
-## faust/dsp/libfaust-signal
-##
-
-# include "faust_signal.pxi"
-
+def read_dsp_factory_from_bitcode_file(str bitcode_path) -> InterpreterDspFactory:
+    """Create a Faust DSP factory from a bitcode file."""
+    return InterpreterDspFactory.from_bitcode_file(bitcode_path)
 

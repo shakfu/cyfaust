@@ -27,6 +27,8 @@ def test_interp_from_file():
 
     dsp = factory.create_dsp_instance()
 
+    assert dsp
+
     # FIXME: doesn't work!!
     # ui = interp.PrintUI()
     # dsp.build_user_interface(ui)
@@ -63,6 +65,8 @@ def test_interp_from_string():
     print("sha key", factory.get_sha_key())
 
     dsp = factory.create_dsp_instance()
+
+    assert dsp
     
     dsp.build_user_interface()
 

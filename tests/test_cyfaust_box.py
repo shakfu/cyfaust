@@ -8,7 +8,9 @@ from testutils import print_section, print_entry
 
 # functional way
 def test_create_source_from_boxes():
+
     print_entry("test_create_source_from_boxes")
+
     with box_context():
         b = box_par(box_int(7), box_float(3.14))
         assert b.is_valid, "box is not valid"
@@ -21,7 +23,9 @@ def test_create_source_from_boxes():
 # mixed functional / object-oriented wa
 # note use of `par` abd `b.create_source()`
 def test_box_create_source():
+
     print_entry("test_box_create_source")
+
     with box_context():
         b = box_int(7).par(box_float(3.14))
         assert b.is_valid, "box is not valid"
