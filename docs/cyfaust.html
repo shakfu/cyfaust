@@ -1,0 +1,1591 @@
+Python Library Documentation: module cyfaust
+
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">cyfaust</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/Users/sa/Downloads/projects/faustlab/build/cyfaust.cpython-311-darwin.so">/Users/sa/Downloads/projects/faustlab/build/cyfaust.cpython-311-darwin.so</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="builtins.html">builtins</a><br>
+</td><td class="multicolumn"></td><td class="multicolumn"></td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="cyfaust.html#Box">Box</a>
+</dt><dt class="heading-text"><a href="cyfaust.html#InterpreterDsp">InterpreterDsp</a>
+</dt><dt class="heading-text"><a href="cyfaust.html#InterpreterDspFactory">InterpreterDspFactory</a>
+</dt><dt class="heading-text"><a href="cyfaust.html#Interval">Interval</a>
+</dt><dt class="heading-text"><a href="cyfaust.html#ParamArray">ParamArray</a>
+</dt><dt class="heading-text"><a href="cyfaust.html#RtAudioDriver">RtAudioDriver</a>
+</dt><dt class="heading-text"><a href="cyfaust.html#Signal">Signal</a>
+</dt><dt class="heading-text"><a href="cyfaust.html#SignalVector">SignalVector</a>
+</dt><dt class="heading-text"><a href="cyfaust.html#box_context">box_context</a>
+</dt><dt class="heading-text"><a href="cyfaust.html#signal_context">signal_context</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Box">class <strong>Box</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">faust&nbsp;<a href="#Box">Box</a>&nbsp;wrapper.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="Box-__add__"><strong>__add__</strong></a>(...)</dt><dd><span class="code">Add&nbsp;this&nbsp;box&nbsp;to&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Box-__and__"><strong>__and__</strong></a>(...)</dt><dd><span class="code">logical&nbsp;and&nbsp;with&nbsp;another&nbsp;box</span></dd></dl>
+
+<dl><dt><a name="Box-__eq__"><strong>__eq__</strong></a>(...)</dt><dd><span class="code">Compare&nbsp;for&nbsp;equality&nbsp;with&nbsp;another&nbsp;box.</span></dd></dl>
+
+<dl><dt><a name="Box-__ge__"><strong>__ge__</strong></a>(...)</dt><dd><span class="code">Is&nbsp;this&nbsp;box&nbsp;greater&nbsp;than&nbsp;or&nbsp;equal&nbsp;from&nbsp;another&nbsp;box.</span></dd></dl>
+
+<dl><dt><a name="Box-__gt__"><strong>__gt__</strong></a>(...)</dt><dd><span class="code">Is&nbsp;this&nbsp;box&nbsp;greater&nbsp;than&nbsp;another&nbsp;box.</span></dd></dl>
+
+<dl><dt><a name="Box-__le__"><strong>__le__</strong></a>(...)</dt><dd><span class="code">Is&nbsp;this&nbsp;box&nbsp;lesser&nbsp;than&nbsp;or&nbsp;equal&nbsp;from&nbsp;another&nbsp;box.</span></dd></dl>
+
+<dl><dt><a name="Box-__lshift__"><strong>__lshift__</strong></a>(...)</dt><dd><span class="code">bitwise&nbsp;left-shift</span></dd></dl>
+
+<dl><dt><a name="Box-__lt__"><strong>__lt__</strong></a>(...)</dt><dd><span class="code">Is&nbsp;this&nbsp;box&nbsp;lesser&nbsp;than&nbsp;another&nbsp;box.</span></dd></dl>
+
+<dl><dt><a name="Box-__mul__"><strong>__mul__</strong></a>(...)</dt><dd><span class="code">Multiply&nbsp;this&nbsp;box&nbsp;with&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Box-__ne__"><strong>__ne__</strong></a>(...)</dt><dd><span class="code">Assert&nbsp;this&nbsp;box&nbsp;is&nbsp;not&nbsp;equal&nbsp;with&nbsp;another&nbsp;box.</span></dd></dl>
+
+<dl><dt><a name="Box-__or__"><strong>__or__</strong></a>(...)</dt><dd><span class="code">logical&nbsp;or&nbsp;with&nbsp;another&nbsp;box</span></dd></dl>
+
+<dl><dt><a name="Box-__radd__"><strong>__radd__</strong></a>(...)</dt><dd><span class="code">Reverse&nbsp;add&nbsp;this&nbsp;box&nbsp;to&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Box-__rand__"><strong>__rand__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value&amp;self.</span></dd></dl>
+
+<dl><dt><a name="Box-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="Box-__rlshift__"><strong>__rlshift__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value&lt;&lt;self.</span></dd></dl>
+
+<dl><dt><a name="Box-__rmul__"><strong>__rmul__</strong></a>(...)</dt><dd><span class="code">Reverse&nbsp;multiply&nbsp;this&nbsp;box&nbsp;with&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Box-__ror__"><strong>__ror__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value|self.</span></dd></dl>
+
+<dl><dt><a name="Box-__rrshift__"><strong>__rrshift__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value&gt;&gt;self.</span></dd></dl>
+
+<dl><dt><a name="Box-__rshift__"><strong>__rshift__</strong></a>(...)</dt><dd><span class="code">bitwise&nbsp;right-shift</span></dd></dl>
+
+<dl><dt><a name="Box-__rsub__"><strong>__rsub__</strong></a>(...)</dt><dd><span class="code">Subtract&nbsp;this&nbsp;box&nbsp;from&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Box-__rxor__"><strong>__rxor__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value^self.</span></dd></dl>
+
+<dl><dt><a name="Box-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="Box-__sub__"><strong>__sub__</strong></a>(...)</dt><dd><span class="code">Subtract&nbsp;this&nbsp;box&nbsp;from&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Box-__xor__"><strong>__xor__</strong></a>(...)</dt><dd><span class="code">logical&nbsp;xor&nbsp;with&nbsp;another&nbsp;box</span></dd></dl>
+
+<dl><dt><a name="Box-abs"><strong>abs</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-acos"><strong>acos</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-asin"><strong>asin</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-atan"><strong>atan</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-ceil"><strong>ceil</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-cos"><strong>cos</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-create_source"><strong>create_source</strong></a>(self, name_app, lang, *args) -&gt; 'str'</dt><dd><span class="code">Create&nbsp;source&nbsp;code&nbsp;in&nbsp;a&nbsp;target&nbsp;language&nbsp;from&nbsp;a&nbsp;box&nbsp;expression.<br>
+&nbsp;<br>
+name_app&nbsp;-&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;Faust&nbsp;program<br>
+lang&nbsp;-&nbsp;the&nbsp;target&nbsp;source&nbsp;code's&nbsp;language&nbsp;which&nbsp;can&nbsp;be&nbsp;one&nbsp;of&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'c',&nbsp;'cpp',&nbsp;'cmajor',&nbsp;'codebox',&nbsp;'csharp',&nbsp;'dlang',&nbsp;'fir',&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'interp',&nbsp;'java',&nbsp;'jax','jsfx',&nbsp;'julia',&nbsp;'ocpp',&nbsp;'rust'&nbsp;or&nbsp;'wast'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(depending&nbsp;of&nbsp;which&nbsp;of&nbsp;the&nbsp;corresponding&nbsp;backends&nbsp;are&nbsp;compiled&nbsp;in&nbsp;libfaust)<br>
+args&nbsp;-&nbsp;tuple&nbsp;of&nbsp;parameters&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+returns&nbsp;a&nbsp;string&nbsp;of&nbsp;source&nbsp;code&nbsp;on&nbsp;success,&nbsp;printing&nbsp;error_msg&nbsp;if&nbsp;error.</span></dd></dl>
+
+<dl><dt><a name="Box-exp"><strong>exp</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-exp10"><strong>exp10</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-floor"><strong>floor</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-is_box_abstr"><strong>is_box_abstr</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_appl"><strong>is_box_appl</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_button"><strong>is_box_button</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_case"><strong>is_box_case</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_checkbox"><strong>is_box_checkbox</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_cut"><strong>is_box_cut</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_environment"><strong>is_box_environment</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_error"><strong>is_box_error</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_f_const"><strong>is_box_f_const</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_ffun"><strong>is_box_ffun</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_fvar_"><strong>is_box_fvar_</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_hbargraph"><strong>is_box_hbargraph</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_hgroup"><strong>is_box_hgroup</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_hslider"><strong>is_box_hslider</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_ident"><strong>is_box_ident</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_int"><strong>is_box_int</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_numentry"><strong>is_box_numentry</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_prim0"><strong>is_box_prim0</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_prim1"><strong>is_box_prim1</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_prim2"><strong>is_box_prim2</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_prim3"><strong>is_box_prim3</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_prim4"><strong>is_box_prim4</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_prim5"><strong>is_box_prim5</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_real_"><strong>is_box_real_</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_slot"><strong>is_box_slot</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_soundfile"><strong>is_box_soundfile</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_symbolic"><strong>is_box_symbolic</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_tgroup"><strong>is_box_tgroup</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_vgroup"><strong>is_box_vgroup</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_vslider"><strong>is_box_vslider</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_waveform"><strong>is_box_waveform</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_box_wire"><strong>is_box_wire</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Box-is_nil"><strong>is_nil</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Check&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;nil.</span></dd></dl>
+
+<dl><dt><a name="Box-log"><strong>log</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-log10"><strong>log10</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-print"><strong>print</strong></a>(self, shared: 'bool' = False, max_size: 'int' = 256)</dt><dd><span class="code">Print&nbsp;this&nbsp;box.</span></dd></dl>
+
+<dl><dt><a name="Box-rint"><strong>rint</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-round"><strong>round</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-sin"><strong>sin</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-sqrt"><strong>sqrt</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-tan"><strong>tan</strong></a>(self) -&gt; 'Box'</dt></dl>
+
+<dl><dt><a name="Box-to_int"><strong>to_int</strong></a>(self)</dt><dd><span class="code">If&nbsp;this&nbsp;box&nbsp;tree&nbsp;has&nbsp;a&nbsp;node&nbsp;of&nbsp;type&nbsp;int,&nbsp;return&nbsp;it,&nbsp;otherwise&nbsp;error.</span></dd></dl>
+
+<dl><dt><a name="Box-to_string"><strong>to_string</strong></a>(self)</dt><dd><span class="code">Convert&nbsp;this&nbsp;box&nbsp;tree&nbsp;(such&nbsp;as&nbsp;the&nbsp;label&nbsp;of&nbsp;a&nbsp;UI)&nbsp;to&nbsp;a&nbsp;string.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="Box-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="Box-from_float"><strong>from_float</strong></a>(value) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;box&nbsp;from&nbsp;float</span></dd></dl>
+
+<dl><dt><a name="Box-from_int"><strong>from_int</strong></a>(value) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;box&nbsp;from&nbsp;int</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>inputs</strong></dt>
+</dl>
+<dl><dt><strong>is_valid</strong></dt>
+<dd><span class="code">Return&nbsp;true&nbsp;if&nbsp;box&nbsp;is&nbsp;defined,&nbsp;false&nbsp;otherwise<br>
+&nbsp;<br>
+sets&nbsp;number&nbsp;of&nbsp;inputs&nbsp;and&nbsp;outputs&nbsp;as&nbsp;a&nbsp;side-effect</span></dd>
+</dl>
+<dl><dt><strong>outputs</strong></dt>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__hash__</strong> = None</dl>
+
+<dl><dt><strong>__pyx_vtable__</strong> = &lt;capsule object NULL&gt;</dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="InterpreterDsp">class <strong>InterpreterDsp</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">DSP&nbsp;instance&nbsp;class&nbsp;with&nbsp;methods.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="InterpreterDsp-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="InterpreterDsp-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="InterpreterDsp-build_user_interface"><strong>build_user_interface</strong></a>(self)</dt><dd><span class="code">Trigger&nbsp;the&nbsp;ui_interface&nbsp;parameter&nbsp;with&nbsp;instance&nbsp;specific&nbsp;calls.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-clone"><strong>clone</strong></a>(self) -&gt; 'InterpreterDsp'</dt><dd><span class="code">Return&nbsp;a&nbsp;clone&nbsp;of&nbsp;the&nbsp;instance.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-get_numinputs"><strong>get_numinputs</strong></a>(self) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;instance&nbsp;number&nbsp;of&nbsp;audio&nbsp;inputs.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-get_numoutputs"><strong>get_numoutputs</strong></a>(self) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;instance&nbsp;number&nbsp;of&nbsp;audio&nbsp;outputs.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-get_samplerate"><strong>get_samplerate</strong></a>(self) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;the&nbsp;sample&nbsp;rate&nbsp;currently&nbsp;used&nbsp;by&nbsp;the&nbsp;instance.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-init"><strong>init</strong></a>(self, sample_rate)</dt><dd><span class="code">Global&nbsp;init,&nbsp;calls&nbsp;static&nbsp;class&nbsp;init&nbsp;and&nbsp;instance&nbsp;init.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-instance_clear"><strong>instance_clear</strong></a>(self)</dt><dd><span class="code">Init&nbsp;instance&nbsp;state&nbsp;but&nbsp;keep&nbsp;the&nbsp;control&nbsp;parameter&nbsp;values.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-instance_constants"><strong>instance_constants</strong></a>(self, sample_rate)</dt><dd><span class="code">Init&nbsp;instance&nbsp;constant&nbsp;state.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-instance_init"><strong>instance_init</strong></a>(self, sample_rate)</dt><dd><span class="code">Init&nbsp;instance&nbsp;state.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-instance_reset_user_interface"><strong>instance_reset_user_interface</strong></a>(self)</dt><dd><span class="code">Init&nbsp;default&nbsp;control&nbsp;parameters&nbsp;values.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="InterpreterDsp-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__pyx_vtable__</strong> = &lt;capsule object NULL&gt;</dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="InterpreterDspFactory">class <strong>InterpreterDspFactory</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">Interpreter&nbsp;DSP&nbsp;factory&nbsp;class.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="InterpreterDspFactory-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="InterpreterDspFactory-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="InterpreterDspFactory-create_dsp_instance"><strong>create_dsp_instance</strong></a>(self) -&gt; 'InterpreterDsp'</dt><dd><span class="code">Create&nbsp;a&nbsp;new&nbsp;DSP&nbsp;instance,&nbsp;to&nbsp;be&nbsp;deleted&nbsp;with&nbsp;C++&nbsp;'delete'</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_compile_options"><strong>get_compile_options</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;factory&nbsp;compile&nbsp;options.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_dsp_code"><strong>get_dsp_code</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;factory&nbsp;expanded&nbsp;DSP&nbsp;code.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_include_pathnames"><strong>get_include_pathnames</strong></a>(self) -&gt; 'list[str]'</dt><dd><span class="code">Get&nbsp;the&nbsp;list&nbsp;of&nbsp;all&nbsp;used&nbsp;includes.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_library_list"><strong>get_library_list</strong></a>(self) -&gt; 'list[str]'</dt><dd><span class="code">Get&nbsp;the&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;list&nbsp;of&nbsp;library&nbsp;dependancies.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_name"><strong>get_name</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;factory&nbsp;name.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_sha_key"><strong>get_sha_key</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;factory&nbsp;SHA&nbsp;key.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_warning_messages"><strong>get_warning_messages</strong></a>(self) -&gt; 'list[str]'</dt><dd><span class="code">Get&nbsp;warning&nbsp;messages&nbsp;list&nbsp;for&nbsp;a&nbsp;given&nbsp;compilation.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-write_to_bitcode"><strong>write_to_bitcode</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Write&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;into&nbsp;a&nbsp;bitcode&nbsp;string.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-write_to_bitcode_file"><strong>write_to_bitcode_file</strong></a>(self, bit_code_path: 'str') -&gt; 'bool'</dt><dd><span class="code">Write&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;into&nbsp;a&nbsp;bitcode&nbsp;file.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="InterpreterDspFactory-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_bitcode"><strong>from_bitcode</strong></a>(bitcode) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;string.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_bitcode_file"><strong>from_bitcode_file</strong></a>(bit_code_path) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;file.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_boxes"><strong>from_boxes</strong></a>(name_app, box, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;box&nbsp;expression.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_file"><strong>from_file</strong></a>(filepath, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;file</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_sha_key"><strong>from_sha_key</strong></a>(sha_key) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;sha&nbsp;key</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_signals"><strong>from_signals</strong></a>(name_app, signals, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;vector&nbsp;of&nbsp;output&nbsp;signals.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_string"><strong>from_string</strong></a>(name_app, code, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;string</span></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__pyx_vtable__</strong> = &lt;capsule object NULL&gt;</dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Interval">class <strong>Interval</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">wraps&nbsp;fs.<a href="#Interval">Interval</a>&nbsp;struct/class<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="Interval-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="Interval-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="Interval-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>high</strong></dt>
+</dl>
+<dl><dt><strong>low</strong></dt>
+</dl>
+<dl><dt><strong>lsb</strong></dt>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__pyx_vtable__</strong> = &lt;capsule object NULL&gt;</dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="ParamArray">class <strong>ParamArray</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">wrapper&nbsp;classs&nbsp;around&nbsp;faust&nbsp;paramater&nbsp;array<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="ParamArray-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="ParamArray-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="ParamArray-dump"><strong>dump</strong></a>(self)</dt></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="ParamArray-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="RtAudioDriver">class <strong>RtAudioDriver</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">faust&nbsp;audio&nbsp;driver&nbsp;using&nbsp;rtaudio&nbsp;cross-platform&nbsp;lib.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="RtAudioDriver-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-get_buffersize"><strong>get_buffersize</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-get_numinputs"><strong>get_numinputs</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-get_numoutputs"><strong>get_numoutputs</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-get_samplerate"><strong>get_samplerate</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-init"><strong>init</strong></a>(self, dsp: 'InterpreterDsp') -&gt; 'bool'</dt><dd><span class="code">initialize&nbsp;with&nbsp;dsp&nbsp;instance.</span></dd></dl>
+
+<dl><dt><a name="RtAudioDriver-set_dsp"><strong>set_dsp</strong></a>(self, dsp: 'InterpreterDsp')</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-start"><strong>start</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-stop"><strong>stop</strong></a>(self)</dt></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="RtAudioDriver-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Signal">class <strong>Signal</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">faust&nbsp;<a href="#Signal">Signal</a>&nbsp;wrapper.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="Signal-__add__"><strong>__add__</strong></a>(...)</dt><dd><span class="code">Add&nbsp;this&nbsp;signal&nbsp;to&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Signal-__and__"><strong>__and__</strong></a>(...)</dt><dd><span class="code">logical&nbsp;and&nbsp;with&nbsp;another&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-__eq__"><strong>__eq__</strong></a>(...)</dt><dd><span class="code">Compare&nbsp;for&nbsp;equality&nbsp;with&nbsp;another&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-__ge__"><strong>__ge__</strong></a>(...)</dt><dd><span class="code">Is&nbsp;this&nbsp;box&nbsp;greater&nbsp;than&nbsp;or&nbsp;equal&nbsp;from&nbsp;another&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-__gt__"><strong>__gt__</strong></a>(...)</dt><dd><span class="code">Is&nbsp;this&nbsp;box&nbsp;greater&nbsp;than&nbsp;another&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-__le__"><strong>__le__</strong></a>(...)</dt><dd><span class="code">Is&nbsp;this&nbsp;box&nbsp;lesser&nbsp;than&nbsp;or&nbsp;equal&nbsp;from&nbsp;another&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-__lshift__"><strong>__lshift__</strong></a>(...)</dt><dd><span class="code">bitwise&nbsp;left-shift</span></dd></dl>
+
+<dl><dt><a name="Signal-__lt__"><strong>__lt__</strong></a>(...)</dt><dd><span class="code">Is&nbsp;this&nbsp;box&nbsp;lesser&nbsp;than&nbsp;another&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-__mod__"><strong>__mod__</strong></a>(...)</dt><dd><span class="code">modulo&nbsp;of&nbsp;other&nbsp;<a href="#Signal">Signal</a></span></dd></dl>
+
+<dl><dt><a name="Signal-__mul__"><strong>__mul__</strong></a>(...)</dt><dd><span class="code">Multiply&nbsp;this&nbsp;box&nbsp;with&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Signal-__ne__"><strong>__ne__</strong></a>(...)</dt><dd><span class="code">Assert&nbsp;this&nbsp;box&nbsp;is&nbsp;not&nbsp;equal&nbsp;with&nbsp;another&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-__or__"><strong>__or__</strong></a>(...)</dt><dd><span class="code">logical&nbsp;or&nbsp;with&nbsp;another&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-__radd__"><strong>__radd__</strong></a>(...)</dt><dd><span class="code">Reverse&nbsp;add&nbsp;this&nbsp;signal&nbsp;to&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Signal-__rand__"><strong>__rand__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value&amp;self.</span></dd></dl>
+
+<dl><dt><a name="Signal-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="Signal-__rlshift__"><strong>__rlshift__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value&lt;&lt;self.</span></dd></dl>
+
+<dl><dt><a name="Signal-__rmod__"><strong>__rmod__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value%self.</span></dd></dl>
+
+<dl><dt><a name="Signal-__rmul__"><strong>__rmul__</strong></a>(...)</dt><dd><span class="code">Reverse&nbsp;multiply&nbsp;this&nbsp;box&nbsp;with&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Signal-__ror__"><strong>__ror__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value|self.</span></dd></dl>
+
+<dl><dt><a name="Signal-__rrshift__"><strong>__rrshift__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value&gt;&gt;self.</span></dd></dl>
+
+<dl><dt><a name="Signal-__rshift__"><strong>__rshift__</strong></a>(...)</dt><dd><span class="code">bitwise&nbsp;right-shift</span></dd></dl>
+
+<dl><dt><a name="Signal-__rsub__"><strong>__rsub__</strong></a>(...)</dt><dd><span class="code">Subtract&nbsp;this&nbsp;box&nbsp;from&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Signal-__rxor__"><strong>__rxor__</strong></a>(self, value, /)</dt><dd><span class="code">Return&nbsp;value^self.</span></dd></dl>
+
+<dl><dt><a name="Signal-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="Signal-__sub__"><strong>__sub__</strong></a>(...)</dt><dd><span class="code">Subtract&nbsp;this&nbsp;box&nbsp;from&nbsp;another.</span></dd></dl>
+
+<dl><dt><a name="Signal-__xor__"><strong>__xor__</strong></a>(...)</dt><dd><span class="code">logical&nbsp;xor&nbsp;with&nbsp;another&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-abs"><strong>abs</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-acos"><strong>acos</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-asin"><strong>asin</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-atan"><strong>atan</strong></a>(self, y) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-attach"><strong>attach</strong></a>(self, other) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;an&nbsp;attached&nbsp;signal&nbsp;from&nbsp;another&nbsp;signal<br>
+&nbsp;<br>
+The&nbsp;attach&nbsp;primitive&nbsp;takes&nbsp;two&nbsp;input&nbsp;signals&nbsp;and&nbsp;produces&nbsp;<br>
+one&nbsp;output&nbsp;signal&nbsp;which&nbsp;is&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;first&nbsp;input.<br>
+&nbsp;<br>
+The&nbsp;role&nbsp;of&nbsp;attach&nbsp;is&nbsp;to&nbsp;force&nbsp;the&nbsp;other&nbsp;input&nbsp;signal&nbsp;to&nbsp;be&nbsp;<br>
+compiled&nbsp;with&nbsp;this&nbsp;one.</span></dd></dl>
+
+<dl><dt><a name="Signal-ceil"><strong>ceil</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-cos"><strong>cos</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-create_source"><strong>create_source</strong></a>(self, name_app: 'str', lang, *args) -&gt; 'str'</dt><dd><span class="code">Create&nbsp;source&nbsp;code&nbsp;in&nbsp;a&nbsp;target&nbsp;language&nbsp;from&nbsp;a&nbsp;signal&nbsp;expression.</span></dd></dl>
+
+<dl><dt><a name="Signal-delay"><strong>delay</strong></a>(self, d) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-exp"><strong>exp</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-exp10"><strong>exp10</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-ffarity"><strong>ffarity</strong></a>(self, s) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;the&nbsp;arity&nbsp;of&nbsp;a&nbsp;foreign&nbsp;function.</span></dd></dl>
+
+<dl><dt><a name="Signal-ffname"><strong>ffname</strong></a>(self, s) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;the&nbsp;name&nbsp;parameter&nbsp;of&nbsp;a&nbsp;foreign&nbsp;function.</span></dd></dl>
+
+<dl><dt><a name="Signal-float_cast"><strong>float_cast</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-floor"><strong>floor</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-fmod"><strong>fmod</strong></a>(self, y) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-hbargraph"><strong>hbargraph</strong></a>(self, label, min, max) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;horizontal&nbsp;bargraph&nbsp;signal&nbsp;from&nbsp;this&nbsp;signal</span></dd></dl>
+
+<dl><dt><a name="Signal-int_cast"><strong>int_cast</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-is_assert_bounds"><strong>is_assert_bounds</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_attach"><strong>is_attach</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_bin_op"><strong>is_bin_op</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_button"><strong>is_button</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_checkbox"><strong>is_checkbox</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_control"><strong>is_control</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_delay"><strong>is_delay</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_delay1"><strong>is_delay1</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_doc_access_tbl"><strong>is_doc_access_tbl</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_doc_constant_tbl"><strong>is_doc_constant_tbl</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_doc_write_tbl"><strong>is_doc_write_tbl</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_enable"><strong>is_enable</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_fconst"><strong>is_fconst</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_ffun"><strong>is_ffun</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_float"><strong>is_float</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_float_cast"><strong>is_float_cast</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_fvar"><strong>is_fvar</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_gen"><strong>is_gen</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_hbargraph"><strong>is_hbargraph</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_highest"><strong>is_highest</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_hslider"><strong>is_hslider</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_input"><strong>is_input</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_int"><strong>is_int</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_int_cast"><strong>is_int_cast</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_lowest"><strong>is_lowest</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_num_entry"><strong>is_num_entry</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_output"><strong>is_output</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_prefix"><strong>is_prefix</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_proj"><strong>is_proj</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_read_table"><strong>is_read_table</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_rec"><strong>is_rec</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_select2"><strong>is_select2</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_soundfile"><strong>is_soundfile</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_soundfile_buffer"><strong>is_soundfile_buffer</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_soundfile_length"><strong>is_soundfile_length</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_soundfile_rate"><strong>is_soundfile_rate</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_vbargraph"><strong>is_vbargraph</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_vslider"><strong>is_vslider</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_waveform"><strong>is_waveform</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-is_write_table"><strong>is_write_table</strong></a>(self) -&gt; 'bool'</dt></dl>
+
+<dl><dt><a name="Signal-log"><strong>log</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-log10"><strong>log10</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-max"><strong>max</strong></a>(self, y) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-min"><strong>min</strong></a>(self, y) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-pow"><strong>pow</strong></a>(self, y) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-print"><strong>print</strong></a>(self, shared: 'bool' = False, max_size: 'int' = 256)</dt><dd><span class="code">Print&nbsp;this&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-recursion"><strong>recursion</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-remainder"><strong>remainder</strong></a>(self, y) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-rint"><strong>rint</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-simplify_to_normal_form"><strong>simplify_to_normal_form</strong></a>(self) -&gt; 'Signal'</dt><dd><span class="code">Simplify&nbsp;a&nbsp;signal&nbsp;to&nbsp;its&nbsp;normal&nbsp;form.</span></dd></dl>
+
+<dl><dt><a name="Signal-sin"><strong>sin</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-sqrt"><strong>sqrt</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-tan"><strong>tan</strong></a>(self) -&gt; 'Signal'</dt></dl>
+
+<dl><dt><a name="Signal-vbargraph"><strong>vbargraph</strong></a>(self, label, min, max) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;bargraph&nbsp;signal&nbsp;from&nbsp;this&nbsp;signal</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="Signal-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="Signal-from_button"><strong>from_button</strong></a>(label) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;button&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-from_checkbox"><strong>from_checkbox</strong></a>(label) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;checkbox&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-from_float"><strong>from_float</strong></a>(value) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;signal&nbsp;from&nbsp;float</span></dd></dl>
+
+<dl><dt><a name="Signal-from_hslider"><strong>from_hslider</strong></a>(label, init, min, max, step) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;horizontal&nbsp;slider&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-from_input"><strong>from_input</strong></a>(idx) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;signal&nbsp;from&nbsp;int</span></dd></dl>
+
+<dl><dt><a name="Signal-from_int"><strong>from_int</strong></a>(value) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;signal&nbsp;from&nbsp;int</span></dd></dl>
+
+<dl><dt><a name="Signal-from_numentry"><strong>from_numentry</strong></a>(label, init, min, max, step) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;num&nbsp;entry&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-from_read_only_table"><strong>from_read_only_table</strong></a>(n, init, ridx)</dt><dd><span class="code">Create&nbsp;a&nbsp;read-only&nbsp;table.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
+ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;int&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;table&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-from_soundfile"><strong>from_soundfile</strong></a>(label) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;signal&nbsp;from&nbsp;soundfile.</span></dd></dl>
+
+<dl><dt><a name="Signal-from_vslider"><strong>from_vslider</strong></a>(label, init, min, max, step) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;slider&nbsp;signal.</span></dd></dl>
+
+<dl><dt><a name="Signal-from_write_read_table"><strong>from_write_read_table</strong></a>(n, init, widx, wsig, ridx)</dt><dd><span class="code">Create&nbsp;a&nbsp;read-write-only&nbsp;table.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
+widx&nbsp;-&nbsp;the&nbsp;write&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
+wsig&nbsp;-&nbsp;the&nbsp;input&nbsp;of&nbsp;the&nbsp;table<br>
+ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;int&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;table&nbsp;signal.</span></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__hash__</strong> = None</dl>
+
+<dl><dt><strong>__pyx_vtable__</strong> = &lt;capsule object NULL&gt;</dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="SignalVector">class <strong>SignalVector</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">wraps&nbsp;tvec:&nbsp;a&nbsp;std::vector&lt;CTree*&gt;<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="SignalVector-__iter__"><strong>__iter__</strong></a>(self, /)</dt><dd><span class="code">Implement&nbsp;iter(self).</span></dd></dl>
+
+<dl><dt><a name="SignalVector-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="SignalVector-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="SignalVector-add"><strong>add</strong></a>(self, sig)</dt></dl>
+
+<dl><dt><a name="SignalVector-create_source"><strong>create_source</strong></a>(self, name_app: 'str', lang, *args) -&gt; 'str'</dt><dd><span class="code">Create&nbsp;source&nbsp;code&nbsp;in&nbsp;a&nbsp;target&nbsp;language&nbsp;from&nbsp;a&nbsp;signal&nbsp;expression.</span></dd></dl>
+
+<dl><dt><a name="SignalVector-simplify_to_normal_form"><strong>simplify_to_normal_form</strong></a>(self)</dt><dd><span class="code">Simplify&nbsp;a&nbsp;signal&nbsp;list&nbsp;to&nbsp;its&nbsp;normal&nbsp;form.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="SignalVector-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__pyx_vtable__</strong> = &lt;capsule object NULL&gt;</dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="box_context">class <strong>box_context</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor"><span class="code">&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="box_context-__enter__"><strong>__enter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="box_context-__exit__"><strong>__exit__</strong></a>(self, type, value, traceback)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="signal_context">class <strong>signal_context</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor"><span class="code">&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="signal_context-__enter__"><strong>__enter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="signal_context-__exit__"><strong>__exit__</strong></a>(self, type, value, traceback)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-__reduce_cython__"><strong>__reduce_cython__</strong></a>(self)</dt></dl>
+ <dl><dt><a name="-__setstate_cython__"><strong>__setstate_cython__</strong></a>(self, __pyx_state)</dt></dl>
+ <dl><dt><a name="-box_add"><strong>box_add</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_add_op"><strong>box_add_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_and"><strong>box_and</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_and_op"><strong>box_and_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_arightshift"><strong>box_arightshift</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_arightshift_op"><strong>box_arightshift_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_atan2"><strong>box_atan2</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_atan2_op"><strong>box_atan2_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_attach"><strong>box_attach</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;an&nbsp;attach&nbsp;box.<br>
+&nbsp;<br>
+The&nbsp;attach&nbsp;primitive&nbsp;takes&nbsp;two&nbsp;input&nbsp;boxes&nbsp;and&nbsp;produces&nbsp;one&nbsp;output&nbsp;box<br>
+which&nbsp;is&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;first&nbsp;input.&nbsp;The&nbsp;role&nbsp;of&nbsp;attach&nbsp;is&nbsp;to&nbsp;force<br>
+its&nbsp;second&nbsp;input&nbsp;boxes&nbsp;to&nbsp;be&nbsp;compiled&nbsp;with&nbsp;the&nbsp;first&nbsp;one.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;attach&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_attach_op"><strong>box_attach_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;an&nbsp;attach&nbsp;box.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;attach&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_bin_op"><strong>box_bin_op</strong></a>(op, b1, b2) -&gt; 'Box'</dt><dd><span class="code">Generic&nbsp;binary&nbsp;mathematical&nbsp;functions.<br>
+&nbsp;<br>
+op&nbsp;-&nbsp;the&nbsp;operator&nbsp;in&nbsp;SOperator&nbsp;set<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;result&nbsp;box&nbsp;of&nbsp;op(x,y).</span></dd></dl>
+ <dl><dt><a name="-box_bin_op0"><strong>box_bin_op0</strong></a>(op) -&gt; 'Box'</dt><dd><span class="code">Generic&nbsp;binary&nbsp;mathematical&nbsp;functions.<br>
+&nbsp;<br>
+op&nbsp;-&nbsp;the&nbsp;operator&nbsp;in&nbsp;SOperator&nbsp;set<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;result&nbsp;box&nbsp;of&nbsp;op(x,y).</span></dd></dl>
+ <dl><dt><a name="-box_button"><strong>box_button</strong></a>(label) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;button&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;button&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_checkbox"><strong>box_checkbox</strong></a>(label) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;checkbox&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;checkbox&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_cut"><strong>box_cut</strong></a>() -&gt; 'Box'</dt><dd><span class="code">The&nbsp;cut&nbsp;box,&nbsp;to&nbsp;stop/terminate&nbsp;a&nbsp;signal.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;cut&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_delay"><strong>box_delay</strong></a>(b, d) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;delayed&nbsp;box.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;box&nbsp;to&nbsp;be&nbsp;delayed<br>
+d&nbsp;-&nbsp;the&nbsp;delay&nbsp;box&nbsp;that&nbsp;doesn't&nbsp;have&nbsp;to&nbsp;be&nbsp;fixed&nbsp;but&nbsp;must&nbsp;be&nbsp;bounded&nbsp;and&nbsp;cannot&nbsp;be&nbsp;negative<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;delayed&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_delay0"><strong>box_delay0</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;delayed&nbsp;box.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;delayed&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_div"><strong>box_div</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_div_op"><strong>box_div_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_eq"><strong>box_eq</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_eq_op"><strong>box_eq_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_fconst"><strong>box_fconst</strong></a>(type, name, file) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;foreign&nbsp;constant&nbsp;box.<br>
+&nbsp;<br>
+type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;type&nbsp;of&nbsp;SType<br>
+name&nbsp;-&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;name<br>
+file&nbsp;-&nbsp;the&nbsp;include&nbsp;file&nbsp;where&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;is&nbsp;defined<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_float"><strong>box_float</strong></a>(n) -&gt; 'Box'</dt><dd><span class="code">Constant&nbsp;real&nbsp;:&nbsp;for&nbsp;all&nbsp;t,&nbsp;x(t)&nbsp;=&nbsp;n.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;float/double&nbsp;value&nbsp;(depends&nbsp;of&nbsp;-single&nbsp;or&nbsp;-double&nbsp;compilation&nbsp;parameter)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;float/double&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_float_cast"><strong>box_float_cast</strong></a>(b) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;casted&nbsp;box.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;be&nbsp;casted&nbsp;as&nbsp;float/double&nbsp;value&nbsp;(depends&nbsp;of&nbsp;-single&nbsp;or&nbsp;-double&nbsp;compilation&nbsp;parameter)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;casted&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_float_cast0"><strong>box_float_cast0</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;casted&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_fmod"><strong>box_fmod</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_fmod_op"><strong>box_fmod_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_fvar"><strong>box_fvar</strong></a>(type, name, file) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;foreign&nbsp;variable&nbsp;box.<br>
+&nbsp;<br>
+type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;type&nbsp;of&nbsp;SType<br>
+name&nbsp;-&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;name<br>
+file&nbsp;-&nbsp;the&nbsp;include&nbsp;file&nbsp;where&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;is&nbsp;defined<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_ge"><strong>box_ge</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_ge_op"><strong>box_ge_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_gt"><strong>box_gt</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_gt_op"><strong>box_gt_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_hbargraph"><strong>box_hbargraph</strong></a>(label, min, max) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;horizontal&nbsp;bargraph&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+x&nbsp;-&nbsp;the&nbsp;input&nbsp;box<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;horizontal&nbsp;bargraph&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_hbargraph2"><strong>box_hbargraph2</strong></a>(label, min, max, x) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;horizontal&nbsp;bargraph&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+x&nbsp;-&nbsp;the&nbsp;input&nbsp;box<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;horizontal&nbsp;bargraph&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_hgroup"><strong>box_hgroup</strong></a>(label, group) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;horizontal&nbsp;group&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+group&nbsp;-&nbsp;the&nbsp;group&nbsp;to&nbsp;be&nbsp;added<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;horizontal&nbsp;group&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_hslider"><strong>box_hslider</strong></a>(label, init, min, max, step) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;an&nbsp;horizontal&nbsp;slider&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+init&nbsp;-&nbsp;the&nbsp;init&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+step&nbsp;-&nbsp;the&nbsp;step&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;horizontal&nbsp;slider&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_int"><strong>box_int</strong></a>(n) -&gt; 'Box'</dt><dd><span class="code">Constant&nbsp;integer&nbsp;:&nbsp;for&nbsp;all&nbsp;t,&nbsp;x(t)&nbsp;=&nbsp;n.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;integer<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;integer&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_int_cast"><strong>box_int_cast</strong></a>(b) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;casted&nbsp;box.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;box&nbsp;to&nbsp;be&nbsp;casted&nbsp;in&nbsp;integer<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;casted&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_int_cast0"><strong>box_int_cast0</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;casted&nbsp;box.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;casted&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_is_nil"><strong>box_is_nil</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">Check&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;nil.<br>
+&nbsp;<br>
+b&nbsp;-&nbsp;the&nbsp;box<br>
+&nbsp;<br>
+returns&nbsp;true&nbsp;if&nbsp;the&nbsp;box&nbsp;is&nbsp;nil,&nbsp;otherwise&nbsp;false.</span></dd></dl>
+ <dl><dt><a name="-box_le"><strong>box_le</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_le_op"><strong>box_le_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_leftshift"><strong>box_leftshift</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_leftshift_op"><strong>box_leftshift_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_lrightshift"><strong>box_lrightshift</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_lrightshift_op"><strong>box_lrightshift_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_lt"><strong>box_lt</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_lt_op"><strong>box_lt_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_max"><strong>box_max</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_max_op"><strong>box_max_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_merge"><strong>box_merge</strong></a>(x, y) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;merge&nbsp;composition&nbsp;(e.g.,&nbsp;A:&gt;B)&nbsp;is&nbsp;the&nbsp;dual&nbsp;of&nbsp;the&nbsp;split&nbsp;composition.<br>
+&nbsp;<br>
+The&nbsp;number&nbsp;of&nbsp;outputs&nbsp;of&nbsp;A&nbsp;must&nbsp;be&nbsp;a&nbsp;multiple&nbsp;of&nbsp;the&nbsp;number&nbsp;of&nbsp;inputs&nbsp;of&nbsp;B:&nbsp;outputs(A)=k.inputs(B)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;merge&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_min"><strong>box_min</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_min_op"><strong>box_min_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_mul"><strong>box_mul</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_mul_op"><strong>box_mul_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_ne"><strong>box_ne</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_ne_op"><strong>box_ne_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_numentry"><strong>box_numentry</strong></a>(label, init, min, max, step) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;num&nbsp;entry&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+init&nbsp;-&nbsp;the&nbsp;init&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+step&nbsp;-&nbsp;the&nbsp;step&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;num&nbsp;entry&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_or"><strong>box_or</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_or_op"><strong>box_or_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_par"><strong>box_par</strong></a>(x, y) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;parallel&nbsp;composition&nbsp;of&nbsp;two&nbsp;blocks&nbsp;(e.g.,&nbsp;A,B).<br>
+&nbsp;<br>
+It&nbsp;places&nbsp;the&nbsp;two&nbsp;block-diagrams&nbsp;one&nbsp;on&nbsp;top&nbsp;of&nbsp;the&nbsp;other,&nbsp;without&nbsp;connections.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;par&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_par3"><strong>box_par3</strong></a>(x, y, z) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;parallel&nbsp;composition&nbsp;of&nbsp;three&nbsp;blocks&nbsp;(e.g.,&nbsp;A,B,C).<br>
+&nbsp;<br>
+It&nbsp;places&nbsp;the&nbsp;three&nbsp;block-diagrams&nbsp;one&nbsp;on&nbsp;top&nbsp;of&nbsp;the&nbsp;other,&nbsp;without&nbsp;connections.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;par&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_par4"><strong>box_par4</strong></a>(a, b, c, d) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;parallel&nbsp;composition&nbsp;of&nbsp;four&nbsp;blocks&nbsp;(e.g.,&nbsp;A,B,C,D).<br>
+&nbsp;<br>
+It&nbsp;places&nbsp;the&nbsp;four&nbsp;block-diagrams&nbsp;one&nbsp;on&nbsp;top&nbsp;of&nbsp;the&nbsp;other,&nbsp;without&nbsp;connections.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;par&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_par5"><strong>box_par5</strong></a>(a, b, c, d, e) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;parallel&nbsp;composition&nbsp;of&nbsp;five&nbsp;blocks&nbsp;(e.g.,&nbsp;A,B,C,D,E).<br>
+&nbsp;<br>
+It&nbsp;places&nbsp;the&nbsp;five&nbsp;block-diagrams&nbsp;one&nbsp;on&nbsp;top&nbsp;of&nbsp;the&nbsp;other,&nbsp;without&nbsp;connections.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;par&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_pow"><strong>box_pow</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_pow_op"><strong>box_pow_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_readonly_table"><strong>box_readonly_table</strong></a>(n, init, ridx) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;read&nbsp;only&nbsp;table.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
+ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;int&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;table&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_readonly_table0"><strong>box_readonly_table0</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;read&nbsp;only&nbsp;table.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;table&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_rec"><strong>box_rec</strong></a>(x, y) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;recursive&nbsp;composition&nbsp;(e.g.,&nbsp;A~B)&nbsp;is&nbsp;used&nbsp;to&nbsp;create&nbsp;cycles&nbsp;in&nbsp;the&nbsp;block-diagram<br>
+in&nbsp;order&nbsp;to&nbsp;express&nbsp;recursive&nbsp;computations.<br>
+&nbsp;<br>
+It&nbsp;is&nbsp;the&nbsp;most&nbsp;complex&nbsp;operation&nbsp;in&nbsp;terms&nbsp;of&nbsp;connections:&nbsp;outputs(A)≥inputs(B)&nbsp;and&nbsp;inputs(A)≥outputs(B)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;rec&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_rem"><strong>box_rem</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_rem_op"><strong>box_rem_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_remainder"><strong>box_remainder</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_remainder_op"><strong>box_remainder_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_route"><strong>box_route</strong></a>(n, m, r) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;route&nbsp;primitive&nbsp;facilitates&nbsp;the&nbsp;routing&nbsp;of&nbsp;signals&nbsp;in&nbsp;Faust.<br>
+&nbsp;<br>
+It&nbsp;has&nbsp;the&nbsp;following&nbsp;syntax:&nbsp;route(A,B,a,b,c,d,...)&nbsp;or&nbsp;route(A,B,(a,b),(c,d),...)<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;&nbsp;the&nbsp;number&nbsp;of&nbsp;input&nbsp;signals<br>
+m&nbsp;-&nbsp;&nbsp;the&nbsp;number&nbsp;of&nbsp;output&nbsp;signals<br>
+r&nbsp;-&nbsp;the&nbsp;routing&nbsp;description,&nbsp;a&nbsp;'par'&nbsp;expression&nbsp;of&nbsp;a,b&nbsp;/&nbsp;(a,b)&nbsp;input/output&nbsp;pairs<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;route&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_select2"><strong>box_select2</strong></a>(selector, b1, b2) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;selector&nbsp;between&nbsp;two&nbsp;boxes.<br>
+&nbsp;<br>
+selector&nbsp;-&nbsp;when&nbsp;0&nbsp;at&nbsp;time&nbsp;t&nbsp;returns&nbsp;s1[t],&nbsp;otherwise&nbsp;returns&nbsp;s2[t]<br>
+s1&nbsp;-&nbsp;first&nbsp;box&nbsp;to&nbsp;be&nbsp;selected<br>
+s2&nbsp;-&nbsp;second&nbsp;box&nbsp;to&nbsp;be&nbsp;selected<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;selected&nbsp;box&nbsp;depending&nbsp;of&nbsp;the&nbsp;selector&nbsp;value&nbsp;at&nbsp;each&nbsp;time&nbsp;t.</span></dd></dl>
+ <dl><dt><a name="-box_select2_"><strong>box_select2_</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;selector&nbsp;between&nbsp;two&nbsp;boxes.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;selected&nbsp;box&nbsp;depending&nbsp;of&nbsp;the&nbsp;selector&nbsp;value&nbsp;at&nbsp;each&nbsp;time&nbsp;t.</span></dd></dl>
+ <dl><dt><a name="-box_select3"><strong>box_select3</strong></a>(selector, b1, b2, b3) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;selector&nbsp;between&nbsp;three&nbsp;boxes.<br>
+&nbsp;<br>
+selector&nbsp;-&nbsp;when&nbsp;0&nbsp;at&nbsp;time&nbsp;t&nbsp;returns&nbsp;s1[t],&nbsp;when&nbsp;1&nbsp;at&nbsp;time&nbsp;t&nbsp;returns&nbsp;s2[t],&nbsp;otherwise&nbsp;returns&nbsp;s3[t]<br>
+s1&nbsp;-&nbsp;first&nbsp;box&nbsp;to&nbsp;be&nbsp;selected<br>
+s2&nbsp;-&nbsp;second&nbsp;box&nbsp;to&nbsp;be&nbsp;selected<br>
+s3&nbsp;-&nbsp;third&nbsp;box&nbsp;to&nbsp;be&nbsp;selected<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;selected&nbsp;box&nbsp;depending&nbsp;of&nbsp;the&nbsp;selector&nbsp;value&nbsp;at&nbsp;each&nbsp;time&nbsp;t.</span></dd></dl>
+ <dl><dt><a name="-box_seq"><strong>box_seq</strong></a>(x, y) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;sequential&nbsp;composition&nbsp;of&nbsp;two&nbsp;blocks&nbsp;(e.g.,&nbsp;A:B)&nbsp;expects:&nbsp;outputs(A)=inputs(B)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;seq&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_soundfile"><strong>box_soundfile</strong></a>(label, chan) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;soundfile&nbsp;block.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;of&nbsp;form&nbsp;"label[url:{'path1';'path2';'path3'}]"&nbsp;to&nbsp;describe&nbsp;a&nbsp;list&nbsp;of&nbsp;soundfiles<br>
+chan&nbsp;-&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs&nbsp;channels,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;soundfile&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_soundfile2"><strong>box_soundfile2</strong></a>(label, chan, part, ridx) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;soundfile&nbsp;block.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;of&nbsp;form&nbsp;"label[url:{'path1';'path2';'path3'}]"&nbsp;to&nbsp;describe&nbsp;a&nbsp;list&nbsp;of&nbsp;soundfiles<br>
+chan&nbsp;-&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs&nbsp;channels,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+part&nbsp;-&nbsp;in&nbsp;the&nbsp;[0..255]&nbsp;range&nbsp;to&nbsp;select&nbsp;a&nbsp;given&nbsp;sound&nbsp;number,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;the&nbsp;selected&nbsp;sound&nbsp;length)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;soundfile&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_split"><strong>box_split</strong></a>(x, y) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;split&nbsp;composition&nbsp;(e.g.,&nbsp;A&lt;:B)&nbsp;operator&nbsp;is&nbsp;used&nbsp;to&nbsp;distribute<br>
+the&nbsp;outputs&nbsp;of&nbsp;A&nbsp;to&nbsp;the&nbsp;inputs&nbsp;of&nbsp;B.<br>
+&nbsp;<br>
+For&nbsp;the&nbsp;operation&nbsp;to&nbsp;be&nbsp;valid,&nbsp;the&nbsp;number&nbsp;of&nbsp;inputs&nbsp;of&nbsp;B<br>
+must&nbsp;be&nbsp;a&nbsp;multiple&nbsp;of&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs&nbsp;of&nbsp;A:&nbsp;outputs(A).k=inputs(B)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;split&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_sub"><strong>box_sub</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_sub_op"><strong>box_sub_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_tgroup"><strong>box_tgroup</strong></a>(label, group) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;tab&nbsp;group&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+group&nbsp;-&nbsp;the&nbsp;group&nbsp;to&nbsp;be&nbsp;added<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;tab&nbsp;group&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_vbargraph"><strong>box_vbargraph</strong></a>(label, min, max) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;bargraph&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+x&nbsp;-&nbsp;the&nbsp;input&nbsp;box<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;vertical&nbsp;bargraph&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_vbargraph2"><strong>box_vbargraph2</strong></a>(label, min, max, x) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;bargraph&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+x&nbsp;-&nbsp;the&nbsp;input&nbsp;box<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;vertical&nbsp;bargraph&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_vgroup"><strong>box_vgroup</strong></a>(label, group) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;group&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+group&nbsp;-&nbsp;the&nbsp;group&nbsp;to&nbsp;be&nbsp;added<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;vertical&nbsp;group&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_vslider"><strong>box_vslider</strong></a>(label, init, min, max, step) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;slider&nbsp;box.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+init&nbsp;-&nbsp;the&nbsp;init&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+step&nbsp;-&nbsp;the&nbsp;step&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;vertical&nbsp;slider&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_waveform"><strong>box_waveform</strong></a>(wf)</dt><dd><span class="code">Create&nbsp;a&nbsp;waveform.<br>
+&nbsp;<br>
+wf&nbsp;-&nbsp;the&nbsp;content&nbsp;of&nbsp;the&nbsp;waveform&nbsp;as&nbsp;a&nbsp;vector&nbsp;of&nbsp;boxInt&nbsp;or&nbsp;boxDouble&nbsp;boxes<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;waveform&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_wire"><strong>box_wire</strong></a>() -&gt; 'Box'</dt><dd><span class="code">The&nbsp;identity&nbsp;box,&nbsp;copy&nbsp;its&nbsp;input&nbsp;to&nbsp;its&nbsp;output.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;identity&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_write_read_table"><strong>box_write_read_table</strong></a>(n, init, widx, wsig, ridx) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;read/write&nbsp;table.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
+widx&nbsp;-&nbsp;the&nbsp;write&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
+wsig&nbsp;-&nbsp;the&nbsp;input&nbsp;of&nbsp;the&nbsp;table<br>
+ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;table&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_write_read_table0"><strong>box_write_read_table0</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;read/write&nbsp;table.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;table&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-box_xor"><strong>box_xor</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_xor_op"><strong>box_xor_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-boxes_to_signals"><strong>boxes_to_signals</strong></a>(b) -&gt; 'SignalVector | None'</dt><dd><span class="code">Compile&nbsp;a&nbsp;box&nbsp;expression&nbsp;in&nbsp;a&nbsp;list&nbsp;of&nbsp;signals&nbsp;in&nbsp;normal&nbsp;form<br>
+(see&nbsp;simplifyToNormalForm&nbsp;in&nbsp;libfaust-signal.h)<br>
+&nbsp;<br>
+box&nbsp;-&nbsp;the&nbsp;box&nbsp;expression<br>
+error_msg&nbsp;-&nbsp;the&nbsp;error&nbsp;string&nbsp;to&nbsp;be&nbsp;filled<br>
+&nbsp;<br>
+returns&nbsp;a&nbsp;list&nbsp;of&nbsp;signals&nbsp;in&nbsp;normal&nbsp;form&nbsp;on&nbsp;success,&nbsp;otherwise&nbsp;an&nbsp;empty&nbsp;list.</span></dd></dl>
+ <dl><dt><a name="-create_dsp_factory_from_file"><strong>create_dsp_factory_from_file</strong></a>(filename: 'str', *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;DSP&nbsp;source&nbsp;code&nbsp;as&nbsp;a&nbsp;file.</span></dd></dl>
+ <dl><dt><a name="-create_dsp_factory_from_string"><strong>create_dsp_factory_from_string</strong></a>(name_app: 'str', code: 'str', *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;DSP&nbsp;source&nbsp;code&nbsp;as&nbsp;a&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-create_interpreter_dsp_factory_from_boxes"><strong>create_interpreter_dsp_factory_from_boxes</strong></a>(name_app, box, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;boxes.</span></dd></dl>
+ <dl><dt><a name="-create_interpreter_dsp_factory_from_signals"><strong>create_interpreter_dsp_factory_from_signals</strong></a>(name_app, signals, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;vector&nbsp;of&nbsp;output&nbsp;signals.</span></dd></dl>
+ <dl><dt><a name="-create_lib_context"><strong>create_lib_context</strong></a>()</dt><dd><span class="code">Create&nbsp;global&nbsp;compilation&nbsp;context,&nbsp;has&nbsp;to&nbsp;be&nbsp;done&nbsp;first.</span></dd></dl>
+ <dl><dt><a name="-create_source_from_boxes"><strong>create_source_from_boxes</strong></a>(name_app, box, lang, *args) -&gt; 'str'</dt><dd><span class="code">Create&nbsp;source&nbsp;code&nbsp;in&nbsp;a&nbsp;target&nbsp;language&nbsp;from&nbsp;a&nbsp;box&nbsp;expression.<br>
+&nbsp;<br>
+name_app&nbsp;-&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;Faust&nbsp;program<br>
+box&nbsp;-&nbsp;the&nbsp;box&nbsp;expression<br>
+lang&nbsp;-&nbsp;the&nbsp;target&nbsp;source&nbsp;code's&nbsp;language&nbsp;which&nbsp;can&nbsp;be&nbsp;one&nbsp;of&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'c',&nbsp;'cpp',&nbsp;'cmajor',&nbsp;'codebox',&nbsp;'csharp',&nbsp;'dlang',&nbsp;'fir',&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'interp',&nbsp;'java',&nbsp;'jax','jsfx',&nbsp;'julia',&nbsp;'ocpp',&nbsp;'rust'&nbsp;or&nbsp;'wast'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(depending&nbsp;of&nbsp;which&nbsp;of&nbsp;the&nbsp;corresponding&nbsp;backends&nbsp;are&nbsp;compiled&nbsp;in&nbsp;libfaust)<br>
+argc&nbsp;-&nbsp;the&nbsp;number&nbsp;of&nbsp;parameters&nbsp;in&nbsp;argv&nbsp;array<br>
+argv&nbsp;-&nbsp;the&nbsp;array&nbsp;of&nbsp;parameters<br>
+error_msg&nbsp;-&nbsp;the&nbsp;error&nbsp;string&nbsp;to&nbsp;be&nbsp;filled<br>
+&nbsp;<br>
+returns&nbsp;a&nbsp;string&nbsp;of&nbsp;source&nbsp;code&nbsp;on&nbsp;success,&nbsp;setting&nbsp;error_msg&nbsp;on&nbsp;error.</span></dd></dl>
+ <dl><dt><a name="-create_source_from_signals"><strong>create_source_from_signals</strong></a>(name_app, osigs, lang, *args) -&gt; 'str'</dt><dd><span class="code">Create&nbsp;source&nbsp;code&nbsp;in&nbsp;a&nbsp;target&nbsp;language&nbsp;from&nbsp;a&nbsp;vector&nbsp;of&nbsp;output&nbsp;signals.<br>
+&nbsp;<br>
+name_app&nbsp;-&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;Faust&nbsp;program<br>
+osigs&nbsp;-&nbsp;the&nbsp;vector&nbsp;of&nbsp;output&nbsp;signals&nbsp;(that&nbsp;will&nbsp;internally&nbsp;be&nbsp;converted&nbsp;in&nbsp;normal&nbsp;form,<br>
+see&nbsp;simplifyToNormalForm)<br>
+lang&nbsp;-&nbsp;the&nbsp;target&nbsp;source&nbsp;code's&nbsp;language&nbsp;which&nbsp;can&nbsp;be&nbsp;one&nbsp;of&nbsp;'c',<br>
+'cpp',&nbsp;'cmajor',&nbsp;'codebox',&nbsp;'csharp',&nbsp;'dlang',&nbsp;'fir',&nbsp;'interp',&nbsp;'java',&nbsp;'jax',<br>
+'jsfx',&nbsp;'julia',&nbsp;'ocpp',&nbsp;'rust'&nbsp;or&nbsp;'wast'<br>
+(depending&nbsp;of&nbsp;which&nbsp;of&nbsp;the&nbsp;corresponding&nbsp;backends&nbsp;are&nbsp;compiled&nbsp;in&nbsp;libfaust)<br>
+argc&nbsp;-&nbsp;the&nbsp;number&nbsp;of&nbsp;parameters&nbsp;in&nbsp;argv&nbsp;array<br>
+argv&nbsp;-&nbsp;the&nbsp;array&nbsp;of&nbsp;parameters<br>
+error_msg&nbsp;-&nbsp;the&nbsp;error&nbsp;string&nbsp;to&nbsp;be&nbsp;filled<br>
+&nbsp;<br>
+returns&nbsp;a&nbsp;string&nbsp;of&nbsp;source&nbsp;code&nbsp;on&nbsp;success,&nbsp;setting&nbsp;error_msg&nbsp;on&nbsp;error.</span></dd></dl>
+ <dl><dt><a name="-delete_all_dsp_factories"><strong>delete_all_dsp_factories</strong></a>()</dt><dd><span class="code">Delete&nbsp;all&nbsp;Faust&nbsp;DSP&nbsp;factories&nbsp;kept&nbsp;in&nbsp;the&nbsp;library&nbsp;cache.</span></dd></dl>
+ <dl><dt><a name="-destroy_lib_context"><strong>destroy_lib_context</strong></a>()</dt><dd><span class="code">Destroy&nbsp;global&nbsp;compilation&nbsp;context,&nbsp;has&nbsp;to&nbsp;be&nbsp;done&nbsp;last.</span></dd></dl>
+ <dl><dt><a name="-dsp_to_boxes"><strong>dsp_to_boxes</strong></a>(name_app, dsp_content, *args) -&gt; 'Box'</dt><dd><span class="code">Compile&nbsp;a&nbsp;DSP&nbsp;source&nbsp;code&nbsp;as&nbsp;a&nbsp;string&nbsp;in&nbsp;a&nbsp;flattened&nbsp;box<br>
+&nbsp;<br>
+name_app&nbsp;-&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;Faust&nbsp;program<br>
+dsp_content&nbsp;-&nbsp;the&nbsp;Faust&nbsp;program&nbsp;as&nbsp;a&nbsp;string<br>
+argc&nbsp;-&nbsp;the&nbsp;number&nbsp;of&nbsp;parameters&nbsp;in&nbsp;argv&nbsp;array<br>
+argv&nbsp;-&nbsp;the&nbsp;array&nbsp;of&nbsp;parameters<br>
+inputs&nbsp;-&nbsp;the&nbsp;place&nbsp;to&nbsp;return&nbsp;the&nbsp;number&nbsp;of&nbsp;inputs&nbsp;of&nbsp;the&nbsp;resulting&nbsp;box<br>
+outputs&nbsp;-&nbsp;the&nbsp;place&nbsp;to&nbsp;return&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs&nbsp;of&nbsp;the&nbsp;resulting&nbsp;box<br>
+error_msg&nbsp;-&nbsp;the&nbsp;error&nbsp;string&nbsp;to&nbsp;be&nbsp;filled<br>
+&nbsp;<br>
+returns&nbsp;a&nbsp;flattened&nbsp;box&nbsp;on&nbsp;success,&nbsp;otherwise&nbsp;a&nbsp;null&nbsp;pointer.</span></dd></dl>
+ <dl><dt><a name="-expand_dsp_from_file"><strong>expand_dsp_from_file</strong></a>(filename: 'str', *args) -&gt; 'tuple(str, str)'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.<br>
+&nbsp;<br>
+Returns&nbsp;sha&nbsp;key&nbsp;for&nbsp;expanded&nbsp;dsp&nbsp;string&nbsp;and&nbsp;expanded&nbsp;dsp&nbsp;string</span></dd></dl>
+ <dl><dt><a name="-expand_dsp_from_string"><strong>expand_dsp_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'str'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-extract_name"><strong>extract_name</strong></a>(full_label) -&gt; 'str'</dt><dd><span class="code">Extract&nbsp;the&nbsp;name&nbsp;from&nbsp;a&nbsp;label.<br>
+&nbsp;<br>
+full_label&nbsp;the&nbsp;label&nbsp;to&nbsp;be&nbsp;analyzed<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;extracted&nbsp;name</span></dd></dl>
+ <dl><dt><a name="-ffarity"><strong>ffarity</strong></a>(s) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;the&nbsp;arity&nbsp;of&nbsp;a&nbsp;foreign&nbsp;function.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal<br>
+returns&nbsp;the&nbsp;name</span></dd></dl>
+ <dl><dt><a name="-ffname"><strong>ffname</strong></a>(s) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;the&nbsp;name&nbsp;parameter&nbsp;of&nbsp;a&nbsp;foreign&nbsp;function.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal<br>
+returns&nbsp;the&nbsp;name</span></dd></dl>
+ <dl><dt><a name="-generate_auxfiles_from_file"><strong>generate_auxfiles_from_file</strong></a>(filename: 'str', *args) -&gt; 'str'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;(other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...)&nbsp;from&nbsp;a&nbsp;file.</span></dd></dl>
+ <dl><dt><a name="-generate_auxfiles_from_string"><strong>generate_auxfiles_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'str'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;(other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...)&nbsp;from&nbsp;a&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-generate_sha1"><strong>generate_sha1</strong></a>(data: 'str') -&gt; 'str'</dt><dd><span class="code">Generate&nbsp;SHA1&nbsp;key&nbsp;from&nbsp;a&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-get_all_dsp_factories"><strong>get_all_dsp_factories</strong></a>()</dt><dd><span class="code">Return&nbsp;Faust&nbsp;DSP&nbsp;factories&nbsp;of&nbsp;the&nbsp;library&nbsp;cache&nbsp;as&nbsp;a&nbsp;vector&nbsp;of&nbsp;their&nbsp;SHA&nbsp;keys.</span></dd></dl>
+ <dl><dt><a name="-get_box_id"><strong>get_box_id</strong></a>(t) -&gt; 'str | None'</dt></dl>
+ <dl><dt><a name="-get_box_type"><strong>get_box_type</strong></a>(b) -&gt; 'tuple[int, int] | None'</dt><dd><span class="code">Return&nbsp;the&nbsp;number&nbsp;of&nbsp;inputs&nbsp;and&nbsp;outputs&nbsp;of&nbsp;a&nbsp;box<br>
+&nbsp;<br>
+box&nbsp;-&nbsp;the&nbsp;box&nbsp;we&nbsp;want&nbsp;to&nbsp;know&nbsp;the&nbsp;number&nbsp;of&nbsp;inputs&nbsp;and&nbsp;outputs<br>
+inputs&nbsp;-&nbsp;the&nbsp;place&nbsp;to&nbsp;return&nbsp;the&nbsp;number&nbsp;of&nbsp;inputs<br>
+outputs&nbsp;-&nbsp;the&nbsp;place&nbsp;to&nbsp;return&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs<br>
+&nbsp;<br>
+returns&nbsp;true&nbsp;if&nbsp;type&nbsp;is&nbsp;defined,&nbsp;false&nbsp;if&nbsp;undefined.</span></dd></dl>
+ <dl><dt><a name="-get_def_name_property"><strong>get_def_name_property</strong></a>(b) -&gt; 'Box | None'</dt><dd><span class="code">Returns&nbsp;the&nbsp;identifier&nbsp;(if&nbsp;any)&nbsp;the&nbsp;expression&nbsp;was&nbsp;a&nbsp;definition&nbsp;of.<br>
+&nbsp;<br>
+b&nbsp;the&nbsp;expression<br>
+id&nbsp;reference&nbsp;to&nbsp;the&nbsp;identifier<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;identifier&nbsp;if&nbsp;the&nbsp;expression&nbsp;b&nbsp;was&nbsp;a&nbsp;definition&nbsp;of&nbsp;id<br>
+else&nbsp;returns&nbsp;None</span></dd></dl>
+ <dl><dt><a name="-get_dsp_factory_from_sha_key"><strong>get_dsp_factory_from_sha_key</strong></a>(sha_key) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Get&nbsp;the&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;associated&nbsp;with&nbsp;a&nbsp;given&nbsp;SHA&nbsp;key.</span></dd></dl>
+ <dl><dt><a name="-get_version"><strong>get_version</strong></a>()</dt><dd><span class="code">Get&nbsp;the&nbsp;version&nbsp;of&nbsp;the&nbsp;library.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;library&nbsp;version&nbsp;as&nbsp;a&nbsp;static&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-getparams_box_abstr"><strong>getparams_box_abstr</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_access"><strong>getparams_box_access</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_appl"><strong>getparams_box_appl</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_button"><strong>getparams_box_button</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_case"><strong>getparams_box_case</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_checkbox"><strong>getparams_box_checkbox</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_component"><strong>getparams_box_component</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_fconst"><strong>getparams_box_fconst</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_ffun"><strong>getparams_box_ffun</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_fvar"><strong>getparams_box_fvar</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_hbargraph"><strong>getparams_box_hbargraph</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_hgroup"><strong>getparams_box_hgroup</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_hslider"><strong>getparams_box_hslider</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_inputs"><strong>getparams_box_inputs</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_int"><strong>getparams_box_int</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_ipar"><strong>getparams_box_ipar</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_iprod"><strong>getparams_box_iprod</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_iseq"><strong>getparams_box_iseq</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_isum"><strong>getparams_box_isum</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_library"><strong>getparams_box_library</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_merge"><strong>getparams_box_merge</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_metadata"><strong>getparams_box_metadata</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_num_entry"><strong>getparams_box_num_entry</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_outputs"><strong>getparams_box_outputs</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_par"><strong>getparams_box_par</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_real"><strong>getparams_box_real</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_rec"><strong>getparams_box_rec</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_route"><strong>getparams_box_route</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_seq"><strong>getparams_box_seq</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_slot"><strong>getparams_box_slot</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_soundfile"><strong>getparams_box_soundfile</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_split"><strong>getparams_box_split</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_symbolic"><strong>getparams_box_symbolic</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_tgroup"><strong>getparams_box_tgroup</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_vbargraph"><strong>getparams_box_vbargraph</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_vgroup"><strong>getparams_box_vgroup</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_vslider"><strong>getparams_box_vslider</strong></a>(b) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-getparams_box_with_local_def"><strong>getparams_box_with_local_def</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_box_abstr"><strong>is_box_abstr</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_appl"><strong>is_box_appl</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_button"><strong>is_box_button</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_case"><strong>is_box_case</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_checkbox"><strong>is_box_checkbox</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_cut"><strong>is_box_cut</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_environment"><strong>is_box_environment</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_error"><strong>is_box_error</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_fconst"><strong>is_box_fconst</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_ffun"><strong>is_box_ffun</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_fvar"><strong>is_box_fvar</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_hbargraph"><strong>is_box_hbargraph</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_hgroup"><strong>is_box_hgroup</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_hslider"><strong>is_box_hslider</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_ident"><strong>is_box_ident</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_int"><strong>is_box_int</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_num_entry"><strong>is_box_num_entry</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim0"><strong>is_box_prim0</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim0_"><strong>is_box_prim0_</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim1"><strong>is_box_prim1</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim1_"><strong>is_box_prim1_</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim2"><strong>is_box_prim2</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim2_"><strong>is_box_prim2_</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim3"><strong>is_box_prim3</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim3_"><strong>is_box_prim3_</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim4"><strong>is_box_prim4</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim4_"><strong>is_box_prim4_</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim5"><strong>is_box_prim5</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_prim5_"><strong>is_box_prim5_</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_real"><strong>is_box_real</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_slot"><strong>is_box_slot</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_soundfile"><strong>is_box_soundfile</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_symbolic"><strong>is_box_symbolic</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_t_group"><strong>is_box_t_group</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_vbargraph"><strong>is_box_vbargraph</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_vgroup"><strong>is_box_vgroup</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_vslider"><strong>is_box_vslider</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_waveform"><strong>is_box_waveform</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_wire"><strong>is_box_wire</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_nil"><strong>is_nil</strong></a>(s) -&gt; 'bool'</dt><dd><span class="code">Check&nbsp;if&nbsp;a&nbsp;signal&nbsp;is&nbsp;nil.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal<br>
+&nbsp;<br>
+returns&nbsp;true&nbsp;if&nbsp;the&nbsp;signal&nbsp;is&nbsp;nil,&nbsp;otherwise&nbsp;false.</span></dd></dl>
+ <dl><dt><a name="-is_proj"><strong>is_proj</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_rec"><strong>is_rec</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_assert_bounds"><strong>is_sig_assert_bounds</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_attach"><strong>is_sig_attach</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_bin_op"><strong>is_sig_bin_op</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_button"><strong>is_sig_button</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_checkbox"><strong>is_sig_checkbox</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_control"><strong>is_sig_control</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_delay"><strong>is_sig_delay</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_delay1"><strong>is_sig_delay1</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_doc_access_tbl"><strong>is_sig_doc_access_tbl</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_doc_constant_tbl"><strong>is_sig_doc_constant_tbl</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_doc_write_tbl"><strong>is_sig_doc_write_tbl</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_enable"><strong>is_sig_enable</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_fconst"><strong>is_sig_fconst</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_ffun"><strong>is_sig_ffun</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_float"><strong>is_sig_float</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_float_cast"><strong>is_sig_float_cast</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_fvar"><strong>is_sig_fvar</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_gen"><strong>is_sig_gen</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_hbargraph"><strong>is_sig_hbargraph</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_highest"><strong>is_sig_highest</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_hslider"><strong>is_sig_hslider</strong></a>(u) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_input"><strong>is_sig_input</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_int"><strong>is_sig_int</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_int_cast"><strong>is_sig_int_cast</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_lowest"><strong>is_sig_lowest</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_numentry"><strong>is_sig_numentry</strong></a>(u) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_output"><strong>is_sig_output</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_prefix"><strong>is_sig_prefix</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_read_write_table"><strong>is_sig_read_write_table</strong></a>(u) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_readonly_table"><strong>is_sig_readonly_table</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_select2"><strong>is_sig_select2</strong></a>(t) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_soundfile"><strong>is_sig_soundfile</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_soundfile_buffer"><strong>is_sig_soundfile_buffer</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_soundfile_length"><strong>is_sig_soundfile_length</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_soundfile_rate"><strong>is_sig_soundfile_rate</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_vbargraph"><strong>is_sig_vbargraph</strong></a>(s) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_vslider"><strong>is_sig_vslider</strong></a>(u) -&gt; 'dict'</dt></dl>
+ <dl><dt><a name="-is_sig_waveform"><strong>is_sig_waveform</strong></a>(s) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-print_box"><strong>print_box</strong></a>(box, shared, max_size) -&gt; 'str'</dt><dd><span class="code">Print&nbsp;the&nbsp;box.<br>
+&nbsp;<br>
+box&nbsp;-&nbsp;the&nbsp;box&nbsp;to&nbsp;be&nbsp;printed<br>
+shared&nbsp;-&nbsp;whether&nbsp;the&nbsp;identical&nbsp;sub&nbsp;boxes&nbsp;are&nbsp;printed&nbsp;as&nbsp;identifiers<br>
+max_size&nbsp;-&nbsp;the&nbsp;maximum&nbsp;number&nbsp;of&nbsp;characters&nbsp;to&nbsp;be&nbsp;printed&nbsp;(possibly&nbsp;needed&nbsp;for&nbsp;big&nbsp;expressions&nbsp;in&nbsp;non&nbsp;shared&nbsp;mode)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;printed&nbsp;box&nbsp;as&nbsp;a&nbsp;string</span></dd></dl>
+ <dl><dt><a name="-print_signal"><strong>print_signal</strong></a>(sig, shared, max_size) -&gt; 'str'</dt><dd><span class="code">Print&nbsp;the&nbsp;signal.<br>
+&nbsp;<br>
+sig&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;be&nbsp;printed<br>
+shared&nbsp;-&nbsp;whether&nbsp;the&nbsp;identical&nbsp;sub&nbsp;signals&nbsp;are&nbsp;printed&nbsp;as&nbsp;identifiers<br>
+max_size&nbsp;-&nbsp;the&nbsp;maximum&nbsp;number&nbsp;of&nbsp;characters&nbsp;to&nbsp;be&nbsp;printed&nbsp;(possibly&nbsp;needed&nbsp;for&nbsp;big&nbsp;expressions&nbsp;in&nbsp;non&nbsp;shared&nbsp;mode)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;printed&nbsp;signal&nbsp;as&nbsp;a&nbsp;string</span></dd></dl>
+ <dl><dt><a name="-sig_abs"><strong>sig_abs</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_acos"><strong>sig_acos</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_add"><strong>sig_add</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_and"><strong>sig_and</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_arightshift"><strong>sig_arightshift</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_asin"><strong>sig_asin</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_atan"><strong>sig_atan</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_atan2"><strong>sig_atan2</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_attach"><strong>sig_attach</strong></a>(s1, s2) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;an&nbsp;attach&nbsp;signal.<br>
+&nbsp;<br>
+The&nbsp;attach&nbsp;primitive&nbsp;takes&nbsp;two&nbsp;input&nbsp;signals&nbsp;and&nbsp;produces&nbsp;one&nbsp;output&nbsp;signal<br>
+which&nbsp;is&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;first&nbsp;input.&nbsp;The&nbsp;role&nbsp;of&nbsp;attach&nbsp;is&nbsp;to&nbsp;force<br>
+its&nbsp;second&nbsp;input&nbsp;signal&nbsp;to&nbsp;be&nbsp;compiled&nbsp;with&nbsp;the&nbsp;first&nbsp;one.<br>
+&nbsp;<br>
+s1&nbsp;-&nbsp;the&nbsp;first&nbsp;signal<br>
+s2&nbsp;-&nbsp;the&nbsp;second&nbsp;signal<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;attach&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_bin_op"><strong>sig_bin_op</strong></a>(op, x, y) -&gt; 'Signal'</dt><dd><span class="code">Generic&nbsp;binary&nbsp;mathematical&nbsp;functions.<br>
+&nbsp;<br>
+op&nbsp;-&nbsp;the&nbsp;operator&nbsp;in&nbsp;SOperator&nbsp;set<br>
+x&nbsp;-&nbsp;first&nbsp;signal<br>
+y&nbsp;-&nbsp;second&nbsp;signal<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;result&nbsp;signal&nbsp;of&nbsp;op(x,&nbsp;y).</span></dd></dl>
+ <dl><dt><a name="-sig_button"><strong>sig_button</strong></a>(label) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;button&nbsp;signal.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;button&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_ceil"><strong>sig_ceil</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_checkbox"><strong>sig_checkbox</strong></a>(label) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;checkbox&nbsp;signal.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;checkbox&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_cos"><strong>sig_cos</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_delay"><strong>sig_delay</strong></a>(s, d) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;delayed&nbsp;signal.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;be&nbsp;delayed<br>
+d&nbsp;-&nbsp;the&nbsp;delay&nbsp;signal&nbsp;that&nbsp;doesn't&nbsp;have&nbsp;to&nbsp;be&nbsp;fixed&nbsp;but&nbsp;must&nbsp;be&nbsp;bounded&nbsp;and&nbsp;cannot&nbsp;be&nbsp;negative<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;delayed&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_delay1"><strong>sig_delay1</strong></a>(s) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;one&nbsp;sample&nbsp;delayed&nbsp;signal.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;be&nbsp;delayed<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;delayed&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_div"><strong>sig_div</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_eq"><strong>sig_eq</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_exp"><strong>sig_exp</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_exp10"><strong>sig_exp10</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_fconst"><strong>sig_fconst</strong></a>(type, name, file) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;foreign&nbsp;constant&nbsp;signal.<br>
+&nbsp;<br>
+type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;type&nbsp;of&nbsp;SType<br>
+name&nbsp;-&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;name<br>
+file&nbsp;-&nbsp;the&nbsp;include&nbsp;file&nbsp;where&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;is&nbsp;defined<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_float_cast"><strong>sig_float_cast</strong></a>(s) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;casted&nbsp;signal.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;be&nbsp;casted&nbsp;as&nbsp;float/double&nbsp;value&nbsp;(depends&nbsp;of&nbsp;-single&nbsp;or&nbsp;-double&nbsp;compilation&nbsp;parameter)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;casted&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_floor"><strong>sig_floor</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_fmod"><strong>sig_fmod</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_fvar"><strong>sig_fvar</strong></a>(type, name, file) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;foreign&nbsp;variable&nbsp;signal.<br>
+&nbsp;<br>
+type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;type&nbsp;of&nbsp;SType<br>
+name&nbsp;-&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;name<br>
+file&nbsp;-&nbsp;the&nbsp;include&nbsp;file&nbsp;where&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;is&nbsp;defined<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_ge"><strong>sig_ge</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_gt"><strong>sig_gt</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_hbargraph"><strong>sig_hbargraph</strong></a>(label, min, max, s)</dt><dd><span class="code">Create&nbsp;an&nbsp;horizontal&nbsp;bargraph&nbsp;signal.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+s&nbsp;-&nbsp;the&nbsp;input&nbsp;signal<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;horizontal&nbsp;bargraph&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_hslider"><strong>sig_hslider</strong></a>(label, init, min, max, step) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;an&nbsp;horizontal&nbsp;slider&nbsp;signal.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+init&nbsp;-&nbsp;the&nbsp;init&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+step&nbsp;-&nbsp;the&nbsp;step&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;horizontal&nbsp;slider&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_input"><strong>sig_input</strong></a>(idx) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;an&nbsp;input.<br>
+&nbsp;<br>
+idx&nbsp;-&nbsp;the&nbsp;input&nbsp;index<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;input&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_int"><strong>sig_int</strong></a>(n) -&gt; 'Signal'</dt><dd><span class="code">Constant&nbsp;integer&nbsp;:&nbsp;for&nbsp;all&nbsp;t,&nbsp;x(t)&nbsp;=&nbsp;n.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;integer<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;integer&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_int_cast"><strong>sig_int_cast</strong></a>(s) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;casted&nbsp;signal.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;be&nbsp;casted&nbsp;in&nbsp;integer<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;casted&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_le"><strong>sig_le</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_leftshift"><strong>sig_leftshift</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_log"><strong>sig_log</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_log10"><strong>sig_log10</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_lrightshift"><strong>sig_lrightshift</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_lt"><strong>sig_lt</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_max"><strong>sig_max</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_min"><strong>sig_min</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_mul"><strong>sig_mul</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_ne"><strong>sig_ne</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_numentry"><strong>sig_numentry</strong></a>(label, init, min, max, step) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;num&nbsp;entry&nbsp;signal.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+init&nbsp;-&nbsp;the&nbsp;init&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+step&nbsp;-&nbsp;the&nbsp;step&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;num&nbsp;entry&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_or"><strong>sig_or</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_pow"><strong>sig_pow</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_readonly_table"><strong>sig_readonly_table</strong></a>(n, init, ridx) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;read&nbsp;only&nbsp;table.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
+ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;int&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;table&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_real"><strong>sig_real</strong></a>(n) -&gt; 'Signal'</dt><dd><span class="code">Constant&nbsp;real&nbsp;:&nbsp;for&nbsp;all&nbsp;t,&nbsp;x(t)&nbsp;=&nbsp;n.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;float/double&nbsp;value&nbsp;(depends&nbsp;of&nbsp;-single&nbsp;or&nbsp;-double&nbsp;compilation&nbsp;parameter)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;float/double&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_recursion"><strong>sig_recursion</strong></a>(s) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;recursive&nbsp;signal.&nbsp;Use&nbsp;sigSelf()&nbsp;to&nbsp;refer&nbsp;to&nbsp;the<br>
+recursive&nbsp;signal&nbsp;inside&nbsp;the&nbsp;sigRecursion&nbsp;expression.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;recurse&nbsp;on.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;signal&nbsp;with&nbsp;a&nbsp;recursion.</span></dd></dl>
+ <dl><dt><a name="-sig_recursion_n"><strong>sig_recursion_n</strong></a>(rf) -&gt; 'SignalVector'</dt><dd><span class="code">Create&nbsp;a&nbsp;recursive&nbsp;block&nbsp;of&nbsp;signals.&nbsp;<br>
+&nbsp;<br>
+Use&nbsp;sigSelfN()&nbsp;to&nbsp;refer&nbsp;to&nbsp;the&nbsp;recursive&nbsp;signal&nbsp;inside&nbsp;<br>
+the&nbsp;sigRecursionN&nbsp;expression.<br>
+&nbsp;<br>
+rf&nbsp;-&nbsp;the&nbsp;list&nbsp;of&nbsp;signals&nbsp;to&nbsp;recurse&nbsp;on.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;list&nbsp;of&nbsp;signals&nbsp;with&nbsp;recursions.</span></dd></dl>
+ <dl><dt><a name="-sig_rem"><strong>sig_rem</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_remainder"><strong>sig_remainder</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_rint"><strong>sig_rint</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_select2"><strong>sig_select2</strong></a>(selector, s1, s2) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;selector&nbsp;between&nbsp;two&nbsp;signals.<br>
+&nbsp;<br>
+selector&nbsp;-&nbsp;when&nbsp;0&nbsp;at&nbsp;time&nbsp;t&nbsp;returns&nbsp;s1[t],&nbsp;otherwise&nbsp;returns&nbsp;s2[t]<br>
+(selector&nbsp;is&nbsp;automatically&nbsp;wrapped&nbsp;with&nbsp;sigIntCast)<br>
+s1&nbsp;-&nbsp;first&nbsp;signal&nbsp;to&nbsp;be&nbsp;selected<br>
+s2&nbsp;-&nbsp;second&nbsp;signal&nbsp;to&nbsp;be&nbsp;selected<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;selected&nbsp;signal&nbsp;depending&nbsp;of&nbsp;the&nbsp;selector&nbsp;value&nbsp;at&nbsp;each&nbsp;time&nbsp;t.</span></dd></dl>
+ <dl><dt><a name="-sig_select3"><strong>sig_select3</strong></a>(selector, s1, s2, s3) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;selector&nbsp;between&nbsp;three&nbsp;signals.<br>
+&nbsp;<br>
+selector&nbsp;-&nbsp;when&nbsp;0&nbsp;at&nbsp;time&nbsp;t&nbsp;returns&nbsp;s1[t],&nbsp;when&nbsp;1&nbsp;at&nbsp;time&nbsp;t&nbsp;returns&nbsp;s2[t],&nbsp;otherwise&nbsp;returns&nbsp;s3[t]<br>
+(selector&nbsp;is&nbsp;automatically&nbsp;wrapped&nbsp;with&nbsp;sigIntCast)<br>
+s1&nbsp;-&nbsp;first&nbsp;signal&nbsp;to&nbsp;be&nbsp;selected<br>
+s2&nbsp;-&nbsp;second&nbsp;signal&nbsp;to&nbsp;be&nbsp;selected<br>
+s3&nbsp;-&nbsp;third&nbsp;signal&nbsp;to&nbsp;be&nbsp;selected<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;selected&nbsp;signal&nbsp;depending&nbsp;of&nbsp;the&nbsp;selector&nbsp;value&nbsp;at&nbsp;each&nbsp;time&nbsp;t.</span></dd></dl>
+ <dl><dt><a name="-sig_self"><strong>sig_self</strong></a>() -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;recursive&nbsp;signal&nbsp;inside&nbsp;the&nbsp;sigRecursion&nbsp;expression.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;recursive&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_self_n"><strong>sig_self_n</strong></a>(id) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;recursive&nbsp;signal&nbsp;inside&nbsp;the&nbsp;sigRecursionN&nbsp;expression.<br>
+&nbsp;<br>
+id&nbsp;-&nbsp;the&nbsp;recursive&nbsp;signal&nbsp;index&nbsp;(starting&nbsp;from&nbsp;0,&nbsp;up&nbsp;to&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs&nbsp;signals&nbsp;in&nbsp;the&nbsp;recursive&nbsp;block)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;recursive&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_sin"><strong>sig_sin</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_soundfile"><strong>sig_soundfile</strong></a>(*paths) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;soundfile&nbsp;block.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;of&nbsp;form&nbsp;"label[url:{'path1''path2''path3'}]"&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;describe&nbsp;a&nbsp;list&nbsp;of&nbsp;soundfiles<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;soundfile&nbsp;block.</span></dd></dl>
+ <dl><dt><a name="-sig_soundfile_buffer"><strong>sig_soundfile_buffer</strong></a>(sf, chan, part, ridx) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;the&nbsp;buffer&nbsp;signal&nbsp;of&nbsp;a&nbsp;given&nbsp;soundfile.<br>
+&nbsp;<br>
+sf&nbsp;-&nbsp;the&nbsp;soundfile<br>
+chan&nbsp;-&nbsp;an&nbsp;integer&nbsp;to&nbsp;select&nbsp;a&nbsp;given&nbsp;channel,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+part&nbsp;-&nbsp;in&nbsp;the&nbsp;[0..255]&nbsp;range&nbsp;to&nbsp;select&nbsp;a&nbsp;given&nbsp;sound&nbsp;number,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;the&nbsp;selected&nbsp;sound&nbsp;length)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;soundfile&nbsp;buffer&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_soundfile_length"><strong>sig_soundfile_length</strong></a>(sf, part) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;the&nbsp;length&nbsp;signal&nbsp;of&nbsp;a&nbsp;given&nbsp;soundfile&nbsp;in&nbsp;frames.<br>
+&nbsp;<br>
+sf&nbsp;-&nbsp;the&nbsp;soundfile<br>
+part&nbsp;-&nbsp;in&nbsp;the&nbsp;[0..255]&nbsp;range&nbsp;to&nbsp;select&nbsp;a&nbsp;given&nbsp;sound&nbsp;number,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;soundfile&nbsp;length&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_soundfile_rate"><strong>sig_soundfile_rate</strong></a>(sf, part) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;the&nbsp;rate&nbsp;signal&nbsp;of&nbsp;a&nbsp;given&nbsp;soundfile&nbsp;in&nbsp;Hz.<br>
+&nbsp;<br>
+sf&nbsp;-&nbsp;the&nbsp;soundfile<br>
+part&nbsp;-&nbsp;in&nbsp;the&nbsp;[0..255]&nbsp;range&nbsp;to&nbsp;select&nbsp;a&nbsp;given&nbsp;sound&nbsp;number,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;soundfile&nbsp;rate&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_sqrt"><strong>sig_sqrt</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_sub"><strong>sig_sub</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_tan"><strong>sig_tan</strong></a>(x) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_vbargraph"><strong>sig_vbargraph</strong></a>(label, min, max, s)</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;bargraph&nbsp;signal.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+s&nbsp;-&nbsp;the&nbsp;input&nbsp;signal<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;vertical&nbsp;bargraph&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_vslider"><strong>sig_vslider</strong></a>(label, init, min, max, step) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;slider&nbsp;signal.<br>
+&nbsp;<br>
+label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
+init&nbsp;-&nbsp;the&nbsp;init&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+step&nbsp;-&nbsp;the&nbsp;step&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;vertical&nbsp;slider&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_waveform_float"><strong>sig_waveform_float</strong></a>(view) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;waveform&nbsp;from&nbsp;a&nbsp;memoryview&nbsp;of&nbsp;floats<br>
+&nbsp;<br>
+view&nbsp;-&nbsp;memorview&nbsp;of&nbsp;floats<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;waveform&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_waveform_int"><strong>sig_waveform_int</strong></a>(view) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;waveform&nbsp;from&nbsp;a&nbsp;memoryview&nbsp;of&nbsp;ints<br>
+&nbsp;<br>
+view&nbsp;-&nbsp;memorview&nbsp;of&nbsp;ints<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;waveform&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_write_read_table"><strong>sig_write_read_table</strong></a>(n, init, widx, wsig, ridx) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;read/write&nbsp;table.<br>
+&nbsp;<br>
+n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
+widx&nbsp;-&nbsp;the&nbsp;write&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
+wsig&nbsp;-&nbsp;the&nbsp;input&nbsp;of&nbsp;the&nbsp;table<br>
+ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;table&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-sig_xor"><strong>sig_xor</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-simplify_to_normal_form"><strong>simplify_to_normal_form</strong></a>(s) -&gt; 'Signal'</dt><dd><span class="code">Simplify&nbsp;a&nbsp;signal&nbsp;to&nbsp;its&nbsp;normal&nbsp;form,&nbsp;where:<br>
+&nbsp;<br>
+&nbsp;-&nbsp;all&nbsp;possible&nbsp;optimisations,&nbsp;simplications,&nbsp;and&nbsp;compile&nbsp;time&nbsp;computations&nbsp;have&nbsp;been&nbsp;done<br>
+&nbsp;-&nbsp;the&nbsp;mathematical&nbsp;functions&nbsp;(primitives&nbsp;and&nbsp;binary&nbsp;functions),&nbsp;delay,&nbsp;select2,&nbsp;soundfile&nbsp;primitive...<br>
+&nbsp;are&nbsp;properly&nbsp;typed&nbsp;(arguments&nbsp;and&nbsp;result)<br>
+&nbsp;-&nbsp;signal&nbsp;cast&nbsp;are&nbsp;properly&nbsp;done&nbsp;when&nbsp;needed<br>
+&nbsp;<br>
+sig&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;be&nbsp;processed<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;signal&nbsp;in&nbsp;normal&nbsp;form.</span></dd></dl>
+ <dl><dt><a name="-simplify_to_normal_form2"><strong>simplify_to_normal_form2</strong></a>(vec) -&gt; 'SignalVector'</dt><dd><span class="code">Simplify&nbsp;a&nbsp;signal&nbsp;list&nbsp;to&nbsp;its&nbsp;normal&nbsp;form,&nbsp;where:<br>
+&nbsp;<br>
+&nbsp;-&nbsp;all&nbsp;possible&nbsp;optimisations,&nbsp;simplications,&nbsp;and&nbsp;compile&nbsp;time&nbsp;computations&nbsp;have&nbsp;been&nbsp;done<br>
+&nbsp;-&nbsp;the&nbsp;mathematical&nbsp;functions&nbsp;(primitives&nbsp;and&nbsp;binary&nbsp;functions),&nbsp;delay,&nbsp;select2,&nbsp;soundfile&nbsp;primitive...<br>
+&nbsp;are&nbsp;properly&nbsp;typed&nbsp;(arguments&nbsp;and&nbsp;result)<br>
+&nbsp;-&nbsp;signal&nbsp;cast&nbsp;are&nbsp;properly&nbsp;done&nbsp;when&nbsp;needed<br>
+&nbsp;<br>
+siglist&nbsp;-&nbsp;the&nbsp;signal&nbsp;list&nbsp;to&nbsp;be&nbsp;processed<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;signal&nbsp;vector&nbsp;in&nbsp;normal&nbsp;form.</span></dd></dl>
+ <dl><dt><a name="-start_multithreaded_access_mode"><strong>start_multithreaded_access_mode</strong></a>() -&gt; 'bool'</dt><dd><span class="code">Start&nbsp;multi-thread&nbsp;access&nbsp;mode.</span></dd></dl>
+ <dl><dt><a name="-stop_multithreaded_access_mode"><strong>stop_multithreaded_access_mode</strong></a>()</dt><dd><span class="code">Stop&nbsp;multi-thread&nbsp;access&nbsp;mode.</span></dd></dl>
+ <dl><dt><a name="-tree2int"><strong>tree2int</strong></a>(b) -&gt; 'int'</dt><dd><span class="code">If&nbsp;t&nbsp;has&nbsp;a&nbsp;node&nbsp;of&nbsp;type&nbsp;int,&nbsp;return&nbsp;it.&nbsp;Otherwise&nbsp;error<br>
+&nbsp;<br>
+b&nbsp;-&nbsp;the&nbsp;box&nbsp;to&nbsp;convert<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;int&nbsp;value&nbsp;of&nbsp;the&nbsp;box.</span></dd></dl>
+ <dl><dt><a name="-tree2str"><strong>tree2str</strong></a>(s)</dt><dd><span class="code">Convert&nbsp;a&nbsp;signal&nbsp;(such&nbsp;as&nbsp;the&nbsp;label&nbsp;of&nbsp;a&nbsp;UI)&nbsp;to&nbsp;a&nbsp;string.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;convert<br>
+&nbsp;<br>
+returns&nbsp;a&nbsp;string&nbsp;representation&nbsp;of&nbsp;a&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-xtended_arity"><strong>xtended_arity</strong></a>(s) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;the&nbsp;arity&nbsp;of&nbsp;the&nbsp;xtended&nbsp;signal.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;xtended&nbsp;signal<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;arity&nbsp;of&nbsp;the&nbsp;xtended&nbsp;signal.</span></dd></dl>
+ <dl><dt><a name="-xtended_name"><strong>xtended_name</strong></a>(s)</dt><dd><span class="code">Return&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;xtended&nbsp;signal.<br>
+&nbsp;<br>
+s&nbsp;-&nbsp;the&nbsp;xtended&nbsp;signal<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;xtended&nbsp;signal.</span></dd></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>__test__</strong> = {}</td></tr></table>

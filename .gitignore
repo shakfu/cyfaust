@@ -1,3 +1,65 @@
+.vscode
+
+
+bin/
+lib/
+share/
+
+src/cyfaust/*.cpp
+src/cfaust/*.cpp
+
+.DS_Store
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Distribution / packaging
+build/
+dist/
+sdist/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# cache
+.mypy_cache/
+.ruff_cache/
+
+
 # Prerequisites
 *.d
 
