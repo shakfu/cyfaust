@@ -1,2 +1,9 @@
+
+# build requirements
 cython
+
+# macos build requirements
 delocate
+
+# testing requirements
+pytest

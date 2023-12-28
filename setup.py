@@ -20,14 +20,16 @@ CWD = os.getcwd()
 LIB = os.path.join(CWD, 'lib')
 LIBRARY_DIRS.append(LIB)
 INCLUDE_DIRS.append(os.path.join(CWD, 'include'))
+EXTRA_COMPILE_ARGS = ['-std=c++11']
 
 # add local rpath
 if platform.system() == 'Darwin' and WITH_DYLIB:
     EXTRA_LINK_ARGS.append('-Wl,-rpath,'+LIB)
 
-os.environ['LDFLAGS'] = ('-framework CoreFoundation '
-                         '-framework CoreAudio')
-
+os.environ['LDFLAGS'] = " ".join([
+    "-framework CoreFoundation",
+    "-framework CoreAudio"
+])
 
 extensions = [
     Extension("cyfaust.interp", 
@@ -44,7 +46,7 @@ extensions = [
         libraries = LIBRARIES,
         library_dirs = LIBRARY_DIRS,
         extra_objects = EXTRA_OBJECTS,
-        extra_compile_args = ['-std=c++11'],
+        extra_compile_args = EXTRA_COMPILE_ARGS,
         extra_link_args = EXTRA_LINK_ARGS,
     ),
     Extension("cyfaust.common", ["src/cyfaust/common.pyx"],
@@ -53,7 +55,7 @@ extensions = [
         libraries = LIBRARIES,
         library_dirs = LIBRARY_DIRS,
         extra_objects = EXTRA_OBJECTS,
-        extra_compile_args = ['-std=c++11'],
+        extra_compile_args = EXTRA_COMPILE_ARGS,
         extra_link_args = EXTRA_LINK_ARGS,
     ),
     Extension("cyfaust.signal", ["src/cyfaust/signal.pyx"],
@@ -62,7 +64,7 @@ extensions = [
         libraries = LIBRARIES,
         library_dirs = LIBRARY_DIRS,
         extra_objects = EXTRA_OBJECTS,
-        extra_compile_args = ['-std=c++11'],
+        extra_compile_args = EXTRA_COMPILE_ARGS,
         extra_link_args = EXTRA_LINK_ARGS,
     ),
     Extension("cyfaust.box", ["src/cyfaust/box.pyx"],
@@ -71,7 +73,7 @@ extensions = [
         libraries = LIBRARIES,
         library_dirs = LIBRARY_DIRS,
         extra_objects = EXTRA_OBJECTS,
-        extra_compile_args = ['-std=c++11'],
+        extra_compile_args = EXTRA_COMPILE_ARGS,
         extra_link_args = EXTRA_LINK_ARGS,
     ),
 ]

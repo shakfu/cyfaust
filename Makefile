@@ -62,6 +62,7 @@ test_audio:
 test: setup
 # 	@cp tests/noise.dsp ./build
 	@python3 tests/test_cyfaust_interp.py
+	@python3 tests/test_cyfaust_box.py
 	@echo "DONE"
 
 

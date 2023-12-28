@@ -4,7 +4,7 @@ A [cython](https://github.com/cython/cython) wrapper of the [Faust](https://gith
 
 The objective is to end up with a minimal, modular, self-contained, cross-platform python3 extension.
 
-This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject and was spun-off into its own project.
+This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name which was built as a single statically compiled module. After this was modularized into a package, it was spun-off this project which exclusively uses standard python build systems (setup.py, etc..)
 
 ## Status
 
@@ -13,9 +13,9 @@ cyfaust is a python package which consists of the following builtin modules:
 - `cyfaust.interp`: wraps the faust interpreter and the rtaudio audio driver
 - `cyfaust.box`: wraps the faust box api
 - `cyfaust.signal`: wraps the faust signal api
-- `cyfaust.common`: commons utilities and classes
+- `cyfaust.common`: common utilities and classes
 
-Wrapping and modularization are mostly complete except for a few areas the task at hand is to create a test suite.
+Wrapping and modularization are mostly complete except for a few areas. Current focus is on creating a test suite.
 
 ## Usage
 
@@ -42,7 +42,7 @@ Developed and tested only on macOS x86_64 and arm64 for the time being.
     
     - will build `cyfaust`
 
-3. `make test` will test the `cyfaust.interp` module and audio driver and will interpret a `noise.dsp` mmodule and produce "noise" if successful.
+3. `make test` will run the tests in sequence. You can also run `pytest` to do the same.
 
 
 ## Prior Art of Faust + Python
