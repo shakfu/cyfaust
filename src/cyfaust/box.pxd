@@ -1,5 +1,27 @@
 from . cimport faust_box as fb
 
+cpdef enum SType:
+    kSInt
+    kSReal
+
+cpdef enum SOperator:
+    kAdd
+    kSub
+    kMul
+    kDiv
+    kRem
+    kLsh
+    kARsh
+    kLRsh
+    kGT
+    kLT
+    kGE
+    kLE
+    kEQ
+    kNE
+    kAND
+    kOR
+    kXOR
 
 cdef class Box:
     cdef fb.Box ptr

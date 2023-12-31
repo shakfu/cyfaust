@@ -28,13 +28,13 @@ cdef extern from "faust/dsp/libfaust-box.h":
     const char* ffname(Signal s)
 
     # Return the arity of a foreign function.
-    int ffarity(Signal s);
+    int ffarity(Signal s)
 
-    ctypedef enum SType: 
+    cpdef enum SType:
         kSInt
         kSReal
 
-    ctypedef enum SOperator:
+    cpdef enum SOperator:
         kAdd
         kSub
         kMul

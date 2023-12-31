@@ -3,6 +3,28 @@ from libcpp.vector cimport vector
 
 from . cimport faust_signal as fs
 
+cpdef enum SType:
+    kSInt
+    kSReal
+
+cpdef enum SOperator:
+    kAdd
+    kSub
+    kMul
+    kDiv
+    kRem
+    kLsh
+    kARsh
+    kLRsh
+    kGT
+    kLT
+    kGE
+    kLE
+    kEQ
+    kNE
+    kAND
+    kOR
+    kXOR
 
 cdef class SignalVector:
     cdef vector[fs.Signal] ptr
@@ -12,7 +34,6 @@ cdef class SignalVector:
     cdef SignalVector from_ptr(fs.tvec ptr)
 
     cdef add_ptr(self, fs.Signal sig)
-
 
 
 

@@ -1,7 +1,6 @@
 # distutils: language = c++
 
 from libcpp.string cimport string
-# from libcpp.vector cimport vector
 
 from . cimport faust_signal as fs
 
@@ -856,10 +855,10 @@ def sig_real(float n) -> Signal:
     cdef fs.Signal s = fs.sigReal(n)
     return Signal.from_ptr(s)
 
+sig_float = sig_real
 
 def sig_input(int idx) -> Signal:
-    """
-    Create an input.
+    """Create an input.
 
     idx - the input index
 
@@ -870,8 +869,7 @@ def sig_input(int idx) -> Signal:
 
 
 def sig_delay(Signal s, Signal d) -> Signal:
-    """
-    Create a delayed signal.
+    """Create a delayed signal.
 
     s - the signal to be delayed
     d - the delay signal that doesn't have to be fixed but must be bounded and cannot be negative

@@ -6,6 +6,7 @@ from libcpp.string cimport string
 from . cimport faust_box as fb
 from . cimport faust_signal as fs
 
+
 from .signal cimport SignalVector
 from .signal import SignalVector
 
@@ -174,7 +175,6 @@ cdef class Box:
         """
         return box_fvar(type, name, file)
 
-    @property
     def is_valid(self) -> bool:
         """Return true if box is defined, false otherwise
 
@@ -1050,7 +1050,7 @@ def box_fconst(fb.SType type, str name, str file) -> Box:
 
     returns the foreign constant box.
     """
-    cdef fb.Box b = fb.boxFConst(type, name, file)
+    cdef fb.Box b = fb.boxFConst(type, name.encode('utf8'), file.encode('utf8'))
     return Box.from_ptr(b)
 
 def box_fvar(fb.SType type, str name, str file) -> Box:
@@ -1062,7 +1062,7 @@ def box_fvar(fb.SType type, str name, str file) -> Box:
 
     returns the foreign variable box.
     """
-    cdef fb.Box b = fb.boxFVar(type, name, file)
+    cdef fb.Box b = fb.boxFVar(type, name.encode('utf8'), file.encode('utf8'))
     return Box.from_ptr(b)
 
 def box_bin_op0(fb.SOperator op) -> Box:
