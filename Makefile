@@ -68,5 +68,5 @@ test: setup
 
 
 clean:
-	@rm -rf build dist *.egg-info
+	@rm -rf build dist *.egg-info .pytest_*
 

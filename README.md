@@ -4,7 +4,7 @@ A [cython](https://github.com/cython/cython) wrapper of the [Faust](https://gith
 
 The objective is to end up with a minimal, modular, self-contained, cross-platform python3 extension.
 
-This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name which was built as a single statically compiled module. After this was modularized into a package, it was spun-off this project which exclusively uses standard python build systems (setup.py, etc..)
+This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name which was built as a single statically compiled module. After this was modularized into a package, it was spun-off to this project which exclusively uses a standard python build systems (setup.py, etc..)
 
 ## Status
 
