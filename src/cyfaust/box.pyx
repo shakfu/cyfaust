@@ -41,6 +41,43 @@ class box_context:
         fb.destroyLibContext()
 
 
+cdef class BoxVector:
+    """wraps tvec: a std::vector<CTree*>"""
+    # cdef vector[fb.Box] ptr
+    # cdef bint ptr_owner
+
+    def __cinit__(self):
+        self.ptr_owner = False
+
+    def __iter__(self):
+        for i in self.ptr:
+            yield Box.from_ptr(i)
+
+    @staticmethod
+    cdef BoxVector from_ptr(fb.tvec ptr):
+        """Wrap a fs.tvec instance."""
+        cdef BoxVector bv = BoxVector.__new__(BoxVector)
+        bv.ptr = ptr
+        return bv
+
+    cdef add_ptr(self, fb.Box b):
+        self.ptr.push_back(b)
+
+    def add(self, Box b):
+        self.ptr.push_back(b.ptr)
+
+    # def create_source(self, name_app: str, lang, *args) -> str:
+    #     """Create source code in a target language from a signal expression."""
+    #     return create_source_from_signals(name_app, self, lang, *args)
+
+    # def simplify_to_normal_form(self) -> SignalVector:
+    #     """Simplify a signal list to its normal form.
+
+    #     returns the signal vector in normal form.
+    #     """
+    #     return simplify_to_normal_form2(self)
+
+
 cdef class Box:
     """faust Box wrapper.
     """
@@ -103,12 +140,7 @@ cdef class Box:
 
         returns the soundfile box.
         """
-        _chan = box_or_int(chan)
-        if part and ridx:
-            _ridx = box_or_int(ridx)
-            return box_soundfile2(label.encode('utf8'), _chan, part, _ridx)
-        else:
-            return box_soundfile(label, _chan)
+        return box_soundfile(label, chan, part, ridx)
 
     @staticmethod
     def from_readonly_table(n: Box | int, Box init, ridx: Box | int) -> Box:
@@ -142,7 +174,7 @@ cdef class Box:
         return box_write_read_table(_n, init, _widx, wsig, _ridx)
 
     @staticmethod
-    def from_waveform(SignalVector wf) -> Box:
+    def from_waveform(BoxVector wf) -> Box:
         """Create a waveform.
 
         wf - the content of the waveform as a vector of boxInt or boxDouble boxes
@@ -180,8 +212,19 @@ cdef class Box:
 
         sets number of inputs and outputs as a side-effect
         """
-        return fb.getBoxType(self.ptr,
-            &self.inputs, &self.outputs)
+        return fb.getBoxType(self.ptr, &self.inputs, &self.outputs)
+
+    def to_string(self, shared: bool = False, max_size: int = 256) -> str:
+        """Convert the box to a string
+
+        box - the box to be converted
+        shared - whether the identical sub boxes are converted as identifiers
+        max_size - the maximum number of characters to be converted (possibly 
+                   needed for big expressions in non shared mode)
+
+        returns the box as a string
+        """
+        return to_string(self, shared, max_size).decode()
 
     def print(self, shared: bool = False, max_size: int = 256):
         """Print this box."""
@@ -281,11 +324,11 @@ cdef class Box:
     # Box boxARightShift()
     # Box boxARightShift(Box b1, Box b2)
 
-    def to_string(self):
+    def tree2str(self):
         """Convert this box tree (such as the label of a UI) to a string."""
         return fb.tree2str(self.ptr).decode()
 
-    def to_int(self):
+    def tree2int(self):
         """If this box tree has a node of type int, return it, otherwise error."""
         return fb.tree2int(self.ptr).decode()
 
@@ -625,6 +668,19 @@ cdef class Box:
         return box_select3(self, b1, b2, b3)
 
 
+def to_string(Box box, bint shared, int max_size) -> str:
+    """Convert the box to a string
+
+    box - the box to be converted
+    shared - whether the identical sub boxes are converted as identifiers
+    max_size - the maximum number of characters to be converted (possibly 
+               needed for big expressions in non shared mode)
+
+    returns the box as a string
+    """
+    return fb.printBox(box.ptr, shared, max_size).decode()
+
+
 def print_box(Box box, bint shared, int max_size) -> str:
     """Print the box.
 
@@ -635,7 +691,7 @@ def print_box(Box box, bint shared, int max_size) -> str:
 
     returns the printed box as a string
     """
-    return fb.printBox(box.ptr, shared, max_size).decode()
+    return print(fb.printBox(box.ptr, shared, max_size).decode())
 
 
 def get_def_name_property(Box b) -> Box | None:
@@ -968,7 +1024,7 @@ def box_write_read_table(Box n, Box init, Box widx, Box wsig, Box ridx) -> Box:
     return Box.from_ptr(b)
 
 
-def box_waveform(SignalVector wf):
+def box_waveform(BoxVector wf):
     """Create a waveform.
 
     wf - the content of the waveform as a vector of boxInt or boxDouble boxes
@@ -979,7 +1035,27 @@ def box_waveform(SignalVector wf):
     return Box.from_ptr(b)
 
 
-def box_soundfile(str label, Box chan) -> Box:
+def box_soundfile(str label, chan: Box | int, part: Box | None, ridx: Box | int | None) -> Box:
+    """Create a soundfile block.
+
+    label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
+    chan - the number of outputs channels, a constant numerical expression (see [1])
+
+    (box_soundfile2 parameters)
+    part - in the [0..255] range to select a given sound number, a constant numerical expression (see [1])
+    ridx - the read index (an integer between 0 and the selected sound length)
+
+    returns the soundfile box.
+    """
+    _chan = box_or_int(chan)
+    if part and ridx:
+        _ridx = box_or_int(ridx)
+        return __box_soundfile2(label, _chan, part, _ridx)
+    else:
+        return __box_soundfile1(label, _chan)
+
+
+cdef Box __box_soundfile1(str label, Box chan):
     """Create a soundfile block.
 
     label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
@@ -991,7 +1067,7 @@ def box_soundfile(str label, Box chan) -> Box:
     return Box.from_ptr(b)
 
 
-def box_soundfile2(str label, Box chan, Box part, Box ridx) -> Box:
+cdef Box __box_soundfile2(str label, Box chan, Box part, Box ridx):
     """Create a soundfile block.
 
     label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles

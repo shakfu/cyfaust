@@ -3,6 +3,7 @@ BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
 sys.path.insert(0, BUILD_PATH)
 
 from cyfaust.box import *
+from cyfaust.signal import SignalVector
 
 from testutils import print_section, print_entry
 
@@ -90,8 +91,6 @@ def test_box_fconst():
             box_max(box_real(1.0), 
                 box_fconst(SType.kSInt, "fSampleFreq", "<math.h>")))
 
-    # Reproduce the 'BS' definition in platform.lib 
-    # BS = fvariable(int count, <dummy.h>);
     def BS():
         return box_fvar(SType.kSInt, "count", "<math.h>")
     with box_context():
@@ -100,9 +99,46 @@ def test_box_fconst():
         b.print()
 
 
+def test_box_readonly_table():
+    print_entry("test_box_readonly_table")
+    with box_context():
+        b = box_readonly_table(box_int(10), box_int(1), box_int_cast(box_wire()))
+        assert b.is_valid()
+        b.print()
 
 
+def test_box_write_readonly_table():
+    print_entry("test_box_write_readonly_table")
+    with box_context():
+        b = box_readonly_table(box_int(10), box_int(1), box_int_cast(box_wire()))
+        b = box_write_read_table(
+            box_int(10), 
+            box_int(1), 
+            box_int_cast(box_wire()), 
+            box_int_cast(box_wire()), 
+            box_int_cast(box_wire()))
+        assert b.is_valid()
+        b.print()
 
+def test_box_waveform():
+    print_entry("test_box_waveform")
+    with box_context():
+        waveform = BoxVector()
+        for i in range(5):
+            waveform.add(box_real(100*i))
+        b = box_waveform(waveform);
+        assert b.is_valid()
+        b.print()
+
+def test_box_soundfile():
+    print_entry("test_box_soundfile")
+    with box_context():
+        b = box_soundfile("sound[url:{'tango.wav'}]", 
+            box_int(2),  
+            box_int(0),  
+            box_int(0))
+        assert b.is_valid()
+        b.print()
 
 if __name__ == '__main__':
     print_section("testing cyfaust.box")
@@ -113,4 +149,9 @@ if __name__ == '__main__':
     test_box_vslider()
     test_box_rec()
     test_box_fconst()
+    test_box_readonly_table()
+    test_box_write_readonly_table()
+    test_box_waveform()
+    test_box_soundfile()
+
 
