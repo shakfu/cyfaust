@@ -110,7 +110,6 @@ def test_box_readonly_table():
 def test_box_write_readonly_table():
     print_entry("test_box_write_readonly_table")
     with box_context():
-        b = box_readonly_table(box_int(10), box_int(1), box_int_cast(box_wire()))
         b = box_write_read_table(
             box_int(10), 
             box_int(1), 
