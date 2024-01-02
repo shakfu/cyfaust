@@ -4,14 +4,33 @@ sys.path.insert(0, BUILD_PATH)
 
 from cyfaust.box import *
 from cyfaust.signal import SignalVector
+from cyfaust.interp import create_dsp_factory_from_boxes
 
 from testutils import print_section, print_entry
 
+
+def test_create_dsp_factory_from_boxes():
+    print_entry("test_create_dsp_factory_from_boxes")
+    with box_context():
+        b = box_int(7).par(box_float(3.14))
+        assert b.is_valid, "box is not valid"
+        factory = create_dsp_factory_from_boxes("dspme", b)
+        assert factory
+
+        print("compile options:", factory.get_compile_options())
+        print("library list:", factory.get_library_list())
+        print("include pathnames:", factory.get_include_pathnames())
+
+        print("factory name:", factory.get_name())
+        print("factory key:", factory.get_sha_key())
+            
+        dsp = factory.create_dsp_instance()
+
+        assert dsp
+
 # functional way
 def test_create_source_from_boxes():
-
     print_entry("test_create_source_from_boxes")
-
     with box_context():
         b = box_par(box_int(7), box_float(3.14))
         assert b.is_valid, "box is not valid"
@@ -24,9 +43,7 @@ def test_create_source_from_boxes():
 # mixed functional / object-oriented wa
 # note use of `par` abd `b.create_source()`
 def test_box_create_source_cpp():
-
     print_entry("test_box_create_source_cpp")
-
     with box_context():
         b = box_int(7).par(box_float(3.14))
         assert b.is_valid, "box is not valid"
@@ -37,9 +54,7 @@ def test_box_create_source_cpp():
         # print(code)
 
 def test_box_create_source_c():
-
     print_entry("test_box_create_source_c")
-
     with box_context():
         b = box_int(7).par(box_float(3.14))
         assert b.is_valid, "box is not valid"
@@ -154,6 +169,7 @@ def test_box_soundfile():
 
 if __name__ == '__main__':
     print_section("testing cyfaust.box")
+    test_create_dsp_factory_from_boxes()
     test_create_source_from_boxes()
     test_box_create_source_cpp()
     test_box_create_source_c()

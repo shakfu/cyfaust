@@ -31,6 +31,16 @@ def box_or_float(var):
         return var
     raise TypeError("argument must be an float or a boxReal")
 
+def box_or_number(var):
+    if isinstance(var, int):
+        return Box.from_int(var)
+    if isinstance(var, float):
+        return Box.from_real(var)
+    elif isinstance(var, Box):
+        assert is_box_real(var) or is_box_int(var), "box is not a float or int box"
+        return var
+    raise TypeError("argument must be of type float or int or boxReal or boxInt")
+
 
 class box_context:
     def __enter__(self):
