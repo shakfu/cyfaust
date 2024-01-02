@@ -6,13 +6,11 @@ from libcpp.string cimport string
 from . cimport faust_box as fb
 from . cimport faust_signal as fs
 
-
 from .signal cimport SignalVector
 from .signal import SignalVector
 
 from .common cimport ParamArray
 from .common import ParamArray
-
 
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust-box
@@ -61,21 +59,17 @@ cdef class BoxVector:
         return bv
 
     cdef add_ptr(self, fb.Box b):
+        """add pointer to unwrapped Box"""
         self.ptr.push_back(b)
 
     def add(self, Box b):
+        """add wrapped Box"""
         self.ptr.push_back(b.ptr)
 
-    # def create_source(self, name_app: str, lang, *args) -> str:
-    #     """Create source code in a target language from a signal expression."""
-    #     return create_source_from_signals(name_app, self, lang, *args)
+    def create_source(self, name_app: str, lang, *args) -> str:
+        """Create source code in a target language from a box expression."""
+        return create_source_from_boxes(name_app, self, lang, *args)
 
-    # def simplify_to_normal_form(self) -> SignalVector:
-    #     """Simplify a signal list to its normal form.
-
-    #     returns the signal vector in normal form.
-    #     """
-    #     return simplify_to_normal_form2(self)
 
 
 cdef class Box:
@@ -132,10 +126,8 @@ cdef class Box:
         """Create a soundfile block.
 
         label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
-        chan - the number of outputs channels, a constant numerical expression (see [1])
-
-        (box_soundfile2 parameters)
-        part - in the [0..255] range to select a given sound number, a constant numerical expression (see [1])
+        chan - the number of outputs channels, a constant numerical expression
+        part - in the [0..255] range to select a given sound number, a constant numerical expression
         ridx - the read index (an integer between 0 and the selected sound length)
 
         returns the soundfile box.
@@ -160,7 +152,7 @@ cdef class Box:
     def from_write_read_table(n: Box | int, Box init, widx: Box | int, Box wsig, ridx: Box | int) -> Box:
         """Create a read/write table.
 
-        n - the table size, a constant numerical expression (see [1])
+        n - the table size, a constant numerical expression
         init - the table content
         widx - the write index (an integer between 0 and n-1)
         wsig - the input of the table
@@ -187,7 +179,7 @@ cdef class Box:
     def from_fconst(fb.SType type, str name, str file) -> Box:
         """Create a foreign constant box.
 
-        type - the foreign constant type of SType
+        type - the foreign constant type of SType {kSInt, kSReal}
         name - the foreign constant name
         file - the include file where the foreign constant is defined
 
@@ -199,7 +191,7 @@ cdef class Box:
     def from_fvar(fb.SType type, str name, str file) -> Box:
         """Create a foreign variable box.
 
-        type - the foreign variable type of SType
+        type - the foreign variable type of SType {kSInt, kSReal}
         name - the foreign variable name
         file - the include file where the foreign variable is defined
 
@@ -215,7 +207,7 @@ cdef class Box:
         return fb.getBoxType(self.ptr, &self.inputs, &self.outputs)
 
     def to_string(self, shared: bool = False, max_size: int = 256) -> str:
-        """Convert the box to a string
+        """Convert the box to a string via printBox mechanism
 
         box - the box to be converted
         shared - whether the identical sub boxes are converted as identifiers
@@ -992,7 +984,7 @@ def box_readonly_table_op() -> Box:
 def box_readonly_table(Box n, Box init, Box ridx) -> Box:
     """Create a read only table.
 
-    n - the table size, a constant numerical expression (see [1])
+    n - the table size, a constant numerical expression
     init - the table content
     ridx - the read index (an int between 0 and n-1)
 
@@ -1012,7 +1004,7 @@ def box_write_read_table_op() -> Box:
 def box_write_read_table(Box n, Box init, Box widx, Box wsig, Box ridx) -> Box:
     """Create a read/write table.
 
-    n - the table size, a constant numerical expression (see [1])
+    n - the table size, a constant numerical expression
     init - the table content
     widx - the write index (an integer between 0 and n-1)
     wsig - the input of the table
@@ -1039,10 +1031,10 @@ def box_soundfile(str label, chan: Box | int, part: Box | None, ridx: Box | int 
     """Create a soundfile block.
 
     label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
-    chan - the number of outputs channels, a constant numerical expression (see [1])
+    chan - the number of outputs channels, a constant numerical expression
 
     (box_soundfile2 parameters)
-    part - in the [0..255] range to select a given sound number, a constant numerical expression (see [1])
+    part - in the [0..255] range to select a given sound number, a constant numerical expression
     ridx - the read index (an integer between 0 and the selected sound length)
 
     returns the soundfile box.
@@ -1059,7 +1051,7 @@ cdef Box __box_soundfile1(str label, Box chan):
     """Create a soundfile block.
 
     label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
-    chan - the number of outputs channels, a constant numerical expression (see [1])
+    chan - the number of outputs channels, a constant numerical expression
 
     returns the soundfile box.
     """
@@ -1071,8 +1063,8 @@ cdef Box __box_soundfile2(str label, Box chan, Box part, Box ridx):
     """Create a soundfile block.
 
     label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
-    chan - the number of outputs channels, a constant numerical expression (see [1])
-    part - in the [0..255] range to select a given sound number, a constant numerical expression (see [1])
+    chan - the number of outputs channels, a constant numerical expression
+    part - in the [0..255] range to select a given sound number, a constant numerical expression
     ridx - the read index (an integer between 0 and the selected sound length)
 
     returns the soundfile box.
@@ -1505,10 +1497,10 @@ def box_vslider(str label, Box init, Box min, Box max, Box step) -> Box:
     """Create a vertical slider box.
 
     label - the label definition (see [2])
-    init - the init box, a constant numerical expression (see [1])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
-    step - the step box, a constant numerical expression (see [1])
+    init - the init box, a constant numerical expression
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
+    step - the step box, a constant numerical expression
 
     returns the vertical slider box.
     """
@@ -1519,10 +1511,10 @@ def box_hslider(str label, Box init, Box min, Box max, Box step) -> Box:
     """Create an horizontal slider box.
 
     label - the label definition (see [2])
-    init - the init box, a constant numerical expression (see [1])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
-    step - the step box, a constant numerical expression (see [1])
+    init - the init box, a constant numerical expression
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
+    step - the step box, a constant numerical expression
 
     returns the horizontal slider box.
     """
@@ -1533,10 +1525,10 @@ def box_numentry(str label, Box init, Box min, Box max, Box step) -> Box:
     """Create a num entry box.
 
     label - the label definition (see [2])
-    init - the init box, a constant numerical expression (see [1])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
-    step - the step box, a constant numerical expression (see [1])
+    init - the init box, a constant numerical expression
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
+    step - the step box, a constant numerical expression
 
     returns the num entry box.
     """
@@ -1548,8 +1540,8 @@ def box_vbargraph(str label, Box min, Box max) -> Box:
     """Create a vertical bargraph box.
 
     label - the label definition (see [2])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
     x - the input box
 
     returns the vertical bargraph box.
@@ -1561,8 +1553,8 @@ def box_vbargraph2(str label, Box min, Box max, Box x) -> Box:
     """Create a vertical bargraph box.
 
     label - the label definition (see [2])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
     x - the input box
 
     returns the vertical bargraph box.
@@ -1574,8 +1566,8 @@ def box_hbargraph(str label, Box min, Box max) -> Box:
     """Create a horizontal bargraph box.
 
     label - the label definition (see [2])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
     x - the input box
 
     returns the horizontal bargraph box.
@@ -1587,8 +1579,8 @@ def box_hbargraph2(str label, Box min, Box max, Box x) -> Box:
     """Create a horizontal bargraph box.
 
     label - the label definition (see [2])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
     x - the input box
 
     returns the horizontal bargraph box.

@@ -23,9 +23,9 @@ def test_create_source_from_boxes():
 
 # mixed functional / object-oriented wa
 # note use of `par` abd `b.create_source()`
-def test_box_create_source():
+def test_box_create_source_cpp():
 
-    print_entry("test_box_create_source")
+    print_entry("test_box_create_source_cpp")
 
     with box_context():
         b = box_int(7).par(box_float(3.14))
@@ -34,6 +34,19 @@ def test_box_create_source():
         code = b.create_source("test_dsp", "cpp")
         assert len(code) == 1960
         assert "class mydsp : public dsp" in code
+        # print(code)
+
+def test_box_create_source_c():
+
+    print_entry("test_box_create_source_c")
+
+    with box_context():
+        b = box_int(7).par(box_float(3.14))
+        assert b.is_valid, "box is not valid"
+        print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
+        code = b.create_source("test_dsp", "c")
+        assert len(code) == 2305
+        assert "mydsp* dsp = (mydsp*)calloc(1, sizeof(mydsp))" in code
         # print(code)
 
 def test_box_split():
@@ -142,7 +155,8 @@ def test_box_soundfile():
 if __name__ == '__main__':
     print_section("testing cyfaust.box")
     test_create_source_from_boxes()
-    test_box_create_source()
+    test_box_create_source_cpp()
+    test_box_create_source_c()
     test_box_split()
     test_box_hslider()
     test_box_vslider()
