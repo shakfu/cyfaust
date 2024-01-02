@@ -64,7 +64,7 @@ def expand_dsp_from_string(name_app: str, dsp_content: str, *args) -> str:
         return
     return (sha_key.decode(), result.decode())
 
-def generate_auxfiles_from_file(filename: str, *args) -> str:
+def generate_auxfiles_from_file(filename: str, *args) -> bool:
     """Generate additional files (other backends, SVG, XML, JSON...) from a file."""
     cdef ParamArray params = ParamArray(args)
     cdef string error_msg
@@ -77,10 +77,10 @@ def generate_auxfiles_from_file(filename: str, *args) -> str:
     )
     if not error_msg.empty():
         print(error_msg.decode())
-        return False
+        return
     return result
 
-def generate_auxfiles_from_string(name_app: str, dsp_content: str, *args) -> str:
+def generate_auxfiles_from_string(name_app: str, dsp_content: str, *args) -> bool:
     """Generate additional files (other backends, SVG, XML, JSON...) from a string."""
     cdef ParamArray params = ParamArray(args)
     cdef string error_msg
@@ -94,7 +94,7 @@ def generate_auxfiles_from_string(name_app: str, dsp_content: str, *args) -> str
     )
     if not error_msg.empty():
         print(error_msg.decode())
-        return False
+        return
     return result
 
 ## ---------------------------------------------------------------------------

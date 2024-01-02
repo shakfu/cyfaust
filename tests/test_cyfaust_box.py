@@ -23,9 +23,8 @@ def test_create_dsp_factory_from_boxes():
 
         print("factory name:", factory.get_name())
         print("factory key:", factory.get_sha_key())
-            
+    
         dsp = factory.create_dsp_instance()
-
         assert dsp
 
 # functional way
