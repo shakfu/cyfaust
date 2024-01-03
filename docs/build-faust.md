@@ -5,7 +5,7 @@
 
 - [CCRMA Faust Tutorials](https://ccrma.stanford.edu/~rmichon/faustTutorials/)
 - [Embedding the Faust Compiler Using libfaust](https://faustdoc.grame.fr/manual/embedding/)
-- 
+
 
 
 ## Building faust libs with LLVM
@@ -75,7 +75,7 @@ set ( OSCDYNAMIC          OFF CACHE STRING  "Include Faust OSC dynamic library" 
 set ( HTTPDYNAMIC         OFF CACHE STRING  "Include Faust HTTP dynamic library" FORCE )
 ```
 
-Then was called in a custom target in the main `Makefile` as follows:
+Which is called in a custom target in the main `Makefile` as follows:
 
 ```make
 interp : updatesubmodules

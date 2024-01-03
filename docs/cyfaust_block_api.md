@@ -1,51 +1,4 @@
-# Api usage variants
-
-
-Some of the api variants depend on how cyfaust is packaged:
-
-1. single-monolithic module (current)
-
-	Can be statically compiled or a dynamically linked to `libfaust`
-
-	In this case functions must have a prefix such as `box_` or `sig_`
-
-2. package with single-monolithic extension
-
-Can be statically compiled or a dynamically linked to `libfaust`
-
-
-
-```
-cyfaust/
-	.dylibs
-	__init__.py
-	_cyfaust.so
-	interp.py
-	box.py
-	signal.py
-	resources/
-		architectures
-		libraries
-```
-
-
-3. package-structure with several extension submodule
-
-	Can be statically compiled or a dynamically linked to `libfaust`
-
-```
-cyfaust/
-	.dylibs
-	__init__.py
-	interp.so
-	box.so
-	signal.so
-	resources/
-		architectures
-		libraries
-```
-
-
+# Box Api examples
 
 ## Example 1
 
@@ -73,10 +26,17 @@ python hybrid
 box = box_par(Box(7), Box(3.14))
 ```
 
+numerical extension (numbers are auto-boxed)
+
+```python
+box = box_par(7, 3.14)
+```
+
+
 Alternative api with submodules and specialized Box subclasses
 
 ```python
-from cyfaust.box import context, par, Int, Float
+from cyfaust.box import box_context, par, Int, Float
 
 with context():
 	b = par(Int(10), Float(20))

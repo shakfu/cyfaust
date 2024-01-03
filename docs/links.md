@@ -3,7 +3,6 @@
 
 ## python
 
-
 - [python operators](https://docs.python.org/3/library/operator.html)
 
 - python [bitshift operator demo](https://gist.github.com/tamsanh/19abf12ef97ea1c86f1ea703c80db5b3)

@@ -7,11 +7,16 @@
 
 - [ ] What resources should be included in the package {faust stdlib, archtecture files}?
 
+- [ ] Add examples
+
+
 ## cyfaust.interp
 
 - [ ] Complete `InterpreterDsp.build_user_interface` to properly accept `fi.UI* instances`
 
 - [ ] Complete `InterpreterDsp.metadata` and `fi.Meta* m` parameter
+
+- [ ] How to specify output file for svg, `-o <path.svg>` doesn't work?
 
 
 ## cyfaust.box
@@ -25,6 +30,7 @@
 - [ ] Improve docstrings
 
 - [ ] `box.getparams` and `signal.is_sig_xxx` are inconsistent apis
+
 
 ## cyfaust.signal
 

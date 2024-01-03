@@ -22,5 +22,6 @@ Could be represented in python as:
 
 ```python
 
-box.add(in1 + 3.14)
+b = bow_wire() + bow_real(3.14)
 ```
+
