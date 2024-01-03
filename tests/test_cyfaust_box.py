@@ -39,6 +39,7 @@ def test_create_source_from_boxes():
         assert "class mydsp : public dsp" in code
         # print(code)
 
+
 # mixed functional / object-oriented wa
 # note use of `par` abd `b.create_source()`
 def test_box_create_source_cpp():
@@ -62,6 +63,30 @@ def test_box_create_source_c():
         assert len(code) == 2305
         assert "mydsp* dsp = (mydsp*)calloc(1, sizeof(mydsp))" in code
         # print(code)
+
+def test_box_create_source_codebox():
+    print_entry("test_box_create_source_codebox")
+    with box_context():
+        b = box_int(7).par(box_float(3.14))
+        assert b.is_valid, "box is not valid"
+        print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
+        code = b.create_source("test_dsp", "codebox")
+        assert len(code) == 801
+        assert "function dspsetup()" in code
+        # print("code length:", len(code))
+        print(code)
+
+def test_box_create_source_rust():
+    print_entry("test_box_create_source_rust")
+    with box_context():
+        b = box_int(7).par(box_float(3.14))
+        assert b.is_valid, "box is not valid"
+        print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
+        code = b.create_source("test_dsp", "rust")
+        assert len(code) == 2286
+        assert "impl FaustDsp for mydsp" in code
+        # print("code length:", len(code))
+        print(code)
 
 def test_box_split():
     print_entry("test_box_split")
@@ -172,6 +197,8 @@ if __name__ == '__main__':
     test_create_source_from_boxes()
     test_box_create_source_cpp()
     test_box_create_source_c()
+    test_box_create_source_codebox()
+    # test_box_create_source_rust()
     test_box_split()
     test_box_hslider()
     test_box_vslider()

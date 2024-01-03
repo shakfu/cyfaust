@@ -72,6 +72,10 @@ copy_examples() {
 	rm -rf ./share/faust/examples/bela
 }
 
+patch_audio_driver() {
+	cp ./scripts/rtaudio-dsp.h ./include/faust/audio/rtaudio-dsp.h
+}
+
 
 main() {
 	get_faust && \
@@ -82,7 +86,8 @@ main() {
 	copy_staticlib && \
 	copy_sharedlib	&& \
 	copy_stdlib && \
-	copy_examples
+	copy_examples && \
+	patch_audio_driver
 }
 
 main
