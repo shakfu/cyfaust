@@ -1,14 +1,16 @@
 .vscode
 
-
+# don't include faust binaries and resources 
 bin/
 lib/
 share/
 
+# don't include cython-generated cpp
 src/cyfaust/*.cpp
-src/cfaust/*.cpp
 
+# general macos detritus
 .DS_Store
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

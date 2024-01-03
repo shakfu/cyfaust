@@ -8,20 +8,14 @@ MIN_OSX_VER := -mmacosx-version-min=13.6
 FAUST_STATICLIB := ./lib/libfaust.a
 INTERP_TESTS := tests/test_faust_interp
 
-.PHONY: clean setup setup_inplace wheel
+.PHONY: setup wheel clean
 
 all: setup
-
 
 setup:
 	@WITH_DYLIB=$(WITH_DYLIB) python3 setup.py build --build-lib build
 
-setup_inplace:
-	@python3 setup.py build_ext --inplace
-	@rm -rf build
-
 wheel:
-	@echo "WITH_DYLIB=$(WITH_DYLIB)"
 	@python3 setup.py bdist_wheel
 ifeq ($(WITH_DYLIB),1)
 	delocate-wheel -v dist/*.whl 

@@ -2,8 +2,8 @@
 # build requirements
 cython
 
-# macos build requirements
+# macos build wheel tool
 delocate
 
-# testing requirements
+# testing tools (optional)
 pytest

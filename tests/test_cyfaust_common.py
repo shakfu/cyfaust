@@ -1,6 +1,5 @@
 import os, sys
-BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
-sys.path.insert(0, BUILD_PATH)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build'))
 
 from cyfaust.common import ParamArray
 

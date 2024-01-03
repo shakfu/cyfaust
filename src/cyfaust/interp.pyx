@@ -116,6 +116,7 @@ cdef class RtAudioDriver:
         self.ptr_owner = True
 
     def set_dsp(self, dsp: InterpreterDsp):
+        """"set InterpreterDsp instance."""
         self.ptr.setDsp(<fi.dsp*>dsp.ptr)
 
     def init(self, dsp: InterpreterDsp) -> bool:
@@ -127,22 +128,32 @@ cdef class RtAudioDriver:
         return False
 
     def start(self):
+        """start audio driver."""
         if not self.ptr.start():
             print("RtAudioDriver: could not start")
 
     def stop(self):
+        """stop audio driver."""
         self.ptr.stop()
 
-    def get_buffersize(self):
+    @property
+    def buffersize(self):
+        """get buffersize"""
         return self.ptr.getBufferSize()
 
-    def get_samplerate(self):
+    @property
+    def samplerate(self):
+        """get samplerate."""
         return self.ptr.getSampleRate()
 
-    def get_numinputs(self):
+    @property
+    def numinputs(self):
+        """get number of inputs."""
         return self.ptr.getNumInputs()
 
-    def get_numoutputs(self):
+    @property
+    def numoutputs(self):
+        """get number of outputs."""
         return self.ptr.getNumOutputs()
 
 ## ---------------------------------------------------------------------------
