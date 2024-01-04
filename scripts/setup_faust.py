@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import shutil
 import logging
@@ -10,8 +12,8 @@ DEBUG = True
 
 LOG_LEVEL = logging.DEBUG if DEBUG else logging.INFO
 LOG_FORMAT = "%(relativeCreated)-4d %(levelname)-5s: %(name)-10s %(message)s"
-logging.basicConfig(format=LOG_FORMAT)
-=
+logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
+
 
 
 class ShellCmd:
@@ -35,7 +37,7 @@ class ShellCmd:
         self.log.info("change permission of %s to %s", path, perm)
         os.chmod(path, perm)
 
-    def makedirs(self, path, mode=511, exist_ok=False):
+    def makedirs(self, path, mode=511, exist_ok=True):
         """Recursive directory creation function"""
         self.log.info("making directory: %s", path)
         os.makedirs(path, mode, exist_ok)
@@ -49,8 +51,8 @@ class ShellCmd:
         """copy file or folders -- tries to be behave like `cp -rf`"""
         self.log.info("copy %s to %s", src, dst)
         src, dst = Path(src), Path(dst)
-        if dst.exists():
-            dst = dst / src.name
+        # if dst.exists():
+        #     dst = dst / src.name
         if src.is_dir():
             shutil.copytree(src, dst)
         else:
@@ -97,17 +99,17 @@ class FaustBuilder(ShellCmd):
         self.makedirs(self.build)
         self.chdir(self.build)
         self.cmd(
-            f"git clone --depth 1 --branch ${self.version} https://github.com/grame-cncm/faust.git"
+            f"git clone --depth 1 --branch '{self.version}' https://github.com/grame-cncm/faust.git"
         )
         self.makedirs(self.build / "faust" / "build" / "faustdir")
         self.copy(self.scripts / "faust.mk", self.faust / "Makefile")
         self.copy(
             self.scripts / "interp_plus_backend.cmake",
-            self.backends / "interp_plus.cmake",
+            self.backends / "interp_plus.cmake"
         )
         self.copy(
             self.scripts / "interp_plus_target.cmake",
-            self.targets / "interp_plus.cmake",
+            self.targets / "interp_plus.cmake"
         )
         self.chdir(self.faust)
         self.cmd("make interp")
@@ -166,7 +168,7 @@ class FaustBuilder(ShellCmd):
             self.include / "faust" / "audio" / "rtaudio-dsp.h",
         )
 
-    def build(self):
+    def process(self):
         self.get_faust()
         self.remove_current()
         self.copy_executables()
@@ -178,6 +180,6 @@ class FaustBuilder(ShellCmd):
         self.patch_audio_driver()
 
 
-if __name __ '__main__':
+if __name__ == '__main__':
 	b = FaustBuilder()
-	b.build()
+	b.process()
