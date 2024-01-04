@@ -2,20 +2,46 @@
 
 A [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
-The objective is to end up with a minimal, modular, self-contained, cross-platform python3 extension.
+Built with the objective of having a minimal, modular, self-contained, cross-platform python3 extension.
 
-This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name which was built as a single statically compiled module. After this was modularized into a package, it was spun-off to this project which exclusively uses a standard python build systems (setup.py, etc..)
+This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name which was built as a single statically compiled module. After this was modularized into a package, it was spun off as this project which exclusively uses a standard python build systems (setup.py, etc..)
+
+## Features
+
+- Python-oriented implementation of the faust intrepreter
+
+- Provides the following submodules:
+
+    - `cyfaust.interp`: wraps the faust interpreter and the rtaudio audio driver
+
+    - `cyfaust.box`: wraps the faust box api
+
+    - `cyfaust.signal`: wraps the faust signal api
+
+    - `cyfaust.common`: common utilities and classes
+
+- Self-contained, minimal, and modular design
+
+- Does not use LLVM to keep size low.
+
+- Can generate code using the following backends:
+     - c++
+     - c
+     - rust
+     - codebox
+
+- Can generate auxiliary files such as svg block diagrams of dsp
+
+- Dual functional/oo design for box and signal api with minimal code duplication.
+
+- Implements Memorviews for read/write to numpy buffers
+
+- Can be converted to a self-contained python wheel (2MB): the submodules are dymically linked to `libfaust.dylib` which is embedded in the wheel.
+
 
 ## Status
 
-cyfaust is a python package which consists of the following builtin modules:
-
-- `cyfaust.interp`: wraps the faust interpreter and the rtaudio audio driver
-- `cyfaust.box`: wraps the faust box api
-- `cyfaust.signal`: wraps the faust signal api
-- `cyfaust.common`: common utilities and classes
-
-Wrapping and modularization are mostly complete except for a few areas. Current focus is on creating a test suite.
+Wrapping and modularization are mostly complete except for a few areas (see `TODO`). Current focus is on creating a test suite, and working through remaining items in the todo list.
 
 ## Usage
 

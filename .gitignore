@@ -4,6 +4,7 @@
 bin/
 lib/
 share/
+resources/
 
 # don't include cython-generated cpp
 src/cyfaust/*.cpp

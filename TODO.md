@@ -3,8 +3,6 @@
 
 ##  cyfaust
 
-- [ ] What to put in the top-level `__init__.py`?
-
 - [ ] What resources should be included in the package {faust stdlib, archtecture files}?
 
 - [ ] Add examples
