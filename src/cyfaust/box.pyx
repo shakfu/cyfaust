@@ -148,7 +148,7 @@ cdef class Box:
     def from_readonly_table(n: Box | int, Box init, ridx: Box | int) -> Box:
         """Create a read only table.
 
-        n - the table size, a constant numerical expression
+        n    - the table size, a constant numerical expression
         init - the table content
         ridx - the read index (an int between 0 and n-1)
 
@@ -162,7 +162,7 @@ cdef class Box:
     def from_write_read_table(n: Box | int, Box init, widx: Box | int, Box wsig, ridx: Box | int) -> Box:
         """Create a read/write table.
 
-        n - the table size, a constant numerical expression
+        n    - the table size, a constant numerical expression
         init - the table content
         widx - the write index (an integer between 0 and n-1)
         wsig - the input of the table
@@ -322,9 +322,9 @@ cdef class Box:
         """bitwise right-shift"""
         return box_lrightshift(self, other)
 
-    # TODO: ???
-    # Box boxARightShift()
-    # Box boxARightShift(Box b1, Box b2)
+    def arightshift(self, Box other) -> Box:
+        """bitwise arithmetic right shift"""
+        return box_arightshift(self, other)
 
     def tree2str(self):
         """Convert this box tree (such as the label of a UI) to a string."""
@@ -401,106 +401,141 @@ cdef class Box:
     # boolean methods ----------------
 
     def is_nil(self) -> bool:
-        """Check if a box is nil."""
+        """Test if a box is nil."""
         return box_is_nil(self)
 
     def is_abstr(self) -> bool:
+        """Test if a box is an abstraction.
+        
+        see: https://faustdoc.grame.fr/manual/syntax
+        """
         return is_box_abstr(self)
 
     def is_appl(self) -> bool:
+        """Test if a box is an application."""
         return is_box_appl(self)
 
     def is_button(self) -> bool:
+        """Test if a box is a button."""
         return is_box_button(self)
 
     def is_case(self) -> bool:
         return is_box_case(self)
 
     def is_checkbox(self) -> bool:
+        """Test if a box is an checkbox."""
         return is_box_checkbox(self)
 
     def is_cut(self) -> bool:
+        """Test if a box is a cut."""
         return is_box_cut(self)
 
     def is_environment(self) -> bool:
+        """Test if a box is an environmnent."""
         return is_box_environment(self)
 
     def is_error(self) -> bool:
+        """Test if a box is an error."""
         return is_box_error(self)
 
     def is_fconst(self) -> bool:
+        """Test if a box is an fconst."""
         return is_box_fconst(self)
 
     def is_ffun(self) -> bool:
+        """Test if a box is an ffun."""    
         return is_box_ffun(self)
 
-    def is_fvar_(self) -> bool:
+    def is_fvar(self) -> bool:
+        """Test if a box is an fvar."""    
         return is_box_fvar(self)
 
     def is_hbargraph(self) -> bool:
+        """Test if a box is an hbargraph."""
         return is_box_hbargraph(self)
 
     def is_hgroup(self) -> bool:
+        """Test if a box is an hgroup."""
         return is_box_hgroup(self)
 
     def is_hslider(self) -> bool:
+        """Test if a box is an hslider."""
         return is_box_hslider(self)
 
     def is_ident(self) -> bool:
+        """Test if a box is an indentifier."""
         return is_box_ident(self)
 
     def is_int(self) -> bool:
+        """Test if a box is an int."""    
         return is_box_int(self)
 
     def is_numentry(self) -> bool:
+        """Test if a box is an numentry."""
         return is_box_numentry(self)
 
     def is_prim0(self) -> bool:
+        """Test if a box is a nullary function."""    
         return is_box_prim0(self)
 
     def is_prim1(self) -> bool:
+        """Test if a box is a unitary function."""
         return is_box_prim1(self)
 
     def is_prim2(self) -> bool:
+        """Test if a box is a binary function."""
         return is_box_prim2(self)
 
     def is_prim3(self) -> bool:
+        """Test if a box is a ternary function."""
         return is_box_prim3(self)
 
     def is_prim4(self) -> bool:
+        """Test if a box is a 4 param function."""
         return is_box_prim4(self)
 
     def is_prim5(self) -> bool:
+        """Test if a box is a 5 param function."""
         return is_box_prim5(self)
 
     def is_real(self) -> bool:
+        """Test if a box is a real or floot box."""
         return is_box_real(self)
 
     def is_slot(self) -> bool:
+        """Test if a box is a slot."""
         return is_box_slot(self)
 
     def is_soundfile(self) -> bool:
+        """Test if a box is a soundfile."""
         return is_box_soundfile(self)
 
     def is_symbolic(self) -> bool:
+        """Test if a box is symbolic."""
         return is_box_symbolic(self)
 
     def is_tgroup(self) -> bool:
+        """Test if a box is a tab group."""
         return is_box_tgroup(self)
 
     def is_vgroup(self) -> bool:
+        """Test if a box is a vertical group."""
         return is_box_vgroup(self)
 
     def is_vslider(self) -> bool:
+        """Test if a box is a vertical slider."""
         return is_box_vslider(self)
 
     def is_hslider(self) -> bool:
+        """Test if a box is a horizontal slider."""
         return is_box_hslider(self)
 
     def is_waveform(self) -> bool:
+        """Test if a box is a waveform."""
         return is_box_waveform(self)
 
     def is_wire(self) -> bool:
+        """Test if a box is a wire (pass-through) box."""
         return is_box_wire(self)
 
 
@@ -1164,7 +1199,6 @@ def box_bin_op(fb.SOperator op, Box b1, Box b2) -> Box:
     return Box.from_ptr(b)
 
 
-
 def box_add_op() -> Box:
     cdef fb.Box b = fb.boxAdd()
     return Box.from_ptr(b)
@@ -1222,10 +1256,12 @@ def box_lrightshift(Box b1, Box b2) -> Box:
     return Box.from_ptr(b)
 
 def box_arightshift_op() -> Box:
+    """bitwise arithmetic right shift op"""
     cdef fb.Box b = fb.boxARightShift()
     return Box.from_ptr(b)
 
 def box_arightshift(Box b1, Box b2) -> Box:
+    """bitwise arithmetic right shift"""
     cdef fb.Box b = fb.boxARightShift(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
@@ -2043,7 +2079,6 @@ def is_box_prim4(Box b) -> bool:
 
 def is_box_prim5(Box b) -> bool:
     return fb.isBoxPrim5(b.ptr)
-
 
 
 def is_box_real(Box t) -> bool:

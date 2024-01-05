@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, pathlib
 BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
 sys.path.insert(0, BUILD_PATH)
 
@@ -191,6 +191,20 @@ def test_box_soundfile():
         assert b.is_valid()
         b.print()
 
+# test architectures
+def test_box_create_source_cpp_arch():
+    print_entry("test_box_create_source_cpp")
+    with box_context():
+        b = box_int(7).par(box_float(3.14))
+        assert b.is_valid, "box is not valid"
+        print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
+        code = b.create_source("test_dsp", "cpp", "-a", "ca-qt.cpp", "-A", "./resources/architecture")
+        print("code length", len(code))
+        assert len(code) == 14007
+        assert "BEGIN ARCHITECTURE SECTION" in code
+        # print(code)
+
+
 if __name__ == '__main__':
     print_section("testing cyfaust.box")
     test_create_dsp_factory_from_boxes()
@@ -198,7 +212,7 @@ if __name__ == '__main__':
     test_box_create_source_cpp()
     test_box_create_source_c()
     test_box_create_source_codebox()
-    # test_box_create_source_rust()
+    test_box_create_source_rust()
     test_box_split()
     test_box_hslider()
     test_box_vslider()
@@ -208,5 +222,6 @@ if __name__ == '__main__':
     test_box_write_readonly_table()
     test_box_waveform()
     test_box_soundfile()
+    test_box_create_source_cpp_arch()
 
 

@@ -8,12 +8,42 @@ from pathlib import Path
 
 PLATFORM = platform.system()
 
-DEBUG = True
 
-LOG_LEVEL = logging.DEBUG if DEBUG else logging.INFO
-LOG_FORMAT = "%(relativeCreated)-4d %(levelname)-5s: %(name)-10s %(message)s"
-logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
+DEBUG=True
 
+
+class CustomFormatter(logging.Formatter):
+
+    white = "\x1b[97;20m"
+    grey = "\x1b[38;20m"
+    green = "\x1b[32;20m"
+    cyan = "\x1b[36;20m"
+    yellow = "\x1b[33;20m"
+    red = "\x1b[31;20m"
+    bold_red = "\x1b[31;1m"
+    reset = "\x1b[0m"
+    fmt = "%(asctime)s - {}%(levelname)-8s{} - %(name)s.%(funcName)s - %(message)s"
+
+    FORMATS = {
+        logging.DEBUG: fmt.format(grey, reset),
+        logging.INFO: fmt.format(green, reset),
+        logging.WARNING: fmt.format(yellow, reset),
+        logging.ERROR: fmt.format(red, reset),
+        logging.CRITICAL: fmt.format(bold_red, reset),
+    }
+
+    def format(self, record):
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt, datefmt="%H:%M:%S")
+        return formatter.format(record)
+
+
+handler = logging.StreamHandler()
+handler.setFormatter(CustomFormatter())
+logging.basicConfig(
+    level=logging.DEBUG if DEBUG else logging.INFO,
+    handlers=[handler]
+)
 
 
 class ShellCmd:
@@ -141,6 +171,11 @@ class FaustBuilder(ShellCmd):
             self.copy(
                 self.root / "lib" / "libfaust.2.dylib", self.lib / "libfaust.2.dylib"
             )
+        elif PLATFORM == "Linux":
+            self.copy(
+                self.root / "lib" / "libfaust.so.2", self.lib / "libfaust.so.2"
+            )
+
 
     def copy_staticlib(self):
         self.log.info("copy staticlib")

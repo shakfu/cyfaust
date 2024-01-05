@@ -3,7 +3,7 @@
 
 ##  cyfaust
 
-- [ ] What resources should be included in the package {faust stdlib, archtecture files}?
+- [ ] Decide what to data files to include in the package {faust stdlib, archtecture files}.
 
 - [ ] Add examples
 
@@ -14,7 +14,7 @@
 
 - [ ] Complete `InterpreterDsp.metadata` and `fi.Meta* m` parameter
 
-- [ ] How to specify output file for svg, `-o <path.svg>` doesn't work?
+- [x] How to specify output file for svg, `-o <path.svg>` doesn't work? (not possible)
 
 
 ## cyfaust.box
@@ -29,6 +29,15 @@
 
 - [ ] `box.getparams` and `signal.is_sig_xxx` are inconsistent apis
 
+- [x] auto set package-local libraries and architecture paths 
+
+```
+-A <dir>  --architecture-dir <dir>      add <dir> to the architecture search path.
+
+-I <dir>  --import-dir <dir>            add <dir> to the libraries search path
+
+```
+
 
 ## cyfaust.signal
 
@@ -41,3 +50,4 @@
 - [ ] Improve docstrings
 
 - [ ] `signal.is_sig_xxx` and `Box.getparams` are inconsistent apis
+
