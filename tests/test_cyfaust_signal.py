@@ -2,8 +2,11 @@ import os, sys, time
 BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
 sys.path.insert(0, BUILD_PATH)
 
-from cyfaust import interp
-from cyfaust.signal import *
+try:
+    from cyfaust.interp import *
+    from cyfaust.signal import *
+except ImportError:
+    from cyfaust import *
 
 from testutils import print_section, print_entry
 
@@ -40,7 +43,7 @@ def test_create_dsp_factory_from_signals1():
         in1 = sig_input(0)
         sv.add(sig_delay(in1 + sig_real(0.5), sig_int(500)))
         sv.add(sig_delay(in1 * sig_real(1.5), sig_int(3000)))
-        factory = interp.create_dsp_factory_from_signals("test3", sv)
+        factory = create_dsp_factory_from_signals("test3", sv)
         assert factory
         print("compile options:", factory.get_compile_options())
         print("library list:", factory.get_library_list())
@@ -57,7 +60,7 @@ def test_create_dsp_factory_from_signals2():
         s1 = sig_delay(sig_input(0), sig_int(500)) + sig_real(0.5)
         sv.add(s1);
         sv.add(s1);
-        factory = interp.create_dsp_factory_from_signals("test4", sv)
+        factory = create_dsp_factory_from_signals("test4", sv)
         assert factory
         print("compile options:", factory.get_compile_options())
         print("library list:", factory.get_library_list())

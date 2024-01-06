@@ -47,6 +47,32 @@ cdef class ParamArray:
             free(self.argv)
 
 
+## ---------------------------------------------------------------------------
+## enums
+##
+
+cpdef enum SType:
+    kSInt
+    kSReal
+
+cpdef enum SOperator:
+    kAdd
+    kSub
+    kMul
+    kDiv
+    kRem
+    kLsh
+    kARsh
+    kLRsh
+    kGT
+    kLT
+    kGE
+    kLE
+    kEQ
+    kNE
+    kAND
+    kOR
+    kXOR
 
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust

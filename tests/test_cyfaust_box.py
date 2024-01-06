@@ -2,9 +2,12 @@ import os, sys, pathlib
 BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
 sys.path.insert(0, BUILD_PATH)
 
-from cyfaust.box import *
-from cyfaust.signal import SignalVector
-from cyfaust.interp import create_dsp_factory_from_boxes
+try:
+    from cyfaust.box import *
+    from cyfaust.signal import SignalVector
+    from cyfaust.interp import create_dsp_factory_from_boxes
+except ImportError:
+    from cyfaust import *
 
 from testutils import print_section, print_entry
 

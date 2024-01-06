@@ -4,7 +4,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'bui
 import time
 from pathlib import Path
 
-from cyfaust import interp
+try:
+    from cyfaust.interp import *
+except ImportError:
+    from cyfaust import *
 
 from testutils import print_section, print_entry
 
@@ -29,14 +32,14 @@ TEMP_PATH = "/tmp/FaustDSP.fbc"
 def test_interp_version():
     print_entry("test_interp_version")
 
-    assert interp.get_version()
+    assert get_version()
 
 def test_interp_create_dsp_factory_from_file():
     print_entry("test_interp_create_dsp_factory_from_file")
 
-    print("faust version:", interp.get_version())
+    print("faust version:", get_version())
 
-    factory = interp.create_dsp_factory_from_file('tests/noise.dsp')
+    factory = create_dsp_factory_from_file('tests/noise.dsp')
 
     assert factory
     
@@ -49,13 +52,13 @@ def test_interp_create_dsp_factory_from_file():
     assert dsp
 
     # FIXME: doesn't work!!
-    # ui = interp.PrintUI()
+    # ui = PrintUI()
     # dsp.build_user_interface(ui)
     
     # bypass
     dsp.build_user_interface()
 
-    audio = interp.RtAudioDriver(48000, 256)
+    audio = RtAudioDriver(48000, 256)
 
     audio.init(dsp)
 
@@ -69,7 +72,7 @@ def test_interp_create_dsp_factory_from_string1():
     # For bitcode file write/read test
     
 
-    factory = interp.create_dsp_factory_from_string("FaustDSP", "process = 0.5,0.6;")
+    factory = create_dsp_factory_from_string("FaustDSP", "process = 0.5,0.6;")
 
     assert factory
 
@@ -87,7 +90,7 @@ def test_interp_create_dsp_factory_from_string1():
     
     dsp.build_user_interface()
 
-    audio = interp.RtAudioDriver(48000, 256)
+    audio = RtAudioDriver(48000, 256)
 
     audio.init(dsp)
 
@@ -97,7 +100,7 @@ def test_interp_create_dsp_factory_from_string1():
 def test_interp_create_dsp_factory_from_string2():
     print_entry("test_interp_create_dsp_factory_from_string2")
 
-    factory = interp.create_dsp_factory_from_string("FaustDSP", 
+    factory = create_dsp_factory_from_string("FaustDSP", 
         """process = 0,0 : soundfile("sound[url:{'tests/amen.wav'}]", 0);""")
 
     assert factory
@@ -114,7 +117,7 @@ def test_interp_create_dsp_factory_from_string2():
     
     dsp.build_user_interface()
 
-    audio = interp.RtAudioDriver(48000, 256)
+    audio = RtAudioDriver(48000, 256)
 
     audio.init(dsp)
 
@@ -128,7 +131,7 @@ def test_interp_warning_message():
 
     warn_code = "process = rwtable(10, 10.0, idx, _, idx) with { idx = +(1)~_; };"
 
-    factory = interp.create_dsp_factory_from_string("FaustDSP", warn_code, "-wall")
+    factory = create_dsp_factory_from_string("FaustDSP", warn_code, "-wall")
 
     assert factory
 
@@ -138,7 +141,7 @@ def test_interp_warning_message():
 def test_interp_read_dsp_factory_from_bitcode_file():
     print_entry("test_interp_read_dsp_factory_from_bitcode_file")
 
-    factory = interp.InterpreterDspFactory.from_bitcode_file(TEMP_PATH)
+    factory = InterpreterDspFactory.from_bitcode_file(TEMP_PATH)
 
     assert factory
 
@@ -156,7 +159,7 @@ def test_interp_read_dsp_factory_from_bitcode_file():
     # bypass
     # dsp.build_user_interface()
 
-    audio = interp.RtAudioDriver(48000, 256)
+    audio = RtAudioDriver(48000, 256)
 
     audio.init(dsp)
 
@@ -167,7 +170,7 @@ def test_interp_read_dsp_factory_from_bitcode_file():
 # def test_interp_generate_auxfiles_from_string():
 #     print_entry("test_interp_generate_auxfiles_from_string")
 #     eg = "process = _,3.14 : +;"
-#     assert interp.generate_auxfiles_from_string("svgdsp", eg, "-svg")
+#     assert generate_auxfiles_from_string("svgdsp", eg, "-svg")
 #     svg_folder = Path("svgdsp-svg")
 #     process_svg = svg_folder / "process.svg"
 #     assert svg_folder.exists()

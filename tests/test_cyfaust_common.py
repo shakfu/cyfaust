@@ -1,7 +1,12 @@
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build'))
 
-from cyfaust.common import ParamArray
+
+
+try:
+    from cyfaust.common import ParamArray
+except ImportError:
+    from cyfaust import ParamArray
 
 from testutils import print_section, print_entry
 

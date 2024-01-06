@@ -37,7 +37,8 @@ else:
 if PLATFORM == 'Darwin':
     EXTRA_LINK_ARGS.append('-mmacosx-version-min=13.6')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos
-    EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
+    if not STATIC:
+        EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
     os.environ['LDFLAGS'] = " ".join([
         "-framework CoreFoundation",
         "-framework CoreAudio"
