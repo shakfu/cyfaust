@@ -15,7 +15,7 @@ from .common import ParamArray
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust-box
 
-def box_or_int(var):
+def box_or_int(var: Box | int) -> Box:
     if isinstance(var, int):
         return Box.from_int(var)
     if isinstance(var, Box):
@@ -23,7 +23,7 @@ def box_or_int(var):
         return var
     raise TypeError("argument must be an int or a boxInt")
 
-def box_or_float(var):
+def box_or_float(var: Box | float) -> Box:
     if isinstance(var, float):
         return Box.from_real(var)
     elif isinstance(var, Box):
@@ -31,7 +31,7 @@ def box_or_float(var):
         return var
     raise TypeError("argument must be an float or a boxReal")
 
-def box_or_number(var):
+def box_or_number(var: Box | float | int) -> Box:
     if isinstance(var, int):
         return Box.from_int(var)
     if isinstance(var, float):
@@ -43,6 +43,10 @@ def box_or_number(var):
 
 
 class box_context:
+    """box context manager
+
+    required for box operations
+    """
     def __enter__(self):
         fb.createLibContext()
     def __exit__(self, type, value, traceback):
@@ -1200,63 +1204,77 @@ def box_bin_op(fb.SOperator op, Box b1, Box b2) -> Box:
 
 
 def box_add_op() -> Box:
+    """nullary box add operation."""
     cdef fb.Box b = fb.boxAdd()
     return Box.from_ptr(b)
 
 def box_add(Box b1, Box b2) -> Box:
+    """binary box add operation."""
     cdef fb.Box b = fb.boxAdd(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_sub_op() -> Box:
+    """nullary box substract operation."""
     cdef fb.Box b = fb.boxSub()
     return Box.from_ptr(b)
 
 def box_sub(Box b1, Box b2) -> Box:
+    """binary box substract operation."""
     cdef fb.Box b = fb.boxSub(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_mul_op() -> Box:
+    """nullary box multipy operation."""
     cdef fb.Box b = fb.boxMul()
     return Box.from_ptr(b)
 
 def box_mul(Box b1, Box b2) -> Box:
+    """binary box multiply operation."""
     cdef fb.Box b = fb.boxMul(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_div_op() -> Box:
+    """nullary box divide operation."""
     cdef fb.Box b = fb.boxDiv()
     return Box.from_ptr(b)
 
 def box_div(Box b1, Box b2) -> Box:
+    """binary box divide operation."""
     cdef fb.Box b = fb.boxDiv(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_rem_op() -> Box:
+    """nullary box modulo operation."""
     cdef fb.Box b = fb.boxRem()
     return Box.from_ptr(b)
 
 def box_rem(Box b1, Box b2) -> Box:
+    """binary box modulo operation."""
     cdef fb.Box b = fb.boxRem(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_leftshift_op() -> Box:
+    """nullary box left bitshift operation."""
     cdef fb.Box b = fb.boxLeftShift()
     return Box.from_ptr(b)
 
 def box_leftshift(Box b1, Box b2) -> Box:
+    """binary box left bit shift operation."""
     cdef fb.Box b = fb.boxLeftShift(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_lrightshift_op() -> Box:
+    """nullary box logical right bit shift operation."""
     cdef fb.Box b = fb.boxLRightShift()
     return Box.from_ptr(b)
 
 def box_lrightshift(Box b1, Box b2) -> Box:
+    """binary box logical right bit shift operation."""
     cdef fb.Box b = fb.boxLRightShift(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_arightshift_op() -> Box:
-    """bitwise arithmetic right shift op"""
+    """bitwise arithmetic right bit shift op"""
     cdef fb.Box b = fb.boxARightShift()
     return Box.from_ptr(b)
 
@@ -1266,253 +1284,313 @@ def box_arightshift(Box b1, Box b2) -> Box:
     return Box.from_ptr(b)
 
 def box_gt_op() -> Box:
+    """nullary greater than operation."""
     cdef fb.Box b = fb.boxGT()
     return Box.from_ptr(b)
 
 def box_gt(Box b1, Box b2) -> Box:
+    """binary box greater than operation."""
     cdef fb.Box b = fb.boxGT(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_lt_op() -> Box:
+    """nullary less than operation."""
     cdef fb.Box b = fb.boxLT()
     return Box.from_ptr(b)
 
 def box_lt(Box b1, Box b2) -> Box:
+    """binary box lesser than operation."""
     cdef fb.Box b = fb.boxLT(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_ge_op() -> Box:
+    """nullary greater than or equal operation."""
     cdef fb.Box b = fb.boxGE()
     return Box.from_ptr(b)
 
 def box_ge(Box b1, Box b2) -> Box:
+    """binary box greater than or equal operation."""
     cdef fb.Box b = fb.boxGE(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_le_op() -> Box:
+    """nullary less than than equal operation."""
     cdef fb.Box b = fb.boxLE()
     return Box.from_ptr(b)
 
 def box_le(Box b1, Box b2) -> Box:
+    """binary box lesser than or equaloperation."""
     cdef fb.Box b = fb.boxLE(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_eq_op() -> Box:
+    """nullary equal operation."""
     cdef fb.Box b = fb.boxEQ()
     return Box.from_ptr(b)
 
 def box_eq(Box b1, Box b2) -> Box:
+    """binary box equals operation."""
     cdef fb.Box b = fb.boxEQ(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_ne_op() -> Box:
+    """nullary not equal than operation."""
     cdef fb.Box b = fb.boxNE()
     return Box.from_ptr(b)
 
 def box_ne(Box b1, Box b2) -> Box:
+    """binary box not equals than operation."""
     cdef fb.Box b = fb.boxNE(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_and_op() -> Box:
+    """nullary AND operation."""
     cdef fb.Box b = fb.boxAND()
     return Box.from_ptr(b)
 
 def box_and(Box b1, Box b2) -> Box:
+    """binary box AND operation."""
     cdef fb.Box b = fb.boxAND(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_or_op() -> Box:
+    """nullary OR operation."""
     cdef fb.Box b = fb.boxOR()
     return Box.from_ptr(b)
 
 def box_or(Box b1, Box b2) -> Box:
+    """binary box OR operation."""
     cdef fb.Box b = fb.boxOR(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_xor_op() -> Box:
+    """nullary XOR operation."""
     cdef fb.Box b = fb.boxXOR()
     return Box.from_ptr(b)
 
 def box_xor(Box b1, Box b2) -> Box:
+    """binary box XOR operation."""
     cdef fb.Box b = fb.boxXOR(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 
 def box_abs_op() -> Box:
+    """nullary absolute operation."""
     cdef fb.Box b = fb.boxAbs()
     return Box.from_ptr(b)
 
 def box_abs(Box x) -> Box:
+    """unitary box absolute operation."""
     cdef fb.Box b = fb.boxAbs(x.ptr)
     return Box.from_ptr(b)
 
 def box_acos_op() -> Box:
+    """nullary arccosine than operation."""
     cdef fb.Box b = fb.boxAcos()
     return Box.from_ptr(b)
 
 def box_acos(Box x) -> Box:
+    """unitary box arccosine operation."""
     cdef fb.Box b = fb.boxAcos(x.ptr)
     return Box.from_ptr(b)
 
 def box_tan_op() -> Box:
+    """nullary tangent operation."""
     cdef fb.Box b = fb.boxTan()
     return Box.from_ptr(b)
 
 def box_tan(Box x) -> Box:
+    """unitary box tangent operation."""
     cdef fb.Box b = fb.boxTan(x.ptr)
     return Box.from_ptr(b)
 
 def box_sqrt_op() -> Box:
+    """nullary square root than operation."""
     cdef fb.Box b = fb.boxSqrt()
     return Box.from_ptr(b)
 
 def box_sqrt(Box x) -> Box:
+    """unitary box sqrt operation."""
     cdef fb.Box b = fb.boxSqrt(x.ptr)
     return Box.from_ptr(b)
 
 def box_sin_op() -> Box:
+    """nullary sine op than operation."""
     cdef fb.Box b = fb.boxSin()
     return Box.from_ptr(b)
 
 def box_sin(Box x) -> Box:
+    """unitary box sine operation."""
     cdef fb.Box b = fb.boxSin(x.ptr)
     return Box.from_ptr(b)
 
 def box_rint_op() -> Box:
+    """nullary round int operation."""
     cdef fb.Box b = fb.boxRint()
     return Box.from_ptr(b)
 
 def box_rint(Box x) -> Box:
+    """unitary box round int operation."""
     cdef fb.Box b = fb.boxRint(x.ptr)
     return Box.from_ptr(b)
 
 def box_round_op() -> Box:
+    """nullary round float operation."""
     cdef fb.Box b = fb.boxRound()
     return Box.from_ptr(b)
 
 def box_round(Box x) -> Box:
+    """unitary box round operation."""
     cdef fb.Box b = fb.boxRound(x.ptr)
     return Box.from_ptr(b)
 
 def box_log_op() -> Box:
+    """nullary log operation."""
     cdef fb.Box b = fb.boxLog()
     return Box.from_ptr(b)
 
 def box_log(Box x) -> Box:
+    """unitary box log operation."""
     cdef fb.Box b = fb.boxLog(x.ptr)
     return Box.from_ptr(b)
 
 def box_log10_op() -> Box:
+    """nullary log10 operation."""
     cdef fb.Box b = fb.boxLog10()
     return Box.from_ptr(b)
 
 def box_log10(Box x) -> Box:
+    """unitary box log10 operation."""
     cdef fb.Box b = fb.boxLog10(x.ptr)
     return Box.from_ptr(b)
 
 def box_floor_op() -> Box:
+    """nullary floor operation."""
     cdef fb.Box b = fb.boxFloor()
     return Box.from_ptr(b)
 
 def box_floor(Box x) -> Box:
+    """unitary box floor operation."""
     cdef fb.Box b = fb.boxFloor(x.ptr)
     return Box.from_ptr(b)
 
 def box_exp_op() -> Box:
+    """nullary exp operation."""
     cdef fb.Box b = fb.boxExp()
     return Box.from_ptr(b)
 
 def box_exp(Box x) -> Box:
+    """unitary box exp operation."""
     cdef fb.Box b = fb.boxExp(x.ptr)
     return Box.from_ptr(b)
 
 def box_exp10_op() -> Box:
+    """nullary exp10 operation."""
     cdef fb.Box b = fb.boxExp10()
     return Box.from_ptr(b)
 
 def box_exp10(Box x) -> Box:
+    """unitary box exp10 operation."""
     cdef fb.Box b = fb.boxExp10(x.ptr)
     return Box.from_ptr(b)
 
 def box_cos_op() -> Box:
+    """nullary cosine operation."""
     cdef fb.Box b = fb.boxCos()
     return Box.from_ptr(b)
 
 def box_cos(Box x) -> Box:
+    """unitary box cosine operation."""
     cdef fb.Box b = fb.boxCos(x.ptr)
     return Box.from_ptr(b)
 
 def box_ceil_op() -> Box:
+    """nullary ceiling operation."""
     cdef fb.Box b = fb.boxCeil()
     return Box.from_ptr(b)
 
 def box_ceil(Box x) -> Box:
+    """unitary box ceiling operation."""
     cdef fb.Box b = fb.boxCeil(x.ptr)
     return Box.from_ptr(b)
 
 def box_atan_op() -> Box:
+    """nullary arc tangent operation."""
     cdef fb.Box b = fb.boxAtan()
     return Box.from_ptr(b)
 
 def box_atan(Box x) -> Box:
+    """unitary box arctangent operation."""
     cdef fb.Box b = fb.boxAtan(x.ptr)
     return Box.from_ptr(b)
 
 def box_asin_op() -> Box:
+    """nullary arcsine operation."""
     cdef fb.Box b = fb.boxAsin()
     return Box.from_ptr(b)
 
 def box_asin(Box x) -> Box:
+    """unitary box arcsine operation."""
     cdef fb.Box b = fb.boxAsin(x.ptr)
     return Box.from_ptr(b)
 
-
-
 def box_remainder_op() -> Box:
+    """nullary remainder operation."""
     cdef fb.Box b = fb.boxRemainder()
     return Box.from_ptr(b)
 
 def box_remainder(Box b1, Box b2) -> Box:
+    """binary box remainder operation."""
     cdef fb.Box b = fb.boxRemainder(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_pow_op() -> Box:
+    """nullary power operation."""
     cdef fb.Box b = fb.boxPow()
     return Box.from_ptr(b)
 
 def box_pow(Box b1, Box b2) -> Box:
+    """binary box power operation."""
     cdef fb.Box b = fb.boxPow(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_min_op() -> Box:
+    """nullary minimum operation."""
     cdef fb.Box b = fb.boxMin()
     return Box.from_ptr(b)
 
 def box_min(Box b1, Box b2) -> Box:
+    """binary box minimum operation."""
     cdef fb.Box b = fb.boxMin(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_max_op() -> Box:
+    """nullary maximum operation."""
     cdef fb.Box b = fb.boxMax()
     return Box.from_ptr(b)
 
 def box_max(Box b1, Box b2) -> Box:
+    """binary box maximum operation."""
     cdef fb.Box b = fb.boxMax(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_fmod_op() -> Box:
+    """nullary fmod operation."""
     cdef fb.Box b = fb.boxFmod()
     return Box.from_ptr(b)
 
 def box_fmod(Box b1, Box b2) -> Box:
+    """binary box fmod operation."""
     cdef fb.Box b = fb.boxFmod(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_atan2_op() -> Box:
+    """nullary arctangent2 operation."""
     cdef fb.Box b = fb.boxAtan2()
     return Box.from_ptr(b)
 
 def box_atan2(Box b1, Box b2) -> Box:
+    """binary box arctan2 operation."""
     cdef fb.Box b = fb.boxAtan2(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
@@ -1695,6 +1773,7 @@ def box_attach(Box b1, Box b2) -> Box:
 #     return fb.boxPrim2(foo)
 
 def is_box_abstr(Box t) -> bool:
+    """test if box is an abtraction."""
     return fb.isBoxAbstr(t.ptr)
 
 def getparams_box_abstr(Box t) -> dict:
@@ -1720,6 +1799,7 @@ def getparams_box_access(Box t) -> dict:
         return {}
 
 def is_box_appl(Box t) -> bool:
+    """test if box is an application."""
     return fb.isBoxAppl(t.ptr)
 
 def getparams_box_appl(Box t) -> dict:
@@ -1734,6 +1814,7 @@ def getparams_box_appl(Box t) -> dict:
         return {}
 
 def is_box_button(Box b) -> bool:
+    """test if box is a button."""
     return fb.isBoxButton(b.ptr)
 
 def getparams_box_button(Box b) -> dict:
@@ -1746,6 +1827,7 @@ def getparams_box_button(Box b) -> dict:
         return {}
 
 def is_box_case(Box b) -> bool:
+    """test if box is a case."""
     return fb.isBoxCase(b.ptr)
 
 def getparams_box_case(Box b) -> dict:
@@ -1758,6 +1840,7 @@ def getparams_box_case(Box b) -> dict:
         return {}
 
 def is_box_checkbox(Box b) -> bool:
+    """test if box is a checkbox."""
     return fb.isBoxCheckbox(b.ptr)
 
 def getparams_box_checkbox(Box b) -> dict:
@@ -1779,15 +1862,18 @@ def getparams_box_component(Box b) -> dict:
         return {}
 
 def is_box_cut(Box t) -> bool:
+    """test if box is a cut."""
     return fb.isBoxCut(t.ptr)
 
 def is_box_environment(Box b) -> bool:
     return fb.isBoxEnvironment(b.ptr)
 
 def is_box_error(Box t) -> bool:
+    """test if box is an error."""
     return fb.isBoxError(t.ptr)
 
 def is_box_fconst(Box b) -> bool:
+    """test if box is an fconst."""
     return fb.isBoxFConst(b.ptr)
 
 def getparams_box_fconst(Box b) -> dict:
@@ -1804,6 +1890,7 @@ def getparams_box_fconst(Box b) -> dict:
         return {}
 
 def is_box_ffun(Box b) -> bool:
+    """test if box is an ffun."""
     return fb.isBoxFFun(b.ptr)
 
 def getparams_box_ffun(Box b) -> dict:
@@ -1816,6 +1903,7 @@ def getparams_box_ffun(Box b) -> dict:
         return {}
 
 def is_box_fvar(Box b) -> bool:
+    """test if box is an fvar."""
     return fb.isBoxFVar(b.ptr)
 
 def getparams_box_fvar(Box b) -> dict:
@@ -1832,6 +1920,7 @@ def getparams_box_fvar(Box b) -> dict:
         return {}
 
 def is_box_hbargraph(Box b) -> bool:
+    """test if box is a hbargraph."""
     return fb.isBoxHBargraph(b.ptr)
 
 def getparams_box_hbargraph(Box b) -> dict:
@@ -1848,6 +1937,7 @@ def getparams_box_hbargraph(Box b) -> dict:
         return {}
 
 def is_box_hgroup(Box b) -> bool:
+    """test if box is an horizontal group."""
     return fb.isBoxHGroup(b.ptr)
 
 def getparams_box_hgroup(Box b) -> dict:
@@ -1862,6 +1952,7 @@ def getparams_box_hgroup(Box b) -> dict:
         return {}
 
 def is_box_hslider(Box b) -> bool:
+    """test if box is an horizontal slider."""
     return fb.isBoxHSlider(b.ptr)
 
 def getparams_box_hslider(Box b) -> dict:
@@ -1882,6 +1973,7 @@ def getparams_box_hslider(Box b) -> dict:
         return {}
 
 def is_box_ident(Box t) -> bool:
+    """test if box is an indentifier."""
     return fb.isBoxIdent(t.ptr)
 
 def get_box_id(Box t) -> str | None:
@@ -1900,6 +1992,7 @@ def getparams_box_inputs(Box t) -> dict:
         return {}
 
 def is_box_int(Box t) -> bool:
+    """test if box is an int."""
     return fb.isBoxInt(t.ptr)
 
 def getparams_box_int(Box t) -> dict:
@@ -1995,6 +2088,7 @@ def getparams_box_metadata(Box b) -> dict:
         return {}
 
 def is_box_numentry(Box b) -> bool:
+    """test if box is a numentry."""
     return fb.isBoxNumEntry(b.ptr)
 
 def getparams_box_num_entry(Box b) -> dict:
@@ -2082,6 +2176,7 @@ def is_box_prim5(Box b) -> bool:
 
 
 def is_box_real(Box t) -> bool:
+    """test if box is a real or float."""
     return fb.isBoxReal(t.ptr)
 
 def getparams_box_real(Box t) -> dict:
@@ -2129,6 +2224,7 @@ def getparams_box_seq(Box t) -> dict:
         return {}
 
 def is_box_slot(Box t) -> bool:
+    """test if box is a slot."""
     return fb.isBoxSlot(t.ptr)
 
 def getparams_box_slot(Box t) -> dict:
@@ -2141,6 +2237,7 @@ def getparams_box_slot(Box t) -> dict:
         return {}
 
 def is_box_soundfile(Box b) -> bool:
+    """test if box is a soundfile."""
     return fb.isBoxSoundfile(b.ptr)
 
 def getparams_box_soundfile(Box b) -> dict:
@@ -2166,6 +2263,7 @@ def getparams_box_split(Box t) -> dict:
         return {}
 
 def is_box_symbolic(Box t) -> bool:
+    """test if box is symbolic."""
     return fb.isBoxSymbolic(t.ptr)
 
 def getparams_box_symbolic(Box t) -> dict:
@@ -2180,6 +2278,7 @@ def getparams_box_symbolic(Box t) -> dict:
         return {}
 
 def is_box_tgroup(Box b) -> bool:
+    """test if box is a tab group."""
     return fb.isBoxTGroup(b.ptr)
 
 def getparams_box_tgroup(Box b) -> dict:
@@ -2194,6 +2293,7 @@ def getparams_box_tgroup(Box b) -> dict:
         return {}
 
 def is_box_vbargraph(Box b) -> bool:
+    """test if box is a vertical bargraph."""
     return fb.isBoxVBargraph(b.ptr)
 
 def getparams_box_vbargraph(Box b) -> dict:
@@ -2210,6 +2310,7 @@ def getparams_box_vbargraph(Box b) -> dict:
         return {}
 
 def is_box_vgroup(Box b) -> bool:
+    """test if box is a vertical group."""
     return fb.isBoxVGroup(b.ptr)
 
 def getparams_box_vgroup(Box b) -> dict:
@@ -2244,9 +2345,11 @@ def getparams_box_vslider(Box b) -> dict:
         return {}
 
 def is_box_waveform(Box b) -> bool:
+    """test if box is a waveform."""
     return fb.isBoxWaveform(b.ptr)
 
 def is_box_wire(Box t) -> bool:
+    """test if box is a wire."""
     return fb.isBoxWire(t.ptr)
 
 def getparams_box_with_local_def(Box t) -> dict:

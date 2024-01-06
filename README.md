@@ -2,9 +2,38 @@
 
 A [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
-Built with the objective of having a minimal, modular, self-contained, cross-platform python3 extension.
+Intended to be a minimal, modular, self-contained, cross-platform python3 wrappre of the faust interpreter.
 
-This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name which was built as a single statically compiled module. After this was modularized into a package, it was spun off as this project which exclusively uses a standard python build systems (setup.py, etc..)
+
+This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name.
+
+It has two build variants:
+
+1. The default build is the dynamic build: dynamically linked to `libfaust.dylib` or `libfaust.so` and consisting of a python package with compiled submodules:
+
+```bash
+make
+```
+
+or 
+
+```bash
+python3 setup.py build
+```
+
+2. Optionally, the module can be build as a single statically linked (with `libfaust.a`) extension module.
+
+```bash
+STATIC=1 make
+```
+
+or
+
+```bash
+STATIC=1 python3 setup.py build
+```
+
+
 
 ## Features
 

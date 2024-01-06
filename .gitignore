@@ -8,6 +8,7 @@ resources/
 
 # don't include cython-generated cpp
 src/cyfaust/*.cpp
+src/static/cyfaust/*.cpp
 
 # general macos detritus
 .DS_Store

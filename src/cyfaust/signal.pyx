@@ -8,7 +8,7 @@ from .common cimport ParamArray
 from .common import ParamArray
 
 
-def sig_or_float(var):
+def sig_or_float(var: Signal | float) -> Signal:
     if isinstance(var, float):
         return Signal.from_real(var)
     elif isinstance(var, Signal):
@@ -16,7 +16,7 @@ def sig_or_float(var):
         return var
     raise TypeError("argument must be an float or a sigReal")
 
-def sig_or_int(var):
+def sig_or_int(var: Signal | int) -> Signal:
     if isinstance(var, int):
         return Signal.from_int(var)
     elif isinstance(var, Signal):
