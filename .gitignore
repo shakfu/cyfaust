@@ -4,7 +4,9 @@
 bin/
 lib/
 share/
-resources/
+
+# dynamically generated
+# MANIFEST.in
 
 # don't include cython-generated cpp
 src/cyfaust/*.cpp

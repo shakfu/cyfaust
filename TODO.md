@@ -5,7 +5,7 @@
 
 - [ ] Decide what to data files to include in the package {faust stdlib, archtecture files}.
 
-- [ ] Add examples
+- [ ] Add cyfaust examples
 
 
 ## cyfaust.interp

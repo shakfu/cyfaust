@@ -65,9 +65,14 @@ def mk_extension(name, sources, define_macros=None):
 # ----------------------------------------------------------------------------
 # STATIC BUILD
 
-if STATIC: 
+if STATIC:
+
+    with open("MANIFEST.in", "w") as f:
+        f.write("graft src/static/cyfaust/resources\n")
+        f.write("global-exclude *.cpp\n")
+
     extensions = [
-        mk_extension("cyfaust", 
+        mk_extension("cyfaust.cyfaust", 
             sources=["src/static/cyfaust/cyfaust.pyx"] + RTAUDIO_SRC,
             define_macros=DEFINE_MACROS,
         ),
@@ -82,13 +87,17 @@ if STATIC:
         ),
         package_dir = {"cyfaust": "src/static/cyfaust"},
         packages=['cyfaust'],
-        # include_package_data=True
+        include_package_data=True
     )
 
 # ----------------------------------------------------------------------------
 # DEFAULT MODULAR DYNAMIC BUILD
 
 else:
+
+    with open("MANIFEST.in", "w") as f:
+        f.write("graft src/cyfaust/resources\n")
+        f.write("global-exclude *.cpp\n")
 
     extensions = [
         mk_extension("cyfaust.interp", 
@@ -109,6 +118,6 @@ else:
         ),
         package_dir = {"cyfaust": "src/cyfaust"},
         packages=['cyfaust'],
-        # include_package_data=True
+        include_package_data=True
     )
 
