@@ -19,8 +19,6 @@
 
 ## cyfaust.box
 
-- [ ] Complete `boxARightShift`
-
 - [ ] Try to find a use for `getUserData`: Return the xtended type of a box
 
 - [ ] Add classes (thin wrappers around `Box`)

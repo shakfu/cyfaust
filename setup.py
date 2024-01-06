@@ -34,10 +34,10 @@ elif PLATFORM == 'Linux':
     DEFINE_MACROS.append(("__LINUX_ALSA__", None))
 
 
-def mk_extension(name, source, define_macros=None):
+def mk_extension(name, sources, define_macros=None):
     return Extension(
-        name,
-        source,
+        name=name,
+        sources=sources,
         define_macros=define_macros if define_macros else [],
         include_dirs = INCLUDE_DIRS,
         libraries = LIBRARIES,
@@ -45,11 +45,13 @@ def mk_extension(name, source, define_macros=None):
         extra_objects = EXTRA_OBJECTS,
         extra_compile_args = EXTRA_COMPILE_ARGS,
         extra_link_args = EXTRA_LINK_ARGS,
+        language="c++",
+        # py_limited_api=True,
     )
 
 extensions = [
     mk_extension("cyfaust.interp", 
-        source=["src/cyfaust/interp.pyx"] + RTAUDIO_SRC,
+        sources=["src/cyfaust/interp.pyx"] + RTAUDIO_SRC,
         define_macros=DEFINE_MACROS,
     ),
     mk_extension("cyfaust.common", ["src/cyfaust/common.pyx"]),
@@ -65,5 +67,6 @@ setup(
         language_level="3",
     ),
     package_dir = {"cyfaust": "src/cyfaust"},
-    packages=['cyfaust']
+    packages=['cyfaust'],
+    # include_package_data=True
 )
