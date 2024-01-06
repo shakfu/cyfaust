@@ -1,2 +1,0 @@
-graft src/static/cyfaust/resources
-global-exclude *.cpp
