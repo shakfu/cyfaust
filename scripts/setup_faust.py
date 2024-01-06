@@ -155,7 +155,7 @@ class FaustBuilder(ShellCmd):
 
     def copy_executables(self):
         self.log.info("copy executables")
-        self.makedirs("./bin")
+        self.makedirs(self.bin)
         for e in ["faust", "faust-config", "faustpath"]:
             self.copy(self.root / "bin" / e, self.bin / e)
 

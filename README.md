@@ -9,7 +9,7 @@ This project started off as a [faustlab](https://github.com/shakfu/faustlab) sub
 
 It has two build variants:
 
-1. The default build is the dynamic build: dynamically linked to `libfaust.dylib` or `libfaust.so` and consisting of a python package with compiled submodules:
+1. The default build is dynamically linked to `libfaust.dylib` or `libfaust.so` and consisting of a python package with compiled submodules:
 
 ```bash
 make
@@ -39,7 +39,7 @@ STATIC=1 python3 setup.py build
 
 - Python-oriented implementation of the faust intrepreter
 
-- Provides the following submodules:
+- Provides the following submodules (in the default build):
 
     - `cyfaust.interp`: wraps the faust interpreter and the rtaudio audio driver
 
@@ -54,6 +54,7 @@ STATIC=1 python3 setup.py build
 - Does not use LLVM to keep size low.
 
 - Can generate code using the following backends:
+
      - c++
      - c
      - rust

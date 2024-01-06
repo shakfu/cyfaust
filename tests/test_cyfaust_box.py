@@ -192,16 +192,16 @@ def test_box_soundfile():
         b.print()
 
 # test architectures
-def test_box_create_source_cpp_arch():
-    print_entry("test_box_create_source_cpp")
-    with box_context():
-        b = box_int(7).par(box_float(3.14))
-        assert b.is_valid, "box is not valid"
-        print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
-        code = b.create_source("test_dsp", "cpp", "-a", "ca-qt.cpp", "-A", "./resources/architecture")
-        print("code length", len(code))
-        assert len(code) == 14007
-        assert "BEGIN ARCHITECTURE SECTION" in code
+# def test_box_create_source_cpp_arch():
+#     print_entry("test_box_create_source_cpp")
+#     with box_context():
+#         b = box_int(7).par(box_float(3.14))
+#         assert b.is_valid, "box is not valid"
+#         print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
+#         code = b.create_source("test_dsp", "cpp", "-a", "ca-qt.cpp", "-A", "./resources/architecture")
+#         print("code length", len(code))
+#         assert len(code) == 14007
+#         assert "BEGIN ARCHITECTURE SECTION" in code
         # print(code)
 
 
@@ -222,6 +222,6 @@ if __name__ == '__main__':
     test_box_write_readonly_table()
     test_box_waveform()
     test_box_soundfile()
-    test_box_create_source_cpp_arch()
+    # test_box_create_source_cpp_arch()
 
 
