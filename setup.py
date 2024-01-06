@@ -20,13 +20,18 @@ INCLUDE_DIRS = [INCLUDE]
 LIBRARY_DIRS = [LIB]
 EXTRA_OBJECTS = []
 EXTRA_LINK_ARGS = []
-LIBRARIES = ["faust.2", "pthread"]
+LIBRARIES = ["pthread"]
 DEFINE_MACROS = [("INTERP_DSP", 1)]
 EXTRA_COMPILE_ARGS = ['-std=c++11']
 RTAUDIO_SRC = [
     "include/rtaudio/RtAudio.cpp",
     "include/rtaudio/rtaudio_c.cpp",
 ]
+
+if STATIC:
+    EXTRA_OBJECTS.append('lib/libfaust.a')
+else:
+    LIBRARIES.append('faust.2')
 
 # platform specific
 if PLATFORM == 'Darwin':
@@ -80,7 +85,8 @@ if STATIC:
     )
 
 # ----------------------------------------------------------------------------
-# MODULAR DYNAMIC BUILD
+# DEFAULT MODULAR DYNAMIC BUILD
+
 else:
 
     extensions = [
