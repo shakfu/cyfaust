@@ -4,8 +4,7 @@ import subprocess
 from setuptools import Extension, setup
 from Cython.Build import cythonize
 
-# set static or dynamic here
-
+# set static or dynamic build here
 STATIC = os.getenv("STATIC", False)
 
 # ----------------------------------------------------------------------------
@@ -16,7 +15,7 @@ CWD = os.getcwd()
 LIB = os.path.join(CWD, 'lib')
 INCLUDE = os.path.join(CWD, 'include')
 
-
+# common configuration
 INCLUDE_DIRS = [INCLUDE]
 LIBRARY_DIRS = [LIB]
 EXTRA_OBJECTS = []
@@ -29,23 +28,29 @@ RTAUDIO_SRC = [
     "include/rtaudio/rtaudio_c.cpp",
 ]
 
-if STATIC:
-    EXTRA_OBJECTS.append('lib/libfaust.a')
-else:
-    LIBRARIES.append('faust.2')
-
-# platform specific
+# platform specific  configuration
 if PLATFORM == 'Darwin':
     EXTRA_LINK_ARGS.append('-mmacosx-version-min=13.6')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos
-    if not STATIC:
+    if STATIC:
+        EXTRA_OBJECTS.append('lib/libfaust.a')
+    else:
         EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
+        LIBRARIES.append('faust.2')
     os.environ['LDFLAGS'] = " ".join([
         "-framework CoreFoundation",
         "-framework CoreAudio"
     ])
 elif PLATFORM == 'Linux':
     DEFINE_MACROS.append(("__LINUX_ALSA__", None))
+    if STATIC:
+        EXTRA_OBJECTS.append('lib/libfaust.a')
+    else:
+        EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
+        LIBRARIES.extend([
+            'asound',
+            'faust',
+        ])
 
 
 def mk_extension(name, sources, define_macros=None):
@@ -124,4 +129,3 @@ else:
         packages=['cyfaust'],
         include_package_data=True
     )
-

@@ -7,6 +7,8 @@
 
 - [ ] Add cyfaust examples
 
+- [ ] Add Linux support (almost done except requires `#include <limits>` in `faust/export.h`)
+
 
 ## cyfaust.interp
 
