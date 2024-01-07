@@ -4,35 +4,13 @@ A [cython](https://github.com/cython/cython) wrapper of the [Faust](https://gith
 
 Intended to be a minimal, modular, self-contained, cross-platform python3 wrappre of the faust interpreter.
 
-
 This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name.
 
 It has two build variants:
 
-1. The default build is dynamically linked to `libfaust.dylib` or `libfaust.so` and consisting of a python package with compiled submodules:
+1. The default build is dynamically linked to `libfaust.dylib` or `libfaust.so` and consists of a python package with multiple compiled submodules and embedded resources (faust libraries and architecture files).
 
-```bash
-make
-```
-
-or 
-
-```bash
-python3 setup.py build
-```
-
-2. Optionally, the module can be build as a single statically linked (with `libfaust.a`) extension module.
-
-```bash
-STATIC=1 make
-```
-
-or
-
-```bash
-STATIC=1 python3 setup.py build
-```
-
+2. The static build is statically linked (with `libfaust.a`) and consists of a python package with a single compiled submodule and embedded resources (faust libraries and architecture files)
 
 
 ## Features
@@ -88,15 +66,38 @@ Optional
 
 Developed and tested only on macOS x86_64 and arm64 for the time being.
 
-1. `./scripts/setup.sh`
+1. `./scripts/setup.sh` or even better, `./scripts/setup_faust.py`:
 
     - This will download faust into the `build` directory, configure it, build it, and install the build into a local `prefix` inside the `build` directory/
 
     - The faust executable, staticlib / dylib, headers and stdlib from the newly installed local prefix will be copied into the project directory and and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
 
-2. `make`
+2. To build the default variant package and/or wheel:
     
-    - will build `cyfaust`
+
+```bash
+make
+```
+
+or 
+
+```bash
+python3 setup.py build
+```
+ 
+and for a wheel:
+
+```bash
+make wheel
+```
+
+For the static variant just set the environ variable `STATIC=1` in front of above commands. For example:
+
+```bash
+STATIC=1 make
+```
+
+etc.
 
 3. `make test` will run the tests in sequence. You can also run `pytest` to do the same.
 

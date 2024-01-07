@@ -3,7 +3,7 @@
 
 ##  cyfaust
 
-- [ ] Decide what to data files to include in the package {faust stdlib, archtecture files}.
+- [x] Decide what data files to include in the package {faust stdlib, archtecture files}.
 
 - [ ] Add cyfaust examples
 
@@ -23,7 +23,7 @@
 
 - [ ] Add classes (thin wrappers around `Box`)
 
-- [ ] Improve docstrings
+- [x] Improve docstrings
 
 - [ ] `box.getparams` and `signal.is_sig_xxx` are inconsistent apis
 

@@ -1,5 +1,6 @@
 # distutils: language = c++
 
+import os
 from libc.stdlib cimport malloc, free
 from libcpp.string cimport string
 from libcpp.vector cimport vector
@@ -20,12 +21,22 @@ cdef extern from "Python.h":
 ## common utility classes / functions
 ##
 
+def get_package_resources() -> tuple[str, str, str, str]:
+    """provides the paths of package architecture and library files."""
+    resources = os.path.join(os.path.dirname(__file__), "resources")
+    archs = os.path.join(resources, "architecture")
+    libs = os.path.join(resources, "libraries")
+    return ("-A", archs, "-I", libs)
+
+PACKAGE_RESOURCES = get_package_resources()
+
 cdef class ParamArray:
     """wrapper classs around faust parameter array"""
     cdef const char ** argv
     cdef int argc
 
     def __cinit__(self, tuple ptuple):
+        ptuple = ptuple + PACKAGE_RESOURCES
         self.argc = len(ptuple)
         self.argv = <const char **>malloc(self.argc * sizeof(char *))
         for i in range(self.argc):
