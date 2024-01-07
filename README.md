@@ -35,6 +35,7 @@ It has two build variants:
         └── libraries
 ```
 
+Currently dveloped and tested only on macOS x86_64 and arm64. 
 
 ## Features
 
@@ -72,11 +73,24 @@ It has two build variants:
 
 ## Status
 
-Wrapping and modularization are mostly complete except for a few areas (see `TODO`). Current focus is on creating a test suite, and working through remaining items in the todo list.
+Wrapping and modularization are mostly complete except for a few areas (see `TODO`). Current priorities are:
 
-## Usage
+- Address any instability, crashes, etc..
 
-Requires:
+- Complete Linux support
+
+- Create further tests
+
+- Working through remaining items in the todo list
+
+
+
+## Setup and Requirements
+
+
+**Requires:**
+
+- `cmake` (to build faust)
 
 - `python3` with dev libraries installed
 
@@ -86,10 +100,17 @@ Optional
 
 - `make` (build frontend)
 
+macOS
 
-Developed and tested only on macOS x86_64 and arm64 for the time being.
+- `delocate` (for including `libfaust.dylib` in wheels)
 
-1. `./scripts/setup.sh` or even better, `./scripts/setup_faust.py`:
+
+**To Build:**
+
+
+1. `./scripts/setup.sh` or, `./scripts/setup_faust.py`:
+
+    - Faust version `2.69.3` is known to work and is used by the setup scripts.
 
     - This will download faust into the `build` directory, configure it, build it, and install the build into a local `prefix` inside the `build` directory/
 
