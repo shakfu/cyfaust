@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module cyfaust.interp</title>
+<link rel="stylesheet" href="styles.css">
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="cyfaust.html" class="white">cyfaust</a>.interp</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="#">cyfaust/interp.so</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="builtins.html">builtins</a><br>
+</td><td class="multicolumn"></td><td class="multicolumn"></td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="cyfaust.interp.html#InterpreterDsp">InterpreterDsp</a>
+</dt><dt class="heading-text"><a href="cyfaust.interp.html#InterpreterDspFactory">InterpreterDspFactory</a>
+</dt><dt class="heading-text"><a href="cyfaust.interp.html#RtAudioDriver">RtAudioDriver</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="InterpreterDsp">class <strong>InterpreterDsp</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">DSP&nbsp;instance&nbsp;class&nbsp;with&nbsp;methods.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="InterpreterDsp-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="InterpreterDsp-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="InterpreterDsp-build_user_interface"><strong>build_user_interface</strong></a>(self)</dt><dd><span class="code">Trigger&nbsp;the&nbsp;ui_interface&nbsp;parameter&nbsp;with&nbsp;instance&nbsp;specific&nbsp;calls<br>
+to&nbsp;'openTabBox',&nbsp;'addButton',&nbsp;'addVerticalSlider'...&nbsp;in&nbsp;order&nbsp;to&nbsp;build&nbsp;the&nbsp;UI.<br>
+&nbsp;<br>
+ui_interface&nbsp;-&nbsp;the&nbsp;user&nbsp;interface&nbsp;builder</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-clone"><strong>clone</strong></a>(self) -&gt; 'InterpreterDsp'</dt><dd><span class="code">Return&nbsp;a&nbsp;clone&nbsp;of&nbsp;the&nbsp;instance.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-get_numinputs"><strong>get_numinputs</strong></a>(self) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;instance&nbsp;number&nbsp;of&nbsp;audio&nbsp;inputs.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-get_numoutputs"><strong>get_numoutputs</strong></a>(self) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;instance&nbsp;number&nbsp;of&nbsp;audio&nbsp;outputs.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-get_samplerate"><strong>get_samplerate</strong></a>(self) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;the&nbsp;sample&nbsp;rate&nbsp;currently&nbsp;used&nbsp;by&nbsp;the&nbsp;instance.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-init"><strong>init</strong></a>(self, sample_rate)</dt><dd><span class="code">Global&nbsp;init,&nbsp;calls&nbsp;static&nbsp;class&nbsp;init&nbsp;and&nbsp;instance&nbsp;init.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-instance_clear"><strong>instance_clear</strong></a>(self)</dt><dd><span class="code">Init&nbsp;instance&nbsp;state&nbsp;but&nbsp;keep&nbsp;the&nbsp;control&nbsp;parameter&nbsp;values.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-instance_constants"><strong>instance_constants</strong></a>(self, sample_rate)</dt><dd><span class="code">Init&nbsp;instance&nbsp;constant&nbsp;state.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-instance_init"><strong>instance_init</strong></a>(self, sample_rate)</dt><dd><span class="code">Init&nbsp;instance&nbsp;state.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-instance_reset_user_interface"><strong>instance_reset_user_interface</strong></a>(self)</dt><dd><span class="code">Init&nbsp;default&nbsp;control&nbsp;parameters&nbsp;values.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="InterpreterDsp-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__pyx_vtable__</strong> = &lt;capsule object NULL&gt;</dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="InterpreterDspFactory">class <strong>InterpreterDspFactory</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">Interpreter&nbsp;DSP&nbsp;factory&nbsp;class.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="InterpreterDspFactory-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="InterpreterDspFactory-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="InterpreterDspFactory-create_dsp_instance"><strong>create_dsp_instance</strong></a>(self) -&gt; 'InterpreterDsp'</dt><dd><span class="code">Create&nbsp;a&nbsp;new&nbsp;DSP&nbsp;instance,&nbsp;to&nbsp;be&nbsp;deleted&nbsp;with&nbsp;C++&nbsp;'delete'</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_compile_options"><strong>get_compile_options</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;factory&nbsp;compile&nbsp;options.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_dsp_code"><strong>get_dsp_code</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;factory&nbsp;expanded&nbsp;DSP&nbsp;code.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_include_pathnames"><strong>get_include_pathnames</strong></a>(self) -&gt; 'list[str]'</dt><dd><span class="code">Get&nbsp;the&nbsp;list&nbsp;of&nbsp;all&nbsp;used&nbsp;includes.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_library_list"><strong>get_library_list</strong></a>(self) -&gt; 'list[str]'</dt><dd><span class="code">Get&nbsp;the&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;list&nbsp;of&nbsp;library&nbsp;dependancies.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_name"><strong>get_name</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;factory&nbsp;name.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_sha_key"><strong>get_sha_key</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Return&nbsp;factory&nbsp;SHA&nbsp;key.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-get_warning_messages"><strong>get_warning_messages</strong></a>(self) -&gt; 'list[str]'</dt><dd><span class="code">Get&nbsp;warning&nbsp;messages&nbsp;list&nbsp;for&nbsp;a&nbsp;given&nbsp;compilation.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-write_to_bitcode"><strong>write_to_bitcode</strong></a>(self) -&gt; 'str'</dt><dd><span class="code">Write&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;into&nbsp;a&nbsp;bitcode&nbsp;string.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-write_to_bitcode_file"><strong>write_to_bitcode_file</strong></a>(self, bit_code_path: 'str') -&gt; 'bool'</dt><dd><span class="code">Write&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;into&nbsp;a&nbsp;bitcode&nbsp;file.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="InterpreterDspFactory-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_bitcode"><strong>from_bitcode</strong></a>(bitcode) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;string.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;the&nbsp;library&nbsp;keeps&nbsp;an&nbsp;internal&nbsp;cache&nbsp;of&nbsp;all&nbsp;allocated&nbsp;factories&nbsp;so&nbsp;that<br>
+the&nbsp;compilation&nbsp;of&nbsp;the&nbsp;same&nbsp;DSP&nbsp;code&nbsp;(that&nbsp;is&nbsp;the&nbsp;same&nbsp;bitcode&nbsp;code&nbsp;string)&nbsp;will&nbsp;return<br>
+the&nbsp;same&nbsp;(reference&nbsp;counted)&nbsp;factory&nbsp;pointer.<br>
+&nbsp;<br>
+bitcode&nbsp;-&nbsp;the&nbsp;bitcode&nbsp;string<br>
+error_msg&nbsp;-&nbsp;the&nbsp;error&nbsp;string&nbsp;to&nbsp;be&nbsp;filled<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;DSP&nbsp;factory&nbsp;on&nbsp;success,&nbsp;otherwise&nbsp;a&nbsp;null&nbsp;pointer.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_bitcode_file"><strong>from_bitcode_file</strong></a>(bit_code_path) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;file.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_boxes"><strong>from_boxes</strong></a>(name_app, box, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;box&nbsp;expression.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_file"><strong>from_file</strong></a>(filepath, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;file</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_sha_key"><strong>from_sha_key</strong></a>(sha_key) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;sha&nbsp;key</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_signals"><strong>from_signals</strong></a>(name_app, signals, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;vector&nbsp;of&nbsp;output&nbsp;signals.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDspFactory-from_string"><strong>from_string</strong></a>(name_app, code, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;string</span></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__pyx_vtable__</strong> = &lt;capsule object NULL&gt;</dl>
+
+</td></tr></table> <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="RtAudioDriver">class <strong>RtAudioDriver</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">faust&nbsp;audio&nbsp;driver&nbsp;using&nbsp;rtaudio&nbsp;cross-platform&nbsp;lib.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="RtAudioDriver-__reduce__"><strong>__reduce__</strong></a> = __reduce_cython__(...)</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
+
+<dl><dt><a name="RtAudioDriver-init"><strong>init</strong></a>(self, dsp: 'InterpreterDsp') -&gt; 'bool'</dt><dd><span class="code">initialize&nbsp;with&nbsp;dsp&nbsp;instance.</span></dd></dl>
+
+<dl><dt><a name="RtAudioDriver-set_dsp"><strong>set_dsp</strong></a>(self, dsp: 'InterpreterDsp')</dt><dd><span class="code">"set&nbsp;<a href="#InterpreterDsp">InterpreterDsp</a>&nbsp;instance.</span></dd></dl>
+
+<dl><dt><a name="RtAudioDriver-start"><strong>start</strong></a>(self)</dt><dd><span class="code">start&nbsp;audio&nbsp;driver.</span></dd></dl>
+
+<dl><dt><a name="RtAudioDriver-stop"><strong>stop</strong></a>(self)</dt><dd><span class="code">stop&nbsp;audio&nbsp;driver.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="RtAudioDriver-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>buffersize</strong></dt>
+<dd><span class="code">get&nbsp;buffersize</span></dd>
+</dl>
+<dl><dt><strong>numinputs</strong></dt>
+<dd><span class="code">get&nbsp;number&nbsp;of&nbsp;inputs.</span></dd>
+</dl>
+<dl><dt><strong>numoutputs</strong></dt>
+<dd><span class="code">get&nbsp;number&nbsp;of&nbsp;outputs.</span></dd>
+</dl>
+<dl><dt><strong>samplerate</strong></dt>
+<dd><span class="code">get&nbsp;samplerate.</span></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-__reduce_cython__"><strong>__reduce_cython__</strong></a>(self)</dt></dl>
+ <dl><dt><a name="-__setstate_cython__"><strong>__setstate_cython__</strong></a>(self, __pyx_state)</dt></dl>
+ <dl><dt><a name="-create_dsp_factory_from_boxes"><strong>create_dsp_factory_from_boxes</strong></a>(name_app, box, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;boxes.</span></dd></dl>
+ <dl><dt><a name="-create_dsp_factory_from_file"><strong>create_dsp_factory_from_file</strong></a>(filename: 'str', *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;DSP&nbsp;source&nbsp;code&nbsp;as&nbsp;a&nbsp;file.</span></dd></dl>
+ <dl><dt><a name="-create_dsp_factory_from_signals"><strong>create_dsp_factory_from_signals</strong></a>(name_app, signals, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;vector&nbsp;of&nbsp;output&nbsp;signals.</span></dd></dl>
+ <dl><dt><a name="-create_dsp_factory_from_string"><strong>create_dsp_factory_from_string</strong></a>(name_app: 'str', code: 'str', *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;DSP&nbsp;source&nbsp;code&nbsp;as&nbsp;a&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-delete_all_dsp_factories"><strong>delete_all_dsp_factories</strong></a>()</dt><dd><span class="code">Delete&nbsp;all&nbsp;Faust&nbsp;DSP&nbsp;factories&nbsp;kept&nbsp;in&nbsp;the&nbsp;library&nbsp;cache.</span></dd></dl>
+ <dl><dt><a name="-expand_dsp_from_file"><strong>expand_dsp_from_file</strong></a>(filename: 'str', *args) -&gt; 'tuple(str, str)'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.<br>
+&nbsp;<br>
+Returns&nbsp;sha&nbsp;key&nbsp;for&nbsp;expanded&nbsp;dsp&nbsp;string&nbsp;and&nbsp;expanded&nbsp;dsp&nbsp;string</span></dd></dl>
+ <dl><dt><a name="-expand_dsp_from_string"><strong>expand_dsp_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'str'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-generate_auxfiles_from_file"><strong>generate_auxfiles_from_file</strong></a>(filename: 'str', *args) -&gt; 'bool'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;(other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...)&nbsp;from&nbsp;a&nbsp;file.</span></dd></dl>
+ <dl><dt><a name="-generate_auxfiles_from_string"><strong>generate_auxfiles_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'bool'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;(other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...)&nbsp;from&nbsp;a&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-generate_sha1"><strong>generate_sha1</strong></a>(data: 'str') -&gt; 'str'</dt><dd><span class="code">Generate&nbsp;SHA1&nbsp;key&nbsp;from&nbsp;a&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-get_all_dsp_factories"><strong>get_all_dsp_factories</strong></a>()</dt><dd><span class="code">Return&nbsp;Faust&nbsp;DSP&nbsp;factories&nbsp;of&nbsp;the&nbsp;library&nbsp;cache&nbsp;as&nbsp;a&nbsp;vector&nbsp;of&nbsp;their&nbsp;SHA&nbsp;keys.</span></dd></dl>
+ <dl><dt><a name="-get_dsp_factory_from_sha_key"><strong>get_dsp_factory_from_sha_key</strong></a>(sha_key) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Get&nbsp;the&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;associated&nbsp;with&nbsp;a&nbsp;given&nbsp;SHA&nbsp;key.</span></dd></dl>
+ <dl><dt><a name="-get_version"><strong>get_version</strong></a>()</dt><dd><span class="code">Get&nbsp;the&nbsp;version&nbsp;of&nbsp;the&nbsp;library.<br>
+&nbsp;<br>
+returns&nbsp;the&nbsp;library&nbsp;version&nbsp;as&nbsp;a&nbsp;static&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-read_dsp_factory_from_bitcode"><strong>read_dsp_factory_from_bitcode</strong></a>(bitcode) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-read_dsp_factory_from_bitcode_file"><strong>read_dsp_factory_from_bitcode_file</strong></a>(bitcode_path) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;file.</span></dd></dl>
+ <dl><dt><a name="-start_multithreaded_access_mode"><strong>start_multithreaded_access_mode</strong></a>() -&gt; 'bool'</dt><dd><span class="code">Start&nbsp;multi-thread&nbsp;access&nbsp;mode.</span></dd></dl>
+ <dl><dt><a name="-stop_multithreaded_access_mode"><strong>stop_multithreaded_access_mode</strong></a>()</dt><dd><span class="code">Stop&nbsp;multi-thread&nbsp;access&nbsp;mode.</span></dd></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>__test__</strong> = {}</td></tr></table>
+</body></html>
