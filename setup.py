@@ -69,7 +69,7 @@ def mk_extension(name, sources, define_macros=None):
     )
 
 # ----------------------------------------------------------------------------
-# STATIC BUILD
+# ALTERNATIVE STATIC BUILD
 
 if STATIC:
 

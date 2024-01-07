@@ -1,5 +1,7 @@
 # Box Api examples
 
+Some sketches of different ways the box api can be implemented in cyfaust.
+
 ## Example 1
 
 original cpp
@@ -8,25 +10,25 @@ original cpp
 Box box = boxPar(boxInt(7), boxReal(3.14));
 ```
 
-python equivalent (snakecase-ified)
+cyfaust equivalent (snakecase)
 
 ```python
 box = box_par(box_int(7), box_real(3.14))
 ```
 
-python oo
+cyfaust oo
 
 ```python
 box = Box(7).par(Box(3.14))
 ```
 
-python hybrid
+cyfaust hybrid
 
 ```python
 box = box_par(Box(7), Box(3.14))
 ```
 
-numerical extension (numbers are auto-boxed)
+numerical extension where numbers are auto-boxed (not yet implemented)
 
 ```python
 box = box_par(7, 3.14)
@@ -70,22 +72,24 @@ box = box_seq(Box().par(Box(3.14)), box_add_op())
 
 
 Alternative api with submodules and specialized Box subclasses (functional)
+(not implemented)
 
 ```python
-from cyfaust.box import context, seq, par, wire, add, Float
+from cyfaust.box import context, seq, par, wire, add_op, 
 
 with context():
-	b = seq(par(wire(), Float(3.14)), add())
+	b = seq(par(wire(), 3.14), add_op())
 	b.print()
 ```
 
 Alternative api with submodules and specialized Box subclasses (oo)
+(not implemented)
 
 ```python
-from cyfaust.box import context, seq, par, wire, add, Float
+from cyfaust.box import context, seq, par, wire, add_op
 
 with context():
-	b = wire().par(Float(3.14)).seq(add())
+	b = wire().par(3.14).seq(add_op())
 	b.print()
 ```
 

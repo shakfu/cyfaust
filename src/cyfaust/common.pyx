@@ -29,7 +29,11 @@ PACKAGE_RESOURCES = get_package_resources()
 ##
 
 cdef class ParamArray:
-    """wrapper classs around faust paramater array"""
+    """wrapper classs around a faust parameter array.
+    
+    Automatically adds `PACKAGE_RESOURCES` paths (faust stdlibs and architecture) 
+    to the params.
+    """
     # cdef const char ** argv
     # cdef int argc
 

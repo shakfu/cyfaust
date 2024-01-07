@@ -9,7 +9,7 @@
 
 # from testutils import print_section, print_entry
 
-# @pytest.mark.skip(reason="causes segfault (also c++ version as well)")
+# @pytest.mark.skip(reason="causes segfault (c++ version as well)")
 # def test_create_dsp_factory_from_signals3():
 
 #     print_entry("test_create_dsp_factory_from_signals3")
