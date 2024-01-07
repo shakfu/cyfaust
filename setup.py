@@ -73,7 +73,7 @@ if STATIC:
 
     with open("MANIFEST.in", "w") as f:
         f.write("graft src/static/cyfaust/resources\n")
-        f.write("global-exclude *.cpp\n")
+        f.write("exclude src/static/cyfaust/*.cpp\n")
 
     extensions = [
         mk_extension("cyfaust.cyfaust", 
@@ -101,7 +101,7 @@ else:
 
     with open("MANIFEST.in", "w") as f:
         f.write("graft src/cyfaust/resources\n")
-        f.write("global-exclude *.cpp\n")
+        f.write("exclude src/cyfaust/*.cpp\n")
 
     extensions = [
         mk_extension("cyfaust.interp", 
