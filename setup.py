@@ -28,14 +28,17 @@ RTAUDIO_SRC = [
     "include/rtaudio/rtaudio_c.cpp",
 ]
 
+if STATIC:
+    EXTRA_OBJECTS.append('lib/libfaust.a')
+else:
+    EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
+
+
 # platform specific  configuration
 if PLATFORM == 'Darwin':
     EXTRA_LINK_ARGS.append('-mmacosx-version-min=13.6')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos
-    if STATIC:
-        EXTRA_OBJECTS.append('lib/libfaust.a')
-    else:
-        EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
+    if not STATIC:
         LIBRARIES.append('faust.2')
     os.environ['LDFLAGS'] = " ".join([
         "-framework CoreFoundation",
@@ -43,10 +46,7 @@ if PLATFORM == 'Darwin':
     ])
 elif PLATFORM == 'Linux':
     DEFINE_MACROS.append(("__LINUX_ALSA__", None))
-    if STATIC:
-        EXTRA_OBJECTS.append('lib/libfaust.a')
-    else:
-        EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
+    if not STATIC:
         LIBRARIES.extend([
             'asound',
             'faust',
