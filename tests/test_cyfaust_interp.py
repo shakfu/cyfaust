@@ -138,45 +138,45 @@ def test_interp_warning_message():
     print("compile options:", factory.get_compile_options())
     print("warning msgs:", factory.get_warning_messages())
 
-# def test_interp_read_dsp_factory_from_bitcode_file():
-#     print_entry("test_interp_read_dsp_factory_from_bitcode_file")
+def test_interp_read_dsp_factory_from_bitcode_file():
+    print_entry("test_interp_read_dsp_factory_from_bitcode_file")
 
-#     factory = InterpreterDspFactory.from_bitcode_file(TEMP_PATH)
+    factory = InterpreterDspFactory.from_bitcode_file(TEMP_PATH)
 
-#     assert factory
+    assert factory
 
-#     print("compile options:", factory.get_compile_options())
-#     print("library list:", factory.get_library_list())
-#     print("include pathnames:", factory.get_include_pathnames())
+    print("compile options:", factory.get_compile_options())
+    print("library list:", factory.get_library_list())
+    print("include pathnames:", factory.get_include_pathnames())
 
-#     print("factory name:", factory.get_name())
-#     print("factory key:", factory.get_sha_key())
+    print("factory name:", factory.get_name())
+    print("factory key:", factory.get_sha_key())
         
-#     dsp = factory.create_dsp_instance()
+    dsp = factory.create_dsp_instance()
 
-#     assert dsp
+    assert dsp
 
-#     # bypass
-#     # dsp.build_user_interface()
+    # bypass
+    # dsp.build_user_interface()
 
-#     audio = RtAudioDriver(48000, 256)
+    audio = RtAudioDriver(48000, 256)
 
-#     audio.init(dsp)
+    audio.init(dsp)
 
-#     audio.start()
-#     time.sleep(1)
+    audio.start()
+    time.sleep(1)
 
 # FIXME: control output location of svg file "-o out.svg" doesn't work  
-# def test_interp_generate_auxfiles_from_string():
-#     print_entry("test_interp_generate_auxfiles_from_string")
-#     eg = "process = _,3.14 : +;"
-#     assert generate_auxfiles_from_string("svgdsp", eg, "-svg")
-#     svg_folder = Path("svgdsp-svg")
-#     process_svg = svg_folder / "process.svg"
-#     assert svg_folder.exists()
-#     assert process_svg.exists()
-#     process_svg.unlink()
-#     svg_folder.rmdir()
+def test_interp_generate_auxfiles_from_string():
+    print_entry("test_interp_generate_auxfiles_from_string")
+    eg = "process = _,3.14 : +;"
+    assert generate_auxfiles_from_string("svgdsp", eg, "-svg", "-o", "/tmp/out.cpp")
+    svg_folder = Path("svgdsp-svg")
+    process_svg = svg_folder / "process.svg"
+    assert svg_folder.exists()
+    assert process_svg.exists()
+    process_svg.unlink()
+    svg_folder.rmdir()
 
 
 
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     test_interp_create_dsp_factory_from_string1()
     test_interp_create_dsp_factory_from_string2()
     test_interp_warning_message()
-    # test_interp_read_dsp_factory_from_bitcode_file()
-    # test_interp_generate_auxfiles_from_string()
+    test_interp_read_dsp_factory_from_bitcode_file()
+    test_interp_generate_auxfiles_from_string()
 
 

@@ -67,7 +67,7 @@ It has two build variants:
 
 - Implements Memorviews for read/write to numpy buffers
 
-- Can be converted to a self-contained python wheel (2MB): the submodules are dymically linked to `libfaust.dylib` which is embedded in the wheel.
+- Both build variants can be packaged as a self-contained python wheel.
 
 
 ## Status

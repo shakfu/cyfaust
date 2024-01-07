@@ -208,7 +208,7 @@ def test_box_create_source_cpp_arch():
         # print("code length", len(code))
         # assert len(code) == 14007
         assert "BEGIN ARCHITECTURE SECTION" in code
-        print(code)
+        # print(code)
 
 
 if __name__ == '__main__':
