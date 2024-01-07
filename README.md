@@ -1,16 +1,39 @@
 # cyfaust
 
-A [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
-
-Intended to be a minimal, modular, self-contained, cross-platform python3 wrappre of the faust interpreter.
+Intended to be a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
 This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name.
 
 It has two build variants:
 
-1. The default build is dynamically linked to `libfaust.dylib` or `libfaust.so` and consists of a python package with multiple compiled submodules and embedded resources (faust libraries and architecture files).
+1. The default build is dynamically linked to `libfaust.dylib` or `libfaust.so` and consists of a python package with multiple compiled submodules and embedded resources (faust libraries and architecture files):
 
-2. The static build is statically linked (with `libfaust.a`) and consists of a python package with a single compiled submodule and embedded resources (faust libraries and architecture files)
+```bash
+% tree -L 3
+.
+└── cyfaust
+    ├── __init__.py
+    ├── box.cpython-311-darwin.so
+    ├── common.cpython-311-darwin.so
+    ├── interp.cpython-311-darwin.so
+    ├── signal.cpython-311-darwin.so
+    └── resources
+        ├── architecture
+        └── libraries
+```
+
+2. The static build is statically linked (with `libfaust.a`) and consists of a python package with a single compiled submodule and embedded resources (faust libraries and architecture files):
+
+```bash
+% tree -L 3
+.
+└── cyfaust
+    ├── __init__.py
+    ├── cyfaust.cpython-311-darwin.so
+    └── resources
+        ├── architecture
+        └── libraries
+```
 
 
 ## Features
