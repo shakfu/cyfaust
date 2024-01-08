@@ -35,7 +35,7 @@ It has two build variants:
         └── libraries
 ```
 
-Currently dveloped and tested only on macOS x86_64 and arm64. 
+Currently dveloped and tested only on macOS `x86_64` and `arm64`. A linux version is intermittently under development.
 
 ## Features
 

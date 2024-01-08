@@ -3,9 +3,13 @@
 
 ##  cyfaust
 
-- [ ] Add Linux support (almost done except requires `#include <limits>` in `faust/export.h`)
+- [ ] Add Linux support (almost done except requires adding `#include <limits>` in `faust/export.h` or similar.)
+
+- [ ] Fix Soundfile support so that it works out of the box without compilation.
 
 - [ ] Add more tests
+
+- [ ] Add `cython/__main__.py` commandline interface.
 
 
 ## cyfaust.interp
