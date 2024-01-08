@@ -66,11 +66,11 @@ def test_interp_create_dsp_factory_from_file():
     time.sleep(1)
     # audio.stop() # not needed here
 
+# FIXME: trips up on threading issues every now and then
 def test_interp_create_dsp_factory_from_string1():
     print_entry("test_interp_create_dsp_factory_from_string1")
 
     # For bitcode file write/read test
-    
 
     factory = create_dsp_factory_from_string("FaustDSP", "process = 0.5,0.6;")
 

@@ -50,7 +50,7 @@ def expand_dsp_from_string(name_app: str, dsp_content: str, *args) -> str:
     cdef ParamArray params = ParamArray(args)
     cdef string error_msg, sha_key 
     error_msg.reserve(4096)
-    sha_key.reserve(100) # sha1 is 40 chars
+    sha_key.reserve(128) # sha1 is 40 chars
     cdef string result = fi.expandDSPFromString(
         name_app.encode('utf8'),
         dsp_content.encode('utf8'),
@@ -65,7 +65,10 @@ def expand_dsp_from_string(name_app: str, dsp_content: str, *args) -> str:
     return (sha_key.decode(), result.decode())
 
 def generate_auxfiles_from_file(filename: str, *args) -> bool:
-    """Generate additional files (other backends, SVG, XML, JSON...) from a file."""
+    """Generate additional files from a file.
+
+    Auxfiles can be other backends, SVG, XML, JSON...
+    """
     cdef ParamArray params = ParamArray(args)
     cdef string error_msg
     error_msg.reserve(4096)
@@ -81,7 +84,10 @@ def generate_auxfiles_from_file(filename: str, *args) -> bool:
     return result
 
 def generate_auxfiles_from_string(name_app: str, dsp_content: str, *args) -> bool:
-    """Generate additional files (other backends, SVG, XML, JSON...) from a string."""
+    """Generate additional files from a string.
+
+    Auxfiles can be other backends, SVG, XML, JSON...
+    """
     cdef ParamArray params = ParamArray(args)
     cdef string error_msg
     error_msg.reserve(4096)
@@ -162,10 +168,7 @@ cdef class RtAudioDriver:
 
 
 def get_version():
-    """Get the version of the library.
-
-    returns the library version as a static string.
-    """
+    """Returns the library version as a static string."""
     return fi.getCLibFaustVersion().decode()
 
 
@@ -218,11 +221,11 @@ cdef class InterpreterDspFactory:
         return InterpreterDsp.from_ptr(dsp)
 
     cdef set_memory_manager(self, fi.dsp_memory_manager* manager):
-        """Set a custom memory manager to be used when creating instances"""
+        """Set a custom memory manager to be used when creating instances."""
         self.ptr.setMemoryManager(manager)
 
     cdef fi.dsp_memory_manager* get_memory_manager(self):
-        """Set a custom memory manager to be used when creating instances"""
+        """Set a custom memory manager to be used when creating instances."""
         return self.ptr.getMemoryManager()
 
     def write_to_bitcode(self) -> str:
@@ -334,7 +337,7 @@ cdef class InterpreterDspFactory:
 
     @staticmethod
     def from_string(str name_app, str code, *args) -> InterpreterDspFactory:
-        """create an interpreter dsp factory from a string"""
+        """Create an interpreter dsp factory from a string"""
         cdef string error_msg
         error_msg.reserve(4096)
         cdef InterpreterDspFactory factory = InterpreterDspFactory.__new__(
@@ -351,15 +354,17 @@ cdef class InterpreterDspFactory:
         if not error_msg.empty():
             print(error_msg.decode())
             return
+        assert factory.ptr, "factory.ptr is NULL (should not be)"
         return factory
 
     @staticmethod
     def from_bitcode(str bitcode) -> InterpreterDspFactory:
         """Create a Faust DSP factory from a bitcode string.
 
-        Note that the library keeps an internal cache of all allocated factories so that
-        the compilation of the same DSP code (that is the same bitcode code string) will return
-        the same (reference counted) factory pointer.
+        Note that the library keeps an internal cache of all allocated
+        factories so that the compilation of the same DSP code (that is
+        the same bitcode code string) will return the same
+        (reference counted) factory pointer.
 
         bitcode - the bitcode string
         error_msg - the error string to be filled
@@ -378,6 +383,7 @@ cdef class InterpreterDspFactory:
         if not error_msg.empty():
             print(error_msg.decode())
             return
+        assert factory.ptr, "factory pointer is NULL (should not be)"
         return factory
 
 
@@ -443,7 +449,9 @@ cdef class InterpreterDsp:
 
     def build_user_interface(self):
         """Trigger the ui_interface parameter with instance specific calls
-        to 'openTabBox', 'addButton', 'addVerticalSlider'... in order to build the UI.
+
+        Calls are made to 'openTabBox', 'addButton',
+        'addVerticalSlider'... in order to build the UI.
         
         ui_interface - the user interface builder
         """
