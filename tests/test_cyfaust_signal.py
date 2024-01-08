@@ -50,6 +50,9 @@ def test_create_dsp_factory_from_signals1():
         print("sha key", factory.get_sha_key())
         dsp = factory.create_dsp_instance()
         assert dsp
+        del dsp
+        del factory
+
 
 def test_create_dsp_factory_from_signals2():
 
@@ -67,6 +70,8 @@ def test_create_dsp_factory_from_signals2():
         print("sha key", factory.get_sha_key())
         dsp = factory.create_dsp_instance()
         assert dsp
+        del dsp
+        del factory
 
 
 
