@@ -185,7 +185,7 @@ cdef class InterpreterDspFactory:
     def __dealloc__(self):
         if self.ptr and self.ptr_owner:
             fi.deleteInterpreterDSPFactory(self.ptr)
-            self.ptr = NULL
+            # self.ptr = NULL
 
     def get_name(self) -> str:
         """Return factory name."""
