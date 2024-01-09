@@ -8,7 +8,7 @@ MIN_OSX_VER := -mmacosx-version-min=13.6
 FAUST_STATICLIB := ./lib/libfaust.a
 INTERP_TESTS := tests/test_faust_interp
 
-.PHONY: setup wheel clean
+.PHONY: all setup wheel clean
 
 all: setup
 
