@@ -37,6 +37,9 @@ It has two build variants:
 
 Currently dveloped and tested only on macOS `x86_64` and `arm64`. A linux version is intermittently under development.
 
+**CAVEAT**: this is pre-alpha software and certain bugs are still being worked out of the codebase which are causing intermittent segafaults. Please expect instability!
+
+
 ## Features
 
 - Python-oriented implementation of the faust intrepreter

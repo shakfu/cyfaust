@@ -2,6 +2,16 @@ CWD=`pwd`
 ROOT=build/faust/root
 FAUST_STDLIB="${ROOT}/share/faust/*.lib"
 FAUST_VERSION="2.69.3"
+OS=`uname -o` # 'Darwin' or 'GNU/Linux' supported
+if [ "${OS}" == "Darwin" ]
+then
+    DYLIB=libfaust.2.dylib
+elif [ "${OS}" == "GNU/Linux" ]
+then
+    DYLIB=libfaust.so.2
+else
+    echo "Only MACOS / GNU/Linux are supported"; exit
+fi
 
 
 get_faust() {
@@ -46,7 +56,7 @@ copy_headers() {
 copy_sharedlib() {
 	echo "copy_sharedlib"
 	mkdir -p lib && \
-	cp "${ROOT}/lib/libfaust.2.dylib" ./lib/libfaust.2.dylib
+	cp "${ROOT}/lib/${DYLIB}" ./lib/${DYLIB}
 }
 
 copy_staticlib() {
