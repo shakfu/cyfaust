@@ -41,4 +41,3 @@
 - [ ] Improve docstrings
 
 - [ ] `signal.is_sig_xxx` and `Box.getparams` are inconsistent apis
-

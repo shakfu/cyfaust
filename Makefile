@@ -21,7 +21,7 @@ ifeq ($(WITH_DYLIB),1)
 	delocate-wheel -v dist/*.whl 
 endif
 
-.PHONY: test test_cpp test_c test_audio
+.PHONY: test test_cpp test_c test_audio pytest
 
 test_cpp:
 	@g++ -std=c++11 $(MIN_OSX_VER) -O3 \
@@ -60,6 +60,8 @@ test: setup
 	@python3 tests/test_cyfaust_common.py
 	@echo "DONE"
 
+pytest:
+	@python3 -Xfaulthandler -mpytest -vv
 
 clean:
 	@rm -rf build dist *.egg-info .pytest_*

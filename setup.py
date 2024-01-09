@@ -4,8 +4,11 @@ import subprocess
 from setuptools import Extension, setup
 from Cython.Build import cythonize
 
-# set static or dynamic build here
-STATIC = os.getenv("STATIC", False)
+# ----------------------------------------------------------------------------
+# OPTIONS
+
+STATIC = os.getenv("STATIC", False)         # set static or dynamic build here
+SANITIZE = os.getenv("SANITIZE", False)     # enable address/leak sanitizer 
 
 # ----------------------------------------------------------------------------
 # COMMON
@@ -27,6 +30,15 @@ RTAUDIO_SRC = [
     "include/rtaudio/RtAudio.cpp",
     "include/rtaudio/rtaudio_c.cpp",
 ]
+
+# ----------------------------------------------------------------------------
+# CONDITIONAL CONFIGURATION
+
+if SANITIZE:
+    os.environ["ASAN_OPTIONS"]="detect_leaks=1"
+    EXTRA_COMPILE_ARGS.append("-fsanitize=address")
+    EXTRA_LINK_ARGS.append("-static-libsan")
+
 
 if STATIC:
     EXTRA_OBJECTS.append('lib/libfaust.a')
@@ -69,7 +81,7 @@ def mk_extension(name, sources, define_macros=None):
     )
 
 # ----------------------------------------------------------------------------
-# ALTERNATIVE STATIC BUILD
+# PRODUCT: STATIC BUILD
 
 if STATIC:
 
@@ -100,7 +112,7 @@ if STATIC:
     )
 
 # ----------------------------------------------------------------------------
-# DEFAULT MODULAR DYNAMIC BUILD
+# PRODUCT: DEFAULT DYNAMIC BUILD
 
 else:
 
