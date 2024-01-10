@@ -9,8 +9,11 @@ share/
 MANIFEST.in
 
 # don't include cython-generated cpp
-src/cyfaust/*.cpp
-src/static/cyfaust/*.cpp
+src/cyfaust/interp.cpp
+src/cyfaust/common.cpp
+src/cyfaust/box.cpp
+src/cyfaust/signal.cpp
+src/static/cyfaust/cyfaust.cpp
 
 # general macos detritus
 .DS_Store
