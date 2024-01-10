@@ -30,8 +30,6 @@ def test_create_dsp_factory_from_boxes():
     
         dsp = factory.create_dsp_instance()
         assert dsp
-        del dsp
-        del factory
 
 # functional way
 def test_create_source_from_boxes():

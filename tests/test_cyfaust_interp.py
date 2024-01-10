@@ -65,8 +65,7 @@ def test_interp_create_dsp_factory_from_file():
     audio.start()
     time.sleep(1)
     # audio.stop() # not needed here
-    del dsp
-    del factory
+
 
 # FIXME: trips up on threading issues every now and then
 def test_interp_create_dsp_factory_from_string1():
@@ -98,8 +97,6 @@ def test_interp_create_dsp_factory_from_string1():
 
     audio.start()
     time.sleep(1)
-    del dsp
-    del factory
 
 
 def test_interp_create_dsp_factory_from_string2():
@@ -130,8 +127,6 @@ def test_interp_create_dsp_factory_from_string2():
     # FIXME: sleep causes crash!
     # time.sleep(1)
     # audio.stop()
-    del dsp
-    del factory
 
 
 def test_interp_warning_message():
@@ -173,8 +168,7 @@ def test_interp_read_dsp_factory_from_bitcode_file():
 
     audio.start()
     time.sleep(1)
-    del dsp
-    del factory
+
 
 # FIXME: control output location of svg file "-o out.svg" doesn't work  
 def test_interp_generate_auxfiles_from_string():

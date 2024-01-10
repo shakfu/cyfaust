@@ -23,11 +23,57 @@ interpreter_dsp* interpreter_dsp_factory::createDSPInstance();
 - If the factory is deleted before the dsp instance then you have a segfault
 
 
-## One Failed Solution
+## Solutution A: del dsp instances in factory's __deallocate__ (FAILED)
 
 - tracks the dsp instances at InterpreterDspFactory and deallocate them in the factory's `__deallocate__` method
 
-- Result failed (segfaults galore)
+```cython
+cdef class InterpreterDsp:
+    """DSP instance class with methods."""
+
+    cdef fi.interpreter_dsp* ptr
+    cdef bint ptr_owner
+
+    def __dealloc__(self):
+        if self.ptr and self.ptr_owner:
+            del self.ptr
+            self.ptr = NULL
+
+    def __cinit__(self):
+        self.ptr = NULL
+        self.ptr_owner = False
+
+    def delete(self):
+        del self.ptr
+
+    @staticmethod
+    cdef InterpreterDsp from_ptr(fi.interpreter_dsp* ptr, bint owner=False):
+        """Wrap the dsp instance and manage its lifetime."""
+        cdef InterpreterDsp dsp = InterpreterDsp.__new__(InterpreterDsp)
+        dsp.ptr_owner = False
+        dsp.ptr = ptr
+        return dsp
+
+cdef class InterpreterDspFactory:
+    """Interpreter DSP factory class."""
+
+    cdef fi.interpreter_dsp_factory* ptr
+    cdef bint ptr_owner
+    cdef set instances
+
+    def __cinit__(self):
+        self.ptr = NULL
+        self.ptr_owner = False
+        self.instances = set()
+
+    def __dealloc__(self):
+        if self.ptr and self.ptr_owner:
+            instances = self.instances.copy()
+            for i in instances:
+                i.delete()
+            fi.deleteInterpreterDSPFactory(self.ptr)
+            self.ptr = NULL
+```
 
 
 ## Another Possible Solution

@@ -1,6 +1,7 @@
 # distutils: language = c++
 
 from libcpp.string cimport string
+from cpython.ref cimport Py_INCREF, Py_DECREF
 
 from . cimport faust_interp as fi
 from . cimport faust_box as fb
@@ -177,13 +178,19 @@ cdef class InterpreterDspFactory:
 
     cdef fi.interpreter_dsp_factory* ptr
     cdef bint ptr_owner
+    cdef set instances
 
     def __cinit__(self):
         self.ptr = NULL
         self.ptr_owner = False
+        self.instances = set()
 
     def __dealloc__(self):
         if self.ptr and self.ptr_owner:
+            instances = self.instances.copy()
+            while instances:
+                i = instances.pop()
+                i.delete()
             fi.deleteInterpreterDSPFactory(self.ptr)
             self.ptr = NULL
 
@@ -218,7 +225,9 @@ cdef class InterpreterDspFactory:
     def create_dsp_instance(self) -> InterpreterDsp:
         """Create a new DSP instance, to be deleted with C++ 'delete'"""
         cdef fi.interpreter_dsp* dsp = self.ptr.createDSPInstance()
-        return InterpreterDsp.from_ptr(dsp)
+        instance = InterpreterDsp.from_ptr(dsp)
+        self.instances.add(instance)
+        return instance
 
     cdef set_memory_manager(self, fi.dsp_memory_manager* manager):
         """Set a custom memory manager to be used when creating instances."""
@@ -402,11 +411,14 @@ cdef class InterpreterDsp:
         self.ptr = NULL
         self.ptr_owner = False
 
+    def delete(self):
+        del self.ptr
+
     @staticmethod
-    cdef InterpreterDsp from_ptr(fi.interpreter_dsp* ptr):
+    cdef InterpreterDsp from_ptr(fi.interpreter_dsp* ptr, bint owner=False):
         """Wrap the dsp instance and manage its lifetime."""
         cdef InterpreterDsp dsp = InterpreterDsp.__new__(InterpreterDsp)
-        dsp.ptr_owner = True
+        dsp.ptr_owner = owner
         dsp.ptr = ptr
         return dsp
 
