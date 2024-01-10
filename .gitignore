@@ -4,6 +4,7 @@
 bin/
 lib/
 share/
+python/
 
 # dynamically generated
 MANIFEST.in
@@ -51,6 +52,7 @@ coverage.xml
 cover/
 
 *.log
+log.txt
 
 # Sphinx documentation
 docs/_build/

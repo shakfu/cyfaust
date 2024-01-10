@@ -1,7 +1,14 @@
 # set path so `faust` be queried for the path to stdlib
 export PATH := $(PWD)/bin:$(PATH)
 
+DEBUG := 0
 STATIC := 0
+
+ifeq ($(DEBUG),1)
+	PYTHON := python/bin/python3
+else
+	PYTHON := python3
+endif
 
 MIN_OSX_VER := -mmacosx-version-min=13.6
 
@@ -13,10 +20,11 @@ INTERP_TESTS := tests/test_faust_interp
 all: setup
 
 setup:
-	@STATIC=$(STATIC) python3 setup.py build --build-lib build
+	@mkdir -p build
+	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
 wheel:
-	@python3 setup.py bdist_wheel
+	@$(PYTHON) setup.py bdist_wheel
 ifeq ($(STATIC),0)
 	delocate-wheel -v dist/*.whl 
 endif
@@ -54,14 +62,14 @@ test_audio:
 
 
 test: setup
-	@python3 tests/test_cyfaust_interp.py
-	@python3 tests/test_cyfaust_box.py
-	@python3 tests/test_cyfaust_signal.py
-	@python3 tests/test_cyfaust_common.py
+	@$(PYTHON) tests/test_cyfaust_interp.py
+	@$(PYTHON) tests/test_cyfaust_box.py
+	@$(PYTHON) tests/test_cyfaust_signal.py
+	@$(PYTHON) tests/test_cyfaust_common.py
 	@echo "DONE"
 
 pytest:
-	@python3 -Xfaulthandler -mpytest -vv
+	@$(PYTHON) -Xfaulthandler -mpytest -vv ./tests
 
 clean:
 	@rm -rf build dist *.egg-info .pytest_*

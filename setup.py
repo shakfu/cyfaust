@@ -13,8 +13,11 @@ VERSION="0.0.2"
 # ----------------------------------------------------------------------------
 # OPTIONS
 
-STATIC = os.getenv("STATIC", False)         # set static or dynamic build here
-SANITIZE = os.getenv("SANITIZE", False)     # enable address/leak sanitizer 
+# convert '0','1' env values to bool
+getenv = lambda key: bool(int(os.getenv(key, False)))
+
+STATIC = getenv("STATIC")       # set static or dynamic build here
+SANITIZE = getenv("SANITIZE")   # enable address/leak sanitizer 
 
 # ----------------------------------------------------------------------------
 # COMMON
@@ -84,11 +87,11 @@ def mk_extension(name, sources, define_macros=None):
         extra_compile_args = EXTRA_COMPILE_ARGS,
         extra_link_args = EXTRA_LINK_ARGS,
         language="c++",
-        # py_limited_api=True,
+        py_limited_api=True,
     )
 
 # ----------------------------------------------------------------------------
-# PRODUCT: STATIC BUILD
+# PRODUCT: STATIC BUILD VARIANT
 
 if STATIC:
 
@@ -112,6 +115,7 @@ if STATIC:
         ext_modules=cythonize(
             extensions,
             language_level="3",
+            language="c++",
         ),
         package_dir = {"cyfaust": "src/static/cyfaust"},
         packages=['cyfaust'],
