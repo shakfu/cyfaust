@@ -15,7 +15,7 @@
 
 	- [sharing-declarations](https://cython.readthedocs.io/en/latest/src/userguide/sharing_declarations.html)
 
-	- [source-files-and-compilation](https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html)
+	- [source-files-and-compilation](https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html) - addresses limited api
 
 	- [typed-memoryviews](https://cython.readthedocs.io/en/latest/src/userguide/memoryviews.html)
 

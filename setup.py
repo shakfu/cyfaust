@@ -5,7 +5,7 @@ from setuptools import Extension, setup
 from Cython.Build import cythonize
 
 # ----------------------------------------------------------------------------
-# VARIABLES
+# CONFIGURABLE VARIABLES
 
 VERSION="0.0.2"
 
@@ -43,7 +43,7 @@ RTAUDIO_SRC = [
 # ----------------------------------------------------------------------------
 # CONDITIONAL CONFIGURATION
 
-if SANITIZE: # not working for now !!
+if SANITIZE: # FIXME: not working for now !!
     os.environ["ASAN_OPTIONS"]="detect_leaks=1"
     EXTRA_COMPILE_ARGS.append("-fsanitize=address")
     EXTRA_LINK_ARGS.append("-static-libsan")
@@ -68,11 +68,9 @@ if PLATFORM == 'Darwin':
 elif PLATFORM == 'Linux':
     os.environ['CPPFLAGS'] = '-include limits'
     DEFINE_MACROS.append(("__LINUX_ALSA__", None))
+    LIBRARIES.append("asound")
     if not STATIC:
-        LIBRARIES.extend([
-            'asound',
-            'faust',
-        ])
+        LIBRARIES.append("faust")
 
 
 def mk_extension(name, sources, define_macros=None):
@@ -87,7 +85,7 @@ def mk_extension(name, sources, define_macros=None):
         extra_compile_args = EXTRA_COMPILE_ARGS,
         extra_link_args = EXTRA_LINK_ARGS,
         language="c++",
-        py_limited_api=True,
+        # py_limited_api=True,
     )
 
 # ----------------------------------------------------------------------------
@@ -115,7 +113,6 @@ if STATIC:
         ext_modules=cythonize(
             extensions,
             language_level="3",
-            language="c++",
         ),
         package_dir = {"cyfaust": "src/static/cyfaust"},
         packages=['cyfaust'],
