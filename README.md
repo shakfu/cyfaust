@@ -136,10 +136,12 @@ and for a wheel:
 make wheel
 ```
 
-For the static variant just set the environ variable `STATIC=1` in front of above commands. For example:
+For the static variant just set the environ variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands. 
+
+For example:
 
 ```bash
-STATIC=1 make
+make STATIC=1
 ```
 
 etc.

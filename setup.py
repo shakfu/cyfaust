@@ -5,6 +5,12 @@ from setuptools import Extension, setup
 from Cython.Build import cythonize
 
 # ----------------------------------------------------------------------------
+# VARIABLES
+
+VERSION="0.0.2"
+
+
+# ----------------------------------------------------------------------------
 # OPTIONS
 
 STATIC = os.getenv("STATIC", False)         # set static or dynamic build here
@@ -34,7 +40,7 @@ RTAUDIO_SRC = [
 # ----------------------------------------------------------------------------
 # CONDITIONAL CONFIGURATION
 
-if SANITIZE:
+if SANITIZE: # not working for now !!
     os.environ["ASAN_OPTIONS"]="detect_leaks=1"
     EXTRA_COMPILE_ARGS.append("-fsanitize=address")
     EXTRA_LINK_ARGS.append("-static-libsan")
@@ -102,7 +108,7 @@ if STATIC:
 
     setup(
         name='cyfaust',
-        version='0.0.1',
+        version=VERSION,
         ext_modules=cythonize(
             extensions,
             language_level="3",
@@ -133,7 +139,7 @@ else:
 
     setup(
         name='cyfaust',
-        version='0.0.1',
+        version=VERSION,
         ext_modules=cythonize(
             extensions,
             language_level="3",

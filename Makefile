@@ -1,7 +1,7 @@
 # set path so `faust` be queried for the path to stdlib
 export PATH := $(PWD)/bin:$(PATH)
 
-WITH_DYLIB=1
+STATIC := 0
 
 MIN_OSX_VER := -mmacosx-version-min=13.6
 
@@ -13,11 +13,11 @@ INTERP_TESTS := tests/test_faust_interp
 all: setup
 
 setup:
-	@WITH_DYLIB=$(WITH_DYLIB) python3 setup.py build --build-lib build
+	@STATIC=$(STATIC) python3 setup.py build --build-lib build
 
 wheel:
 	@python3 setup.py bdist_wheel
-ifeq ($(WITH_DYLIB),1)
+ifeq ($(STATIC),0)
 	delocate-wheel -v dist/*.whl 
 endif
 
