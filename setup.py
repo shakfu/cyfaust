@@ -57,6 +57,7 @@ if PLATFORM == 'Darwin':
         "-framework CoreAudio"
     ])
 elif PLATFORM == 'Linux':
+    os.environ['CPPFLAGS'] = '-include limits'
     DEFINE_MACROS.append(("__LINUX_ALSA__", None))
     if not STATIC:
         LIBRARIES.extend([

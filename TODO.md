@@ -3,13 +3,21 @@
 
 ##  cyfaust
 
-- [ ] Add Linux support (almost done except requires adding `#include <limits>` in `faust/export.h` or similar.)
+- [ ] Add Linux support
+
+	- [x] compile without errors: added `CPPFLAGS=-'include limits'` to env
+
+	- [ ] Fix large binaries
+
+	- [ ] Fix segfault in cases of dsp_from_boxes / signals
 
 - [ ] Fix Soundfile support so that it works out of the box without compilation.
 
 - [ ] Add more tests
 
 - [ ] Add `cython/__main__.py` commandline interface.
+
+- [ ] Fix SANITIZE option (failing on both macos and linux)
 
 
 ## cyfaust.interp
