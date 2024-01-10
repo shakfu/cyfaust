@@ -88,6 +88,9 @@ cpdef enum SOperator:
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust
 ##
+## ---------------------------------------------------------------------------
+## faust/dsp/libfaust
+##
 
 def generate_sha1(data: str) -> str:
     """Generate SHA1 key from a string."""
@@ -119,7 +122,7 @@ def expand_dsp_from_string(name_app: str, dsp_content: str, *args) -> str:
     cdef ParamArray params = ParamArray(args)
     cdef string error_msg, sha_key 
     error_msg.reserve(4096)
-    sha_key.reserve(100) # sha1 is 40 chars
+    sha_key.reserve(128) # sha1 is 40 chars
     cdef string result = fi.expandDSPFromString(
         name_app.encode('utf8'),
         dsp_content.encode('utf8'),
@@ -133,8 +136,11 @@ def expand_dsp_from_string(name_app: str, dsp_content: str, *args) -> str:
         return
     return (sha_key.decode(), result.decode())
 
-def generate_auxfiles_from_file(filename: str, *args) -> str:
-    """Generate additional files (other backends, SVG, XML, JSON...) from a file."""
+def generate_auxfiles_from_file(filename: str, *args) -> bool:
+    """Generate additional files from a file.
+
+    Auxfiles can be other backends, SVG, XML, JSON...
+    """
     cdef ParamArray params = ParamArray(args)
     cdef string error_msg
     error_msg.reserve(4096)
@@ -146,11 +152,14 @@ def generate_auxfiles_from_file(filename: str, *args) -> str:
     )
     if not error_msg.empty():
         print(error_msg.decode())
-        return False
+        return
     return result
 
-def generate_auxfiles_from_string(name_app: str, dsp_content: str, *args) -> str:
-    """Generate additional files (other backends, SVG, XML, JSON...) from a string."""
+def generate_auxfiles_from_string(name_app: str, dsp_content: str, *args) -> bool:
+    """Generate additional files from a string.
+
+    Auxfiles can be other backends, SVG, XML, JSON...
+    """
     cdef ParamArray params = ParamArray(args)
     cdef string error_msg
     error_msg.reserve(4096)
@@ -163,7 +172,7 @@ def generate_auxfiles_from_string(name_app: str, dsp_content: str, *args) -> str
     )
     if not error_msg.empty():
         print(error_msg.decode())
-        return False
+        return
     return result
 
 ## ---------------------------------------------------------------------------
@@ -185,6 +194,7 @@ cdef class RtAudioDriver:
         self.ptr_owner = True
 
     def set_dsp(self, dsp: InterpreterDsp):
+        """"set InterpreterDsp instance."""
         self.ptr.setDsp(<fi.dsp*>dsp.ptr)
 
     def init(self, dsp: InterpreterDsp) -> bool:
@@ -196,22 +206,32 @@ cdef class RtAudioDriver:
         return False
 
     def start(self):
+        """start audio driver."""
         if not self.ptr.start():
             print("RtAudioDriver: could not start")
 
     def stop(self):
+        """stop audio driver."""
         self.ptr.stop()
 
-    def get_buffersize(self):
+    @property
+    def buffersize(self):
+        """get buffersize"""
         return self.ptr.getBufferSize()
 
-    def get_samplerate(self):
+    @property
+    def samplerate(self):
+        """get samplerate."""
         return self.ptr.getSampleRate()
 
-    def get_numinputs(self):
+    @property
+    def numinputs(self):
+        """get number of inputs."""
         return self.ptr.getNumInputs()
 
-    def get_numoutputs(self):
+    @property
+    def numoutputs(self):
+        """get number of outputs."""
         return self.ptr.getNumOutputs()
 
 ## ---------------------------------------------------------------------------
@@ -220,10 +240,7 @@ cdef class RtAudioDriver:
 
 
 def get_version():
-    """Get the version of the library.
-
-    returns the library version as a static string.
-    """
+    """Returns the library version as a static string."""
     return fi.getCLibFaustVersion().decode()
 
 
@@ -232,13 +249,19 @@ cdef class InterpreterDspFactory:
 
     cdef fi.interpreter_dsp_factory* ptr
     cdef bint ptr_owner
+    cdef set instances
 
     def __cinit__(self):
         self.ptr = NULL
         self.ptr_owner = False
+        self.instances = set()
 
     def __dealloc__(self):
         if self.ptr and self.ptr_owner:
+            instances = self.instances.copy()
+            while instances:
+                i = instances.pop()
+                i.delete()
             fi.deleteInterpreterDSPFactory(self.ptr)
             self.ptr = NULL
 
@@ -273,14 +296,16 @@ cdef class InterpreterDspFactory:
     def create_dsp_instance(self) -> InterpreterDsp:
         """Create a new DSP instance, to be deleted with C++ 'delete'"""
         cdef fi.interpreter_dsp* dsp = self.ptr.createDSPInstance()
-        return InterpreterDsp.from_ptr(dsp)
+        instance = InterpreterDsp.from_ptr(dsp)
+        self.instances.add(instance)
+        return instance
 
     cdef set_memory_manager(self, fi.dsp_memory_manager* manager):
-        """Set a custom memory manager to be used when creating instances"""
+        """Set a custom memory manager to be used when creating instances."""
         self.ptr.setMemoryManager(manager)
 
     cdef fi.dsp_memory_manager* get_memory_manager(self):
-        """Set a custom memory manager to be used when creating instances"""
+        """Set a custom memory manager to be used when creating instances."""
         return self.ptr.getMemoryManager()
 
     def write_to_bitcode(self) -> str:
@@ -392,7 +417,7 @@ cdef class InterpreterDspFactory:
 
     @staticmethod
     def from_string(str name_app, str code, *args) -> InterpreterDspFactory:
-        """create an interpreter dsp factory from a string"""
+        """Create an interpreter dsp factory from a string"""
         cdef string error_msg
         error_msg.reserve(4096)
         cdef InterpreterDspFactory factory = InterpreterDspFactory.__new__(
@@ -409,15 +434,17 @@ cdef class InterpreterDspFactory:
         if not error_msg.empty():
             print(error_msg.decode())
             return
+        assert factory.ptr, "factory.ptr is NULL (should not be)"
         return factory
 
     @staticmethod
     def from_bitcode(str bitcode) -> InterpreterDspFactory:
         """Create a Faust DSP factory from a bitcode string.
 
-        Note that the library keeps an internal cache of all allocated factories so that
-        the compilation of the same DSP code (that is the same bitcode code string) will return
-        the same (reference counted) factory pointer.
+        Note that the library keeps an internal cache of all allocated
+        factories so that the compilation of the same DSP code (that is
+        the same bitcode code string) will return the same
+        (reference counted) factory pointer.
 
         bitcode - the bitcode string
         error_msg - the error string to be filled
@@ -436,6 +463,7 @@ cdef class InterpreterDspFactory:
         if not error_msg.empty():
             print(error_msg.decode())
             return
+        assert factory.ptr, "factory pointer is NULL (should not be)"
         return factory
 
 
@@ -445,20 +473,23 @@ cdef class InterpreterDsp:
     cdef fi.interpreter_dsp* ptr
     cdef bint ptr_owner
 
-    # def __dealloc__(self):
-    #     if self.ptr and self.ptr_owner:
-    #         del self.ptr
-    #         self.ptr = NULL
+    def __dealloc__(self):
+        if self.ptr and self.ptr_owner:
+            del self.ptr
+            self.ptr = NULL
 
     def __cinit__(self):
         self.ptr = NULL
         self.ptr_owner = False
 
+    def delete(self):
+        del self.ptr
+
     @staticmethod
-    cdef InterpreterDsp from_ptr(fi.interpreter_dsp* ptr):
+    cdef InterpreterDsp from_ptr(fi.interpreter_dsp* ptr, bint owner=False):
         """Wrap the dsp instance and manage its lifetime."""
         cdef InterpreterDsp dsp = InterpreterDsp.__new__(InterpreterDsp)
-        dsp.ptr_owner = True
+        dsp.ptr_owner = owner
         dsp.ptr = ptr
         return dsp
 
@@ -501,7 +532,9 @@ cdef class InterpreterDsp:
 
     def build_user_interface(self):
         """Trigger the ui_interface parameter with instance specific calls
-        to 'openTabBox', 'addButton', 'addVerticalSlider'... in order to build the UI.
+
+        Calls are made to 'openTabBox', 'addButton',
+        'addVerticalSlider'... in order to build the UI.
         
         ui_interface - the user interface builder
         """
@@ -519,7 +552,7 @@ cdef class InterpreterDsp:
 
 def get_dsp_factory_from_sha_key(str sha_key) -> InterpreterDspFactory:
     """Get the Faust DSP factory associated with a given SHA key."""
-    return InterpreterDspFactory.from_sha_key(sha_key.encode())
+    return InterpreterDspFactory.from_sha_key(sha_key)
 
 def create_dsp_factory_from_file(filename: str, *args) -> InterpreterDspFactory:
     """Create a Faust DSP factory from a DSP source code as a file."""
@@ -543,7 +576,7 @@ def delete_all_dsp_factories():
 
 def get_all_dsp_factories():
     """Return Faust DSP factories of the library cache as a vector of their SHA keys."""
-    return fi.getAllInterpreterDSPFactories()
+    return [key.decode() for key in fi.getAllInterpreterDSPFactories()]
 
 def start_multithreaded_access_mode() -> bool:
     """Start multi-thread access mode."""
@@ -566,7 +599,7 @@ def read_dsp_factory_from_bitcode_file(str bitcode_path) -> InterpreterDspFactor
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust-box
 
-def box_or_int(var):
+def box_or_int(var: Box | int) -> Box:
     if isinstance(var, int):
         return Box.from_int(var)
     if isinstance(var, Box):
@@ -574,7 +607,7 @@ def box_or_int(var):
         return var
     raise TypeError("argument must be an int or a boxInt")
 
-def box_or_float(var):
+def box_or_float(var: Box | float) -> Box:
     if isinstance(var, float):
         return Box.from_real(var)
     elif isinstance(var, Box):
@@ -582,8 +615,22 @@ def box_or_float(var):
         return var
     raise TypeError("argument must be an float or a boxReal")
 
+def box_or_number(var: Box | float | int) -> Box:
+    if isinstance(var, int):
+        return Box.from_int(var)
+    if isinstance(var, float):
+        return Box.from_real(var)
+    elif isinstance(var, Box):
+        assert is_box_real(var) or is_box_int(var), "box is not a float or int box"
+        return var
+    raise TypeError("argument must be of type float or int or boxReal or boxInt")
+
 
 class box_context:
+    """box context manager
+
+    required for box operations
+    """
     def __enter__(self):
         fb.createLibContext()
     def __exit__(self, type, value, traceback):
@@ -610,21 +657,17 @@ cdef class BoxVector:
         return bv
 
     cdef add_ptr(self, fb.Box b):
+        """add pointer to unwrapped Box"""
         self.ptr.push_back(b)
 
     def add(self, Box b):
+        """add wrapped Box"""
         self.ptr.push_back(b.ptr)
 
-    # def create_source(self, name_app: str, lang, *args) -> str:
-    #     """Create source code in a target language from a signal expression."""
-    #     return create_source_from_signals(name_app, self, lang, *args)
+    def create_source(self, name_app: str, lang, *args) -> str:
+        """Create source code in a target language from a box expression."""
+        return create_source_from_boxes(name_app, self, lang, *args)
 
-    # def simplify_to_normal_form(self) -> SignalVector:
-    #     """Simplify a signal list to its normal form.
-
-    #     returns the signal vector in normal form.
-    #     """
-    #     return simplify_to_normal_form2(self)
 
 
 cdef class Box:
@@ -681,10 +724,8 @@ cdef class Box:
         """Create a soundfile block.
 
         label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
-        chan - the number of outputs channels, a constant numerical expression (see [1])
-
-        (box_soundfile2 parameters)
-        part - in the [0..255] range to select a given sound number, a constant numerical expression (see [1])
+        chan - the number of outputs channels, a constant numerical expression
+        part - in the [0..255] range to select a given sound number, a constant numerical expression
         ridx - the read index (an integer between 0 and the selected sound length)
 
         returns the soundfile box.
@@ -695,7 +736,7 @@ cdef class Box:
     def from_readonly_table(n: Box | int, Box init, ridx: Box | int) -> Box:
         """Create a read only table.
 
-        n - the table size, a constant numerical expression
+        n    - the table size, a constant numerical expression
         init - the table content
         ridx - the read index (an int between 0 and n-1)
 
@@ -709,7 +750,7 @@ cdef class Box:
     def from_write_read_table(n: Box | int, Box init, widx: Box | int, Box wsig, ridx: Box | int) -> Box:
         """Create a read/write table.
 
-        n - the table size, a constant numerical expression (see [1])
+        n    - the table size, a constant numerical expression
         init - the table content
         widx - the write index (an integer between 0 and n-1)
         wsig - the input of the table
@@ -736,7 +777,7 @@ cdef class Box:
     def from_fconst(fb.SType type, str name, str file) -> Box:
         """Create a foreign constant box.
 
-        type - the foreign constant type of SType
+        type - the foreign constant type of SType {kSInt, kSReal}
         name - the foreign constant name
         file - the include file where the foreign constant is defined
 
@@ -748,7 +789,7 @@ cdef class Box:
     def from_fvar(fb.SType type, str name, str file) -> Box:
         """Create a foreign variable box.
 
-        type - the foreign variable type of SType
+        type - the foreign variable type of SType {kSInt, kSReal}
         name - the foreign variable name
         file - the include file where the foreign variable is defined
 
@@ -764,7 +805,7 @@ cdef class Box:
         return fb.getBoxType(self.ptr, &self.inputs, &self.outputs)
 
     def to_string(self, shared: bool = False, max_size: int = 256) -> str:
-        """Convert the box to a string
+        """Convert the box to a string via printBox mechanism
 
         box - the box to be converted
         shared - whether the identical sub boxes are converted as identifiers
@@ -869,9 +910,9 @@ cdef class Box:
         """bitwise right-shift"""
         return box_lrightshift(self, other)
 
-    # TODO: ???
-    # Box boxARightShift()
-    # Box boxARightShift(Box b1, Box b2)
+    def arightshift(self, Box other) -> Box:
+        """bitwise arithmetic right shift"""
+        return box_arightshift(self, other)
 
     def tree2str(self):
         """Convert this box tree (such as the label of a UI) to a string."""
@@ -948,106 +989,141 @@ cdef class Box:
     # boolean methods ----------------
 
     def is_nil(self) -> bool:
-        """Check if a box is nil."""
+        """Test if a box is nil."""
         return box_is_nil(self)
 
     def is_abstr(self) -> bool:
+        """Test if a box is an abstraction.
+        
+        see: https://faustdoc.grame.fr/manual/syntax
+        """
         return is_box_abstr(self)
 
     def is_appl(self) -> bool:
+        """Test if a box is an application."""
         return is_box_appl(self)
 
     def is_button(self) -> bool:
+        """Test if a box is a button."""
         return is_box_button(self)
 
     def is_case(self) -> bool:
         return is_box_case(self)
 
     def is_checkbox(self) -> bool:
+        """Test if a box is an checkbox."""
         return is_box_checkbox(self)
 
     def is_cut(self) -> bool:
+        """Test if a box is a cut."""
         return is_box_cut(self)
 
     def is_environment(self) -> bool:
+        """Test if a box is an environmnent."""
         return is_box_environment(self)
 
     def is_error(self) -> bool:
+        """Test if a box is an error."""
         return is_box_error(self)
 
     def is_fconst(self) -> bool:
+        """Test if a box is an fconst."""
         return is_box_fconst(self)
 
     def is_ffun(self) -> bool:
+        """Test if a box is an ffun."""    
         return is_box_ffun(self)
 
-    def is_fvar_(self) -> bool:
+    def is_fvar(self) -> bool:
+        """Test if a box is an fvar."""    
         return is_box_fvar(self)
 
     def is_hbargraph(self) -> bool:
+        """Test if a box is an hbargraph."""
         return is_box_hbargraph(self)
 
     def is_hgroup(self) -> bool:
+        """Test if a box is an hgroup."""
         return is_box_hgroup(self)
 
     def is_hslider(self) -> bool:
+        """Test if a box is an hslider."""
         return is_box_hslider(self)
 
     def is_ident(self) -> bool:
+        """Test if a box is an indentifier."""
         return is_box_ident(self)
 
     def is_int(self) -> bool:
+        """Test if a box is an int."""    
         return is_box_int(self)
 
     def is_numentry(self) -> bool:
+        """Test if a box is an numentry."""
         return is_box_numentry(self)
 
     def is_prim0(self) -> bool:
+        """Test if a box is a nullary function."""    
         return is_box_prim0(self)
 
     def is_prim1(self) -> bool:
+        """Test if a box is a unitary function."""
         return is_box_prim1(self)
 
     def is_prim2(self) -> bool:
+        """Test if a box is a binary function."""
         return is_box_prim2(self)
 
     def is_prim3(self) -> bool:
+        """Test if a box is a ternary function."""
         return is_box_prim3(self)
 
     def is_prim4(self) -> bool:
+        """Test if a box is a 4 param function."""
         return is_box_prim4(self)
 
     def is_prim5(self) -> bool:
+        """Test if a box is a 5 param function."""
         return is_box_prim5(self)
 
     def is_real(self) -> bool:
+        """Test if a box is a real or floot box."""
         return is_box_real(self)
 
     def is_slot(self) -> bool:
+        """Test if a box is a slot."""
         return is_box_slot(self)
 
     def is_soundfile(self) -> bool:
+        """Test if a box is a soundfile."""
         return is_box_soundfile(self)
 
     def is_symbolic(self) -> bool:
+        """Test if a box is symbolic."""
         return is_box_symbolic(self)
 
     def is_tgroup(self) -> bool:
+        """Test if a box is a tab group."""
         return is_box_tgroup(self)
 
     def is_vgroup(self) -> bool:
+        """Test if a box is a vertical group."""
         return is_box_vgroup(self)
 
     def is_vslider(self) -> bool:
+        """Test if a box is a vertical slider."""
         return is_box_vslider(self)
 
     def is_hslider(self) -> bool:
+        """Test if a box is a horizontal slider."""
         return is_box_hslider(self)
 
     def is_waveform(self) -> bool:
+        """Test if a box is a waveform."""
         return is_box_waveform(self)
 
     def is_wire(self) -> bool:
+        """Test if a box is a wire (pass-through) box."""
         return is_box_wire(self)
 
 
@@ -1541,7 +1617,7 @@ def box_readonly_table_op() -> Box:
 def box_readonly_table(Box n, Box init, Box ridx) -> Box:
     """Create a read only table.
 
-    n - the table size, a constant numerical expression (see [1])
+    n - the table size, a constant numerical expression
     init - the table content
     ridx - the read index (an int between 0 and n-1)
 
@@ -1561,7 +1637,7 @@ def box_write_read_table_op() -> Box:
 def box_write_read_table(Box n, Box init, Box widx, Box wsig, Box ridx) -> Box:
     """Create a read/write table.
 
-    n - the table size, a constant numerical expression (see [1])
+    n - the table size, a constant numerical expression
     init - the table content
     widx - the write index (an integer between 0 and n-1)
     wsig - the input of the table
@@ -1588,10 +1664,10 @@ def box_soundfile(str label, chan: Box | int, part: Box | None, ridx: Box | int 
     """Create a soundfile block.
 
     label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
-    chan - the number of outputs channels, a constant numerical expression (see [1])
+    chan - the number of outputs channels, a constant numerical expression
 
     (box_soundfile2 parameters)
-    part - in the [0..255] range to select a given sound number, a constant numerical expression (see [1])
+    part - in the [0..255] range to select a given sound number, a constant numerical expression
     ridx - the read index (an integer between 0 and the selected sound length)
 
     returns the soundfile box.
@@ -1608,7 +1684,7 @@ cdef Box __box_soundfile1(str label, Box chan):
     """Create a soundfile block.
 
     label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
-    chan - the number of outputs channels, a constant numerical expression (see [1])
+    chan - the number of outputs channels, a constant numerical expression
 
     returns the soundfile box.
     """
@@ -1620,8 +1696,8 @@ cdef Box __box_soundfile2(str label, Box chan, Box part, Box ridx):
     """Create a soundfile block.
 
     label - of form "label[url:{'path1';'path2';'path3'}]" to describe a list of soundfiles
-    chan - the number of outputs channels, a constant numerical expression (see [1])
-    part - in the [0..255] range to select a given sound number, a constant numerical expression (see [1])
+    chan - the number of outputs channels, a constant numerical expression
+    part - in the [0..255] range to select a given sound number, a constant numerical expression
     ridx - the read index (an integer between 0 and the selected sound length)
 
     returns the soundfile box.
@@ -1711,319 +1787,394 @@ def box_bin_op(fb.SOperator op, Box b1, Box b2) -> Box:
     return Box.from_ptr(b)
 
 
-
 def box_add_op() -> Box:
+    """nullary box add operation."""
     cdef fb.Box b = fb.boxAdd()
     return Box.from_ptr(b)
 
 def box_add(Box b1, Box b2) -> Box:
+    """binary box add operation."""
     cdef fb.Box b = fb.boxAdd(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_sub_op() -> Box:
+    """nullary box substract operation."""
     cdef fb.Box b = fb.boxSub()
     return Box.from_ptr(b)
 
 def box_sub(Box b1, Box b2) -> Box:
+    """binary box substract operation."""
     cdef fb.Box b = fb.boxSub(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_mul_op() -> Box:
+    """nullary box multipy operation."""
     cdef fb.Box b = fb.boxMul()
     return Box.from_ptr(b)
 
 def box_mul(Box b1, Box b2) -> Box:
+    """binary box multiply operation."""
     cdef fb.Box b = fb.boxMul(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_div_op() -> Box:
+    """nullary box divide operation."""
     cdef fb.Box b = fb.boxDiv()
     return Box.from_ptr(b)
 
 def box_div(Box b1, Box b2) -> Box:
+    """binary box divide operation."""
     cdef fb.Box b = fb.boxDiv(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_rem_op() -> Box:
+    """nullary box modulo operation."""
     cdef fb.Box b = fb.boxRem()
     return Box.from_ptr(b)
 
 def box_rem(Box b1, Box b2) -> Box:
+    """binary box modulo operation."""
     cdef fb.Box b = fb.boxRem(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_leftshift_op() -> Box:
+    """nullary box left bitshift operation."""
     cdef fb.Box b = fb.boxLeftShift()
     return Box.from_ptr(b)
 
 def box_leftshift(Box b1, Box b2) -> Box:
+    """binary box left bit shift operation."""
     cdef fb.Box b = fb.boxLeftShift(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_lrightshift_op() -> Box:
+    """nullary box logical right bit shift operation."""
     cdef fb.Box b = fb.boxLRightShift()
     return Box.from_ptr(b)
 
 def box_lrightshift(Box b1, Box b2) -> Box:
+    """binary box logical right bit shift operation."""
     cdef fb.Box b = fb.boxLRightShift(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_arightshift_op() -> Box:
+    """bitwise arithmetic right bit shift op"""
     cdef fb.Box b = fb.boxARightShift()
     return Box.from_ptr(b)
 
 def box_arightshift(Box b1, Box b2) -> Box:
+    """bitwise arithmetic right shift"""
     cdef fb.Box b = fb.boxARightShift(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_gt_op() -> Box:
+    """nullary greater than operation."""
     cdef fb.Box b = fb.boxGT()
     return Box.from_ptr(b)
 
 def box_gt(Box b1, Box b2) -> Box:
+    """binary box greater than operation."""
     cdef fb.Box b = fb.boxGT(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_lt_op() -> Box:
+    """nullary less than operation."""
     cdef fb.Box b = fb.boxLT()
     return Box.from_ptr(b)
 
 def box_lt(Box b1, Box b2) -> Box:
+    """binary box lesser than operation."""
     cdef fb.Box b = fb.boxLT(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_ge_op() -> Box:
+    """nullary greater than or equal operation."""
     cdef fb.Box b = fb.boxGE()
     return Box.from_ptr(b)
 
 def box_ge(Box b1, Box b2) -> Box:
+    """binary box greater than or equal operation."""
     cdef fb.Box b = fb.boxGE(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_le_op() -> Box:
+    """nullary less than than equal operation."""
     cdef fb.Box b = fb.boxLE()
     return Box.from_ptr(b)
 
 def box_le(Box b1, Box b2) -> Box:
+    """binary box lesser than or equaloperation."""
     cdef fb.Box b = fb.boxLE(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_eq_op() -> Box:
+    """nullary equal operation."""
     cdef fb.Box b = fb.boxEQ()
     return Box.from_ptr(b)
 
 def box_eq(Box b1, Box b2) -> Box:
+    """binary box equals operation."""
     cdef fb.Box b = fb.boxEQ(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_ne_op() -> Box:
+    """nullary not equal than operation."""
     cdef fb.Box b = fb.boxNE()
     return Box.from_ptr(b)
 
 def box_ne(Box b1, Box b2) -> Box:
+    """binary box not equals than operation."""
     cdef fb.Box b = fb.boxNE(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_and_op() -> Box:
+    """nullary AND operation."""
     cdef fb.Box b = fb.boxAND()
     return Box.from_ptr(b)
 
 def box_and(Box b1, Box b2) -> Box:
+    """binary box AND operation."""
     cdef fb.Box b = fb.boxAND(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_or_op() -> Box:
+    """nullary OR operation."""
     cdef fb.Box b = fb.boxOR()
     return Box.from_ptr(b)
 
 def box_or(Box b1, Box b2) -> Box:
+    """binary box OR operation."""
     cdef fb.Box b = fb.boxOR(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_xor_op() -> Box:
+    """nullary XOR operation."""
     cdef fb.Box b = fb.boxXOR()
     return Box.from_ptr(b)
 
 def box_xor(Box b1, Box b2) -> Box:
+    """binary box XOR operation."""
     cdef fb.Box b = fb.boxXOR(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 
 def box_abs_op() -> Box:
+    """nullary absolute operation."""
     cdef fb.Box b = fb.boxAbs()
     return Box.from_ptr(b)
 
 def box_abs(Box x) -> Box:
+    """unitary box absolute operation."""
     cdef fb.Box b = fb.boxAbs(x.ptr)
     return Box.from_ptr(b)
 
 def box_acos_op() -> Box:
+    """nullary arccosine than operation."""
     cdef fb.Box b = fb.boxAcos()
     return Box.from_ptr(b)
 
 def box_acos(Box x) -> Box:
+    """unitary box arccosine operation."""
     cdef fb.Box b = fb.boxAcos(x.ptr)
     return Box.from_ptr(b)
 
 def box_tan_op() -> Box:
+    """nullary tangent operation."""
     cdef fb.Box b = fb.boxTan()
     return Box.from_ptr(b)
 
 def box_tan(Box x) -> Box:
+    """unitary box tangent operation."""
     cdef fb.Box b = fb.boxTan(x.ptr)
     return Box.from_ptr(b)
 
 def box_sqrt_op() -> Box:
+    """nullary square root than operation."""
     cdef fb.Box b = fb.boxSqrt()
     return Box.from_ptr(b)
 
 def box_sqrt(Box x) -> Box:
+    """unitary box sqrt operation."""
     cdef fb.Box b = fb.boxSqrt(x.ptr)
     return Box.from_ptr(b)
 
 def box_sin_op() -> Box:
+    """nullary sine op than operation."""
     cdef fb.Box b = fb.boxSin()
     return Box.from_ptr(b)
 
 def box_sin(Box x) -> Box:
+    """unitary box sine operation."""
     cdef fb.Box b = fb.boxSin(x.ptr)
     return Box.from_ptr(b)
 
 def box_rint_op() -> Box:
+    """nullary round int operation."""
     cdef fb.Box b = fb.boxRint()
     return Box.from_ptr(b)
 
 def box_rint(Box x) -> Box:
+    """unitary box round int operation."""
     cdef fb.Box b = fb.boxRint(x.ptr)
     return Box.from_ptr(b)
 
 def box_round_op() -> Box:
+    """nullary round float operation."""
     cdef fb.Box b = fb.boxRound()
     return Box.from_ptr(b)
 
 def box_round(Box x) -> Box:
+    """unitary box round operation."""
     cdef fb.Box b = fb.boxRound(x.ptr)
     return Box.from_ptr(b)
 
 def box_log_op() -> Box:
+    """nullary log operation."""
     cdef fb.Box b = fb.boxLog()
     return Box.from_ptr(b)
 
 def box_log(Box x) -> Box:
+    """unitary box log operation."""
     cdef fb.Box b = fb.boxLog(x.ptr)
     return Box.from_ptr(b)
 
 def box_log10_op() -> Box:
+    """nullary log10 operation."""
     cdef fb.Box b = fb.boxLog10()
     return Box.from_ptr(b)
 
 def box_log10(Box x) -> Box:
+    """unitary box log10 operation."""
     cdef fb.Box b = fb.boxLog10(x.ptr)
     return Box.from_ptr(b)
 
 def box_floor_op() -> Box:
+    """nullary floor operation."""
     cdef fb.Box b = fb.boxFloor()
     return Box.from_ptr(b)
 
 def box_floor(Box x) -> Box:
+    """unitary box floor operation."""
     cdef fb.Box b = fb.boxFloor(x.ptr)
     return Box.from_ptr(b)
 
 def box_exp_op() -> Box:
+    """nullary exp operation."""
     cdef fb.Box b = fb.boxExp()
     return Box.from_ptr(b)
 
 def box_exp(Box x) -> Box:
+    """unitary box exp operation."""
     cdef fb.Box b = fb.boxExp(x.ptr)
     return Box.from_ptr(b)
 
 def box_exp10_op() -> Box:
+    """nullary exp10 operation."""
     cdef fb.Box b = fb.boxExp10()
     return Box.from_ptr(b)
 
 def box_exp10(Box x) -> Box:
+    """unitary box exp10 operation."""
     cdef fb.Box b = fb.boxExp10(x.ptr)
     return Box.from_ptr(b)
 
 def box_cos_op() -> Box:
+    """nullary cosine operation."""
     cdef fb.Box b = fb.boxCos()
     return Box.from_ptr(b)
 
 def box_cos(Box x) -> Box:
+    """unitary box cosine operation."""
     cdef fb.Box b = fb.boxCos(x.ptr)
     return Box.from_ptr(b)
 
 def box_ceil_op() -> Box:
+    """nullary ceiling operation."""
     cdef fb.Box b = fb.boxCeil()
     return Box.from_ptr(b)
 
 def box_ceil(Box x) -> Box:
+    """unitary box ceiling operation."""
     cdef fb.Box b = fb.boxCeil(x.ptr)
     return Box.from_ptr(b)
 
 def box_atan_op() -> Box:
+    """nullary arc tangent operation."""
     cdef fb.Box b = fb.boxAtan()
     return Box.from_ptr(b)
 
 def box_atan(Box x) -> Box:
+    """unitary box arctangent operation."""
     cdef fb.Box b = fb.boxAtan(x.ptr)
     return Box.from_ptr(b)
 
 def box_asin_op() -> Box:
+    """nullary arcsine operation."""
     cdef fb.Box b = fb.boxAsin()
     return Box.from_ptr(b)
 
 def box_asin(Box x) -> Box:
+    """unitary box arcsine operation."""
     cdef fb.Box b = fb.boxAsin(x.ptr)
     return Box.from_ptr(b)
 
-
-
 def box_remainder_op() -> Box:
+    """nullary remainder operation."""
     cdef fb.Box b = fb.boxRemainder()
     return Box.from_ptr(b)
 
 def box_remainder(Box b1, Box b2) -> Box:
+    """binary box remainder operation."""
     cdef fb.Box b = fb.boxRemainder(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_pow_op() -> Box:
+    """nullary power operation."""
     cdef fb.Box b = fb.boxPow()
     return Box.from_ptr(b)
 
 def box_pow(Box b1, Box b2) -> Box:
+    """binary box power operation."""
     cdef fb.Box b = fb.boxPow(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_min_op() -> Box:
+    """nullary minimum operation."""
     cdef fb.Box b = fb.boxMin()
     return Box.from_ptr(b)
 
 def box_min(Box b1, Box b2) -> Box:
+    """binary box minimum operation."""
     cdef fb.Box b = fb.boxMin(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_max_op() -> Box:
+    """nullary maximum operation."""
     cdef fb.Box b = fb.boxMax()
     return Box.from_ptr(b)
 
 def box_max(Box b1, Box b2) -> Box:
+    """binary box maximum operation."""
     cdef fb.Box b = fb.boxMax(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_fmod_op() -> Box:
+    """nullary fmod operation."""
     cdef fb.Box b = fb.boxFmod()
     return Box.from_ptr(b)
 
 def box_fmod(Box b1, Box b2) -> Box:
+    """binary box fmod operation."""
     cdef fb.Box b = fb.boxFmod(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
 def box_atan2_op() -> Box:
+    """nullary arctangent2 operation."""
     cdef fb.Box b = fb.boxAtan2()
     return Box.from_ptr(b)
 
 def box_atan2(Box b1, Box b2) -> Box:
+    """binary box arctan2 operation."""
     cdef fb.Box b = fb.boxAtan2(b1.ptr, b2.ptr)
     return Box.from_ptr(b)
 
@@ -2054,10 +2205,10 @@ def box_vslider(str label, Box init, Box min, Box max, Box step) -> Box:
     """Create a vertical slider box.
 
     label - the label definition (see [2])
-    init - the init box, a constant numerical expression (see [1])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
-    step - the step box, a constant numerical expression (see [1])
+    init - the init box, a constant numerical expression
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
+    step - the step box, a constant numerical expression
 
     returns the vertical slider box.
     """
@@ -2068,10 +2219,10 @@ def box_hslider(str label, Box init, Box min, Box max, Box step) -> Box:
     """Create an horizontal slider box.
 
     label - the label definition (see [2])
-    init - the init box, a constant numerical expression (see [1])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
-    step - the step box, a constant numerical expression (see [1])
+    init - the init box, a constant numerical expression
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
+    step - the step box, a constant numerical expression
 
     returns the horizontal slider box.
     """
@@ -2082,10 +2233,10 @@ def box_numentry(str label, Box init, Box min, Box max, Box step) -> Box:
     """Create a num entry box.
 
     label - the label definition (see [2])
-    init - the init box, a constant numerical expression (see [1])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
-    step - the step box, a constant numerical expression (see [1])
+    init - the init box, a constant numerical expression
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
+    step - the step box, a constant numerical expression
 
     returns the num entry box.
     """
@@ -2097,8 +2248,8 @@ def box_vbargraph(str label, Box min, Box max) -> Box:
     """Create a vertical bargraph box.
 
     label - the label definition (see [2])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
     x - the input box
 
     returns the vertical bargraph box.
@@ -2110,8 +2261,8 @@ def box_vbargraph2(str label, Box min, Box max, Box x) -> Box:
     """Create a vertical bargraph box.
 
     label - the label definition (see [2])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
     x - the input box
 
     returns the vertical bargraph box.
@@ -2123,8 +2274,8 @@ def box_hbargraph(str label, Box min, Box max) -> Box:
     """Create a horizontal bargraph box.
 
     label - the label definition (see [2])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
     x - the input box
 
     returns the horizontal bargraph box.
@@ -2136,8 +2287,8 @@ def box_hbargraph2(str label, Box min, Box max, Box x) -> Box:
     """Create a horizontal bargraph box.
 
     label - the label definition (see [2])
-    min - the min box, a constant numerical expression (see [1])
-    max - the max box, a constant numerical expression (see [1])
+    min - the min box, a constant numerical expression
+    max - the max box, a constant numerical expression
     x - the input box
 
     returns the horizontal bargraph box.
@@ -2206,6 +2357,7 @@ def box_attach(Box b1, Box b2) -> Box:
 #     return fb.boxPrim2(foo)
 
 def is_box_abstr(Box t) -> bool:
+    """test if box is an abtraction."""
     return fb.isBoxAbstr(t.ptr)
 
 def getparams_box_abstr(Box t) -> dict:
@@ -2231,6 +2383,7 @@ def getparams_box_access(Box t) -> dict:
         return {}
 
 def is_box_appl(Box t) -> bool:
+    """test if box is an application."""
     return fb.isBoxAppl(t.ptr)
 
 def getparams_box_appl(Box t) -> dict:
@@ -2245,6 +2398,7 @@ def getparams_box_appl(Box t) -> dict:
         return {}
 
 def is_box_button(Box b) -> bool:
+    """test if box is a button."""
     return fb.isBoxButton(b.ptr)
 
 def getparams_box_button(Box b) -> dict:
@@ -2257,6 +2411,7 @@ def getparams_box_button(Box b) -> dict:
         return {}
 
 def is_box_case(Box b) -> bool:
+    """test if box is a case."""
     return fb.isBoxCase(b.ptr)
 
 def getparams_box_case(Box b) -> dict:
@@ -2269,6 +2424,7 @@ def getparams_box_case(Box b) -> dict:
         return {}
 
 def is_box_checkbox(Box b) -> bool:
+    """test if box is a checkbox."""
     return fb.isBoxCheckbox(b.ptr)
 
 def getparams_box_checkbox(Box b) -> dict:
@@ -2290,15 +2446,18 @@ def getparams_box_component(Box b) -> dict:
         return {}
 
 def is_box_cut(Box t) -> bool:
+    """test if box is a cut."""
     return fb.isBoxCut(t.ptr)
 
 def is_box_environment(Box b) -> bool:
     return fb.isBoxEnvironment(b.ptr)
 
 def is_box_error(Box t) -> bool:
+    """test if box is an error."""
     return fb.isBoxError(t.ptr)
 
 def is_box_fconst(Box b) -> bool:
+    """test if box is an fconst."""
     return fb.isBoxFConst(b.ptr)
 
 def getparams_box_fconst(Box b) -> dict:
@@ -2315,6 +2474,7 @@ def getparams_box_fconst(Box b) -> dict:
         return {}
 
 def is_box_ffun(Box b) -> bool:
+    """test if box is an ffun."""
     return fb.isBoxFFun(b.ptr)
 
 def getparams_box_ffun(Box b) -> dict:
@@ -2327,6 +2487,7 @@ def getparams_box_ffun(Box b) -> dict:
         return {}
 
 def is_box_fvar(Box b) -> bool:
+    """test if box is an fvar."""
     return fb.isBoxFVar(b.ptr)
 
 def getparams_box_fvar(Box b) -> dict:
@@ -2343,6 +2504,7 @@ def getparams_box_fvar(Box b) -> dict:
         return {}
 
 def is_box_hbargraph(Box b) -> bool:
+    """test if box is a hbargraph."""
     return fb.isBoxHBargraph(b.ptr)
 
 def getparams_box_hbargraph(Box b) -> dict:
@@ -2359,6 +2521,7 @@ def getparams_box_hbargraph(Box b) -> dict:
         return {}
 
 def is_box_hgroup(Box b) -> bool:
+    """test if box is an horizontal group."""
     return fb.isBoxHGroup(b.ptr)
 
 def getparams_box_hgroup(Box b) -> dict:
@@ -2373,6 +2536,7 @@ def getparams_box_hgroup(Box b) -> dict:
         return {}
 
 def is_box_hslider(Box b) -> bool:
+    """test if box is an horizontal slider."""
     return fb.isBoxHSlider(b.ptr)
 
 def getparams_box_hslider(Box b) -> dict:
@@ -2393,6 +2557,7 @@ def getparams_box_hslider(Box b) -> dict:
         return {}
 
 def is_box_ident(Box t) -> bool:
+    """test if box is an indentifier."""
     return fb.isBoxIdent(t.ptr)
 
 def get_box_id(Box t) -> str | None:
@@ -2411,6 +2576,7 @@ def getparams_box_inputs(Box t) -> dict:
         return {}
 
 def is_box_int(Box t) -> bool:
+    """test if box is an int."""
     return fb.isBoxInt(t.ptr)
 
 def getparams_box_int(Box t) -> dict:
@@ -2506,6 +2672,7 @@ def getparams_box_metadata(Box b) -> dict:
         return {}
 
 def is_box_numentry(Box b) -> bool:
+    """test if box is a numentry."""
     return fb.isBoxNumEntry(b.ptr)
 
 def getparams_box_num_entry(Box b) -> dict:
@@ -2592,8 +2759,8 @@ def is_box_prim5(Box b) -> bool:
     return fb.isBoxPrim5(b.ptr)
 
 
-
 def is_box_real(Box t) -> bool:
+    """test if box is a real or float."""
     return fb.isBoxReal(t.ptr)
 
 def getparams_box_real(Box t) -> dict:
@@ -2641,6 +2808,7 @@ def getparams_box_seq(Box t) -> dict:
         return {}
 
 def is_box_slot(Box t) -> bool:
+    """test if box is a slot."""
     return fb.isBoxSlot(t.ptr)
 
 def getparams_box_slot(Box t) -> dict:
@@ -2653,6 +2821,7 @@ def getparams_box_slot(Box t) -> dict:
         return {}
 
 def is_box_soundfile(Box b) -> bool:
+    """test if box is a soundfile."""
     return fb.isBoxSoundfile(b.ptr)
 
 def getparams_box_soundfile(Box b) -> dict:
@@ -2678,6 +2847,7 @@ def getparams_box_split(Box t) -> dict:
         return {}
 
 def is_box_symbolic(Box t) -> bool:
+    """test if box is symbolic."""
     return fb.isBoxSymbolic(t.ptr)
 
 def getparams_box_symbolic(Box t) -> dict:
@@ -2692,6 +2862,7 @@ def getparams_box_symbolic(Box t) -> dict:
         return {}
 
 def is_box_tgroup(Box b) -> bool:
+    """test if box is a tab group."""
     return fb.isBoxTGroup(b.ptr)
 
 def getparams_box_tgroup(Box b) -> dict:
@@ -2706,6 +2877,7 @@ def getparams_box_tgroup(Box b) -> dict:
         return {}
 
 def is_box_vbargraph(Box b) -> bool:
+    """test if box is a vertical bargraph."""
     return fb.isBoxVBargraph(b.ptr)
 
 def getparams_box_vbargraph(Box b) -> dict:
@@ -2722,6 +2894,7 @@ def getparams_box_vbargraph(Box b) -> dict:
         return {}
 
 def is_box_vgroup(Box b) -> bool:
+    """test if box is a vertical group."""
     return fb.isBoxVGroup(b.ptr)
 
 def getparams_box_vgroup(Box b) -> dict:
@@ -2756,9 +2929,11 @@ def getparams_box_vslider(Box b) -> dict:
         return {}
 
 def is_box_waveform(Box b) -> bool:
+    """test if box is a waveform."""
     return fb.isBoxWaveform(b.ptr)
 
 def is_box_wire(Box t) -> bool:
+    """test if box is a wire."""
     return fb.isBoxWire(t.ptr)
 
 def getparams_box_with_local_def(Box t) -> dict:
@@ -2866,13 +3041,11 @@ def create_source_from_boxes(str name_app, Box box, str lang, *args) -> str:
         return
     return code.decode()
 
-
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust-signal
 ##
 
-
-def sig_or_float(var):
+def sig_or_float(var: Signal | float) -> Signal:
     if isinstance(var, float):
         return Signal.from_real(var)
     elif isinstance(var, Signal):
@@ -2880,7 +3053,7 @@ def sig_or_float(var):
         return var
     raise TypeError("argument must be an float or a sigReal")
 
-def sig_or_int(var):
+def sig_or_int(var: Signal | int) -> Signal:
     if isinstance(var, int):
         return Signal.from_int(var)
     elif isinstance(var, Signal):

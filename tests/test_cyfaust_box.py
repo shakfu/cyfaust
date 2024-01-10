@@ -8,7 +8,7 @@ try:
     from cyfaust.interp import create_dsp_factory_from_boxes
     from cyfaust.common import PACKAGE_RESOURCES
 except ImportError:
-    from cyfaust import *
+    from cyfaust.cyfaust import *
 
 from testutils import print_section, print_entry
 

@@ -6,7 +6,7 @@ try:
     from cyfaust.interp import *
     from cyfaust.signal import *
 except ImportError:
-    from cyfaust import *
+    from cyfaust.cyfaust import *
 
 from testutils import print_section, print_entry
 

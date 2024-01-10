@@ -5,14 +5,56 @@ import time
 from pathlib import Path
 
 try:
-    from cyfaust.interp import *
-except ImportError:
-    from cyfaust import *
+    # from cyfaust.interp import *
+    # from cyfaust.common import *
+    # from cyfaust.box import *
+    # from cyfaust.signal import *
+    from cyfaust.interp import (
+        RtAudioDriver,
+        InterpreterDspFactory,
+        get_version, 
+        create_dsp_factory_from_file,
+        create_dsp_factory_from_string,
+        create_dsp_factory_from_boxes,
+        create_dsp_factory_from_signals,
+        generate_auxfiles_from_string,
+        get_all_dsp_factories,
+        get_dsp_factory_from_sha_key,
+        delete_all_dsp_factories,
+    )
+    from cyfaust.signal import (
+        signal_context, SignalVector, 
+        sig_input, sig_int, sig_delay, sig_real,
+    )
+    from cyfaust.box import (
+        box_context, box_float, box_int,
+    )
+except (ModuleNotFoundError, ImportError) as err:
+    # from cyfaust.cyfaust import *
+    from cyfaust.cyfaust import (
+        RtAudioDriver,
+        InterpreterDspFactory,
+        get_version, 
+        create_dsp_factory_from_file,
+        create_dsp_factory_from_string,
+        create_dsp_factory_from_boxes,
+        create_dsp_factory_from_signals,
+        generate_auxfiles_from_string,
+        get_all_dsp_factories,
+        get_dsp_factory_from_sha_key,
+        delete_all_dsp_factories,
+
+        signal_context, SignalVector, 
+        sig_input, sig_int, sig_delay, sig_real,
+
+        box_context, box_float, box_int,
+    )
 
 from testutils import print_section, print_entry
 
 TEMP_PATH = "/tmp/FaustDSP.fbc"
 
+# faust/dsp/libfaust.h
 # def test_generate_sha1():
 # def test_expand_dsp_from_file():
 # def test_expand_dsp_from_string():
@@ -22,11 +64,6 @@ TEMP_PATH = "/tmp/FaustDSP.fbc"
 ## faust/dsp/interpreter-dsp
 ##
 
-# def test_get_dsp_factory_from_sha_key():
-# def test_create_dsp_factory_from_signals():
-# def test_delete_all_dsp_factories():
-# def test_get_all_dsp_factories():
-# def test_read_dsp_factory_from_bitcode():
 
 
 def test_interp_version():
@@ -129,6 +166,52 @@ def test_interp_create_dsp_factory_from_string2():
     # audio.stop()
 
 
+def test_get_all_dsp_factories():
+    print_entry("test_get_all_dsp_factories")
+
+    factory = create_dsp_factory_from_string("FaustDSP", 
+        """process = 0,0 : soundfile("sound[url:{'tests/amen.wav'}]", 0);""")
+
+    assert factory
+        
+    print("compile options:", factory.get_compile_options())
+    print("library list:", factory.get_library_list())
+    print("include pathnames:", factory.get_include_pathnames())
+    print("name:", factory.get_name())
+    print("sha key", factory.get_sha_key())
+
+    assert get_all_dsp_factories()
+    print(get_all_dsp_factories())
+
+# FIXME: crashes for some reason!
+# def test_delete_all_dsp_factories():
+#     print_entry("test_delete_all_dsp_factories")
+
+#     f1 = create_dsp_factory_from_string("FaustDSP", 
+#         """process = 0,0 : soundfile("sound[url:{'tests/amen.wav'}]", 0);""")
+#     assert f1
+
+#     f2 = create_dsp_factory_from_string("FaustDSP", "process = 0.5,0.6;")
+#     assert f2
+
+#     assert len(get_all_dsp_factories()) == 2
+
+#     delete_all_dsp_factories()
+
+#     assert len(get_all_dsp_factories()) == 0
+
+def test_get_dsp_factory_from_sha_key():
+    print_entry("test_get_dsp_factory_from_sha_key")
+    f1 = create_dsp_factory_from_string("FaustDSP", "process = 0.5,0.6;")
+    assert f1
+    key = get_all_dsp_factories()[0]
+    assert isinstance(key, str)
+    print(key)
+    assert key
+    f2 = get_dsp_factory_from_sha_key(key)
+    assert f2
+
+
 def test_interp_warning_message():
     print_entry("test_interp_warning_message")
 
@@ -183,6 +266,56 @@ def test_interp_generate_auxfiles_from_string():
     svg_folder.rmdir()
 
 
+def test_create_dsp_factory_from_boxes():
+    print_entry("test_create_dsp_factory_from_boxes")
+    with box_context():
+        b = box_int(7).par(box_float(3.14))
+        assert b.is_valid, "box is not valid"
+        factory = create_dsp_factory_from_boxes("dspme", b)
+        assert factory
+
+        print("compile options:", factory.get_compile_options())
+        print("library list:", factory.get_library_list())
+        print("include pathnames:", factory.get_include_pathnames())
+
+        print("factory name:", factory.get_name())
+        print("factory key:", factory.get_sha_key())
+    
+        dsp = factory.create_dsp_instance()
+        assert dsp
+
+
+def test_create_dsp_factory_from_signals1():
+    print_entry("test_create_dsp_factory_from_signals1")
+    with signal_context():
+        sv = SignalVector()
+        in1 = sig_input(0)
+        sv.add(sig_delay(in1 + sig_real(0.5), sig_int(500)))
+        sv.add(sig_delay(in1 * sig_real(1.5), sig_int(3000)))
+        factory = create_dsp_factory_from_signals("test3", sv)
+        assert factory
+        print("compile options:", factory.get_compile_options())
+        print("library list:", factory.get_library_list())
+        print("sha key", factory.get_sha_key())
+        dsp = factory.create_dsp_instance()
+        assert dsp
+
+
+def test_create_dsp_factory_from_signals2():
+    print_entry("test_create_dsp_factory_from_signals2")
+    with signal_context():
+        sv = SignalVector()
+        s1 = sig_delay(sig_input(0), sig_int(500)) + sig_real(0.5)
+        sv.add(s1);
+        sv.add(s1);
+        factory = create_dsp_factory_from_signals("test4", sv)
+        assert factory
+        print("compile options:", factory.get_compile_options())
+        print("library list:", factory.get_library_list())
+        print("sha key", factory.get_sha_key())
+        dsp = factory.create_dsp_instance()
+        assert dsp
+
 
 if __name__ == '__main__':
     print_section("testing cyfaust.interp")
@@ -190,8 +323,15 @@ if __name__ == '__main__':
     test_interp_create_dsp_factory_from_file()
     test_interp_create_dsp_factory_from_string1()
     test_interp_create_dsp_factory_from_string2()
+    test_get_all_dsp_factories()
+    # test_delete_all_dsp_factories()
+    test_get_dsp_factory_from_sha_key()
     test_interp_warning_message()
     test_interp_read_dsp_factory_from_bitcode_file()
     test_interp_generate_auxfiles_from_string()
+    test_create_dsp_factory_from_boxes()
+    test_create_dsp_factory_from_signals1()
+    test_create_dsp_factory_from_signals2()
+
 
 

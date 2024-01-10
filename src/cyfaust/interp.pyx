@@ -481,7 +481,7 @@ cdef class InterpreterDsp:
 
 def get_dsp_factory_from_sha_key(str sha_key) -> InterpreterDspFactory:
     """Get the Faust DSP factory associated with a given SHA key."""
-    return InterpreterDspFactory.from_sha_key(sha_key.encode())
+    return InterpreterDspFactory.from_sha_key(sha_key)
 
 def create_dsp_factory_from_file(filename: str, *args) -> InterpreterDspFactory:
     """Create a Faust DSP factory from a DSP source code as a file."""
@@ -505,7 +505,7 @@ def delete_all_dsp_factories():
 
 def get_all_dsp_factories():
     """Return Faust DSP factories of the library cache as a vector of their SHA keys."""
-    return fi.getAllInterpreterDSPFactories()
+    return [key.decode() for key in fi.getAllInterpreterDSPFactories()]
 
 def start_multithreaded_access_mode() -> bool:
     """Start multi-thread access mode."""
