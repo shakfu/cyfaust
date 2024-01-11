@@ -117,7 +117,7 @@ def expand_dsp_from_file(filename: str, *args) -> tuple(str, str):
         return
     return (sha_key.decode(), result.decode())
 
-def expand_dsp_from_string(name_app: str, dsp_content: str, *args) -> str:
+def expand_dsp_from_string(name_app: str, dsp_content: str, *args) -> tuple(str, str):
     """Expand dsp in a file into a self-contained dsp string."""
     cdef ParamArray params = ParamArray(args)
     cdef string error_msg, sha_key 

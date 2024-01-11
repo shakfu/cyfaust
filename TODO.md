@@ -17,7 +17,9 @@
 
 - [ ] Add `cython/__main__.py` commandline interface.
 
-- [ ] Fix SANITIZE option (failing on both macos and linux)
+- [ ] Fix SANITIZE option if possible (failing on both macos and linux)
+
+- [ ] Add additional python debug checks
 
 
 ## cyfaust.interp

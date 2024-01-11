@@ -3,12 +3,36 @@ BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
 sys.path.insert(0, BUILD_PATH)
 
 try:
-    from cyfaust.box import *
-    from cyfaust.signal import SignalVector
+    from cyfaust.box import (
+        create_source_from_boxes, BoxVector,
+        box_add, box_add_op, box_mul,
+        box_context, box_par, box_int, box_float, box_real,
+        box_delay, box_hslider, box_vslider,
+        box_max, box_int_cast,
+        box_readonly_table, box_write_read_table,
+        box_rec, box_min,
+        box_soundfile, box_split, box_wire, 
+        box_waveform, box_fconst, box_fvar
+    )
+    from cyfaust.signal import SignalVector, SType
     from cyfaust.interp import create_dsp_factory_from_boxes
     from cyfaust.common import PACKAGE_RESOURCES
 except ImportError:
-    from cyfaust.cyfaust import *
+    from cyfaust.cyfaust import (
+        create_source_from_boxes, BoxVector,
+        box_add, box_add_op, box_mul,
+        box_context, box_par, box_int, box_float, box_real,
+        box_delay, box_hslider, box_vslider,
+        box_max, box_int_cast,
+        box_readonly_table, box_write_read_table,
+        box_rec, box_min,
+        box_soundfile, box_split, box_wire, 
+        box_waveform, box_fconst, box_fvar,
+
+        SignalVector, SType,
+        create_dsp_factory_from_boxes,
+        PACKAGE_RESOURCES
+    )
 
 from testutils import print_section, print_entry
 

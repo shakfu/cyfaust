@@ -72,5 +72,5 @@ pytest:
 	@$(PYTHON) -Xfaulthandler -mpytest -vv ./tests
 
 clean:
-	@rm -rf build dist *.egg-info .pytest_*
+	@rm -rf build dist *.egg-info .pytest_* .ruff_cache
 

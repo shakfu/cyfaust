@@ -3,17 +3,22 @@ BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
 sys.path.insert(0, BUILD_PATH)
 
 try:
-    from cyfaust.interp import *
-    from cyfaust.signal import *
+    from cyfaust.interp import create_dsp_factory_from_signals
+    from cyfaust.signal import (
+        signal_context, SignalVector, sig_input,
+        sig_real, sig_int, sig_delay
+    )
 except ImportError:
-    from cyfaust.cyfaust import *
+    from cyfaust.cyfaust import (
+        create_dsp_factory_from_signals,
+        signal_context, SignalVector, sig_input,
+        sig_real, sig_int, sig_delay
+    )
 
 from testutils import print_section, print_entry
 
 def test_create_source_from_signals1():
-
     print_entry("test_create_source_from_signals1")
-
     with signal_context():
     	sv = SignalVector()
     	sv.add(sig_real(10.8))
@@ -22,9 +27,7 @@ def test_create_source_from_signals1():
     	# print(code)
 
 def test_create_source_from_signals2():
-
     print_entry("test_create_source_from_signals2")
-
     with signal_context():
         sv = SignalVector()
         in1 = sig_input(0)
@@ -35,9 +38,7 @@ def test_create_source_from_signals2():
         # print(code)
 
 def test_create_dsp_factory_from_signals1():
-
     print_entry("test_create_dsp_factory_from_signals1")
-
     with signal_context():
         sv = SignalVector()
         in1 = sig_input(0)
@@ -53,9 +54,7 @@ def test_create_dsp_factory_from_signals1():
 
 
 def test_create_dsp_factory_from_signals2():
-
     print_entry("test_create_dsp_factory_from_signals2")
-
     with signal_context():
         sv = SignalVector()
         s1 = sig_delay(sig_input(0), sig_int(500)) + sig_real(0.5)
@@ -68,7 +67,6 @@ def test_create_dsp_factory_from_signals2():
         print("sha key", factory.get_sha_key())
         dsp = factory.create_dsp_instance()
         assert dsp
-
 
 
 if __name__ == '__main__':
