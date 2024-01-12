@@ -5,9 +5,12 @@ DEBUG := 0
 STATIC := 0
 
 ifeq ($(DEBUG),1)
-	PYTHON := python/bin/python3
+	PYTHON := python/bin/python3 -X showrefcount -X tracemalloc
+	MEMRAY := python/bin/python3 -m memray
+
 else
 	PYTHON := python3
+	MEMRAY := python3 -m memray
 endif
 
 MIN_OSX_VER := -mmacosx-version-min=13.6
@@ -29,7 +32,7 @@ ifeq ($(STATIC),0)
 	delocate-wheel -v dist/*.whl 
 endif
 
-.PHONY: test test_cpp test_c test_audio pytest
+.PHONY: test test_cpp test_c test_audio pytest memray py-spy
 
 test_cpp:
 	@g++ -std=c++11 $(MIN_OSX_VER) -O3 \
@@ -58,7 +61,6 @@ test_audio:
 		-framework CoreFoundation -framework CoreAudio -lpthread \
 		-o /tmp/audio-test
 	@/tmp/audio-test tests/noise.dsp
-# 	@/tmp/audio-test tests/test_faust_interp/foo.dsp
 
 
 test: setup
@@ -70,6 +72,17 @@ test: setup
 
 pytest:
 	@$(PYTHON) -Xfaulthandler -mpytest -vv ./tests
+
+memray:
+	@rm -rf tests/*.bin tests/*.html
+	@$(MEMRAY) run --native tests/test_cyfaust_interp.py
+	@$(MEMRAY) run --native tests/test_cyfaust_box.py
+	@$(MEMRAY) run --native tests/test_cyfaust_signal.py
+	@$(MEMRAY) run --native tests/test_cyfaust_common.py
+	@for bin in tests/*.bin ; do \
+        $(MEMRAY) flamegraph $$bin ; \
+    done
+
 
 clean:
 	@rm -rf build dist *.egg-info .pytest_* .ruff_cache

@@ -1,6 +1,7 @@
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build'))
 
+
 import time
 import shutil
 from pathlib import Path
@@ -381,6 +382,8 @@ def test_generate_auxfiles_from_file():
 
 if __name__ == '__main__':
     print_section("testing cyfaust.interp")
+    if 'TRACE' in os.environ:
+        import tracemalloc
     test_interp_version()
     test_interp_create_dsp_factory_from_file1()
     test_interp_create_dsp_factory_from_file2()
@@ -400,6 +403,13 @@ if __name__ == '__main__':
     test_expand_dsp_from_file()
     test_expand_dsp_from_string()
     test_generate_auxfiles_from_file()
+    if 'TRACE' in os.environ:
+        print_entry("TRACEMALLOC ANALYSIS")
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+        print("[ Top 10 ]")
+        for stat in top_stats[:10]:
+            print(stat)
 
 
 

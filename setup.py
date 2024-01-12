@@ -89,7 +89,7 @@ def mk_extension(name, sources, define_macros=None):
     )
 
 # ----------------------------------------------------------------------------
-# PRODUCT: STATIC BUILD VARIANT
+# STATIC BUILD VARIANT
 
 if STATIC:
 
@@ -120,7 +120,7 @@ if STATIC:
     )
 
 # ----------------------------------------------------------------------------
-# PRODUCT: DEFAULT DYNAMIC BUILD
+# DEFAULT DYNAMIC BUILD VARIANT
 
 else:
 

@@ -32,19 +32,24 @@
 
 ## debugging c/c++ extensions
 
-- [Debugging](https://pythonextensionpatterns.readthedocs.io/en/latest/debugging/debug.html)
-
-- [Debugging Python C extensions with GDB](https://developers.redhat.com/articles/2021/09/08/debugging-python-c-extensions-gdb#)
-
 - [Debugging C-API (Python Docs)](https://docs.python.org/3/c-api/intro.html#debugging-builds)
 
 - [Configure options (Python Docs)](https://docs.python.org/3/using/configure.html#debug-build)
 
+- [Debugging](https://pythonextensionpatterns.readthedocs.io/en/latest/debugging/debug.html)
+
+- [Debugging Python C extensions with GDB](https://developers.redhat.com/articles/2021/09/08/debugging-python-c-extensions-gdb#)
+
 - [HNews: Debugging a Mixed Python and C Language Stack](https://news.ycombinator.com/item?id=35706687)
+
+- [Debugging with GDB](https://wiki.python.org/moin/DebuggingWithGdb)
+
+
+## tools
+
+- [memray](https://bloomberg.github.io/memray): Memray is a memory profiler for Python
 
 - [py-spy](https://github.com/benfred/py-spy): Sampling profiler for Python programs
 
-- [memray](https://bloomberg.github.io/memray/): Memray is a memory profiler for Python
 
-- [Debugging with GDB](https://wiki.python.org/moin/DebuggingWithGdb)
 

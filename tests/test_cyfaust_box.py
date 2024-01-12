@@ -237,6 +237,8 @@ def test_box_create_source_cpp_arch():
 
 if __name__ == '__main__':
     print_section("testing cyfaust.box")
+    if 'TRACE' in os.environ:
+        import tracemalloc
     test_create_dsp_factory_from_boxes()
     test_create_source_from_boxes()
     test_box_create_source_cpp()
@@ -253,5 +255,11 @@ if __name__ == '__main__':
     test_box_waveform()
     test_box_soundfile()
     test_box_create_source_cpp_arch()
-
+    if 'TRACE' in os.environ:
+        print_entry("TRACEMALLOC ANALYSIS")
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+        print("[ Top 10 ]")
+        for stat in top_stats[:10]:
+            print(stat)
 
