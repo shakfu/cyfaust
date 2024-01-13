@@ -102,7 +102,7 @@ def test_box_create_source_codebox():
         assert len(code) == 801
         assert "function dspsetup()" in code
         # print("code length:", len(code))
-        print(code)
+        # print(code)
 
 def test_box_create_source_rust():
     print_entry("test_box_create_source_rust")
@@ -114,7 +114,7 @@ def test_box_create_source_rust():
         assert len(code) == 2286
         assert "impl FaustDsp for mydsp" in code
         # print("code length:", len(code))
-        print(code)
+        # print(code)
 
 def test_box_split():
     print_entry("test_box_split")

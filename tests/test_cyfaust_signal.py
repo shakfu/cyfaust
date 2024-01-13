@@ -20,11 +20,11 @@ from testutils import print_section, print_entry
 def test_create_source_from_signals1():
     print_entry("test_create_source_from_signals1")
     with signal_context():
-    	sv = SignalVector()
-    	sv.add(sig_real(10.8))
-    	code = sv.create_source("test1", "cpp")
-    	assert len(code) > 0
-    	# print(code)
+        sv = SignalVector()
+        sv.add(sig_real(10.8))
+        code = sv.create_source("test1", "cpp")
+        assert len(code) > 0
+        # print(code)
 
 def test_create_source_from_signals2():
     print_entry("test_create_source_from_signals2")
@@ -58,8 +58,8 @@ def test_create_dsp_factory_from_signals2():
     with signal_context():
         sv = SignalVector()
         s1 = sig_delay(sig_input(0), sig_int(500)) + sig_real(0.5)
-        sv.add(s1);
-        sv.add(s1);
+        sv.add(s1)
+        sv.add(s1)
         factory = create_dsp_factory_from_signals("test4", sv)
         assert factory
         print("compile options:", factory.get_compile_options())
