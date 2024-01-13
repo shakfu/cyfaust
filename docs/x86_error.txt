@@ -1,0 +1,364 @@
+python3(17938,0x7ff84bd83780) malloc: nano zone abandoned due to inability to reserve vm space.
+-------------------------------------------------------------------------------
+>> testing cyfaust.interp
+-------------------------------------------------------------------------------
+test_interp_version
+-------------------------------------------------------------------------------
+test_interp_create_dsp_factory_from_file1
+faust version: 2.69.3
+src/cyfaust/interp.cpp:20245:12: runtime error: call to function __pyx_pw_7cyfaust_6interp_15create_dsp_factory_from_file(_object*, _object* const*, long, _object*) through pointer to incorrect function type '_object *(*)(_object *, _object *const *, long, _object *)'
+interp.cpp:12901: note: __pyx_pw_7cyfaust_6interp_15create_dsp_factory_from_file(_object*, _object* const*, long, _object*) defined here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/cyfaust/interp.cpp:20245:12 in
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+sha key 324C05454AD8094392629BF28647CF8A9C544440
+openVerticalBox label : [Noise]
+declare key : [acc val : 0 0 -10 0 10]
+declare key : [style val : knob]
+addVerticalSlider label : [/Noise/Volume init : 0.5 min : 0 max : 1 step : 0.1]
+closeBox
+/Users/sa/projects/cyfaust/include/faust/audio/rtaudio-dsp.h:65:27: runtime error: variable length array bound evaluates to non-positive value 0
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior /Users/sa/projects/cyfaust/include/faust/audio/rtaudio-dsp.h:65:27 in
+
+RtApiCore::stopStream(): the stream is already stopped!
+
+
+RtApiCore::stopStream(): the stream is already stopped!
+
+-------------------------------------------------------------------------------
+test_interp_create_dsp_factory_from_file2
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+sha key 8220583AB9EB669F292B8F0E3B4F60B30419EF8F
+openVerticalBox label : [Oscillator]
+declare key : [unit val : Hz]
+addHorizontalSlider label : [/Oscillator/freq init : 220 min : 20 max : 24000 step : 1]
+declare key : [unit val : dB]
+addHorizontalSlider label : [/Oscillator/volume init : 0 min : -96 max : 0 step : 0.1]
+closeBox
+
+RtApiCore::stopStream(): the stream is already stopped!
+
+
+RtApiCore::stopStream(): the stream is already stopped!
+
+-------------------------------------------------------------------------------
+test_interp_create_dsp_factory_from_string1
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+include pathnames: []
+name: FaustDSP
+sha key 7496DA5E93212BCFAA22EF53D7EF8682631A2F8D
+openVerticalBox label : [FaustDSP]
+closeBox
+
+RtApiCore::stopStream(): the stream is already stopped!
+
+
+RtApiCore::stopStream(): the stream is already stopped!
+
+-------------------------------------------------------------------------------
+test_interp_create_dsp_factory_from_string2
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+include pathnames: []
+name: FaustDSP
+sha key 1FDA461DA8E9A4E943810FE1BB27D8E9661EE5D9
+-------------------------------------------------------------------------------
+test_get_all_dsp_factories
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+include pathnames: []
+name: FaustDSP
+sha key 1FDA461DA8E9A4E943810FE1BB27D8E9661EE5D9
+['1FDA461DA8E9A4E943810FE1BB27D8E9661EE5D9']
+-------------------------------------------------------------------------------
+test_get_dsp_factory_from_sha_key
+7496DA5E93212BCFAA22EF53D7EF8682631A2F8D
+-------------------------------------------------------------------------------
+test_interp_warning_message
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+warning msgs: ["WARNING : WRTbl write index [0:inf] is outside of table size (10) in write(TABLE(10,1e+01f),proj0(letrec(W0 = (proj0(W0)'+1)))@0,IN[0])\n", "WARNING : RDTbl read index [0:inf] is outside of table size (10) in read(write(TABLE(10,1e+01f),proj0(letrec(W0 = (proj0(W0)'+1)))@0,IN[0]),proj0(letrec(W0 = (proj0(W0)'+1)))@0)\n"]
+-------------------------------------------------------------------------------
+test_interp_read_dsp_factory_from_bitcode_file
+compile options: compile_options -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+include pathnames: []
+factory name: FaustDSP
+factory key: F5EB8F3A379499BA8DAD59547185E522F655CF43
+
+RtApiCore::stopStream(): the stream is already stopped!
+
+
+RtApiCore::stopStream(): the stream is already stopped!
+
+-------------------------------------------------------------------------------
+test_interp_generate_auxfiles_from_string
+-------------------------------------------------------------------------------
+test_create_dsp_factory_from_boxes
+src/cyfaust/box.cpp:80077:12: runtime error: call to function __pyx_pw_7cyfaust_3box_25box_int(_object*, _object* const*, long, _object*) through pointer to incorrect function type '_object *(*)(_object *, _object *const *, long, _object *)'
+box.cpp:29418: note: __pyx_pw_7cyfaust_3box_25box_int(_object*, _object* const*, long, _object*) defined here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/cyfaust/box.cpp:80077:12 in
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+include pathnames: []
+factory name: dspme
+factory key:
+-------------------------------------------------------------------------------
+test_create_dsp_factory_from_signals1
+src/cyfaust/signal.cpp:84487:12: runtime error: call to function __pyx_pw_7cyfaust_6signal_27sig_input(_object*, _object* const*, long, _object*) through pointer to incorrect function type '_object *(*)(_object *, _object *const *, long, _object *)'
+signal.cpp:44715: note: __pyx_pw_7cyfaust_6signal_27sig_input(_object*, _object* const*, long, _object*) defined here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/cyfaust/signal.cpp:84487:12 in
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+sha key
+-------------------------------------------------------------------------------
+test_create_dsp_factory_from_signals2
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+sha key
+-------------------------------------------------------------------------------
+test_generate_sha1
+-------------------------------------------------------------------------------
+test_expand_dsp_from_file
+-------------------------------------------------------------------------------
+test_expand_dsp_from_string
+-------------------------------------------------------------------------------
+test_generate_auxfiles_from_file
+[28087 refs, 0 blocks]
+python3(17963,0x7ff84bd83780) malloc: nano zone abandoned due to inability to reserve vm space.
+-------------------------------------------------------------------------------
+>> testing cyfaust.box
+-------------------------------------------------------------------------------
+test_create_dsp_factory_from_boxes
+src/cyfaust/box.cpp:80077:12: runtime error: call to function __pyx_pw_7cyfaust_3box_25box_int(_object*, _object* const*, long, _object*) through pointer to incorrect function type '_object *(*)(_object *, _object *const *, long, _object *)'
+box.cpp:29418: note: __pyx_pw_7cyfaust_3box_25box_int(_object*, _object* const*, long, _object*) defined here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/cyfaust/box.cpp:80077:12 in
+src/cyfaust/interp.cpp:20245:12: runtime error: call to function __pyx_pw_7cyfaust_6interp_21create_dsp_factory_from_boxes(_object*, _object* const*, long, _object*) through pointer to incorrect function type '_object *(*)(_object *, _object *const *, long, _object *)'
+interp.cpp:13476: note: __pyx_pw_7cyfaust_6interp_21create_dsp_factory_from_boxes(_object*, _object* const*, long, _object*) defined here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/cyfaust/interp.cpp:20245:12 in
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+include pathnames: []
+factory name: dspme
+factory key:
+-------------------------------------------------------------------------------
+test_create_source_from_boxes
+Box inputs: 0, outputs: 0
+-------------------------------------------------------------------------------
+test_box_create_source_cpp
+Box inputs: 0, outputs: 0
+-------------------------------------------------------------------------------
+test_box_create_source_c
+Box inputs: 0, outputs: 0
+-------------------------------------------------------------------------------
+test_box_create_source_codebox
+Box inputs: 0, outputs: 0
+// Code generated with Faust version 2.69.3
+// Compilation options: -lang codebox -ct 1 -es 1 -mcd 16 -single -ftz 0
+// Additional functions
+// Params
+// Globals
+// Fields
+@state fSampleRate_cb : Int = 0;
+@state fUpdated : Int = 0;
+
+// Init
+function dspsetup() {
+	fUpdated = true;
+	fSampleRate_cb = samplerate();
+}
+// Control
+function control() {
+}
+// Update parameters
+function update() {
+	if (fUpdated) { fUpdated = false; control(); }
+}
+// Compute one frame
+function compute() {
+	let output0_cb : number = 0;
+	let output1_cb : number = 0;
+	output0_cb = 7;
+	output1_cb = 3.14f;
+	return [output0_cb,output1_cb];
+}
+// Update parameters
+update();
+// Compute one frame
+outputs = compute();
+// Write the outputs: audio ones and bargraph as additional audio signals
+out1 = outputs[0];
+out2 = outputs[1];
+
+-------------------------------------------------------------------------------
+test_box_create_source_rust
+Box inputs: 0, outputs: 0
+/* ------------------------------------------------------------
+name: "test_dsp"
+Code generated with Faust 2.69.3 (https://faust.grame.fr)
+Compilation options: -lang rust -ct 1 -es 1 -mcd 16 -single -ftz 0
+------------------------------------------------------------ */
+
+
+#[cfg_attr(feature = "default-boxed", derive(default_boxed::DefaultBoxed))]
+#[repr(C)]
+pub struct mydsp {
+	fSampleRate: i32,
+}
+
+impl FaustDsp for mydsp {
+	type T = F32;
+
+	fn new() -> mydsp {
+		mydsp {
+			fSampleRate: 0,
+		}
+	}
+	fn metadata(&self, m: &mut dyn Meta) {
+		m.declare("compile_options", r"-lang rust -ct 1 -es 1 -mcd 16 -single -ftz 0");
+		m.declare("name", r"test_dsp");
+	}
+
+	fn get_sample_rate(&self) -> i32 {
+		return self.fSampleRate;
+	}
+	fn get_num_inputs(&self) -> i32 {
+		return 0;
+	}
+	fn get_num_outputs(&self) -> i32 {
+		return 2;
+	}
+
+	fn class_init(sample_rate: i32) {
+	}
+	fn instance_reset_params(&mut self) {
+	}
+	fn instance_clear(&mut self) {
+	}
+	fn instance_constants(&mut self, sample_rate: i32) {
+		self.fSampleRate = sample_rate;
+	}
+	fn instance_init(&mut self, sample_rate: i32) {
+		self.instance_constants(sample_rate);
+		self.instance_reset_params();
+		self.instance_clear();
+	}
+	fn init(&mut self, sample_rate: i32) {
+		mydsp::class_init(sample_rate);
+		self.instance_init(sample_rate);
+	}
+
+	fn build_user_interface(&self, ui_interface: &mut dyn UI<Self::T>) {
+		Self::build_user_interface_static(ui_interface);
+	}
+
+	fn build_user_interface_static(ui_interface: &mut dyn UI<Self::T>) {
+		ui_interface.open_vertical_box("test_dsp");
+		ui_interface.close_box();
+	}
+
+	fn get_param(&self, param: ParamIndex) -> Option<Self::T> {
+		match param.0 {
+			_ => None,
+		}
+	}
+
+	fn set_param(&mut self, param: ParamIndex, value: Self::T) {
+		match param.0 {
+			_ => {}
+		}
+	}
+
+	fn compute(&mut self, count: i32, inputs: &[&[Self::T]], outputs: &mut[&mut[Self::T]]) {
+		let (outputs0, outputs1) = if let [outputs0, outputs1, ..] = outputs {
+			let outputs0 = outputs0[..count as usize].iter_mut();
+			let outputs1 = outputs1[..count as usize].iter_mut();
+			(outputs0, outputs1)
+		} else {
+			panic!("wrong number of outputs");
+		};
+		let zipped_iterators = outputs0.zip(outputs1);
+		for (output0, output1) in zipped_iterators {
+			*output0 = (7) as F32;
+			*output1 = 3.14;
+		}
+	}
+
+}
+
+
+-------------------------------------------------------------------------------
+test_box_split
+src/cyfaust/box.cpp:80023:12: runtime error: call to function __pyx_pw_7cyfaust_3box_29box_wire(_object*, _object*) through pointer to incorrect function type '_object *(*)(_object *, _object *)'
+box.cpp:29720: note: __pyx_pw_7cyfaust_3box_29box_wire(_object*, _object*) defined here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/cyfaust/box.cpp:80023:12 in
+_<:((_,5e+02f : @),0.5f : +),((_,3e+03f : @),1.5f : *)
+
+-------------------------------------------------------------------------------
+test_box_hslider
+_,hslider("Freq [midi:ctrl 7][style:knob]", 1e+02f, 1e+02f, 2e+03f, 1.0f) : *
+
+-------------------------------------------------------------------------------
+test_box_vslider
+vslider("h:Oscillator/freq", 4.4e+02f, 5e+01f, 1e+03f, 0.1f),vslider("h:Oscillator/gain", 0.0f, 0.0f, 1.0f, 0.01f) : *
+
+-------------------------------------------------------------------------------
+test_box_rec
++~_
+
+-------------------------------------------------------------------------------
+test_box_fconst
+(1.92e+05f,(1.0f,fconstant(int fSampleFreq, <math.h>) : max) : min),fvariable(int count, <math.h>)
+
+-------------------------------------------------------------------------------
+test_box_readonly_table
+10,1,(_ : int) : rdtable
+
+-------------------------------------------------------------------------------
+test_box_write_readonly_table
+10,1,(_ : int),(_ : int),(_ : int) : rwtable
+
+-------------------------------------------------------------------------------
+test_box_waveform
+waveform{0.0f,1e+02f,2e+02f,3e+02f,4e+02f}
+
+-------------------------------------------------------------------------------
+test_box_soundfile
+0,0 : soundfile("sound[url:{'tango.wav'}]", 2)
+
+-------------------------------------------------------------------------------
+test_box_create_source_cpp_arch
+PACKAGE_RESOURCES: ('-A', '/Users/sa/projects/cyfaust/build/cyfaust/resources/architecture', '-I', '/Users/sa/projects/cyfaust/build/cyfaust/resources/libraries')
+Box inputs: 0, outputs: 0
+[28087 refs, 0 blocks]
+python3(17975,0x7ff84bd83780) malloc: nano zone abandoned due to inability to reserve vm space.
+-------------------------------------------------------------------------------
+>> testing cyfaust.signal
+-------------------------------------------------------------------------------
+test_create_source_from_signals1
+src/cyfaust/signal.cpp:84487:12: runtime error: call to function __pyx_pw_7cyfaust_6signal_25sig_real(_object*, _object* const*, long, _object*) through pointer to incorrect function type '_object *(*)(_object *, _object *const *, long, _object *)'
+signal.cpp:44558: note: __pyx_pw_7cyfaust_6signal_25sig_real(_object*, _object* const*, long, _object*) defined here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/cyfaust/signal.cpp:84487:12 in
+-------------------------------------------------------------------------------
+test_create_source_from_signals2
+-------------------------------------------------------------------------------
+test_create_dsp_factory_from_signals1
+src/cyfaust/interp.cpp:20245:12: runtime error: call to function __pyx_pw_7cyfaust_6interp_19create_dsp_factory_from_signals(_object*, _object* const*, long, _object*) through pointer to incorrect function type '_object *(*)(_object *, _object *const *, long, _object *)'
+interp.cpp:13278: note: __pyx_pw_7cyfaust_6interp_19create_dsp_factory_from_signals(_object*, _object* const*, long, _object*) defined here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/cyfaust/interp.cpp:20245:12 in
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+sha key
+-------------------------------------------------------------------------------
+test_create_dsp_factory_from_signals2
+compile options: -lang interp -ct 1 -es 1 -mcd 16 -single -ftz 0
+library list: []
+sha key
+[28087 refs, 0 blocks]
+python3(17984,0x7ff84bd83780) malloc: nano zone abandoned due to inability to reserve vm space.
+-------------------------------------------------------------------------------
+>> testing cyfaust.common
+[28087 refs, 0 blocks]
+DONE
+
