@@ -1,4 +1,4 @@
-# Debug Moode Analysis
+# Debug Mode Analysis
 
 
 Build a debug python python with folllowing configurations:
