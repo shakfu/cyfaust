@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import os, sys
+import os
+import sys
 
 BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "build")
 os.chdir(BUILD_PATH)

@@ -3,9 +3,6 @@ import hashlib
 import re
 from pathlib import Path
 
-
-
-
 header = """\
 bool isBoxAbstr(Box t);
 bool isBoxAbstr(Box t, Box& x, Box& y);

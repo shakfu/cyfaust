@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import os
-import shutil
 import logging
+import os
 import platform
+import shutil
 from pathlib import Path
 
 PLATFORM = platform.system()
@@ -97,7 +97,6 @@ class ShellCmd:
         else:
             self.log.info("remove file: %s", path)
             try:
-                # path.unlink(missing_ok=True)
                 path.unlink()
             except FileNotFoundError:
                 self.log.warning("file not found: %s", path)
@@ -116,6 +115,8 @@ class FaustBuilder(ShellCmd):
         self.bin = self.cwd / "bin"
         self.include = self.cwd / "include"
         self.lib = self.cwd / "lib"
+        self.lib_static = self.lib / "static"
+        self.libname = "libfaust"
         self.share = self.cwd / "share"
         self.build = self.cwd / "build"
         self.scripts = self.cwd / "scripts"
@@ -124,6 +125,41 @@ class FaustBuilder(ShellCmd):
         self.backends = self.faust / "build" / "backends"
         self.targets = self.faust / "build" / "targets"
         self.log = logging.getLogger(self.__class__.__name__)
+
+    @property
+    def staticlib_name(self):
+        return f"{self.libname}.a"
+
+    @property
+    def dylib_name(self):
+        if PLATFORM == "Darwin":
+            return f"{self.libname}.2.dylib"
+        elif PLATFORM == "Linux":
+            return f"{self.libname}.so.2"
+        else:
+            raise SystemExit("platform not supported")
+    
+    @property
+    def dylib_linkname(self):
+        if PLATFORM == "Darwin":
+            return f"{self.libname}.dylib"
+        elif PLATFORM == "Linux":
+            return f"{self.libname}.so"
+        else:
+            raise SystemExit("platform not supported")
+
+    @property
+    def dylib(self):
+        return self.lib / self.dylib_name
+    
+    @property
+    def dylib_link(self):
+        return self.lib / self.dylib_linkname
+
+    @property
+    def staticlib(self):
+        return self.lib_static / self.staticlib_name
+
 
     def get_faust(self):
         self.log.info("update from faust main repo")
@@ -151,7 +187,10 @@ class FaustBuilder(ShellCmd):
         for e in ["faust", "faust-config", "faustpath"]:
             self.remove(self.bin / e)
         self.remove(self.include / "faust")
-        self.remove(self.lib / "libfaust.a")
+        self.remove(self.lib)
+        # self.remove(self.dylib)
+        # self.remove(self.dylib_link)
+        # self.remove(self.staticlib)
         self.remove(self.share / "faust")
 
     def copy_executables(self):
@@ -168,20 +207,18 @@ class FaustBuilder(ShellCmd):
     def copy_sharedlib(self):
         self.log.info("copy_sharedlib")
         self.makedirs(self.lib)
-        if PLATFORM == "Darwin":
-            self.copy(
-                self.root / "lib" / "libfaust.2.dylib", self.lib / "libfaust.2.dylib"
-            )
-        elif PLATFORM == "Linux":
-            self.copy(
-                self.root / "lib" / "libfaust.so.2", self.lib / "libfaust.so.2"
-            )
-
+        self.copy(
+            self.root / "lib" / self.dylib_name,
+            self.dylib
+        )
+        self.dylib_link.symlink_to(self.dylib)
 
     def copy_staticlib(self):
         self.log.info("copy staticlib")
-        self.makedirs(self.lib)
-        self.copy(self.root / "lib" / "libfaust.a", self.lib / "libfaust.a")
+        self.makedirs(self.lib_static)
+        self.copy(
+            self.root / "lib" / self.staticlib_name,
+            self.staticlib)
 
     def copy_stdlib(self):
         self.log.info("copy stdlib")

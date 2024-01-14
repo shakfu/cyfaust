@@ -2,8 +2,11 @@
 # build requirements
 cython
 
-# macos build wheel tool
-delocate
-
 # testing tools (optional)
 pytest
+
+# macos fix wheel tool
+delocate; sys_platform == 'darwin'
+
+# macos fix wheel tool
+auditwheel; sys_platform == 'linux'

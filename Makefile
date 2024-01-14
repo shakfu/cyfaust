@@ -85,5 +85,5 @@ memray:
 
 
 clean:
-	@rm -rf build dist *.egg-info .pytest_* .ruff_cache
+	@rm -rf build dist **/*.egg-info **/.pytest_* **/*.ruff_cache **/*.DS_Store
 

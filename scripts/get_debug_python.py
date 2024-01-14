@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import os
-from pathlib import Path
+import platform
 import subprocess
+from pathlib import Path
 
 # config
 DEFAULT_PYTHON_VERSION = "3.11.7"

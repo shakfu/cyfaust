@@ -44,8 +44,9 @@ RTAUDIO_SRC = [
 #
 
 if STATIC:
-    EXTRA_OBJECTS.append('lib/libfaust.a')
+    EXTRA_OBJECTS.append('lib/static/libfaust.a')
 else:
+    LIBRARIES.append('faust')
     EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
 
 
@@ -53,8 +54,6 @@ else:
 if PLATFORM == 'Darwin':
     EXTRA_LINK_ARGS.append('-mmacosx-version-min=13.6')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos
-    if not STATIC:
-        LIBRARIES.append('faust.2')
     os.environ['LDFLAGS'] = " ".join([
         "-framework CoreFoundation",
         "-framework CoreAudio"
@@ -63,10 +62,8 @@ elif PLATFORM == 'Linux':
     os.environ['CPPFLAGS'] = '-include limits'
     DEFINE_MACROS.append(("__LINUX_ALSA__", None))
     LIBRARIES.append("asound")
-    if not STATIC:
-        LIBRARIES.append("faust")
 else:
-    raise SystemExit("Windows not currently supported")
+    raise SystemExit(f"plaform '{PLATFORM}' not currently supported")
 
 
 def mk_extension(name, sources, define_macros=None):
