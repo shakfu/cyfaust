@@ -1,4 +1,4 @@
-# Rrror on x86 macos ventura 13.6.3
+# Errors on x86 macOS Ventura 13.6.3 running python debug build
  
 running `make test DEBUG=1` with 
 
@@ -11,6 +11,8 @@ debug python configured as follows:
 	--with-undefined-behavior-sanitizer,
 
 built using `./scripts/get_debug_python.py`
+
+The following is an annotated part of the error output.
 
 
 ## initial

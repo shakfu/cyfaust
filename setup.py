@@ -1,7 +1,7 @@
 import os
 import platform
 import subprocess
-from setuptools import Extension, setup
+from setuptools import Extension, setup, find_namespace_packages
 from Cython.Build import cythonize
 
 # ----------------------------------------------------------------------------
@@ -13,11 +13,10 @@ VERSION="0.0.2"
 # ----------------------------------------------------------------------------
 # OPTIONS
 
-# convert '0','1' env values to bool
+# convert '0','1' env values to bool {True, False}
 getenv = lambda key: bool(int(os.getenv(key, False)))
 
 STATIC = getenv("STATIC")       # set static or dynamic build here
-SANITIZE = getenv("SANITIZE")   # enable address/leak sanitizer 
 
 # ----------------------------------------------------------------------------
 # COMMON
@@ -42,12 +41,7 @@ RTAUDIO_SRC = [
 
 # ----------------------------------------------------------------------------
 # CONDITIONAL CONFIGURATION
-
-if SANITIZE: # FIXME: not working for now !!
-    os.environ["ASAN_OPTIONS"]="detect_leaks=1"
-    EXTRA_COMPILE_ARGS.append("-fsanitize=address")
-    EXTRA_LINK_ARGS.append("-static-libsan")
-
+#
 
 if STATIC:
     EXTRA_OBJECTS.append('lib/libfaust.a')
@@ -55,7 +49,7 @@ else:
     EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
 
 
-# platform specific  configuration
+# platform specific configuration
 if PLATFORM == 'Darwin':
     EXTRA_LINK_ARGS.append('-mmacosx-version-min=13.6')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos
@@ -71,6 +65,8 @@ elif PLATFORM == 'Linux':
     LIBRARIES.append("asound")
     if not STATIC:
         LIBRARIES.append("faust")
+else:
+    raise SystemExit("Windows not currently supported")
 
 
 def mk_extension(name, sources, define_macros=None):
@@ -85,8 +81,17 @@ def mk_extension(name, sources, define_macros=None):
         extra_compile_args = EXTRA_COMPILE_ARGS,
         extra_link_args = EXTRA_LINK_ARGS,
         language="c++",
-        # py_limited_api=True,
     )
+
+
+# ----------------------------------------------------------------------------
+# COMMON SETUP CONFIG
+
+common = {
+   "name": "cyfaust",
+   "version": VERSION,
+   "include_package_data": True,
+}
 
 # ----------------------------------------------------------------------------
 # STATIC BUILD VARIANT
@@ -108,15 +113,17 @@ if STATIC:
     ]
 
     setup(
-        name='cyfaust',
-        version=VERSION,
+        **common,
         ext_modules=cythonize(
             extensions,
-            language_level="3",
+            language_level="3str",
         ),
-        package_dir = {"cyfaust": "src/static/cyfaust"},
-        packages=['cyfaust'],
-        include_package_data=True
+        package_dir = {"": "src/static"},
+        packages=find_namespace_packages(
+            where="src/static", 
+            include=["cyfaust*"], 
+            exclude=["cyfaust.scripts*"],
+        )
     )
 
 # ----------------------------------------------------------------------------
@@ -139,13 +146,11 @@ else:
     ]
 
     setup(
-        name='cyfaust',
-        version=VERSION,
+        **common,
         ext_modules=cythonize(
             extensions,
-            language_level="3",
+            language_level="3str",
         ),
-        package_dir = {"cyfaust": "src/cyfaust"},
-        packages=['cyfaust'],
-        include_package_data=True
+        package_dir={"": "src"},
+        packages=find_namespace_packages(where="src", include=["cyfaust*"]),
     )
