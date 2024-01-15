@@ -1,0 +1,76 @@
+
+name: cyfaust-wheel
+
+on:
+  workflow_dispatch:
+    inputs:
+      py_version:
+        type: choice
+        description: Please select a python version
+        default: '3.11'
+        required: true
+        options:
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+
+jobs:
+  build_wheels:
+    name: Build ${{ matrix.variant }}-${{ github.event.inputs.py_version }} wheel on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        variant: [dynamic, static]
+        os: [macos-latest, ubuntu-latest]
+
+    steps:
+
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+        fetch-depth: '0'
+
+    - name: Setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ github.event.inputs.py_version }}
+        cache: 'pip' # caching pip dependencies
+
+    - name: Install cibuildwheel
+      run: pip install cibuildwheel==2.16.2
+
+    - name: Install python requirements
+      run: pip install -r requirements.txt
+
+    - name: Display python version
+      run: python3 --version
+
+    - name: Setup platform
+      run: |
+        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+          echo "install linux system dependencies"
+          sudo apt update
+          sudo apt install libasound2-dev
+        fi
+
+    - name: Setup faust
+      run: python3 scripts/setup_faust.py
+
+    - name: Build cyfaust wheel
+      run: |
+        if [ "${{matrix.variant }}" == "dynamic" ]; then
+          echo "selecting dynamic cyfaust variant"
+          python -m cibuildwheel --output-dir wheels
+        else
+          echo "selecting static cyfaust variant"
+          STATIC=1 python -m cibuildwheel --output-dir wheels
+        fi
+
+    - uses: actions/upload-artifact@v3
+      with:
+        path: ./wheels/*.whl
+
+

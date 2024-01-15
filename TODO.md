@@ -5,15 +5,21 @@
 
 - [ ] Add Linux support
 
-	- [x] compile without errors: added `CPPFLAGS=-'include limits'` to env
+	- [ ] Fix segfault in cases of dsp_from_boxes / signals (maybe only a problem on arm64 linux?)
 
-	- [x] Fix large binaries
+		  Note: Github action testrun passes without issues on Ubuntu ubuntu-22.04 (ubuntu-latest)
 
-	- [ ] Fix segfault in cases of dsp_from_boxes / signals
+		  see: `cyfaust/.github/workflows/cyfaust-test.yml`
 
 - [ ] Fix Soundfile support so that it works out of the box without compilation.
 
 - [ ] Add more tests
+
+	- [x] Add all interpreter tests
+	
+	- [ ] Add all box api tests
+
+	- [ ] Add all signal api test
 
 - [ ] Add `cython/__main__.py` commandline interface.
 

@@ -6,16 +6,24 @@ from Cython.Build import cythonize
 from setuptools import Extension, find_namespace_packages, setup
 
 # ----------------------------------------------------------------------------
-# CONFIGURABLE VARIABLES
+# helper funcs
+
+def getenv(key):
+    """convert '0','1' env values to bool {True, False}"""
+    return bool(int(os.getenv(key, False)))
+ 
+ 
+
+# ----------------------------------------------------------------------------
+# VARS
 
 VERSION="0.0.2"
 
 
 # ----------------------------------------------------------------------------
-# OPTIONS
+# OPTIONS (to be set as environment variables)
 
-# convert '0','1' env values to bool {True, False}
-getenv = lambda key: bool(int(os.getenv(key, False)))
+
 
 STATIC = getenv("STATIC")       # set static or dynamic build here
 

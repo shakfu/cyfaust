@@ -1,6 +1,7 @@
 # set path so `faust` be queried for the path to stdlib
 export PATH := $(PWD)/bin:$(PATH)
 
+PLATFORM := $(shell uname -o)
 DEBUG := 0
 STATIC := 0
 
@@ -29,8 +30,13 @@ setup:
 wheel:
 	@$(PYTHON) setup.py bdist_wheel
 ifeq ($(STATIC),0)
-	delocate-wheel -v dist/*.whl 
+ifeq ($(PLATFORM),Darwin)
+	delocate-wheel -v dist/*.whl
+else
+	auditwheel repair dist/*.whl		
 endif
+endif
+
 
 .PHONY: test test_cpp test_c test_audio pytest memray
 
