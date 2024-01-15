@@ -69,20 +69,13 @@ SKIP_AUDIO = False
 
 
 ## ---------------------------------------------------------------------------
-## faust/dsp/interpreter-dsp
-##
+## utility testing functions
 
-def test_interp_version():
-    print_entry("test_interp_version")
+def dsp_from_file(testname, dsp_path, skip_audio=False):
 
-    assert get_version()
+    print_entry(testname)
 
-def test_interp_create_dsp_factory_from_file1():
-    print_entry("test_interp_create_dsp_factory_from_file1")
-
-    print("faust version:", get_version())
-
-    factory = create_dsp_factory_from_file('tests/noise.dsp')
+    factory = create_dsp_factory_from_file(dsp_path)
     assert factory
     
     print("compile options:", factory.get_compile_options())
@@ -99,7 +92,7 @@ def test_interp_create_dsp_factory_from_file1():
     # bypass
     dsp.build_user_interface()
 
-    if not SKIP_AUDIO:
+    if not skip_audio:
         audio = RtAudioDriver(48000, 256)
 
         audio.init(dsp)
@@ -108,45 +101,16 @@ def test_interp_create_dsp_factory_from_file1():
         time.sleep(1)
         audio.stop()
 
-def test_interp_create_dsp_factory_from_file2():
-    print_entry("test_interp_create_dsp_factory_from_file2")
+    return True
 
-    factory = create_dsp_factory_from_file('tests/osc.dsp')
-    assert factory
-    
-    print("compile options:", factory.get_compile_options())
-    print("library list:", factory.get_library_list())
-    print("sha key", factory.get_sha_key())
+def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=False):
+    print_entry(testname)
 
-    dsp = factory.create_dsp_instance()
-    assert dsp
-
-    # FIXME: doesn't work!!
-    # ui = PrintUI()
-    # dsp.build_user_interface(ui)
-    
-    # bypass
-    dsp.build_user_interface()
-
-    if not SKIP_AUDIO:
-        audio = RtAudioDriver(48000, 256)
-
-        audio.init(dsp)
-
-        audio.start()
-        time.sleep(1)
-        audio.stop()
-
-# FIXME: trips up on threading issues every now and then
-def test_interp_create_dsp_factory_from_string1():
-    print_entry("test_interp_create_dsp_factory_from_string1")
-
-    # For bitcode file write/read test
-
-    factory = create_dsp_factory_from_string("FaustDSP", "process = 0.5,0.6;")
+    factory = create_dsp_factory_from_string("FaustDSP", dsp_string)
     assert factory
 
-    factory.write_to_bitcode_file(TEMP_PATH)
+    if dump_to_bitcode:
+        factory.write_to_bitcode_file(TEMP_PATH)
         
     print("compile options:", factory.get_compile_options())
     print("library list:", factory.get_library_list())
@@ -159,7 +123,7 @@ def test_interp_create_dsp_factory_from_string1():
     
     dsp.build_user_interface()
 
-    if not SKIP_AUDIO:
+    if not skip_audio:
         audio = RtAudioDriver(48000, 256)
 
         audio.init(dsp)
@@ -167,6 +131,48 @@ def test_interp_create_dsp_factory_from_string1():
         audio.start()
         time.sleep(1)
         audio.stop()
+    return True
+
+
+## ---------------------------------------------------------------------------
+## faust/dsp/interpreter-dsp
+
+
+def test_interp_version():
+    print_entry("test_interp_version")
+
+    assert get_version()
+
+def test_interp_create_dsp_factory_from_file1():
+    assert dsp_from_file(
+        testname="test_interp_create_dsp_factory_from_file1",
+        dsp_path="tests/dsp/noise.dsp",
+        skip_audio=SKIP_AUDIO,
+    )
+
+
+def test_interp_create_dsp_factory_from_file2():
+    assert dsp_from_file(
+        testname="test_interp_create_dsp_factory_from_file2",
+        dsp_path="tests/dsp/osc.dsp",
+        skip_audio=SKIP_AUDIO,
+    )
+
+def test_interp_create_dsp_factory_from_file2():
+    assert dsp_from_file(
+        testname="test_interp_create_dsp_factory_from_file3",
+        dsp_path="tests/dsp/vco.dsp",
+        skip_audio=SKIP_AUDIO,
+    )
+
+def test_interp_create_dsp_factory_from_string1():
+    assert dsp_from_string(
+        testname="test_interp_create_dsp_factory_from_string1",
+        dsp_string="process = 0.5,0.6;",
+        dump_to_bitcode=True,
+        skip_audio=SKIP_AUDIO,
+    )
+
 
 def test_interp_create_dsp_factory_from_string2():
     print_entry("test_interp_create_dsp_factory_from_string2")
@@ -356,7 +362,7 @@ def test_generate_sha1():
 def test_expand_dsp_from_file():
     print_entry("test_expand_dsp_from_file")
     sha, expanded = None, None
-    sha, expanded = expand_dsp_from_file("tests/osc.dsp")
+    sha, expanded = expand_dsp_from_file("tests/dsp/osc.dsp")
     assert sha
     assert expanded
     # print(expanded)
@@ -364,7 +370,7 @@ def test_expand_dsp_from_file():
 def test_expand_dsp_from_string():
     print_entry("test_expand_dsp_from_string")
     sha, expanded = None, None
-    with open("tests/osc.dsp") as f:
+    with open("tests/dsp/osc.dsp") as f:
         content = f.read()
     sha, expanded = expand_dsp_from_string("osc_dsp", content)
     assert sha
@@ -372,7 +378,7 @@ def test_expand_dsp_from_string():
 
 def test_generate_auxfiles_from_file():
     print_entry("test_generate_auxfiles_from_file")
-    assert generate_auxfiles_from_file("tests/osc.dsp", "-svg", "-o", "/tmp/out.cpp")
+    assert generate_auxfiles_from_file("tests/dsp/osc.dsp", "-svg", "-o", "/tmp/out.cpp")
     svg_folder = Path("osc-svg")
     process_svg = svg_folder / "process.svg"
     assert svg_folder.exists()
@@ -386,6 +392,7 @@ if __name__ == '__main__':
         import tracemalloc
     test_interp_version()
     test_interp_create_dsp_factory_from_file1()
+    test_interp_create_dsp_factory_from_file2()
     test_interp_create_dsp_factory_from_file2()
     test_interp_create_dsp_factory_from_string1()
     test_interp_create_dsp_factory_from_string2()

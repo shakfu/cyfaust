@@ -1,8 +1,9 @@
 import os
 import platform
 import subprocess
-from setuptools import Extension, setup, find_namespace_packages
+
 from Cython.Build import cythonize
+from setuptools import Extension, find_namespace_packages, setup
 
 # ----------------------------------------------------------------------------
 # CONFIGURABLE VARIABLES
@@ -119,7 +120,7 @@ if STATIC:
         packages=find_namespace_packages(
             where="src/static", 
             include=["cyfaust*"], 
-            exclude=["cyfaust.scripts*"],
+            # exclude=["cyfaust.scripts*"],
         )
     )
 

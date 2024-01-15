@@ -18,7 +18,7 @@ MIN_OSX_VER := -mmacosx-version-min=13.6
 FAUST_STATICLIB := ./lib/libfaust.a
 INTERP_TESTS := tests/test_faust_interp
 
-.PHONY: all setup wheel clean
+.PHONY: all setup wheel clean reset
 
 all: setup
 
@@ -32,7 +32,7 @@ ifeq ($(STATIC),0)
 	delocate-wheel -v dist/*.whl 
 endif
 
-.PHONY: test test_cpp test_c test_audio pytest memray py-spy
+.PHONY: test test_cpp test_c test_audio pytest memray
 
 test_cpp:
 	@g++ -std=c++11 $(MIN_OSX_VER) -O3 \
@@ -85,5 +85,11 @@ memray:
 
 
 clean:
-	@rm -rf build dist **/*.egg-info **/.pytest_* **/*.ruff_cache **/*.DS_Store
+	@rm -rf build dist MANIFEST.in
+	@find . -type d \( -name '.*_cache'    \
+					-o -name '*.egg-info'  \
+					-o -name '.DS_Store'   \
+					-o -name '__pycache__' \) -print0 | xargs -0 -I {} /bin/rm -rf "{}"
 
+reset: clean
+	@rm -rf python bin lib share 

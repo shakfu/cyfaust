@@ -99,7 +99,7 @@ Wrapping and modularization are mostly complete except for a few areas (see `TOD
 
 Optional
 
-- `make` (build frontend)
+- `make` (only used as a build frontend)
 
 macOS
 
@@ -109,15 +109,20 @@ macOS
 **To Build:**
 
 
-1. `./scripts/setup.sh` or, `./scripts/setup_faust.py`:
+1. Run `./scripts/setup_faust.py`:
 
-    - Faust version `2.69.3` is known to work and is used by the setup scripts.
+    - This will download faust into the `build` directory, then configure it for an iterpreter build, build it, and install it into newly created .gitignored folders in the project directory: 
 
-    - This will download faust into the `build` directory, configure it, build it, and install the build into a local `prefix` inside the `build` directory/
+        - `bin`, containing the faust executables, 
+        - `lib`, the dynamic and static versions of `libfaust` and 
+        - `share`, the faust standard libs and examples.
 
-    - The faust executable, staticlib / dylib, headers and stdlib from the newly installed local prefix will be copied into the project directory and and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
+    - Faust version `2.69.3` will be used as it is known to work and is used by the setup scripts.
 
-2. To build the default variant package and/or wheel:
+    - The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
+
+
+2. To build the default dynamically-linked package and/or wheel:
     
 
 ```bash
@@ -136,7 +141,7 @@ and for a wheel:
 make wheel
 ```
 
-For the static variant just set the environ variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands. 
+For the static variant just set the environment variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands. 
 
 For example:
 

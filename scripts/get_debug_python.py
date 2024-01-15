@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import platform
 import subprocess
 from pathlib import Path
 
@@ -63,7 +62,7 @@ def main():
 	cmd("make", cwd=DEBUG_FOLDER)
 	cmd("make install", cwd=DEBUG_FOLDER)
 	required_pkgs = " ".join(REQUIRED_PACKAGES)
-	cmd(f"./python/bin/pip3 install --upgrade pip", cwd=CWD)
+	cmd("./python/bin/pip3 install --upgrade pip", cwd=CWD)
 	cmd(f"./python/bin/pip3 install {required_pkgs}", cwd=CWD)
 
 def install_memray():

@@ -4,6 +4,7 @@ import logging
 import os
 import platform
 import shutil
+import subprocess
 from pathlib import Path
 
 PLATFORM = platform.system()
@@ -68,6 +69,11 @@ class ShellCmd:
         self.log.info("change permission of %s to %s", path, perm)
         os.chmod(path, perm)
 
+    def get(shellcmd) -> str:
+        """get output of shellcmd"""
+        return subprocess.check_output(
+            shellcmd.split(), encoding='utf8').strip()
+
     def makedirs(self, path, mode=511, exist_ok=True):
         """Recursive directory creation function"""
         self.log.info("making directory: %s", path)
@@ -120,6 +126,7 @@ class FaustBuilder(ShellCmd):
         self.share = self.cwd / "share"
         self.build = self.cwd / "build"
         self.scripts = self.cwd / "scripts"
+        self.patch = self.scripts / "patch"
         self.faust = self.build / "faust"
         self.root = self.faust / "root"
         self.backends = self.faust / "build" / "backends"
@@ -169,13 +176,13 @@ class FaustBuilder(ShellCmd):
             f"git clone --depth 1 --branch '{self.version}' https://github.com/grame-cncm/faust.git"
         )
         self.makedirs(self.build / "faust" / "build" / "faustdir")
-        self.copy(self.scripts / "faust.mk", self.faust / "Makefile")
+        self.copy(self.patch / "faust.mk", self.faust / "Makefile")
         self.copy(
-            self.scripts / "interp_plus_backend.cmake",
+            self.patch / "interp_plus_backend.cmake",
             self.backends / "interp_plus.cmake"
         )
         self.copy(
-            self.scripts / "interp_plus_target.cmake",
+            self.patch / "interp_plus_target.cmake",
             self.targets / "interp_plus.cmake"
         )
         self.chdir(self.faust)
@@ -237,7 +244,7 @@ class FaustBuilder(ShellCmd):
 
     def patch_audio_driver(self):
         self.copy(
-            self.scripts / "rtaudio-dsp.h",
+            self.patch / "rtaudio-dsp.h",
             self.include / "faust" / "audio" / "rtaudio-dsp.h",
         )
 
