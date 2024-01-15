@@ -2,6 +2,8 @@
 export PATH := $(PWD)/bin:$(PATH)
 
 PLATFORM := $(shell uname -o)
+ARCH := $(shell uname -m)
+
 DEBUG := 0
 STATIC := 0
 
@@ -33,7 +35,7 @@ ifeq ($(STATIC),0)
 ifeq ($(PLATFORM),Darwin)
 	delocate-wheel -v dist/*.whl
 else
-	auditwheel repair --plat linux_x86_64 dist/*.whl		
+	auditwheel repair --plat linux_$(ARCH) dist/*.whl
 endif
 endif
 
