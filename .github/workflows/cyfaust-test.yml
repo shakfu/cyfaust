@@ -39,6 +39,15 @@ jobs:
     runs-on: ${{ github.event.inputs.platform }}
 
     steps:
+
+    - name: Summarize run options
+      run: |
+          echo "cyfaust-test run summary:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+          echo "- build-variant: ${{ github.event.inputs.variant }}" >> $GITHUB_STEP_SUMMARY
+          echo "- py-version: ${{ github.event.inputs.py_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- platform: ${{ github.event.inputs.platform }}" >> $GITHUB_STEP_SUMMARY
+
     - uses: actions/checkout@v3
       with:
         submodules: 'recursive'
@@ -56,9 +65,6 @@ jobs:
     - name: Display python version
       run: python3 --version
 
-    - name: Setup faust
-      run: python3 scripts/setup_faust.py
-
     - name: Setup platform
       run: |
         if [ "${{ github.event.inputs.platform }}" == "ubuntu-latest" ]; then
@@ -66,6 +72,9 @@ jobs:
           sudo apt update
           sudo apt install libasound2-dev
         fi
+
+    - name: Setup faust
+      run: python3 scripts/setup_faust.py
 
     - name: Build cyfaust
       if: github.event.inputs.variant == 'dynamic'
