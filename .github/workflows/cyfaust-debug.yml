@@ -1,0 +1,76 @@
+
+name: cyfaust-debug
+
+on:
+  workflow_dispatch:
+    inputs:
+      variant:
+        type: choice
+        description: Please select a build variant
+        default: dynamic
+        required: true
+        options: 
+          - dynamic
+          - static
+      py_version:
+        type: choice
+        description: Please select a python version
+        default: '3.11'
+        required: true
+        options:
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+      platform:
+        type: choice
+        description: Please select platform
+        default: 'macos-latest'
+        required: true
+        options:
+          - macos-latest
+          - ubuntu-latest
+
+jobs:
+  build:
+
+    runs-on: ${{ github.event.inputs.platform }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+        fetch-depth: '0'
+
+    - name: Setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ github.event.inputs.py_version }}
+        cache: 'pip' # caching pip dependencies
+
+    - name: Install python requirements
+      run: pip install -r requirements.txt
+
+    - name: Display python version
+      run: python3 --version
+
+    - name: Setup faust
+      run: python3 scripts/setup_faust.py
+
+    - name: Build dynamic cyfaust
+      if: github.event.inputs.variant == 'dynamic'
+      run: make
+
+    - name: Build static cyfaust
+      if: github.event.inputs.variant == 'static'
+      run: make STATIC=1
+
+    - name: Test dynamic cyfaust with pytest
+      if: github.event.inputs.variant == 'dynamic'
+      run: make pytest
+
+    - name: Test static cyfaust with pytest
+      if: github.event.inputs.variant == 'static'
+      run: make pytest STATIC=1
