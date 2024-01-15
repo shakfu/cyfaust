@@ -33,7 +33,7 @@ ifeq ($(STATIC),0)
 ifeq ($(PLATFORM),Darwin)
 	delocate-wheel -v dist/*.whl
 else
-	auditwheel repair dist/*.whl		
+	auditwheel repair --plat linux_x86_64 dist/*.whl		
 endif
 endif
 
