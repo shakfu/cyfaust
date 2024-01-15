@@ -39,9 +39,6 @@ jobs:
         python-version: ${{ github.event.inputs.py_version }}
         cache: 'pip' # caching pip dependencies
 
-    # - name: Install cibuildwheel
-    #   run: pip install cibuildwheel==2.16.2
-
     - name: Install python requirements
       run: pip install -r requirements.txt
 
@@ -59,18 +56,10 @@ jobs:
     - name: Setup faust
       run: python3 scripts/setup_faust.py
 
-    # - name: Build cyfaust wheel
-    #   run: |
-    #     if [ "${{matrix.variant }}" == "dynamic" ]; then
-    #       echo "selecting dynamic cyfaust variant"
-    #       python -m cibuildwheel --output-dir wheels
-    #     else
-    #       echo "selecting static cyfaust variant"
-    #       STATIC=1 python -m cibuildwheel --output-dir wheels
-    #     fi
-
-    - name: Setup faust
-      run: python3 scripts/release.py
+    - name: Build wheels
+      run: |
+        pip install wheel
+        python3 scripts/release.py
 
     - uses: actions/upload-artifact@v3
       with:

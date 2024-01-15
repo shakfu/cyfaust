@@ -98,3 +98,18 @@ jobs:
           make pytest STATIC=1
         fi
 
+
+    - name: Build wheel
+      run: |
+        pip install wheel
+        if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
+          echo "build dynamic variant wheel"
+          make wheel
+        else
+          echo "build static variant wheel"
+          make wheel STATIC=1
+        fi
+
+    - uses: actions/upload-artifact@v3
+      with:
+        path: ./dist/*.whl
