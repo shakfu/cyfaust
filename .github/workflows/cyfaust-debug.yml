@@ -59,18 +59,25 @@ jobs:
     - name: Setup faust
       run: python3 scripts/setup_faust.py
 
-    - name: Build dynamic cyfaust
+    - name: Build cyfaust
       if: github.event.inputs.variant == 'dynamic'
-      run: make
+      run: |
+        if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
+          echo "selecting dynamic cyfaust variant"
+          make
+        else
+          echo "selecting static cyfaust variant"
+          make STATIC=1
+        fi
 
-    - name: Build static cyfaust
-      if: github.event.inputs.variant == 'static'
-      run: make STATIC=1
-
-    - name: Test dynamic cyfaust with pytest
+    - name: Test cyfaust
       if: github.event.inputs.variant == 'dynamic'
-      run: make pytest
+      run: |
+        if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
+          echo "testing dynamic cyfaust variant"
+          make pytest
+        else
+          echo "testing static cyfaust variant"
+          make pytest STATIC=1
+        fi
 
-    - name: Test static cyfaust with pytest
-      if: github.event.inputs.variant == 'static'
-      run: make pytest STATIC=1
