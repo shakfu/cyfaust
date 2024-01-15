@@ -15,7 +15,7 @@ endif
 
 MIN_OSX_VER := -mmacosx-version-min=13.6
 
-FAUST_STATICLIB := ./lib/libfaust.a
+FAUST_STATICLIB := ./lib/static/libfaust.a
 INTERP_TESTS := tests/test_faust_interp
 
 .PHONY: all setup wheel clean reset
@@ -41,7 +41,7 @@ test_cpp:
 		-I./include \
 		-L./lib -L`brew --prefix`/lib $(FAUST_STATICLIB) \
 		-o /tmp/interp-test
-	@/tmp/interp-test tests/noise.dsp
+	@/tmp/interp-test tests/dsp/noise.dsp
 
 test_c:
 	@g++ -O3 $(MIN_OSX_VER) \
@@ -50,7 +50,7 @@ test_c:
 		-I./include \
 		-L./lib -L`brew --prefix`/lib $(FAUST_STATICLIB) \
 		-o /tmp/interp-test
-	@/tmp/interp-test tests/noise.dsp
+	@/tmp/interp-test tests/dsp/noise.dsp
 
 test_audio:
 	@g++ -std=c++11 $(MIN_OSX_VER) -O3 \
@@ -60,7 +60,7 @@ test_audio:
 		-L./lib -L`brew --prefix`/lib $(FAUST_STATICLIB) \
 		-framework CoreFoundation -framework CoreAudio -lpthread \
 		-o /tmp/audio-test
-	@/tmp/audio-test tests/noise.dsp
+	@/tmp/audio-test tests/dsp/noise.dsp
 
 
 test: setup
