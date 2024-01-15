@@ -7,7 +7,7 @@
 
 	- [x] compile without errors: added `CPPFLAGS=-'include limits'` to env
 
-	- [ ] Fix large binaries
+	- [x] Fix large binaries
 
 	- [ ] Fix segfault in cases of dsp_from_boxes / signals
 

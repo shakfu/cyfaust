@@ -1,5 +1,5 @@
 
-name: cyfaust-debug
+name: cyfaust-test
 
 on:
   workflow_dispatch:
@@ -58,6 +58,14 @@ jobs:
 
     - name: Setup faust
       run: python3 scripts/setup_faust.py
+
+    - name: Setup platform
+      run: |
+        if [ "${{ github.event.inputs.platform }}" == "ubuntu-latest" ]; then
+          echo "install linux system dependencies"
+          sudo apt update
+          sudo apt install libasound2-dev
+        fi
 
     - name: Build cyfaust
       if: github.event.inputs.variant == 'dynamic'
