@@ -37,19 +37,18 @@ setup:
 	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
 wheel:
-	@STATIC=$(STATIC) $(PYTHON) setup.py bdist_wheel
-
-# 	mkdir -p wheels
-# ifeq ($(STATIC),0)
-# ifeq ($(PLATFORM),Darwin)
-# 	delocate-wheel -v --wheel-dir wheels dist/*.whl
-# endif
-# ifeq ($(PLATFORM),Linux)
-# 	auditwheel repair --plat linux_$(ARCH) --wheel-dir wheels dist/*.whl
-# endif
-# else
-# 	mv dist/*.whl ./wheel
-# endif
+	@STATIC=$(STATIC) ARCHFLAGS='-arch $(ARCH)' $(PYTHON) setup.py bdist_wheel
+	mkdir -p wheels
+ifeq ($(STATIC),0)
+ifeq ($(PLATFORM),Darwin)
+	delocate-wheel -v --wheel-dir wheels dist/*.whl
+endif
+ifeq ($(PLATFORM),Linux)
+	auditwheel repair --plat linux_$(ARCH) --wheel-dir wheels dist/*.whl
+endif
+else
+	mv dist/*.whl ./wheels
+endif
 
 release:
 	@$(PYTHON) scripts/release.py

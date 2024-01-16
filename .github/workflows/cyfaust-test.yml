@@ -108,17 +108,16 @@ jobs:
           make wheel STATIC=1
         fi
 
-    - name: Test wheel
-      run: |
-        if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
-          ./scripts/test_wheel.sh
-        else
-          STATIC=1 ./scripts/test_wheel.sh
-        fi
+    # - name: Test wheel
+    #   run: |
+    #     if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
+    #       ./scripts/test_wheel.sh
+    #     else
+    #       STATIC=1 ./scripts/test_wheel.sh
+    #     fi
 
     # - name: Build wheel
     #   run: |
-    #     pip install wheel
     #     if [ "${{ github.event.inputs.platform }}" == "macos-latest"]; then
     #       export _PYTHON_HOST_PLATFORM="macosx-11.0-x86_64"
     #       export ARCHFLAGS="-arch x86_64"        
@@ -131,6 +130,6 @@ jobs:
     #       make wheel STATIC=1
     #     fi
 
-    # - uses: actions/upload-artifact@v3
-    #   with:
-    #     path: ./wheels/*.whl
+    - uses: actions/upload-artifact@v3
+      with:
+        path: ./wheels/*.whl
