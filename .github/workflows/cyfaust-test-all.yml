@@ -1,0 +1,77 @@
+
+name: cyfaust-test
+
+on:
+  workflow_dispatch:
+    inputs:
+      py_version:
+        type: choice
+        description: Please select a python version
+        default: '3.11'
+        required: true
+        options:
+          - '3.7'
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+jobs:
+  test_cyfaust:
+    name: Build ${{ github.event.inputs.py_version }} wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        variant: [dynamic, static]
+
+
+    steps:
+
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+        fetch-depth: '0'
+
+    - name: Setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ github.event.inputs.py_version }}
+        cache: 'pip' # caching pip dependencies
+
+    - name: Install python requirements
+      run: pip install -r requirements.txt
+
+    - name: Display python version
+      run: python3 --version
+
+    - name: Setup platform
+      run: |
+        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+          echo "install linux system dependencies"
+          sudo apt update
+          sudo apt install libasound2-dev patchelf
+        fi
+
+    - name: Setup faust
+      run: python3 scripts/setup_faust.py
+
+    - name: Build cyfaust
+      run: |
+        if [ "${{ matrix.variant }}" == "dynamic" ]; then
+          echo "selecting dynamic cyfaust variant"
+          make
+        else
+          echo "selecting static cyfaust variant"
+          make STATIC=1
+        fi
+
+    - name: Test cyfaust
+      run: |
+        if [ "${{ matrix.variant }}" == "dynamic" ]; then
+          echo "testing dynamic cyfaust variant"
+          make pytest
+        else
+          echo "testing static cyfaust variant"
+          make pytest STATIC=1
+        fi

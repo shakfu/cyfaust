@@ -10,7 +10,6 @@ STATIC := 0
 ifeq ($(DEBUG),1)
 	PYTHON := python/bin/python3 -X showrefcount -X tracemalloc
 	MEMRAY := python/bin/python3 -m memray
-
 else
 	PYTHON := python3
 	MEMRAY := python3 -m memray
@@ -21,6 +20,14 @@ MIN_OSX_VER := -mmacosx-version-min=13.6
 FAUST_STATICLIB := ./lib/static/libfaust.a
 INTERP_TESTS := tests/test_faust_interp
 
+TESTS := \
+	test_cyfaust_interp.py 	\
+	test_cyfaust_box.py 	\
+	test_cyfaust_signal.py 	\
+	test_cyfaust_common.py
+
+
+
 .PHONY: all setup wheel release clean reset
 
 all: setup
@@ -30,21 +37,22 @@ setup:
 	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
 wheel:
-	@$(PYTHON) setup.py bdist_wheel
-	mkdir -p wheels
-ifeq ($(STATIC),0)
-ifeq ($(PLATFORM),Darwin)
-	delocate-wheel -v --wheel-dir wheels dist/*.whl
-else
-	auditwheel repair --plat linux_$(ARCH) --wheel-dir wheels dist/*.whl
-endif
-else
-	mv dist/*.whl ./wheel
-endif
+	@STATIC=$(STATIC) $(PYTHON) setup.py bdist_wheel
+
+# 	mkdir -p wheels
+# ifeq ($(STATIC),0)
+# ifeq ($(PLATFORM),Darwin)
+# 	delocate-wheel -v --wheel-dir wheels dist/*.whl
+# endif
+# ifeq ($(PLATFORM),Linux)
+# 	auditwheel repair --plat linux_$(ARCH) --wheel-dir wheels dist/*.whl
+# endif
+# else
+# 	mv dist/*.whl ./wheel
+# endif
 
 release:
 	@$(PYTHON) scripts/release.py
-
 
 .PHONY: test test_cpp test_c test_audio pytest memray
 
@@ -78,10 +86,9 @@ test_audio:
 
 
 test: setup
-	@$(PYTHON) tests/test_cyfaust_interp.py
-	@$(PYTHON) tests/test_cyfaust_box.py
-	@$(PYTHON) tests/test_cyfaust_signal.py
-	@$(PYTHON) tests/test_cyfaust_common.py
+	@for test in $(TESTS) ; do \
+        $(PYTHON) tests/$$test ; \
+    done
 	@echo "DONE"
 
 pytest:
@@ -89,10 +96,9 @@ pytest:
 
 memray:
 	@rm -rf tests/*.bin tests/*.html
-	@$(MEMRAY) run --native tests/test_cyfaust_interp.py
-	@$(MEMRAY) run --native tests/test_cyfaust_box.py
-	@$(MEMRAY) run --native tests/test_cyfaust_signal.py
-	@$(MEMRAY) run --native tests/test_cyfaust_common.py
+	@for test in $(TESTS) ; do \
+        $(MEMRAY) run --native tests/$$test ; \
+    done
 	@for bin in tests/*.bin ; do \
         $(MEMRAY) flamegraph $$bin ; \
     done
