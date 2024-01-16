@@ -100,6 +100,10 @@ jobs:
     - name: Build wheel
       run: |
         pip install wheel
+        if [ "${{ github.event.inputs.platform }}" == "macos-latest"]; then
+          export _PYTHON_HOST_PLATFORM="macosx-11.0-x86_64"
+          export ARCHFLAGS="-arch x86_64"        
+        fi
         if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
           echo "build dynamic variant wheel"
           make wheel
