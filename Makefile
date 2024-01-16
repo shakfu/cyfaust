@@ -1,4 +1,4 @@
-# set path so `faust` be queried for the path to stdlib
+# set path so `faust` can be queried for the path to stdlib
 export PATH := $(PWD)/bin:$(PATH)
 
 PLATFORM := $(shell uname -o)
@@ -21,7 +21,7 @@ MIN_OSX_VER := -mmacosx-version-min=13.6
 FAUST_STATICLIB := ./lib/static/libfaust.a
 INTERP_TESTS := tests/test_faust_interp
 
-.PHONY: all setup wheel clean reset
+.PHONY: all setup wheel release clean reset
 
 all: setup
 
@@ -31,13 +31,17 @@ setup:
 
 wheel:
 	@$(PYTHON) setup.py bdist_wheel
+	mkdir -p wheels
 ifeq ($(STATIC),0)
 ifeq ($(PLATFORM),Darwin)
-	delocate-wheel -v dist/*.whl
+	delocate-wheel -v --wheel-dir wheels dist/*.whl
 else
-	auditwheel repair --plat linux_$(ARCH) dist/*.whl
+	auditwheel repair --plat linux_$(ARCH) --wheel-dir wheels dist/*.whl
 endif
 endif
+
+release:
+	@$(PYTHON) scripts/release.py
 
 
 .PHONY: test test_cpp test_c test_audio pytest memray
@@ -100,4 +104,4 @@ clean:
 					-o -name '__pycache__' \) -print0 | xargs -0 -I {} /bin/rm -rf "{}"
 
 reset: clean
-	@rm -rf python bin lib share 
+	@rm -rf python bin lib share wheels

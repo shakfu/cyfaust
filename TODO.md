@@ -3,9 +3,9 @@
 
 ##  cyfaust
 
-- [ ] Add Linux support
+- [ ] Add github workflows
 
-	- [ ] Fix c++ config
+- [ ] Add Linux support
 
 	- [ ] Fix segfault in cases of dsp_from_boxes / signals (maybe only a problem on arm64 linux?)
 
@@ -20,8 +20,6 @@
 	- [ ] Add all signal api test
 
 - [ ] Add `cython/__main__.py` commandline interface.
-
-- [ ] Fix SANITIZE option if possible (failing on both macos and linux)
 
 - [ ] Add additional python debug checks
 
