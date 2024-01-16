@@ -18,7 +18,7 @@ on:
           - '3.12'
 jobs:
   test_cyfaust:
-    name: Build ${{ github.event.inputs.py_version }} wheels
+    name: Build python cyfaust ${{ matrix.variant }}-${{ github.event.inputs.py_version }}-${{ matrix.os }} wheel
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
