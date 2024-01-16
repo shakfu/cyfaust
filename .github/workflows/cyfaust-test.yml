@@ -96,6 +96,24 @@ jobs:
           make pytest STATIC=1
         fi
 
+    - name: Build wheel
+      run: |
+        pip install wheel
+        if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
+          echo "build dynamic variant wheel"
+          make wheel
+        else
+          echo "build static variant wheel"
+          make wheel STATIC=1
+        fi
+
+    - name: Test wheel
+      run: |
+        if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
+          ./scripts/test_wheel.sh
+        else
+          STATIC=1 ./scripts/test_wheel.sh
+        fi
 
     # - name: Build wheel
     #   run: |

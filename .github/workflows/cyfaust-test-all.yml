@@ -1,5 +1,5 @@
 
-name: cyfaust-test
+name: cyfaust-test-all
 
 on:
   workflow_dispatch:
@@ -24,7 +24,6 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest]
         variant: [dynamic, static]
-
 
     steps:
 
