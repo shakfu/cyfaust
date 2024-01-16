@@ -38,6 +38,8 @@ ifeq ($(PLATFORM),Darwin)
 else
 	auditwheel repair --plat linux_$(ARCH) --wheel-dir wheels dist/*.whl
 endif
+else
+	mv dist/*.whl ./wheel
 endif
 
 release:
