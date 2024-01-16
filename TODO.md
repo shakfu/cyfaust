@@ -5,11 +5,9 @@
 
 - [ ] Add Linux support
 
+	- [ ] Fix c++ config
+
 	- [ ] Fix segfault in cases of dsp_from_boxes / signals (maybe only a problem on arm64 linux?)
-
-		  Note: Github action testrun passes without issues on Ubuntu ubuntu-22.04 (ubuntu-latest)
-
-		  see: `cyfaust/.github/workflows/cyfaust-test.yml`
 
 - [ ] Fix Soundfile support so that it works out of the box without compilation.
 

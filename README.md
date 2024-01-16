@@ -40,21 +40,21 @@ Currently dveloped and tested only on macOS `x86_64` and `arm64`. A linux versio
 
 ## Features
 
-- Python-oriented implementation of the faust intrepreter
+- Python-oriented implementation of the [faust interpreter](https://faustdoc.grame.fr/manual/embedding/#using-libfaust-with-the-interpreter-backend)
 
 - Provides the following submodules (in the default build):
 
     - `cyfaust.interp`: wraps the faust interpreter and the rtaudio audio driver
 
-    - `cyfaust.box`: wraps the faust box api
+    - `cyfaust.box`: wraps the [faust box api](https://faustdoc.grame.fr/tutorials/box-api/)
 
-    - `cyfaust.signal`: wraps the faust signal api
+    - `cyfaust.signal`: wraps the [faust signal api](https://faustdoc.grame.fr/tutorials/signal-api/)
 
     - `cyfaust.common`: common utilities and classes
 
 - Self-contained, minimal, and modular design
 
-- Does not use LLVM to keep size low.
+- Deliberately does not use LLVM to remove dependency on `libLLVM.[dylib|so]` and keep size of python extension low (libLLVM@14 is 94MB).
 
 - Can generate code using the following backends:
 
@@ -67,9 +67,9 @@ Currently dveloped and tested only on macOS `x86_64` and `arm64`. A linux versio
 
 - Dual functional/oo design for box and signal api with minimal code duplication.
 
-- Implements Memorviews for read/write to numpy buffers
+- Implements [Memorviews](https://cython.readthedocs.io/en/latest/src/userguide/memoryviews.html) for read/write to numpy buffers
 
-- Both build variants can be packaged as a self-contained python wheel.
+- Both dynamic and static build variants can be packaged as a self-contained python wheel.
 
 
 ## Status
@@ -125,7 +125,7 @@ In summary,
 
 3. Run `./scripts/setup_faust.py`:
 
-    - This will download faust into the `build` directory, then configure it for an iterpreter build, build it, and install it into newly created .gitignored folders in the project directory: 
+    - This will download faust into the `build` directory, then configure (and patch) it for an interpreter build, build it, and install it into the following (.gitignored) folders in the project directory: 
 
         - `bin`, containing the faust executables, 
         - `lib`, the dynamic and static versions of `libfaust` and 
