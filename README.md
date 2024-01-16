@@ -76,40 +76,54 @@ Currently dveloped and tested only on macOS `x86_64` and `arm64`. A linux versio
 
 Wrapping and modularization are mostly complete except for a few areas (see `TODO`). Current priorities are:
 
-- Address any instability, crashes, etc..
+- Address any instability, crashes, memory leaks, etc..
+
+- Create additional tests
 
 - Complete Linux support
 
-- Create further tests
-
-- Working through remaining items in the todo list
+- Work through remaining items in the TODO list
 
 
 
 ## Setup and Requirements
 
+In summary,
 
-**Requires:**
-
-- `cmake` (to build faust)
-
-- `python3` with dev libraries installed
-
-- `cython`
-
-Optional
-
-- `make` (only used as a build frontend)
-
-macOS
-
-- `delocate` (for including `libfaust.dylib` in wheels)
+| #  | platform | step                    | command                                                      |
+|:--:|:-------- | :----------------------:|:-------------------------------------------------------------|
+| 1a | macOS    | install pre-reqs        | `brew install python cmake`                                  |
+| 1b | linux    | install pre-reqs        | `sudo apt install python3-dev cmake libasound2-dev patchelf` |
+[ 2  ] common   | install python pkgs     | `pip3 install -r requirements.txt`                           |
+| 3  | common   | build/install faustlib  | `./scripts/setup_faust.py`                                   |
+| 4  | common   | build cyfaust           | `make`                                                       |
+| 5  | common   | test cyfaust            | `make pytest`    
 
 
-**To Build:**
+1. The platform specific requirements are as follows:
+
+    For macOS, something like this:
+
+    ```bash
+    brew install python cmake
+    ```
+
+    For Linux, something like this:
+
+    ```bash
+    sudo apt update
+    sudo apt install python3-dev cmake libasound2-dev patchelf
+    ```
 
 
-1. Run `./scripts/setup_faust.py`:
+2. Then (in either case) install the required python packages as follows:
+
+    ```bash
+    pip3 install -r requirements
+    ```
+
+
+3. Run `./scripts/setup_faust.py`:
 
     - This will download faust into the `build` directory, then configure it for an iterpreter build, build it, and install it into newly created .gitignored folders in the project directory: 
 
@@ -122,36 +136,47 @@ macOS
     - The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
 
 
-2. To build the default dynamically-linked package and/or wheel:
+4. To build the default dynamically-linked package and/or wheel:
     
 
+    ```bash
+    make
+    ```
+
+    or 
+
+    ```bash
+    python3 setup.py build
+    ```
+     
+    and for a wheel:
+
+    ```bash
+    make wheel
+    ```
+
+    For the static variant just set the environment variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands. 
+
+    For example:
+
+    ```bash
+    make STATIC=1
+    ```
+
+    etc.
+
+5. To run the tests
+
 ```bash
-make
+make test
 ```
 
 or 
 
-```bash
-python3 setup.py build
-```
- 
-and for a wheel:
 
 ```bash
-make wheel
+make pytest
 ```
-
-For the static variant just set the environment variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands. 
-
-For example:
-
-```bash
-make STATIC=1
-```
-
-etc.
-
-3. `make test` will run the tests in sequence. You can also run `pytest` to do the same.
 
 
 ## Prior Art of Faust + Python

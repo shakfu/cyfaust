@@ -42,7 +42,7 @@ EXTRA_OBJECTS = []
 EXTRA_LINK_ARGS = []
 LIBRARIES = ["pthread"]
 DEFINE_MACROS = [("INTERP_DSP", 1)]
-EXTRA_COMPILE_ARGS = ['-std=c++11']
+EXTRA_COMPILE_ARGS = []
 RTAUDIO_SRC = [
     "include/rtaudio/RtAudio.cpp",
     "include/rtaudio/rtaudio_c.cpp",
@@ -61,6 +61,7 @@ else:
 
 # platform specific configuration
 if PLATFORM == 'Darwin':
+    EXTRA_COMPILE_ARGS.extend(["-std=c++11", "-stdlib=libc++"])
     EXTRA_LINK_ARGS.append('-mmacosx-version-min=13.6')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos
     os.environ['LDFLAGS'] = " ".join([
@@ -69,6 +70,7 @@ if PLATFORM == 'Darwin':
     ])
 elif PLATFORM == 'Linux':
     os.environ['CPPFLAGS'] = '-include limits'
+    EXTRA_COMPILE_ARGS.extend(["-std=c++11", "-stdlib=libstdc++"])
     DEFINE_MACROS.append(("__LINUX_ALSA__", None))
     LIBRARIES.append("asound")
 else:
