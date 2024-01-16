@@ -60,7 +60,9 @@ jobs:
         cache: 'pip' # caching pip dependencies
 
     - name: Install python requirements
-      run: pip install -r requirements.txt
+      run: |
+        pip install wheel virtualenv
+        pip install -r requirements.txt
 
     - name: Display python version
       run: python3 --version
@@ -98,7 +100,6 @@ jobs:
 
     - name: Build wheel
       run: |
-        pip install wheel
         if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
           echo "build dynamic variant wheel"
           make wheel
