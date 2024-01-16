@@ -94,7 +94,7 @@ In summary,
 |:--:|:-------- | :----------------------:|:-------------------------------------------------------------|
 | 1a | macOS    | install pre-reqs        | `brew install python cmake`                                  |
 | 1b | linux    | install pre-reqs        | `sudo apt install python3-dev cmake libasound2-dev patchelf` |
-[ 2  ] common   | install python pkgs     | `pip3 install -r requirements.txt`                           |
+| 2  | common   | install python pkgs     | `pip3 install -r requirements.txt`                           |
 | 3  | common   | build/install faustlib  | `./scripts/setup_faust.py`                                   |
 | 4  | common   | build cyfaust           | `make`                                                       |
 | 5  | common   | test cyfaust            | `make pytest`    
