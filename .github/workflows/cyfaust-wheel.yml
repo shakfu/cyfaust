@@ -19,11 +19,10 @@ on:
 
 jobs:
   build_wheels:
-    name: Build ${{ matrix.variant }}-${{ github.event.inputs.py_version }} wheel on ${{ matrix.os }}
+    name: Build ${{ github.event.inputs.py_version }} wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        variant: [dynamic, static]
         os: [macos-latest, ubuntu-latest]
 
     steps:
@@ -58,7 +57,7 @@ jobs:
 
     - name: Build wheels
       run: |
-        pip install wheel
+        pip install --upgrade wheel
         python3 scripts/release.py
 
     - uses: actions/upload-artifact@v3
