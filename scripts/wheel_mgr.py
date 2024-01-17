@@ -202,13 +202,16 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='manage cyfaust project wheels')
-    opt = lambda long_opt, short_opt, desc: parser.add_argument(
-        long_opt, short_opt, action='store_true', help=desc)
+
+    def opt(long_opt, short_opt, desc):
+        return parser.add_argument(long_opt, short_opt, action='store_true', help=desc)
+
     opt("--release", "-r", "build and release all wheels")
     opt("--build", "-b", "build single wheel based on STATIC env var")
     opt("--build-dynamic", "-d", "build dynamic variant")
     opt("--build-static", "-s", "build static variant")
     opt("--test", "-t", "test built wheels")
+
     args = parser.parse_args()
     if args.release:
         b = WheelBuilder()
@@ -216,7 +219,6 @@ if __name__ == '__main__':
 
     elif args.build:
         b = WheelBuilder()
-        # print(f"IS_STATIC: {b.is_static()}")
         b.build()
 
     elif args.build_dynamic:
@@ -231,6 +233,6 @@ if __name__ == '__main__':
         b.check()
         b.clean()
 
-    if args.test_wheels:
+    if args.test:
         b = WheelBuilder()
         b.test()
