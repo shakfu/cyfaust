@@ -3,11 +3,9 @@
 
 ##  cyfaust
 
-- [ ] Add github workflows
+- [ ] Add working github workflows
 
 - [ ] Add Linux support
-
-	- [ ] Fix segfault in cases of dsp_from_boxes / signals (maybe only a problem on arm64 linux?)
 
 - [ ] Fix Soundfile support so that it works out of the box without compilation.
 
