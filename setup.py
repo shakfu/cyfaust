@@ -63,7 +63,7 @@ else:
 if PLATFORM == 'Darwin':
     # EXTRA_COMPILE_ARGS.extend(["-std=c++11", "-stdlib=libc++"])
     EXTRA_COMPILE_ARGS.append("-std=c++11")
-    EXTRA_LINK_ARGS.append('-mmacosx-version-min=13.6')
+    EXTRA_LINK_ARGS.append('-mmacosx-version-min=10.6')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos
     os.environ['LDFLAGS'] = " ".join([
         "-framework CoreFoundation",

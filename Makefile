@@ -15,7 +15,7 @@ else
 	MEMRAY := python3 -m memray
 endif
 
-MIN_OSX_VER := -mmacosx-version-min=13.6
+MIN_OSX_VER := -mmacosx-version-min=10.6
 
 FAUST_STATICLIB := ./lib/static/libfaust.a
 INTERP_TESTS := tests/test_faust_interp
