@@ -18,7 +18,6 @@ endif
 MIN_OSX_VER := -mmacosx-version-min=10.6
 
 FAUST_STATICLIB := ./lib/static/libfaust.a
-INTERP_TESTS := tests/test_faust_interp
 
 TESTS := \
 	test_cyfaust_interp.py 	\
@@ -27,57 +26,32 @@ TESTS := \
 	test_cyfaust_common.py
 
 
+.PHONY: all build wheel release clean reset test pytest testcpp memray
 
-.PHONY: all setup wheel release clean reset
 
-all: setup
+all: build
 
-setup:
+$(FAUST_STATICLIB):
+	$(PYTHON) scripts/setup_faust.py
+
+build: $(FAUST_STATICLIB)
 	@mkdir -p build
 	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
-wheel:
+wheel: $(FAUST_STATICLIB)
 	@STATIC=$(STATIC) $(PYTHON) scripts/wheel_mgr.py --build
 
-release:
+release: $(FAUST_STATICLIB)
 	@$(PYTHON) scripts/wheel_mgr.py --release
 
-.PHONY: test test_cpp test_c test_audio pytest memray
-
-test_cpp:
-	@g++ -std=c++11 $(MIN_OSX_VER) -O3 \
-		-DINTERP_DSP=1 \
-		$(INTERP_TESTS)/interp-test.cpp \
-		-I./include \
-		-L./lib -L`brew --prefix`/lib $(FAUST_STATICLIB) \
-		-o /tmp/interp-test
-	@/tmp/interp-test tests/dsp/noise.dsp
-
-test_c:
-	@g++ -O3 $(MIN_OSX_VER) \
-		-DINTERP_DSP=1 \
-		$(INTERP_TESTS)/interp-test.c \
-		-I./include \
-		-L./lib -L`brew --prefix`/lib $(FAUST_STATICLIB) \
-		-o /tmp/interp-test
-	@/tmp/interp-test tests/dsp/noise.dsp
-
-test_audio:
-	@g++ -std=c++11 $(MIN_OSX_VER) -O3 \
-		-DINTERP_DSP=1 -D__MACOSX_CORE__ \
-		$(INTERP_TESTS)/interp-audio-min.cpp ./include/rtaudio/RtAudio.cpp \
-		-I./include \
-		-L./lib -L`brew --prefix`/lib $(FAUST_STATICLIB) \
-		-framework CoreFoundation -framework CoreAudio -lpthread \
-		-o /tmp/audio-test
-	@/tmp/audio-test tests/dsp/noise.dsp
-
-
-test: setup
+test: build
 	@for test in $(TESTS) ; do \
         $(PYTHON) tests/$$test ; \
     done
 	@echo "DONE"
+
+testcpp: $(FAUST_STATICLIB)
+	@scripts/test_cpp_tests.sh
 
 pytest:
 	@$(PYTHON) -Xfaulthandler -mpytest -vv ./tests
@@ -90,7 +64,6 @@ memray:
 	@for bin in tests/*.bin ; do \
         $(MEMRAY) flamegraph $$bin ; \
     done
-
 
 clean:
 	@rm -rf build dist MANIFEST.in

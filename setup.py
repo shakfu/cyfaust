@@ -50,7 +50,6 @@ RTAUDIO_SRC = [
 
 # ----------------------------------------------------------------------------
 # CONDITIONAL CONFIGURATION
-#
 
 if STATIC:
     EXTRA_OBJECTS.append('lib/static/libfaust.a')
@@ -61,7 +60,6 @@ else:
 
 # platform specific configuration
 if PLATFORM == 'Darwin':
-    # EXTRA_COMPILE_ARGS.extend(["-std=c++11", "-stdlib=libc++"])
     EXTRA_COMPILE_ARGS.append("-std=c++11")
     EXTRA_LINK_ARGS.append('-mmacosx-version-min=10.6')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos
@@ -71,7 +69,6 @@ if PLATFORM == 'Darwin':
     ])
 elif PLATFORM == 'Linux':
     os.environ['CPPFLAGS'] = '-include limits'
-    # EXTRA_COMPILE_ARGS.extend(["-std=c++11", "-stdlib=libstdc++"])
     EXTRA_COMPILE_ARGS.append("-std=c++11")
     DEFINE_MACROS.append(("__LINUX_ALSA__", None))
     LIBRARIES.append("asound")
