@@ -100,10 +100,13 @@ class WheelBuilder:
     def cmd(self, shellcmd, cwd='.'):
         subprocess.call(shellcmd, shell=True, cwd=str(cwd))
 
-    def get(self, shellcmd) -> str:
+
+    def get(self, shellcmd, cwd='.', shell=False) -> str:
         """get output of shellcmd"""
+        if not shell:
+            shellcmd = shellcmd.split() 
         return subprocess.check_output(
-            shellcmd.split(), encoding='utf8').strip()
+            shellcmd, encoding='utf8', shell=shell, cwd=str(cwd)).strip()
 
     def getenv(self, key):
         """convert '0','1' env values to bool {True, False}"""
@@ -145,12 +148,19 @@ class WheelBuilder:
             vpip = venv / 'bin' / 'pip'
             self.cmd(f"{vpip} install {wheel}")
             if "static" in str(wheel):
+                target = "static"
                 imported='cyfaust'
                 print("static variant test")
             else:
+                target = "dynamic"
                 imported='interp'
                 print("dynamic variant test")
-            self.cmd(f"{vpy} -c 'from cyfaust import {imported}; print(len(dir({imported})))'", cwd=self.dst_folder)
+            val = self.get(f"{vpy} -c 'from cyfaust import {imported};print(len(dir({imported})))'",
+                shell=True, cwd=self.dst_folder
+            )
+            print(f"cyfaust.{imported} # objects: {val}")        
+            assert val, f"cyfaust {target} wheel test: FAILED" 
+            print(f"cyfaust {target} wheel test: OK")
             if venv.exists():
                 shutil.rmtree(venv)
 
