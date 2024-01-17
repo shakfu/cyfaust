@@ -235,4 +235,5 @@ if __name__ == '__main__':
 
     if args.test:
         b = WheelBuilder()
-        b.test()
+        b.test_wheels()
+
