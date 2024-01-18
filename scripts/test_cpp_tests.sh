@@ -10,7 +10,7 @@ PREFIX=`brew --prefix`
 function run_test() {
 	g++ -std=c++11 ${MIN_OSX_VER} -O3 \
 		-DINTERP_DSP=1 \
-		$1 \
+		${INTERP_TESTS}/$1 \
 		-I./include \
 		-L./lib -L${PREFIX}/lib ${FAUST_STATICLIB} \
 		-o /tmp/interp-test
@@ -20,7 +20,7 @@ function run_test() {
 function run_audio_test() {
 	g++ -std=c++11 ${MIN_OSX_VER} -O3 \
 		-DINTERP_DSP=1 -D__MACOSX_CORE__ \
-		$1 ./include/rtaudio/RtAudio.cpp \
+		${INTERP_TESTS}/$1 ./include/rtaudio/RtAudio.cpp \
 		-I./include \
 		-L./lib -L${PREFIX}/lib ${FAUST_STATICLIB} \
 		-framework CoreFoundation -framework CoreAudio -lpthread \
@@ -29,6 +29,6 @@ function run_audio_test() {
 }
 
 
-run_test ${INTERP_TESTS}/interp-test.cpp
-run_test ${INTERP_TESTS}/interp-test.c
-run_audio_test ${INTERP_TESTS}/interp-audio-min.cpp
+run_test interp-test.cpp
+run_test interp-test.c
+run_audio_test interp-audio-min.cpp

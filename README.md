@@ -73,17 +73,31 @@ While this project has been developed and tested primarily on macOS (`x86_64` an
 
 ## Status
 
-Wrapping and modularization are mostly complete except for a few areas (see `TODO`). 
+- Wrapping and modularization are mostly complete except for a few areas (see `TODO`). 
 
-Early focus on stamping out memory leaks and resource cleanup bugs seems to have paid off as the intermittent segfaults which plagued early versions are now quite rare across the two supported platforms.
+- Early focus on stamping out memory leaks and resource cleanup bugs seems to have paid off as the intermittent segfaults which plagued early versions are now relatively rare across the two supported platforms.
 
-While Linux support has progressed well, there are still some issues to resolve.
+- A significant effort was put into moving more complex build or setup logic from the `Makefile` or bash scripts to python scripts. These are generally triggered from the `Makefile`:
 
-Another current challenge is to automate wheel building across supported platforms and architectures. Despite the availabilty of infrastructure such as github actions and [cibuildwheel](https://github.com/pypa/cibuildwheel), this has proven to be more complex than anticipated.
+    - `scripts/setup_faust.py`: downloads, builds, and installs faust into the project's `bin`, `lib`, and `share` folders
+    
+    - `scripts/wheel_mgr.py`: handles wheel building ops.
 
-Current priorities are to:
+    - `scripts/get_debug_python.py`: builds a local debug python and installs it into `cyfaust/python` for additional debugging capabilities.
 
-- Address any instability, crashes, memory leaks, etc. that may occur.
+- While Linux support has progressed well, there are still some issues to resolve such as:
+
+    - support is more recent, therefore the expectation of more instability and bugs, etc.
+
+    - the more fragmented nature of linux audio drivers (currently ALSO is only supported).
+
+    - binary size and compatibility across linux distributions (the need to build on a `manylinux` container for example)
+
+- Another current challenge is to automate wheel building across supported platforms and architectures. Despite the availabilty of infrastructure such as github actions and [cibuildwheel](https://github.com/pypa/cibuildwheel), this has proven to be more complex than anticipated.
+
+So in summary, current priorities are to:
+
+- Address any instances of instability, crashes, memory leaks, etc. that may occur.
 
 - Complete Linux support.
 
@@ -109,10 +123,9 @@ In summary,
 
 
 
-`*`: Note that step 3 need not be a manual step, as you don't have to type `./scripts/setup_faust.py` if you just type `make` (see 3 below).
+`*`: Note that step 3 can be skipped: you don't have to manually type `./scripts/setup_faust.py` if you just type `make` (see 3 below).
 
 Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done once to set up the build environment, while 4 and 5 can be run any number of times thereafter. 
-
 
 
 1. Platform specific requirements are as follows:
