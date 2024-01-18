@@ -13,20 +13,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ---
 
-## [0.0.x]
+## [0.0.3]
 
-###  cyfaust
+### cyfaust
 
-
-- [ ] Added Linux support
-
+- Added Linux support
 
 ### cyfaust.interp
 
 ### cyfaust.box
 
-- [x] Added docstrings
-
+- Added additional docstrings
 
 ### cyfaust.signal
-

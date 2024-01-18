@@ -34,17 +34,15 @@ numerical extension where numbers are auto-boxed (not yet implemented)
 box = box_par(7, 3.14)
 ```
 
-
 Alternative api with submodules and specialized Box subclasses
 
 ```python
 from cyfaust.box import box_context, par, Int, Float
 
 with context():
-	b = par(Int(10), Float(20))
-	b.print()
+    b = par(Int(10), Float(20))
+    b.print()
 ```
-
 
 ## Example 2
 
@@ -70,7 +68,6 @@ python hybrid
 box = box_seq(Box().par(Box(3.14)), box_add_op())
 ```
 
-
 Alternative api with submodules and specialized Box subclasses (functional)
 (not implemented)
 
@@ -78,8 +75,8 @@ Alternative api with submodules and specialized Box subclasses (functional)
 from cyfaust.box import context, seq, par, wire, add_op, 
 
 with context():
-	b = seq(par(wire(), 3.14), add_op())
-	b.print()
+    b = seq(par(wire(), 3.14), add_op())
+    b.print()
 ```
 
 Alternative api with submodules and specialized Box subclasses (oo)
@@ -89,7 +86,6 @@ Alternative api with submodules and specialized Box subclasses (oo)
 from cyfaust.box import context, seq, par, wire, add_op
 
 with context():
-	b = wire().par(3.14).seq(add_op())
-	b.print()
+    b = wire().par(3.14).seq(add_op())
+    b.print()
 ```
-

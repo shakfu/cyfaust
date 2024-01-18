@@ -2,7 +2,6 @@
 
 ## The Problem
 
-
 - `interpreter_dsp` objects are allocated using `interpreter_dsp_factory::createDSPInstance()`:
 
 ```c++
@@ -24,8 +23,7 @@ interpreter_dsp* interpreter_dsp_factory::createDSPInstance();
 
 - It was not known at the time that the above was written that an `interpreter_dsp_factory` keeps track of `interpreter_dsp` pointers and cleans them up when `deleteInterpreterDSPFactory` is called (docs have been updated since to make this point clearer).
 
-
-## Current Solution:
+## Current Solution
 
 The solution below keeps has an `InterpreterDspFactory` instance track of created `InterpreterDsp` and cleans up them before a factory instance is deallocated. This seems to work, but further checks are ncessary using a python debug build.
 
@@ -142,7 +140,6 @@ cdef class InterpreterDspFactory:
             self.ptr = NULL
 ```
 
-
 ## Another Possible Solution
 
 - from [this post](https://groups.google.com/g/cython-users/c/FU_RyQrFaow/m/Kn2XJkOAk00J)
@@ -176,9 +173,7 @@ a = A(b)
 ```
 
 > The destructor `~cppA` does some cleanup on the `cppB` instances that were passed to it via `storeB()` method.
-
 > If `b.__dealloc__()` is called before `a.__dealloc()` (for example when the application exits), `~cppA` will operate on already deleted instances and throw a SIGSEGV.
-
 > How should I handle this situation ? I thought about storing a reference to 'b' in 'a' to let the GC sort things out, but that didn't change anything.
 
 - Solution by Robert:
@@ -221,7 +216,6 @@ a = A(b)
 
   > It can't. The GC has to figure out reference cycles anyway, so it's just
   another reference that it determines unreachable.
-
   > What you can do (and yes, this is a bit of a hack), is manually increase
   the reference count to the B instance in A with a call to Py_INCREF(), and
   then Py_DECREF() it from A.__dealloc__(). That way, the GC will think that
@@ -229,11 +223,9 @@ a = A(b)
   A.__dealloc__() is run and explicitly tells it that B is now unreferenced,
   too. Note that B.__dealloc__() may (or may not) run directly during the
   Py_DECREF() call.
-
   > You can also try to free both cppA and cppB from the same __dealloc__
   method if there's a true 1->1 relation between them. Robert gave you a
   somewhat more generic approach here.
-
   > Stefan
 
 This could look like this:
@@ -271,9 +263,6 @@ a = A(b)
 
 ```
 
-
-
-
 ## Embedding the Compiler
 
 For LLVM
@@ -306,4 +295,3 @@ delete m_dsp;
 delete m_ui;
 deleteDSPFactory(m_factory);
 ```
-

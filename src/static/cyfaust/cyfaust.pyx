@@ -12,14 +12,14 @@ cimport faust_signal as fs
 
 ## ---------------------------------------------------------------------------
 ## python c-api functions
-##
+
 
 cdef extern from "Python.h":
     char* PyUnicode_AsUTF8(object unicode)
 
 ## ---------------------------------------------------------------------------
 ## common utility classes / functions
-##
+
 
 def get_package_resources() -> tuple[str, str, str, str]:
     """provides the paths of package architecture and library files."""
@@ -60,7 +60,7 @@ cdef class ParamArray:
 
 ## ---------------------------------------------------------------------------
 ## enums
-##
+
 
 cpdef enum SType:
     kSInt
@@ -85,12 +85,10 @@ cpdef enum SOperator:
     kOR
     kXOR
 
+
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust
-##
-## ---------------------------------------------------------------------------
-## faust/dsp/libfaust
-##
+
 
 def generate_sha1(data: str) -> str:
     """Generate SHA1 key from a string."""
@@ -177,7 +175,7 @@ def generate_auxfiles_from_string(name_app: str, dsp_content: str, *args) -> boo
 
 ## ---------------------------------------------------------------------------
 ## faust/audio/rtaudio-dsp
-##
+
 
 cdef class RtAudioDriver:
     """faust audio driver using rtaudio cross-platform lib."""
@@ -236,7 +234,6 @@ cdef class RtAudioDriver:
 
 ## ---------------------------------------------------------------------------
 ## faust/dsp/interpreter-dsp
-##
 
 
 def get_version():

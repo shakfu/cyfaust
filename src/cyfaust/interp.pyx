@@ -1,10 +1,9 @@
 # distutils: language = c++
 
 from libcpp.string cimport string
-from cpython.ref cimport Py_INCREF, Py_DECREF
 
 from . cimport faust_interp as fi
-from . cimport faust_box as fb
+# from . cimport faust_box as fb
 from . cimport faust_signal as fs
 
 from .common cimport ParamArray
@@ -19,7 +18,7 @@ from .signal import SignalVector
 
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust
-##
+
 
 def generate_sha1(data: str) -> str:
     """Generate SHA1 key from a string."""
@@ -106,7 +105,7 @@ def generate_auxfiles_from_string(name_app: str, dsp_content: str, *args) -> boo
 
 ## ---------------------------------------------------------------------------
 ## faust/audio/rtaudio-dsp
-##
+
 
 cdef class RtAudioDriver:
     """faust audio driver using rtaudio cross-platform lib."""
@@ -165,7 +164,6 @@ cdef class RtAudioDriver:
 
 ## ---------------------------------------------------------------------------
 ## faust/dsp/interpreter-dsp
-##
 
 
 def get_version():

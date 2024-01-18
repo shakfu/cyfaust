@@ -8,32 +8,32 @@ It has two build variants:
 
 1. The default build is dynamically linked to `libfaust.dylib` or `libfaust.so` and consists of a python package with multiple compiled submodules and embedded resources (faust libraries and architecture files):
 
-```bash
-% tree -L 3
-.
-└── cyfaust
-    ├── __init__.py
-    ├── box.cpython-311-darwin.so
-    ├── common.cpython-311-darwin.so
-    ├── interp.cpython-311-darwin.so
-    ├── signal.cpython-311-darwin.so
-    └── resources
-        ├── architecture
-        └── libraries
-```
+    ```bash
+    % tree -L 3
+    .
+    └── cyfaust
+        ├── __init__.py
+        ├── box.cpython-311-darwin.so
+        ├── common.cpython-311-darwin.so
+        ├── interp.cpython-311-darwin.so
+        ├── signal.cpython-311-darwin.so
+        └── resources
+            ├── architecture
+            └── libraries
+    ```
 
 2. The static build is statically linked (with `libfaust.a`) and consists of a python package with a single compiled submodule and embedded resources (faust libraries and architecture files):
 
-```bash
-% tree -L 3
-.
-└── cyfaust
-    ├── __init__.py
-    ├── cyfaust.cpython-311-darwin.so
-    └── resources
-        ├── architecture
-        └── libraries
-```
+    ```bash
+    % tree -L 3
+    .
+    └── cyfaust
+        ├── __init__.py
+        ├── cyfaust.cpython-311-darwin.so
+        └── resources
+            ├── architecture
+            └── libraries
+    ```
 
 While this project has been developed and tested primarily on macOS (`x86_64` and `arm64`), there have been recent efforts to support Linux (`amd64` and `aarch64`).
 
@@ -43,13 +43,13 @@ While this project has been developed and tested primarily on macOS (`x86_64` an
 
 - Provides the following submodules (in the default build):
 
-    - `cyfaust.interp`: wraps the faust interpreter and the rtaudio audio driver
+  - `cyfaust.interp`: wraps the faust interpreter and the rtaudio audio driver
 
-    - `cyfaust.box`: wraps the [faust box api](https://faustdoc.grame.fr/tutorials/box-api/)
+  - `cyfaust.box`: wraps the [faust box api](https://faustdoc.grame.fr/tutorials/box-api/)
 
-    - `cyfaust.signal`: wraps the [faust signal api](https://faustdoc.grame.fr/tutorials/signal-api/)
+  - `cyfaust.signal`: wraps the [faust signal api](https://faustdoc.grame.fr/tutorials/signal-api/)
 
-    - `cyfaust.common`: common utilities and classes
+  - `cyfaust.common`: common utilities and classes
 
 - Self-contained, minimal, and modular design
 
@@ -57,10 +57,10 @@ While this project has been developed and tested primarily on macOS (`x86_64` an
 
 - Can generate code using the following backends:
 
-     - c++
-     - c
-     - rust
-     - codebox
+  - c++
+  - c
+  - rust
+  - codebox
 
 - Can generate auxiliary files such as svg block diagrams of dsp
 
@@ -69,7 +69,6 @@ While this project has been developed and tested primarily on macOS (`x86_64` an
 - Implements [Memorviews](https://cython.readthedocs.io/en/latest/src/userguide/memoryviews.html) for read/write buffer using `numpy` or `array.array`.
 
 - Both dynamic and static build variants can be packaged as a self-contained python wheel.
-
 
 ## Status
 
@@ -85,26 +84,22 @@ In summary, current priorities are to:
 
 - Work through remaining items in the `TODO` list
 
-
 ## Setup and Requirements
 
 In summary,
 
 | #  | platform | step                    | command                                                      |
-|:--:|:-------- | :----------------------:|:-------------------------------------------------------------|
+|:--:|:-------- | :---------------------- |:------------------------------------------------------------ |
 | 1a | macOS    | install pre-reqs        | `brew install python cmake`                                  |
 | 1b | linux    | install pre-reqs        | `sudo apt install python3-dev cmake libasound2-dev patchelf` |
 | 2  | common   | install python pkgs     | `pip3 install -r requirements.txt`                           |
 | 3* | common   | build/install faustlib  | `./scripts/setup_faust.py`                                   |
 | 4  | common   | build cyfaust           | `make`                                                       |
-| 5  | common   | test cyfaust            | `make pytest`    
-
-
+| 5  | common   | test cyfaust            | `make pytest`                                                |
 
 `*`: Note that step 3 can be skipped: you don't have to manually type `./scripts/setup_faust.py` if you just type `make` (see 3 below).
 
-Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done once to set up the build environment, while 4 and 5 can be run any number of times thereafter. 
-
+Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done once to set up the build environment, while 4 and 5 can be run any number of times thereafter.
 
 1. Platform specific requirements are as follows:
 
@@ -131,10 +126,10 @@ Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done
 
     - Manually running this step is not strictly necessary, as the default `make` command will check if `libfaust.a` has been built and if it hasn't it will run  `./scripts/setup_faust.py`.
 
-    - This will download faust into the `build` directory, then configure (and patch) it for an interpreter build, build it, and install it into the following (.gitignored) folders in the project directory: 
+    - This will download faust into the `build` directory, then configure (and patch) it for an interpreter build, build it, and install it into the following (.gitignored) folders in the project directory:
 
-        - `bin`, containing the faust executables, 
-        - `lib`, the dynamic and static versions of `libfaust` and 
+        - `bin`, containing the faust executables,
+        - `lib`, the dynamic and static versions of `libfaust` and
         - `share`, the faust standard libs and examples.
 
     - Faust version `2.69.3` will be used as it is known to work and is used by the setup scripts.
@@ -142,24 +137,24 @@ Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done
     - The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
 
 4. To build the default dynamically-linked package and/or wheel:
-    
+
     ```bash
     make
     ```
 
-    or 
+    or
 
     ```bash
     python3 setup.py build
     ```
-     
+
     and for a wheel:
 
     ```bash
     make wheel
     ```
 
-    For the static variant just set the environment variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands. 
+    For the static variant just set the environment variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands.
 
     For example:
 
@@ -175,8 +170,7 @@ Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done
 make test
 ```
 
-or 
-
+or
 
 ```bash
 make pytest
@@ -193,4 +187,3 @@ make pytest
 - [faust-ctypes](https://gitlab.com/adud2/faust-ctypes): a port of Marc Joliet's FaustPy from CFFI to Ctypes. (ctypes)
 
 - [faustpp](https://github.com/jpcima/faustpp): A post-processor for faust, which enables more flexible code generation.
-

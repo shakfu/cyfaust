@@ -172,7 +172,7 @@ cdef class Signal:
 
     @staticmethod
     def from_numentry(str label, init: float | Signal, min: float | Signal, 
-                                max: float | Signal, step: float | Signal) -> Signal:
+                                 max: float | Signal, step: float | Signal) -> Signal:
         """Create a num entry signal."""
         _init = sig_or_float(init)
         _min = sig_or_float(min)

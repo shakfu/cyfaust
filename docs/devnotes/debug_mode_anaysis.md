@@ -1,23 +1,22 @@
 # Debug Mode Analysis
 
-
 Build a debug python python with folllowing configurations:
 
 ```python
 CONFIG_OPTIONS = [
-	"--enable-shared",
-	"--disable-test-modules",
-	"--without-static-libpython",
+ "--enable-shared",
+ "--disable-test-modules",
+ "--without-static-libpython",
 
-	"--with-pydebug",
-	"--with-address-sanitizer",
-	"--with-undefined-behavior-sanitizer",
+ "--with-pydebug",
+ "--with-address-sanitizer",
+ "--with-undefined-behavior-sanitizer",
 ]
 ````
 
 ## Undefine Bahavious
 
-```
+```bash
 >> testing cyfaust.interp
 -------------------------------------------------------------------------------
 test_interp_create_dsp_factory_from_file1
@@ -37,7 +36,7 @@ RtApiCore::stopStream(): the stream is already stopped!
 
 
 RtApiCore::stopStream(): the stream is already stopped!
-````
+```
 
 In `include/faust/audio/rtaudio-dsp.h:65`:
 
@@ -52,16 +51,16 @@ class rtaudio : public audio {
         unsigned int fBufferSize;
          
         //----------------------------------------------------------------------------
-        // 	number of physical input and output channels of the PA device
+        //  number of physical input and output channels of the PA device
         //----------------------------------------------------------------------------
-        int	fDevNumInChans;
-        int	fDevNumOutChans;
+        int fDevNumInChans;
+        int fDevNumOutChans;
         
         virtual int processAudio(double streamTime, void* inbuf, void* outbuf, unsigned long frames) 
         {
             AVOIDDENORMALS;
             
-            float* inputs[fDsp->getNumInputs()];  	// <----- ERROR is here 
+            float* inputs[fDsp->getNumInputs()];   // <----- ERROR is here 
             float* outputs[fDsp->getNumOutputs()];
             
             for (int i = 0; i < fDsp->getNumInputs(); i++) {
@@ -78,5 +77,3 @@ class rtaudio : public audio {
  ```
 
 - Basically if the project has not inputs or is just output audio, `fDsp->getNumInputs()` will be 0 and hence rhe undefined behaivour.
-
-
