@@ -1,7 +1,7 @@
 # set path so `faust` can be queried for the path to stdlib
 # export PATH := $(PWD)/bin:$(PATH)
 
-PLATFORM := $(shell uname -o)
+PLATFORM := $(shell uname -s)
 ARCH := $(shell uname -m)
 
 DEBUG := 0

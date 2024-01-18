@@ -151,7 +151,7 @@ Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done
 
 3. Run `./scripts/setup_faust.py`:
 
-    - Manually running this step is not strictly necessary, as the default `make` command will check if `libfaust.a` has been built and it hasn't it will run  `./scripts/setup_faust.py`.
+    - Manually running this step is not strictly necessary, as the default `make` command will check if `libfaust.a` has been built and if it hasn't it will run  `./scripts/setup_faust.py`.
 
     - This will download faust into the `build` directory, then configure (and patch) it for an interpreter build, build it, and install it into the following (.gitignored) folders in the project directory: 
 

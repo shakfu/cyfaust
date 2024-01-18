@@ -24,9 +24,9 @@ on:
           - '3.10'
           - '3.11'
           - '3.12'
-      platform:
+      os:
         type: choice
-        description: Please select platform
+        description: Please select os
         default: 'macos-latest'
         required: true
         options:
@@ -40,7 +40,7 @@ on:
 jobs:
   build:
 
-    runs-on: ${{ github.event.inputs.platform }}
+    runs-on: ${{ github.event.inputs.os }}
 
     steps:
 
@@ -50,7 +50,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
           echo "- build-variant: ${{ github.event.inputs.variant }}" >> $GITHUB_STEP_SUMMARY
           echo "- py-version: ${{ github.event.inputs.py_version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- platform: ${{ github.event.inputs.platform }}" >> $GITHUB_STEP_SUMMARY
+          echo "- os: ${{ github.event.inputs.os }}" >> $GITHUB_STEP_SUMMARY
 
     - uses: actions/checkout@v3
       with:
@@ -71,9 +71,9 @@ jobs:
     - name: Display python version
       run: python3 --version
 
-    - name: Setup platform
+    - name: Setup platform-specific requirements
       run: |
-        if [ "${{ github.event.inputs.platform }}" == "ubuntu-latest" ]; then
+        if [ "${{ github.event.inputs.os }}" == "ubuntu-latest" ]; then
           echo "install linux system dependencies"
           sudo apt update
           sudo apt install libasound2-dev patchelf
