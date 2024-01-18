@@ -121,6 +121,11 @@ class WheelBuilder:
         if self.src_folder.exists():
             shutil.rmtree(self.src_folder)
 
+    def reset(self):
+        self.clean()
+        if self.dst_folder.exists():
+            shutil.rmtree(self.dst_folder)
+
     def check(self):
         assert self.dst_folder.glob("*.whl"), "no 'fixed' wheels created"
 
@@ -208,6 +213,7 @@ class WheelBuilder:
 
 
     def release(self):
+        self.reset()
         self.build_dynamic_wheel()
         self.build_static_wheel()
         self.check()
