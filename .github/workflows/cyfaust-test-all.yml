@@ -37,6 +37,7 @@ jobs:
       with:
         python-version: ${{ github.event.inputs.py_version }}
         cache: 'pip' # caching pip dependencies
+        architecture: x64
 
     - name: Install python requirements
       run: pip install -r requirements.txt
