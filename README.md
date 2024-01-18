@@ -35,8 +35,7 @@ It has two build variants:
         └── libraries
 ```
 
-While developed and tested mostly on macOS `x86_64` and `arm64`, there have been recent efforts to support linux `amd64` and `aarch64`. Currently, 100% of tests pass for both macOS and linux variants.
-
+While developed and tested primarily on macOS `x86_64` and `arm64`, there have been recent efforts to support linux `amd64` and `aarch64`.
 
 ## Features
 
