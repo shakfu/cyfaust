@@ -85,10 +85,10 @@ jobs:
     - name: Build cyfaust
       run: |
         if [ "${{ github.event.inputs.variant }}" == "dynamic" ]; then
-          echo "selecting dynamic cyfaust variant"
+          echo "building dynamic cyfaust variant"
           make
         else
-          echo "selecting static cyfaust variant"
+          echo "building static cyfaust variant"
           make STATIC=1
         fi
 

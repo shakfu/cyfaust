@@ -1,8 +1,8 @@
 # set path so `faust` can be queried for the path to stdlib
 # export PATH := $(PWD)/bin:$(PATH)
 
-PLATFORM := $(shell uname -s)
-ARCH := $(shell uname -m)
+# PLATFORM := $(shell uname -s)
+# ARCH := $(shell uname -m)
 
 DEBUG := 0
 STATIC := 0
@@ -15,7 +15,7 @@ else
 	MEMRAY := python3 -m memray
 endif
 
-MIN_OSX_VER := -mmacosx-version-min=10.6
+MIN_OSX_VER := -mmacosx-version-min=10.9
 
 FAUST_STATICLIB := ./lib/static/libfaust.a
 
