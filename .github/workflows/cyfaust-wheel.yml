@@ -44,13 +44,12 @@ jobs:
     - name: Display python version
       run: python3 --version
 
-    - name: Setup platform
+    - name: Setup platform-specific requirements
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-          echo "install linux system dependencies"
-          sudo apt update
-          sudo apt install libasound2-dev patchelf
-        fi
+        echo "install linux system dependencies"
+        sudo apt update
+        sudo apt install libasound2-dev patchelf
 
     - name: Setup faust
       run: python3 scripts/setup_faust.py

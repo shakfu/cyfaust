@@ -44,33 +44,37 @@ jobs:
     - name: Display python version
       run: python3 --version
 
-    - name: Setup platform
+    - name: Setup platform-specific requirements
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-          echo "install linux system dependencies"
-          sudo apt update
-          sudo apt install libasound2-dev patchelf
-        fi
+        echo "install linux system dependencies"
+        sudo apt update
+        sudo apt install libasound2-dev patchelf
 
     - name: Setup faust
       run: python3 scripts/setup_faust.py
 
-    - name: Build cyfaust
+    - name: Build dynamic cyfaust variant
+      if: matrix.variant == 'dynamic'
       run: |
-        if [ "${{ matrix.variant }}" == "dynamic" ]; then
-          echo "selecting dynamic cyfaust variant"
-          make
-        else
-          echo "selecting static cyfaust variant"
-          make STATIC=1
-        fi
+        echo "building dynamic cyfaust variant"
+        make
 
-    - name: Test cyfaust
+    - name: Build static cyfaust variant
+      if: matrix.variant == 'static'
       run: |
-        if [ "${{ matrix.variant }}" == "dynamic" ]; then
-          echo "testing dynamic cyfaust variant"
-          make pytest
-        else
-          echo "testing static cyfaust variant"
-          make pytest STATIC=1
-        fi
+        echo "building static cyfaust variant"
+        make STATIC=1
+
+    - name: Test dynamic cyfaust variant
+      if: matrix.variant == 'dynamic'
+      run: |
+        echo "testing dynamic cyfaust variant"
+        make pytest
+
+    - name: Test static cyfaust variant
+      if: matrix.variant == 'static'
+      run: |
+        echo "testing static cyfaust variant"
+        make pytest STATIC=1
+
