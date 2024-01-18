@@ -35,7 +35,7 @@ It has two build variants:
         └── libraries
 ```
 
-While developed and tested primarily on macOS `x86_64` and `arm64`, there have been recent efforts to support linux `amd64` and `aarch64`.
+While this project has been developed and tested primarily on macOS (`x86_64` and `arm64`), there have been recent efforts to support Linux (`amd64` and `aarch64`).
 
 ## Features
 
@@ -77,7 +77,9 @@ Wrapping and modularization are mostly complete except for a few areas (see `TOD
 
 Early focus on stamping out memory leaks and resource cleanup bugs seems to have paid off as the intermittent segfaults which plagued early versions are now quite rare across the two supported platforms.
 
-While linux support has progressed well, the current challenge is to automate wheel building across supported platforms and architectures. Despite the availabilty of infrastructure such as github actions and [cibuildwheel](https://github.com/pypa/cibuildwheel), this has proven to be more complex than anticipated.
+While Linux support has progressed well, there are still some issues to resolve.
+
+Another current challenge is to automate wheel building across supported platforms and architectures. Despite the availabilty of infrastructure such as github actions and [cibuildwheel](https://github.com/pypa/cibuildwheel), this has proven to be more complex than anticipated.
 
 Current priorities are to:
 
@@ -92,7 +94,6 @@ Current priorities are to:
 - Work through remaining items in the TODO list
 
 
-
 ## Setup and Requirements
 
 In summary,
@@ -102,12 +103,16 @@ In summary,
 | 1a | macOS    | install pre-reqs        | `brew install python cmake`                                  |
 | 1b | linux    | install pre-reqs        | `sudo apt install python3-dev cmake libasound2-dev patchelf` |
 | 2  | common   | install python pkgs     | `pip3 install -r requirements.txt`                           |
-| 3  | common   | build/install faustlib  | `./scripts/setup_faust.py`                                   |
+| 3* | common   | build/install faustlib  | `./scripts/setup_faust.py`                                   |
 | 4  | common   | build cyfaust           | `make`                                                       |
 | 5  | common   | test cyfaust            | `make pytest`    
 
 
-Note that 1a and 1b are platform-specific, and that 1-3 are only to be done once to set up the build environment, while 4 and 5 can be run any number of times thereafter.
+
+`*`: Note that step 3 need not be a manual step, as you don't have to type `./scripts/setup_faust.py` if you just type `make` (see 3 below).
+
+Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done once to set up the build environment, while 4 and 5 can be run any number of times thereafter. 
+
 
 
 1. Platform specific requirements are as follows:
@@ -125,15 +130,15 @@ Note that 1a and 1b are platform-specific, and that 1-3 are only to be done once
     sudo apt install python3-dev cmake libasound2-dev patchelf
     ```
 
-
 2. Then (in either case) install the required python packages as follows:
 
     ```bash
     pip3 install -r requirements
     ```
 
-
 3. Run `./scripts/setup_faust.py`:
+
+    - Manually running this step is not strictly necessary, as the default `make` command will check if `libfaust.a` has been built and it hasn't it will run  `./scripts/setup_faust.py`.
 
     - This will download faust into the `build` directory, then configure (and patch) it for an interpreter build, build it, and install it into the following (.gitignored) folders in the project directory: 
 
@@ -145,10 +150,8 @@ Note that 1a and 1b are platform-specific, and that 1-3 are only to be done once
 
     - The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
 
-
 4. To build the default dynamically-linked package and/or wheel:
     
-
     ```bash
     make
     ```
@@ -187,7 +190,6 @@ or
 ```bash
 make pytest
 ```
-
 
 ## Prior Art of Faust + Python
 

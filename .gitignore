@@ -97,7 +97,7 @@ venv.bak/
 *.lai
 *.la
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
