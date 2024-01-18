@@ -128,14 +128,20 @@ class WheelBuilder:
         if not self.dst_folder.exists():
             self.dst_folder.mkdir()
 
+    # def build_wheel(self, static=False):
+    #     arch = ""
+    #     if self.native_arch:
+    #         arch = f"ARCHFLAGS='-arch {self.arch}'"
+    #     if static:
+    #         self.cmd(f"STATIC=1 {arch} python3 setup.py bdist_wheel")            
+    #     else:
+    #         self.cmd(f"{arch} python3 setup.py bdist_wheel")
+
     def build_wheel(self, static=False):
-        arch = ""
-        if self.native_arch:
-            arch = f"ARCHFLAGS='-arch {self.arch}'"
         if static:
-            self.cmd(f"STATIC=1 {arch} python3 setup.py bdist_wheel")            
+            self.cmd(f"STATIC=1 python3 setup.py bdist_wheel")            
         else:
-            self.cmd(f"{arch} python3 setup.py bdist_wheel")
+            self.cmd(f"python3 setup.py bdist_wheel")
 
     def test_wheels(self):
         venv = self.dst_folder / 'venv'
