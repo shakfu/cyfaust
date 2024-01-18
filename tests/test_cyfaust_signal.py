@@ -8,7 +8,7 @@ try:
         signal_context, SignalVector, sig_input,
         sig_real, sig_int, sig_delay
     )
-except ImportError:
+except (ModuleNotFoundError, ImportError):
     from cyfaust.cyfaust import (
         create_dsp_factory_from_signals,
         signal_context, SignalVector, sig_input,

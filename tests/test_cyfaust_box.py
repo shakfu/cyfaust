@@ -17,7 +17,7 @@ try:
     from cyfaust.signal import SignalVector, SType
     from cyfaust.interp import create_dsp_factory_from_boxes
     from cyfaust.common import PACKAGE_RESOURCES
-except ImportError:
+except (ModuleNotFoundError, ImportError):
     from cyfaust.cyfaust import (
         create_source_from_boxes, BoxVector,
         box_add, box_add_op, box_mul,

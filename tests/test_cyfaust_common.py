@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'bui
 
 try:
     from cyfaust.common import ParamArray, PACKAGE_RESOURCES
-except ImportError:
+except (ModuleNotFoundError, ImportError):
     from cyfaust.cyfaust import ParamArray, PACKAGE_RESOURCES
 
 from testutils import print_section, print_entry
