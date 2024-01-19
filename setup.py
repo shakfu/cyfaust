@@ -8,30 +8,37 @@ from setuptools import Extension, find_namespace_packages, setup
 # ----------------------------------------------------------------------------
 # helper funcs
 
-def getenv(key):
+def getenv(key: str, default: bool = False) -> bool:
     """convert '0','1' env values to bool {True, False}"""
-    return bool(int(os.getenv(key, False)))
- 
+    return bool(int(os.getenv(key, default)))
  
 
 # ----------------------------------------------------------------------------
 # VARS
 
-VERSION="0.0.3"
+VERSION = "0.0.3"
 
+MIN_OSX_VER = "10.9"
+# MIN_OSX_VER = "13.6"
 
 # ----------------------------------------------------------------------------
 # OPTIONS (to be set as environment variables)
 
+# set cyfaust static or dynamic build here
+STATIC = getenv("STATIC")
 
-
-STATIC = getenv("STATIC")       # set static or dynamic build here
+# rtaudio apis
+ALSA = getenv('ALSA', default=True)
+PULSE = getenv('PULSE')
+JACK = getenv('JACK')
 
 # ----------------------------------------------------------------------------
 # COMMON
 
 PLATFORM = platform.system()
 CWD = os.getcwd()
+
+# local directories
 LIB = os.path.join(CWD, 'lib')
 INCLUDE = os.path.join(CWD, 'include')
 
@@ -60,10 +67,12 @@ else:
 
 # platform specific configuration
 if PLATFORM == 'Darwin':
-    # EXTRA_COMPILE_ARGS.append("-std=c++11")
     EXTRA_COMPILE_ARGS.extend(["-std=c++11", "-stdlib=libc++"])
-    EXTRA_LINK_ARGS.append('-mmacosx-version-min=10.9')
+    EXTRA_LINK_ARGS.append(f'-mmacosx-version-min={MIN_OSX_VER}')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos
+    if JACK:
+        DEFINE_MACROS.append(("__UNIX_JACK__", None))
+        LIBRARIES.append("jack")
     os.environ['LDFLAGS'] = " ".join([
         "-framework CoreFoundation",
         "-framework CoreAudio"
@@ -71,10 +80,18 @@ if PLATFORM == 'Darwin':
 elif PLATFORM == 'Linux':
     os.environ['CPPFLAGS'] = '-include limits'
     EXTRA_COMPILE_ARGS.append("-std=c++11")
-    DEFINE_MACROS.append(("__LINUX_ALSA__", None))
-    LIBRARIES.append("asound")
+    if ALSA:
+        DEFINE_MACROS.append(("__LINUX_ALSA__", None))
+        LIBRARIES.append("asound")
+    if PULSE:
+        DEFINE_MACROS.append(("__LINUX_PULSE__", None))
+        LIBRARIES.append("pulse")
+    if JACK:
+        DEFINE_MACROS.append(("__UNIX_JACK__", None))
+        LIBRARIES.append("jack")
+
 else:
-    raise SystemExit(f"plaform '{PLATFORM}' not currently supported")
+    raise SystemExit(f"platform '{PLATFORM}' not currently supported")
 
 
 def mk_extension(name, sources, define_macros=None):

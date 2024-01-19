@@ -15,8 +15,6 @@ else
 	MEMRAY := python3 -m memray
 endif
 
-MIN_OSX_VER := -mmacosx-version-min=10.9
-
 FAUST_STATICLIB := ./lib/static/libfaust.a
 
 TESTS := \
@@ -53,7 +51,7 @@ test: build
 testcpp: $(FAUST_STATICLIB)
 	@scripts/test_cpp_tests.sh
 
-pytest:
+pytest: $(FAUST_STATICLIB)
 	@$(PYTHON) -Xfaulthandler -mpytest -vv ./tests
 
 memray:
