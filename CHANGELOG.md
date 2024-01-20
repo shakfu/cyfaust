@@ -13,11 +13,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ---
 
-## [0.0.3]
+## [0.0.x]
 
 ### cyfaust
-
-- Added Linux support
 
 - Added infrastructure for additional rtaudio audio driver support
 
@@ -25,6 +23,43 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### cyfaust.box
 
+### cyfaust.signal
+
+
+
+## [0.0.3]
+
+### cyfaust
+
+- Added Linux support
+
+### cyfaust.interp
+
+- Added improved dsp resource cleanup mechanism for `InterpreterFactoryDSP`
+
+### cyfaust.box
+
 - Added additional docstrings
 
+
+## [0.0.1-2]
+
+### cyfaust
+
+- Embedded faust architecture and standard library files in the package
+
+- Created two variants (dynamic, static) of cyfaust package
+
+- Added cyfaust project
+
+### cyfaust.interp
+
+- Wrapped the faust interpreter api in cython
+
+### cyfaust.box
+
+- Wrapped most of the faust box api in cython
+
 ### cyfaust.signal
+
+- Wrapped most of the faust signal api in cython

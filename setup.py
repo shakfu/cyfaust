@@ -20,6 +20,7 @@ VERSION = "0.0.3"
 
 MIN_OSX_VER = "10.9"
 # MIN_OSX_VER = "13.6"
+# export MACOSX_DEPLOYMENT_TARGET=10.9
 
 # ----------------------------------------------------------------------------
 # OPTIONS (to be set as environment variables)

@@ -1,6 +1,6 @@
 # Box Api examples
 
-Some sketches of different ways the box api can be implemented in cyfaust.
+Some sketches of different ways the faust box api can be implemented in cyfaust.
 
 ## Example 1
 
