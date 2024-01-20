@@ -13,14 +13,18 @@ def getenv(key: str, default: bool = False) -> bool:
     return bool(int(os.getenv(key, default)))
  
 
+def get_min_osx_ver(platform, arch):
+    min_osx_ver = os.getenv("MACOSX_DEPLOYMENT_TARGET")
+    if not min_osx_ver:
+        min_osx_ver = "10.9"
+        if platform == "Darwin" and arch == "arm64":
+            min_osx_ver = "11.0"
+    return min_osx_ver
+
 # ----------------------------------------------------------------------------
 # VARS
 
 VERSION = "0.0.3"
-
-MIN_OSX_VER = "10.9"
-# MIN_OSX_VER = "13.6"
-# export MACOSX_DEPLOYMENT_TARGET=10.9
 
 # ----------------------------------------------------------------------------
 # OPTIONS (to be set as environment variables)
@@ -37,6 +41,8 @@ JACK = getenv('JACK')
 # COMMON
 
 PLATFORM = platform.system()
+ARCH = platform.machine()
+
 CWD = os.getcwd()
 
 # local directories
@@ -68,6 +74,8 @@ else:
 
 # platform specific configuration
 if PLATFORM == 'Darwin':
+    MIN_OSX_VER = get_min_osx_ver(PLATFORM, ARCH)
+    os.environ["MACOSX_DEPLOYMENT_TARGET"] = MIN_OSX_VER
     EXTRA_COMPILE_ARGS.extend(["-std=c++11", "-stdlib=libc++"])
     EXTRA_LINK_ARGS.append(f'-mmacosx-version-min={MIN_OSX_VER}')
     DEFINE_MACROS.append(("__MACOSX_CORE__", None)) # rtaudio for macos

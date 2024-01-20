@@ -20,11 +20,11 @@ from dataclasses import dataclass
 import platform
 from pathlib import Path
 import subprocess
+import sys
 
 PLATFORM = platform.system()
 ARCH = platform.machine()
-# MIN_OSX_VER = os.getenv("MIN_OSX_VER", "10.9")
-MIN_OSX_VER = os.getenv("MIN_OSX_VER", "13.6")
+PY_VER_MINOR = sys.version_info.minor
 
 @dataclass
 class WheelFilename:
@@ -92,12 +92,12 @@ class WheelFilename:
 
 
 class WheelBuilder:
-    def __init__(self, src_folder='dist', dst_folder='wheels', native_arch=True):
+    def __init__(self, src_folder='dist', dst_folder='wheels', universal=False):
         self.cwd = Path.cwd()
         self.src_folder = self.cwd / src_folder
         self.dst_folder = self.cwd / dst_folder
         self.build_folder = self.cwd / 'build'
-        self.native_arch = native_arch
+        self.universal = universal
         self.arch = self.get("uname -m")
 
     def cmd(self, shellcmd, cwd='.'):
@@ -114,9 +114,43 @@ class WheelBuilder:
     def getenv(self, key):
         """convert '0','1' env values to bool {True, False}"""
         return bool(int(os.getenv(key, False)))
+
+    def get_min_osx_ver(self):
+        """set MACOSX_DEPLOYMENT_TARGET
+        
+        credits: cibuildwheel
+        ref: https://github.com/pypa/cibuildwheel/blob/main/cibuildwheel/macos.py
+        thanks: @henryiii
+        post: https://github.com/pypa/wheel/issues/573
+
+        For arm64, the minimal deployment target is 11.0.
+        On x86_64 (or universal2), use 10.9 as a default.
+        """
+        min_osx_ver = "10.9"
+        if self.is_macos_arm64 and not self.universal:
+            min_osx_ver = "11.0"
+        os.environ["MACOSX_DEPLOYMENT_TARGET"] = min_osx_ver
+        return min_osx_ver
  
+    @property
     def is_static(self):
         return self.getenv('STATIC')
+
+    @property
+    def is_macos_arm64(self):
+        return PLATFORM == 'Darwin' and ARCH == 'arm64'
+
+    @property
+    def is_macos_x86_64(self):
+        return PLATFORM == 'Darwin' and ARCH == 'x86_64'
+
+    @property
+    def is_linux_x86_64(self):
+        return PLATFORM == 'Linux' and ARCH == 'x86_64'
+
+    @property
+    def is_linux_aarch64(self):
+        return PLATFORM == 'Linux' and ARCH == 'aarch64'
 
     def clean(self):
         if self.build_folder.exists():
@@ -136,12 +170,24 @@ class WheelBuilder:
         if not self.dst_folder.exists():
             self.dst_folder.mkdir()
 
-    def build_wheel(self, static=False, override=False):
+    def build_wheel(self, static=False, override=True):
+        assert PY_VER_MINOR >= 8, "only supporting python >= 3.8"
+
         _cmd = "python3 setup.py bdist_wheel"
-        if override: # FIXME: doesn't work
-            tag = "-".join(["macosx", MIN_OSX_VER, ARCH])
-            _cmd = f"ARCHFLAGS='-arch {ARCH}' " + _cmd
-            _cmd += f" --plat-name {tag}"
+
+        min_osx_ver = self.get_min_osx_ver()
+
+        if PLATFORM == "Darwin":
+            ver = self.get_min_osx_ver()
+            if self.universal:
+                prefix = (f"ARCHFLAGS='-arch arm64 -arch x86_64' "
+                          f"_PYTHON_HOST_PLATFORM='macosx-{ver}-universal2' ")
+            else:
+                prefix = (f"ARCHFLAGS='-arch {ARCH}' "
+                          f"_PYTHON_HOST_PLATFORM='macosx-{ver}-{ARCH}' ")
+
+            _cmd = prefix + _cmd
+
         if static:
             self.cmd(f"STATIC=1 {_cmd}")            
         else:
@@ -203,7 +249,7 @@ class WheelBuilder:
             shutil.move(renamed_wheel, self.dst_folder)
 
     def build(self):
-        if self.is_static():
+        if self.is_static:
             self.build_static_wheel()
         else:
             self.build_dynamic_wheel()
@@ -231,26 +277,27 @@ if __name__ == '__main__':
     opt("--build", "-b", "build single wheel based on STATIC env var")
     opt("--build-dynamic", "-d", "build dynamic variant")
     opt("--build-static", "-s", "build static variant")
+    opt("--universal", "-u", "build universal wheel")
     opt("--test", "-t", "test built wheels")
 
     args = parser.parse_args()
     if args.release:
-        b = WheelBuilder()
+        b = WheelBuilder(universal=args.universal)
         b.release()
 
     elif args.build:
-        b = WheelBuilder()
+        b = WheelBuilder(universal=args.universal)
         b.build()
 
     elif args.build_dynamic:
         b = WheelBuilder()
-        b.build_dynamic_wheel()
+        b.build_dynamic_wheel(universal=args.universal)
         b.check()
         b.clean()
 
     elif args.build_static:
         b = WheelBuilder()
-        b.build_static_wheel()
+        b.build_static_wheel(universal=args.universal)
         b.check()
         b.clean()
 
