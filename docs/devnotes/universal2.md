@@ -34,7 +34,7 @@ ImportError: dlopen($HOME/venv/lib/python3.11/site-packages/cyfaust/interp.cpyth
 
 - When the wheel is downloaded onto an arm64 machine it runs except for `libfaust.dylib` which is the wrong architecture and hence the error above.
 
-## The Solution
+## Sketching the Solution
 
 One of 
 
@@ -73,4 +73,56 @@ What to do?
 	```
 
 What to do?
+
+## Actual Solution
+
+Asked about the above case [here](https://github.com/pypa/wheel/issues/573#issuecomment-1902083893)
+
+@henryiii was kind enough to point in the right direction of how cibuildwheel solved this issue:
+
+> You are building with a universal2 build of Python. Setuptools will ask Python what it was built as and uses that. You can set `_PYTHON_HOST_PLATFORM` (along with `ARCHFLAGS`) to override this. (Though cibuildwheel does all this for you, FYI, [code here](https://github.com/pypa/cibuildwheel/blob/93542c397cfe940bcbb8f1eff5c37d345ea16653/cibuildwheel/macos.py#L247-L260)).
+
+The code below is illustrative of how to solve this:
+
+```python
+#!/usr/bin/env python3
+
+import os
+import platform
+import sys
+
+
+def build_wheel(universal=False):
+    """wheel build config (special cases macos wheels) for github runners
+    
+    ref: https://github.com/pypa/cibuildwheel/blob/main/cibuildwheel/macos.py
+    """
+    assert sys.version_info.minor >= 8, "applies to python >= 3.8"
+
+    _platform = platform.system()
+    _arch = platform.machine()
+    _cmd = "python3 setup.py bdist_wheel"
+
+    if _platform == "Darwin":
+        _min_osx_ver = "10.9"
+
+        if _arch == 'arm64' and not universal:
+            _min_osx_ver = "11.0"
+
+        if universal:
+            _prefix = (f"ARCHFLAGS='-arch arm64 -arch x86_64' "
+                       f"_PYTHON_HOST_PLATFORM='macosx-{_min_osx_ver}-universal2'")
+        else:
+            _prefix = (f"ARCHFLAGS='-arch {_arch}' "
+                       f"_PYTHON_HOST_PLATFORM='macosx-{_min_osx_ver}-{_arch}'")
+
+        _cmd = " ".join([_prefix, _cmd])
+
+    os.system(_cmd)
+
+if __name__ == '__main__':
+    build_wheel()
+```
+
+
 

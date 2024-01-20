@@ -1,32 +1,6 @@
 # TODO
 
-- Wrapping and modularization are mostly complete except for a few areas (see below).
-
-- Early focus on stamping out memory leaks and resource cleanup bugs seems to have paid off as the intermittent segfaults which plagued early versions are now relatively rare across the two supported platforms.
-
-- While Linux support has progressed well, there are still some issues to resolve such as:
-
-  - Support is more recent, therefore the expectation of more instability and bugs, etc.
-
-  - The more fragmented nature of linux audio drivers (currently ALSA is only supported).
-
-  - Binary size variations and compatibility across linux distributions (the need to build on a `manylinux` container for example)
-
-- A significant effort was put into moving more complex setup and/or build logic from the project's `Makefile` or bash scripts to python scripts. These are generally triggered from the `Makefile` (there is an open question on whether these should be integrated into one `manage.py` script:
-
-  - `scripts/setup_faust.py`: downloads, builds, and installs faust into the project's `bin`, `lib`, and `share` folders
-
-  - `scripts/wheel_mgr.py`: handles wheel building ops.
-
-  - `scripts/get_debug_python.py`: builds a local debug python and installs it into `cyfaust/python` for additional debugging capabilities.
-
-- Another current challenge is to automate wheel building across supported platforms and architectures. Despite the availabilty of infrastructure such as github actions and [cibuildwheel](https://github.com/pypa/cibuildwheel), this has proven to be more complex than anticipated.
-
 ## cyfaust
-
-- [ ] Add working github workflows
-
-- [ ] Add Linux support
 
 - [ ] Fix Soundfile support so that it works out of the box without compilation.
 
