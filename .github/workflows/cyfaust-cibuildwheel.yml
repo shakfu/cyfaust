@@ -1,6 +1,6 @@
 name: cyfaust-cibuildwheel
 
-on: workflow dispatch
+on: workflow_dispatch
 
 jobs:
   build_wheels:
