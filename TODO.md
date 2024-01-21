@@ -4,14 +4,6 @@
 
 - [ ] Fix Soundfile support so that it works out of the box without compilation.
 
-- [ ] Add more tests
-
-  - [x] Add all interpreter tests
-
-  - [ ] Add all box api tests
-
-  - [ ] Add all signal api test
-
 - [ ] Add `cython/__main__.py` commandline interface.
 
 - [ ] Add additional python debug checks
@@ -28,9 +20,10 @@
 
 - [ ] Add classes (thin wrappers around `Box`)
 
-- [x] Improve docstrings
-
 - [ ] `box.getparams` and `signal.is_sig_xxx` are inconsistent apis
+
+- [ ] Add more box api tests
+
 
 ## cyfaust.signal
 
@@ -41,5 +34,7 @@
 - [ ] Add classes (thin wrappers around `Signal`)
 
 - [ ] Improve docstrings
+
+- [ ] Add more signal api test
 
 - [ ] `signal.is_sig_xxx` and `Box.getparams` are inconsistent apis

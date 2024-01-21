@@ -72,17 +72,15 @@ While this project has been developed and tested primarily on macOS (`x86_64` an
 
 ## Status
 
-In summary, current priorities are to:
+- Supports most of faust interpreter, box and signals apis (see `TODO`)
 
-- Address any instances of instability, crashes, memory leaks, etc. that may occur.
+- Works on macOS and Linux {x86_64, arm64}
 
-- Complete Linux support.
+- Provides two dynamically-linked and statically-linked build variants
 
-- Build a robust wheel-building CI infrastructure for macos/linux using github actions
 
-- Create additional tests and examples.
+Current priorities are to Work through remaining items in the `TODO` list.
 
-- Work through remaining items in the `TODO` list
 
 ## Setup and Requirements
 

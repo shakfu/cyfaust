@@ -1,8 +1,3 @@
-# set path so `faust` can be queried for the path to stdlib
-# export PATH := $(PWD)/bin:$(PATH)
-
-# PLATFORM := $(shell uname -s)
-# ARCH := $(shell uname -m)
 
 DEBUG := 0
 STATIC := 0
@@ -24,7 +19,7 @@ TESTS := \
 	test_cyfaust_common.py
 
 
-.PHONY: all build wheel release clean reset test pytest testcpp memray
+.PHONY: all setup_faust build wheel release test pytest testcpp memray clean reset
 
 
 all: build
@@ -32,14 +27,17 @@ all: build
 $(FAUST_STATICLIB):
 	$(PYTHON) scripts/setup_faust.py
 
-build: $(FAUST_STATICLIB)
+setup_faust: $(FAUST_STATICLIB)
+	@echo "faust is setup for cyfaust"
+
+build: setup_faust
 	@mkdir -p build
 	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
-wheel: $(FAUST_STATICLIB)
+wheel: setup_faust
 	@STATIC=$(STATIC) $(PYTHON) scripts/wheel_mgr.py --build
 
-release: $(FAUST_STATICLIB)
+release: setup_faust
 	@$(PYTHON) scripts/wheel_mgr.py --release
 
 test: build
@@ -48,10 +46,10 @@ test: build
     done
 	@echo "DONE"
 
-testcpp: $(FAUST_STATICLIB)
+testcpp: setup_faust
 	@scripts/test_cpp_tests.sh
 
-pytest: $(FAUST_STATICLIB)
+pytest: setup_faust
 	@$(PYTHON) -Xfaulthandler -mpytest -vv ./tests
 
 memray:
