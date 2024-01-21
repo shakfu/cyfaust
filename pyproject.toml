@@ -99,6 +99,10 @@ test-extras = []
 
 container-engine = "docker"
 
+manylinux-x86_64-image = "manylinux_2_24"
+manylinux-aarch64-image = "manylinux_2_24"
+
+
 [tool.cibuildwheel.macos]
 before-all = [
 	"make setup_faust",
