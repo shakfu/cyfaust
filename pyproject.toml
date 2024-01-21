@@ -113,7 +113,8 @@ repair-wheel-command = "delocate-wheel -w wheels -v {wheel}"
 
 [tool.cibuildwheel.linux]
 before-all = [
-	"apt-get install -y libasound2-dev patchelf",
+	"yum install -y alsa-lib-devel patchelf",
+	# "apt-get install -y libasound2-dev patchelf",
 	"make setup_faust",
 ]
 archs = ["x86_64", "aarch64"]
