@@ -1,4 +1,4 @@
-name: Build
+name: cyfaust-cibuildwheel
 
 on: workflow dispatch
 
