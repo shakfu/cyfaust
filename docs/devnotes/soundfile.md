@@ -183,228 +183,29 @@ class SoundfileReader:
 
 ## gui/MemoryReader.h
 
-```c++
-/************************** BEGIN MemoryReader.h ************************
- FAUST Architecture File
- Copyright (C) 2003-2022 GRAME, Centre National de Creation Musicale
- ---------------------------------------------------------------------
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU Lesser General Public License as published by
- the Free Software Foundation; either version 2.1 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- 
- EXCEPTION : As a special exception, you may create a larger work
- that contains this FAUST architecture section and distribute
- that work under terms of your choice, so long as this FAUST
- architecture section is not modified.
- ************************************************************************/
-
-#ifndef __MemoryReader__
-#define __MemoryReader__
+```python
 
 #include "faust/gui/Soundfile.h"
 
-/*
- A 'MemoryReader' object can be used to prepare a set of sound resources in memory, to be used by SoundUI::addSoundfile.
+class MemoryReader(SoundfileReader):
+     """
+     A 'MemoryReader' object can be used to prepare a set of sound resources in memory, to be used by SoundUI::addSoundfile.
  
- A Soundfile* object will have to be filled with a list of sound resources: the fLength, fOffset, fSampleRate and fBuffers fields have to be completed with the appropriate values, and will be accessed in the DSP object while running.
- *
- */
+     A Soundfile* object will have to be filled with a list of sound resources: the fLength, fOffset, fSampleRate and fBuffers fields have to be completed with the appropriate values, and will be accessed in the DSP object while running.
+     """
 
-// To adapt for a real case use
+    
+    def bool checkFile(const string& path_name):
+        """Check the availability of a sound resource."""
+    
+    def getParamsFile(const string& path_name, int& channels, int& length):
+        """Get the channels and length values of the given sound resource."""
 
-#define SOUND_CHAN      2
-#define SOUND_LENGTH    4096
-#define SOUND_SR        44100
-
-struct MemoryReader : public SoundfileReader {
-    
-    MemoryReader()
-    {}
-    virtual ~MemoryReader()
-    {}
-    
-    /**
-     * Check the availability of a sound resource.
-     *
-     * @param path_name - the name of the file, or sound resource identified this way
-     *
-     * @return true if the sound resource is available, false otherwise.
-     */
-    virtual bool checkFile(const string& path_name) override { return true; }
-    
-    /**
-     * Get the channels and length values of the given sound resource.
-     *
-     * @param path_name - the name of the file, or sound resource identified this way
-     * @param channels - the channels value to be filled with the sound resource number of channels
-     * @param length - the length value to be filled with the sound resource length in frames
-     *
-     */
-    virtual void getParamsFile(const string& path_name, int& channels, int& length) override
-    {
-        channels = SOUND_CHAN;
-        length = SOUND_LENGTH;
-    }
-    
-    /**
-     * Read one sound resource and fill the 'soundfile' structure accordingly
-     *
-     * @param path_name - the name of the file, or sound resource identified this way
-     * @param part - the part number to be filled in the soundfile
-     * @param offset - the offset value to be incremented with the actual sound resource length in frames
-     * @param max_chan - the maximum number of mono channels to fill
-     *
-     */
-    virtual void readFile(Soundfile* soundfile, const string& path_name, int part, int& offset, int max_chan) override
-    {
-        soundfile->fLength[part] = SOUND_LENGTH;
-        soundfile->fSR[part] = SOUND_SR;
-        soundfile->fOffset[part] = offset;
-        
-        // Audio frames have to be written for each chan
-        if (soundfile->fIsDouble) {
-            for (int sample = 0; sample < SOUND_LENGTH; sample++) {
-                for (int chan = 0; chan < SOUND_CHAN; chan++) {
-                    static_cast<double**>(soundfile->fBuffers)[chan][offset + sample] = 0.f;
-                }
-            }
-        } else {
-            for (int sample = 0; sample < SOUND_LENGTH; sample++) {
-                for (int chan = 0; chan < SOUND_CHAN; chan++) {
-                    static_cast<float**>(soundfile->fBuffers)[chan][offset + sample] = 0.f;
-                }
-            }
-        }
-        
-        // Update offset
-        offset += SOUND_LENGTH;
-    }
-    
-};
-
-#endif
-/**************************  END  MemoryReader.h **************************/
+    def void readFile(Soundfile* soundfile, const string& path_name, int part, int& offset, int max_chan):
+        """Read one sound resource and fill the 'soundfile' structure accordingly"""
 
 ```
 
-## gui/JuceReader.h
-
-```c++
-/************************** BEGIN JuceReader.h **************************
- FAUST Architecture File
- Copyright (C) 2003-2022 GRAME, Centre National de Creation Musicale
- ---------------------------------------------------------------------
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU Lesser General Public License as published by
- the Free Software Foundation; either version 2.1 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- 
- EXCEPTION : As a special exception, you may create a larger work
- that contains this FAUST architecture section and distribute
- that work under terms of your choice, so long as this FAUST
- architecture section is not modified.
- ************************************************************************/
-
-#ifndef __JuceReader__
-#define __JuceReader__
-
-#include <assert.h>
-
-#include "../JuceLibraryCode/JuceHeader.h"
-
-#include "faust/gui/Soundfile.h"
-
-struct JuceReader : public SoundfileReader {
-    
-    juce::AudioFormatManager fFormatManager;
-    
-    JuceReader() { fFormatManager.registerBasicFormats(); }
-    virtual ~JuceReader()
-    {}
-    
-    bool checkFile(const string& path_name) override
-    {
-        juce::File file = juce::File::getCurrentWorkingDirectory().getChildFile(path_name);
-        if (file.existsAsFile()) {
-            return true;
-        } else {
-            //std::cerr << "ERROR : cannot open '" << path_name << "'" << std::endl;
-            return false;
-        }
-    }
-    
-    void getParamsFile(const string& path_name, int& channels, int& length) override
-    {
-        std::unique_ptr<juce::AudioFormatReader> formatReader (fFormatManager.createReaderFor (juce::File::getCurrentWorkingDirectory().getChildFile(path_name)));
-        channels = int(formatReader->numChannels);
-        length = int(formatReader->lengthInSamples);
-    }
-    
-    void readFile(Soundfile* soundfile, const string& path_name, int part, int& offset, int max_chan) override
-    {
-        std::unique_ptr<juce::AudioFormatReader> formatReader (fFormatManager.createReaderFor (juce::File::getCurrentWorkingDirectory().getChildFile(path_name)));
-        
-        soundfile->fLength[part] = int(formatReader->lengthInSamples);
-        soundfile->fSR[part] = int(formatReader->sampleRate);
-        soundfile->fOffset[part] = offset;
-        
-        void* buffers;
-        if (soundfile->fIsDouble) {
-            buffers = alloca(soundfile->fChannels * sizeof(double*));
-            soundfile->getBuffersOffsetReal<double>(buffers, offset);
-        } else {
-            buffers = alloca(soundfile->fChannels * sizeof(float*));
-            soundfile->getBuffersOffsetReal<float>(buffers, offset);
-        }
-        
-        if (formatReader->read(reinterpret_cast<int *const *>(buffers), int(formatReader->numChannels), 0, int(formatReader->lengthInSamples), false)) {
-            
-            // Possibly convert samples
-            if (!formatReader->usesFloatingPointData) {
-                for (int chan = 0; chan < int(formatReader->numChannels); ++chan) {
-                    if (soundfile->fIsDouble) {
-                        // TODO
-                    } else {
-                        float* buffer = &(static_cast<float**>(soundfile->fBuffers))[chan][soundfile->fOffset[part]];
-                        juce::FloatVectorOperations::convertFixedToFloat(buffer, reinterpret_cast<const int*>(buffer),
-                                                                         1.0f/0x7fffffff, int(formatReader->lengthInSamples));
-                    }
-                }
-            }
-            
-        } else {
-            std::cerr << "Error reading the file : " << path_name << std::endl;
-        }
-            
-        // Update offset
-        offset += soundfile->fLength[part];
-    }
-    
-};
-
-#endif
-/**************************  END  JuceReader.h **************************/
-
-```
 
 
 ## gui/WaveReader.h

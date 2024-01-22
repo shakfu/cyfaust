@@ -35,6 +35,6 @@
 
 - [ ] Improve docstrings
 
-- [ ] Add more signal api test
+- [ ] Add more signal api tests
 
 - [ ] `signal.is_sig_xxx` and `Box.getparams` are inconsistent apis
