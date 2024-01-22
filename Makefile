@@ -19,7 +19,8 @@ TESTS := \
 	test_cyfaust_common.py
 
 
-.PHONY: all setup_faust build wheel release test pytest testcpp memray clean reset
+.PHONY: all setup_faust build wheel release test pytest test-wheel \
+		testcpp memray clean reset
 
 
 all: build
@@ -45,6 +46,9 @@ test: build
         $(PYTHON) tests/$$test ; \
     done
 	@echo "DONE"
+
+test-wheel:
+	@$(PYTHON) scripts/wheel_mgr.py --test
 
 testcpp: setup_faust
 	@scripts/test_cpp_tests.sh

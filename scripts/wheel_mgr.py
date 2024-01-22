@@ -98,7 +98,6 @@ class WheelBuilder:
         self.dst_folder = self.cwd / dst_folder
         self.build_folder = self.cwd / 'build'
         self.universal = universal
-        self.arch = self.get("uname -m")
 
     def cmd(self, shellcmd, cwd='.'):
         subprocess.call(shellcmd, shell=True, cwd=str(cwd))
@@ -175,8 +174,6 @@ class WheelBuilder:
 
         _cmd = "python3 setup.py bdist_wheel"
 
-        min_osx_ver = self.get_min_osx_ver()
-
         if PLATFORM == "Darwin":
             ver = self.get_min_osx_ver()
             if self.universal:
@@ -228,11 +225,10 @@ class WheelBuilder:
         self.build_wheel()
         src = self.src_folder
         dst = self.dst_folder
-        arch = self.arch
         if PLATFORM == "Darwin":
             self.cmd(f"delocate-wheel -v --wheel-dir {dst} {src}/*.whl")
         elif PLATFORM == "Linux":
-            self.cmd(f"auditwheel repair --plat linux_{arch} --wheel-dir {dst} {src}/*.whl")
+            self.cmd(f"auditwheel repair --plat linux_{ARCH} --wheel-dir {dst} {src}/*.whl")
         else:
             raise SystemExit("Windows platform not supported")
 

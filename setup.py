@@ -124,6 +124,8 @@ def mk_extension(name, sources, define_macros=None):
 common = {
    "name": "cyfaust",
    "version": VERSION,
+   "description": "A cython wrapper of the faust interpreter with rtaudio.",
+   "python_requires": ">=3.8",
    "include_package_data": True,
 }
 
