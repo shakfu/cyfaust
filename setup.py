@@ -32,6 +32,9 @@ VERSION = "0.0.3"
 # set cyfaust static or dynamic build here
 STATIC = getenv("STATIC")
 
+# sndfile (+ libsamplerate)
+SNDFILE = getenv("SNDFILE")
+
 # rtaudio apis
 ALSA = getenv('ALSA', default=True)
 PULSE = getenv('PULSE')
@@ -70,6 +73,12 @@ if STATIC:
 else:
     LIBRARIES.append('faust')
     EXTRA_LINK_ARGS.append('-Wl,-rpath,' + LIB) # add local rpath
+
+if SNDFILE:
+    EXTRA_OBJECTS.extend([
+        'lib/static/libsndfile.a',
+        'lib/static/libsamplerate.a',        
+    ])
 
 
 # platform specific configuration

@@ -178,7 +178,7 @@ def test_interp_create_dsp_factory_from_string2():
     print_entry("test_interp_create_dsp_factory_from_string2")
 
     factory = create_dsp_factory_from_string("FaustDSP", 
-        """process = 0,0 : soundfile("sound[url:{'tests/amen.wav'}]", 0);""")
+        """process = 0,0 : soundfile("sound[url:{'tests/wav/amen.wav'}]", 0);""")
     assert factory
         
     print("compile options:", factory.get_compile_options())
