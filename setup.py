@@ -135,7 +135,8 @@ common = {
 if STATIC:
 
     # forces cythonize in this case
-    subprocess.call("cythonize cyfaust.pyx", cwd="src/static/cyfaust", shell=True)
+    subprocess.call("cythonize cyfaust.pyx", 
+        cwd="src/static/cyfaust", shell=True)
 
     with open("MANIFEST.in", "w") as f:
         f.write("graft src/static/cyfaust/resources\n")

@@ -19,7 +19,7 @@ TESTS := \
 	test_cyfaust_common.py
 
 
-.PHONY: all setup_faust build wheel release test pytest test-wheel \
+.PHONY: all setup_faust build wheel release test pytest test_wheel \
 		testcpp memray clean reset
 
 
@@ -39,7 +39,7 @@ wheel: setup_faust
 	@STATIC=$(STATIC) $(PYTHON) scripts/wheel_mgr.py --build
 
 release: setup_faust
-	@$(PYTHON) scripts/wheel_mgr.py --release
+	@STATIC=$(STATIC) $(PYTHON) scripts/wheel_mgr.py --release
 
 test: build
 	@for test in $(TESTS) ; do \
@@ -47,7 +47,7 @@ test: build
     done
 	@echo "DONE"
 
-test-wheel:
+test_wheel:
 	@$(PYTHON) scripts/wheel_mgr.py --test
 
 testcpp: setup_faust
@@ -66,7 +66,7 @@ memray:
     done
 
 clean:
-	@rm -rf build dist MANIFEST.in
+	@rm -rf build dist venv .venv MANIFEST.in
 	@find . -type d \( -name '.*_cache'    \
 					-o -name '*.egg-info'  \
 					-o -name '.DS_Store'   \

@@ -92,6 +92,14 @@ class WheelFilename:
 
 
 class WheelBuilder:
+    """cyfaust wheel builder
+
+    Automates wheel building and handle special cases
+    when building cyfaust locally and on github actions,
+    especially whenc considering the number of different products given
+    build-variants * platforms * architectures:
+        {dynamic, static} * {macos, linux} * {x86_64, arm64|aarch64}
+    """
     def __init__(self, src_folder='dist', dst_folder='wheels', universal=False):
         self.cwd = Path.cwd()
         self.src_folder = self.cwd / src_folder
