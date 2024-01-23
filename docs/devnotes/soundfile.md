@@ -5,9 +5,108 @@
 
 - [Developing a New Soundfile Loader](https://faustdoc.grame.fr/manual/architectures/#developing-a-new-soundfile-loader)
 
+- [Sound files Support](https://faustdoc.grame.fr/manual/soundfiles/)
+
+- [Soundfile Primitive](https://faustdoc.grame.fr/manual/syntax/#soundfile-primitive)
+
+
+
+## Api
 
 ```python
-## gui/SourceUI.h
+
+# gui/SoundFile:
+
+class Soundfile:
+    cdef float[:] buffers   # will correspond to a double** or float** pointer chosen at runtime
+    cdef int[:] length      # length of each part (so fLength[P] contains the length in frames of part P)
+    cdef int[:] sr          # sample rate of each part (so fSR[P] contains the SR of part P)
+    cdef int[:] offsets     # offset of each part in  the global buffer (so fOffset[P] contains the offset in frames of part P)
+    cdef int nchannels      # max number of channels of all concatenated files
+    cdef int nparts         # the total number of loaded parts
+    cdef bint is_double     # keep the sample format (float or double)
+
+    def __init__(self, cur_chan: int, length: int, max_chan: int, total_parts: int, is_double: bool):
+
+    def void* allocBufferReal[typename REAL](int cur_chan, int length, int max_chan) -> REAL** buffers
+
+    def copy_to_out(int size, int channels, int max_channels, int offset, void* buffer)
+    
+    def share_buffers(int cur_chan, int max_chan)
+    
+    def copyToOutReal[typename REAL](int size, int channels, int max_channels, int offset, void* buffer)
+    
+    def get_buffers_offset_real[typename REAL](void* buffers, int offset)
+    
+    def empty_file(int part, int& offset)
+
+class SoundfileReader:
+    # protected:
+
+    int fDriverSR
+   
+    def string checkFile(const vector<string>& sound_directories, const string& file_name)
+        """Check if a soundfile exists and return its real path_name"""
+    
+    def bool isResampling(int sample_rate)
+ 
+    # To be implemented by subclasses
+
+    def bool checkFile(const string& path_name) = 0:
+        """Check the availability of a sound resource."""
+
+    def bool checkFile(unsigned char* buffer, size_t size):
+        """Check the availability of a sound resource."""
+
+    def void getParamsFile(const string& path_name, int& channels, int& length) = 0;
+        """Get the channels and length values of the given sound resource."""
+
+    def void getParamsFile(unsigned char* buffer, size_t size, int& channels, int& length) {}
+        """Get the channels and length values of the given sound resource."""
+
+    def void readFile(Soundfile* soundfile, const string& path_name, int part, int& offset, int max_chan) = 0;
+        """Read one sound resource and fill the 'soundfile' structure accordingly"""
+
+    def void readFile(Soundfile* soundfile, unsigned char* buffer, size_t size, int part, int& offset, int max_chan)
+        """Read one sound resource and fill the 'soundfile' structure accordingly"""
+
+    #  public:
+    
+    # SoundfileReader() {}
+    # virtual ~SoundfileReader() {}
+    
+    def setSampleRate(int sample_rate)
+   
+    def Soundfile* createSoundfile(const vector<string>& path_name_list, int max_chan, bool is_double)
+
+    # Check if all soundfiles exist and return their real path_name
+    def vector<string> checkFiles(const vector<string>& sound_directories, const vector<string>& file_name_list)
+
+
+# gui/SoundUI:
+
+class SoundUI(SoundUIInterface):
+    soundfile_dirs: list[str | Path]
+    soundfile_map: dict[str, Soundfile]
+    soundfile_reader: SoundfileReader
+    is_double: bool
+
+    def __init__(sound_dir: str, sample_rate: int, reader: SoundfileReader,
+                 is_double: bool = False)
+
+    def add_soundfile(self, label: str, url: str, sf_array sf_zone)
+
+     @staticmethod
+    def get_binary_path() -> str:
+
+    @staticmethod
+    def get_binary_path_from(str path) -> str:
+
+```
+
+
+```python
+## gui/SoundUI.h
 
 class SoundUI(SoundUIInterface):
         
@@ -72,7 +171,7 @@ class Soundfile:
     bool fIsDouble; # keep the sample format (float or double)
 
     def __init__(int cur_chan, int length, int max_chan, int total_parts, bool is_double)
-    
+
     def void* allocBufferReal[typename REAL](int cur_chan, int length, int max_chan) -> REAL** buffers
 
     def copyToOut(int size, int channels, int max_channels, int offset, void* buffer)
@@ -921,5 +1020,110 @@ struct LibsndfileReader : public SoundfileReader {
 #endif
 /**************************  END  LibsndfileReader.h **************************/
 
+```
+
+## libsndfile with rtaudio
+
+ref: https://stackoverflow.com/questions/34135031/combining-libsndfile-and-rtaudio
+
+
+```c++
+#include <iostream>
+#include <sndfile.hh>
+#include "RtAudio.h"
+
+/*
+* Audio-Wiedergabe mit RtAudio und libsndfile !
+*/
+
+// Call
+int fplay( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
+         double streamTime, RtAudioStreamStatus status, void *userData )
+{
+
+
+  int16_t *buffer = (int16_t *) outputBuffer;
+
+  // ok, i know this is not the best way to do file i/o in the audio thread, but 
+  // this is just for demonstration purposes ... 
+  SndfileHandle *sndfile = reinterpret_cast<SndfileHandle*>(userData);
+
+  // Error handling !
+  if ( status ){
+    std::cout << "Stream underflow detected!" << std::endl;
+  }
+
+
+  // 'readf()' liest frames
+  // 'read()' liest einzelne Samples !
+  // ACHTUNG! Frames != Samples
+  // ein Frame = Samples für alle Kanäle
+  // d.h. |Samples| = Kanäle * Frames !
+  sndfile->readf(buffer, nBufferFrames);
+
+  return 0;
+}
+
+int main () {
+  // Damit das Programm funktioniert, muss eine 16Bit PCM Wave-Datei im
+  // gleichen Ordner liegen !
+    const char * fname = "test.wav" ;
+
+  // Soundfile-Handle aus der libsndfile-Bibliothek
+    SndfileHandle file = SndfileHandle (fname) ;
+
+  // Alle möglichen Infos über die Audio-Datei ausgeben !
+  std::cout << "Reading file: " << fname << std::endl;
+  std::cout << "File format: " << file.format() << std::endl;
+  std::cout << "PCM 16 BIT: " << (SF_FORMAT_WAV | SF_FORMAT_PCM_16) << std::endl;
+  std::cout << "Samples in file: " << file.frames() << std::endl;
+  std::cout << "Samplerate " << file.samplerate() << std::endl;
+  std::cout << "Channels: " << file.channels() << std::endl;
+
+  // Die RtAudio-Klasse ist gleichermassen dac und adc, wird hier aber nur als dac verwendet !
+    RtAudio dac;
+  if ( dac.getDeviceCount() < 1 ) {
+    std::cout << "\nNo audio devices found!\n";
+    return 0;
+  }
+
+  // Output params ...
+  RtAudio::StreamParameters parameters;
+  parameters.deviceId = dac.getDefaultOutputDevice();
+  parameters.nChannels = 2;
+  parameters.firstChannel = 0;
+  unsigned int sampleRate = 44100;
+
+  // ACHTUNG! Frames != Samples
+  // ein Frame = Samples für alle Kanäle
+  // d.h. |Samples| = Kanäle*Frames !
+  unsigned int bufferFrames = 1024;
+
+
+  try {
+    dac.openStream( &parameters, NULL, RTAUDIO_SINT16,
+                    sampleRate, &bufferFrames, &fplay, (void *)&file);
+    dac.startStream();
+  }
+  catch ( RtAudioError& e ) {
+    e.printMessage();
+    return 0;
+  }
+
+  char input;
+  std::cout << "\nPlaying ... press <enter> to quit.\n";
+  std::cin.get( input );
+  try {
+    // Stop the stream
+    dac.stopStream();
+  }
+  catch (RtAudioError& e) {
+    e.printMessage();
+  }
+  if ( dac.isStreamOpen() ) dac.closeStream();
+
+  return 0 ;
+
+}
 ```
 

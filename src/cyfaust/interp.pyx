@@ -3,7 +3,6 @@
 from libcpp.string cimport string
 
 from . cimport faust_interp as fi
-# from . cimport faust_box as fb
 from . cimport faust_signal as fs
 
 from .common cimport ParamArray

@@ -33,7 +33,7 @@ VERSION = "0.0.3"
 STATIC = getenv("STATIC")
 
 # sndfile (+ libsamplerate)
-SNDFILE = getenv("SNDFILE")
+SNDFILE = getenv("SNDFILE", default=False)
 
 # rtaudio apis
 ALSA = getenv('ALSA', default=True)

@@ -32,6 +32,7 @@ setup_faust: $(FAUST_STATICLIB)
 	@echo "faust is setup for cyfaust"
 
 build: setup_faust
+# 	@touch src/cyfaust/interp.pyx
 	@mkdir -p build
 	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
