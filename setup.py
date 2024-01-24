@@ -77,7 +77,7 @@ else:
 if SNDFILE:
     EXTRA_OBJECTS.extend([
         'lib/static/libsndfile.a',
-        'lib/static/libsamplerate.a',        
+        'lib/static/libsamplerate.a',
     ])
 
 
