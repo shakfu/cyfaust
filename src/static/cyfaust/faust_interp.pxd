@@ -3,6 +3,8 @@ from libcpp.vector cimport vector
 
 from faust_box cimport Box, Signal, tvec
 
+DEF SNDFILE = False
+
 cdef extern from "faust/gui/CInterface.h":
     ctypedef float FAUSTFLOAT
     ctypedef struct UIGlue
