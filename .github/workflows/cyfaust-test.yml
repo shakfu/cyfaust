@@ -123,4 +123,5 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
+        name: cyfaust-${{ github.event.inputs.variant }}-${{ github.event.inputs.os }}-py${{ github.event.inputs.py_version }}
         path: ./wheels/*.whl
