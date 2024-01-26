@@ -26,13 +26,13 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
-        submodules: 'recursive'
-        fetch-depth: '0'
+        submodules: true
+        fetch-depth: '1'
 
     - name: Setup python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ github.event.inputs.py_version }}
         cache: 'pip' # caching pip dependencies

@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### cyfaust
 
+- Changed workflow actions, since nodejs 16 actions are deprecated, to latest versions: actions/checkout@v4, actions/setup-python@v5, and actions/upload-artifact@v4
+
 - Added thirdparty licenses to `docs/licenses`
 
 - Added `scripts/setup_cyfaust.py` script which integrates a number of scripts.

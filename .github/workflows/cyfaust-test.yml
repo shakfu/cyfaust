@@ -51,13 +51,13 @@ jobs:
           echo "- py-version: ${{ github.event.inputs.py_version }}" >> $GITHUB_STEP_SUMMARY
           echo "- os: ${{ github.event.inputs.os }}" >> $GITHUB_STEP_SUMMARY
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
-        submodules: 'recursive'
-        fetch-depth: '0'
+        submodules: true
+        fetch-depth: '1'
 
     - name: Setup python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ github.event.inputs.py_version }}
         cache: 'pip' # caching pip dependencies
@@ -110,6 +110,7 @@ jobs:
     - name: Test wheel
       run: python3 scripts/wheel_mgr.py --test
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
+        name: cyfaust-wheels
         path: ./wheels/*.whl
