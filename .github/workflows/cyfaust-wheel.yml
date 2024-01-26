@@ -31,6 +31,16 @@ jobs:
         submodules: true
         fetch-depth: '1'
 
+    - name: Cache libfaust 
+      id: cache-libfaust
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ github.workspace }}/lib/libfaust.2.dylib
+          ${{ github.workspace }}/lib/libfaust.dylib 
+          ${{ github.workspace }}/lib/static/libfaust.a
+        key: ${{ runner.os }}-libfaust
+
     - name: Setup python
       uses: actions/setup-python@v5
       with:
@@ -51,6 +61,7 @@ jobs:
         sudo apt install libasound2-dev patchelf
 
     - name: Setup faust
+      if: steps.cache-libfaust.outputs.cache-hit != 'true'
       run: python3 scripts/setup_cyfaust.py --faust
 
     - name: Build wheels
@@ -61,7 +72,6 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: cyfaust-wheels
         path: ./wheels/*.whl
 
 
