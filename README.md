@@ -72,13 +72,15 @@ While this project has been developed and tested primarily on macOS (`x86_64` an
 
 ## Status
 
-- Supports most of faust interpreter, box and signals apis (see `TODO`)
+- Supports most of faust interpreter, box and signals apis (see [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md))
 
 - Works on macOS and Linux {x86_64, arm64}
 
-- Provides two dynamically-linked and statically-linked build variants
+- Provides two build variants: one dynamically-linked to `libfaust.[so|dylib]` and the other statically-linked to `libfaust.a`
 
-Current priorities are to Work through remaining items in the `TODO` list.
+- Several github workflows are provided which automate the testing and building of cyfaust wheels using supported github runners.
+
+Current priorities are to work through remaining items in the `TODO` list.
 
 ## Setup and Requirements
 
@@ -162,15 +164,15 @@ Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done
 
 5. To run the tests
 
-```bash
-make test
-```
+    ```bash
+    make test
+    ```
 
-or
+    or
 
-```bash
-make pytest
-```
+    ```bash
+    make pytest
+    ```
 
 ## Prior Art of Faust + Python
 
