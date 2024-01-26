@@ -51,7 +51,7 @@ jobs:
         sudo apt install libasound2-dev patchelf
 
     - name: Setup faust
-      run: python3 scripts/setup_faust.py
+      run: python3 scripts/setup_cyfaust.py --faust
 
     - name: Build dynamic cyfaust variant
       if: matrix.variant == 'dynamic'

@@ -35,6 +35,7 @@ DEBUG = True
 
 
 class CustomFormatter(logging.Formatter):
+    """custom logging formatting class""" 
     white = "\x1b[97;20m"
     grey = "\x1b[38;20m"
     green = "\x1b[32;20m"
@@ -129,7 +130,7 @@ class ShellCmd:
         path = Path(path)
         if path.is_dir():
             self.log.info("remove folder: %s", path)
-            shutil.rmtree(path, ignore_errors=(not DEBUG))
+            shutil.rmtree(path, ignore_errors=not DEBUG)
         else:
             self.log.info("remove file: %s", path)
             try:
@@ -200,9 +201,11 @@ class ShellCmd:
 
 class DependencyMgr(ShellCmd):
     def install_py_pkgs(self):
+        """install python packages"""
         self.pip_install(reqs="requirements.txt")
 
     def install_sys_pkgs(self):
+        """install os packages"""
         sys_pkgs = []
 
         if PLATFORM == "Darwin":
@@ -249,38 +252,44 @@ class Project:
         self.downloads = self.build / "downloads"
 
 
-class FaustBuilder(ShellCmd):
-    def __init__(self, version="2.69.3"):
+class Builder(ShellCmd):
+    LIBNAME="libname"
+
+    def __init__(self, version="0.0.1"):
         self.version = version
         self.project = Project()
-        self.libname = "libfaust"
-        self.faust = self.project.build / "faust"
-        self.root = self.faust / "root"
-        self.backends = self.faust / "build" / "backends"
-        self.targets = self.faust / "build" / "targets"
-        self.log = logging.getLogger(self.__class__.__name__)
+
+    def setup_project(self):
+        folders = [
+            self.project.build,
+            self.project.downloads,
+            self.project.bin,
+            self.project.share,
+            self.project.lib_static,
+        ]
+        for folder in folders:
+            if not folder.exists():
+                self.makedirs(folder)
 
     @property
     def staticlib_name(self):
-        return f"{self.libname}.a"
+        return f"{self.LIBNAME}.a"
 
     @property
     def dylib_name(self):
         if PLATFORM == "Darwin":
-            return f"{self.libname}.2.dylib"
-        elif PLATFORM == "Linux":
-            return f"{self.libname}.so.2"
-        else:
-            raise SystemExit("platform not supported")
+            return f"{self.LIBNAME}.2.dylib"
+        if PLATFORM == "Linux":
+            return f"{self.LIBNAME}.so.2"
+        raise SystemExit("platform not supported")
 
     @property
     def dylib_linkname(self):
         if PLATFORM == "Darwin":
-            return f"{self.libname}.dylib"
-        elif PLATFORM == "Linux":
-            return f"{self.libname}.so"
-        else:
-            raise SystemExit("platform not supported")
+            return f"{self.LIBNAME}.dylib"
+        if PLATFORM == "Linux":
+            return f"{self.LIBNAME}.so"
+        raise SystemExit("platform not supported")
 
     @property
     def dylib(self):
@@ -294,13 +303,26 @@ class FaustBuilder(ShellCmd):
     def staticlib(self):
         return self.project.lib_static / self.staticlib_name
 
+
+class FaustBuilder(Builder):
+    LIBNAME="libfaust"
+
+    def __init__(self, version="2.69.3"):
+        super().__init__(version)
+        self.src = self.project.downloads / "faust"
+        self.backends = self.src / "build" / "backends"
+        self.targets = self.src / "build" / "targets"
+        self.prefix = self.project.build / "prefix"
+        self.log = logging.getLogger(self.__class__.__name__)
+
     def get_faust(self):
         self.log.info("update from faust main repo")
-        self.makedirs(self.project.build)
-        self.chdir(self.project.build)
+        self.setup_project()
+        self.makedirs(self.project.downloads)
+        self.chdir(self.project.downloads)
         self.git_clone("https://github.com/grame-cncm/faust.git", branch=self.version)
-        self.makedirs(self.project.build / "faust" / "build" / "faustdir")
-        self.copy(self.project.patch / "faust.mk", self.faust / "Makefile")
+        self.makedirs(self.src / "build" / "faustdir")
+        self.copy(self.project.patch / "faust.mk", self.src / "Makefile")
         self.copy(
             self.project.patch / "interp_plus_backend.cmake",
             self.backends / "interp_plus.cmake",
@@ -309,16 +331,15 @@ class FaustBuilder(ShellCmd):
             self.project.patch / "interp_plus_target.cmake",
             self.targets / "interp_plus.cmake",
         )
-        self.chdir(self.faust)
+        self.chdir(self.src)
         self.cmd("make interp")
-        self.cmd("PREFIX=`pwd`/root make install")
+        self.cmd(f"PREFIX={self.prefix} make install")
 
     def remove_current(self):
         self.log.info("remove current faust libs")
         for e in ["faust", "faust-config", "faustpath"]:
             self.remove(self.project.bin / e)
         self.remove(self.project.include / "faust")
-        # self.remove(self.project.lib)
         if self.dylib.exists():
             self.remove(self.dylib)
         if self.dylib_link.exists():
@@ -329,36 +350,32 @@ class FaustBuilder(ShellCmd):
 
     def copy_executables(self):
         self.log.info("copy executables")
-        self.makedirs(self.project.bin)
         for e in ["faust", "faust-config", "faustpath"]:
-            self.copy(self.root / "bin" / e, self.project.bin / e)
+            self.copy(self.prefix / "bin" / e, self.project.bin / e)
 
     def copy_headers(self):
         self.log.info("update headers")
-        self.makedirs(self.project.include)
-        self.copy(self.root / "include" / "faust", self.project.include / "faust")
+        self.copy(self.prefix / "include" / "faust", self.project.include / "faust")
 
     def copy_sharedlib(self):
         self.log.info("copy_sharedlib")
-        self.makedirs(self.project.lib)
-        self.copy(self.root / "lib" / self.dylib_name, self.dylib)
+        self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
         self.dylib_link.symlink_to(self.dylib)
 
     def copy_staticlib(self):
         self.log.info("copy staticlib")
-        self.makedirs(self.project.lib_static)
-        self.copy(self.root / "lib" / self.staticlib_name, self.staticlib)
+        self.copy(self.prefix / "lib" / self.staticlib_name, self.staticlib)
 
     def copy_stdlib(self):
         self.log.info("copy stdlib")
         self.makedirs(self.project.share / "faust")
-        for lib in (self.root / "share" / "faust").glob("*.lib"):
+        for lib in (self.prefix / "share" / "faust").glob("*.lib"):
             self.copy(lib, self.project.share / "faust" / lib.name)
 
     def copy_examples(self):
         self.log.info("copy examples")
         self.copy(
-            self.root / "share" / "faust" / "examples",
+            self.prefix / "share" / "faust" / "examples",
             self.project.share / "faust" / "examples",
         )
         self.remove(self.project.share / "faust" / "examples" / "SAM")
@@ -382,17 +399,18 @@ class FaustBuilder(ShellCmd):
         self.patch_audio_driver()
 
 
-class SndfileBuilder(ShellCmd):
-    def __init__(self, version="2.69.3"):
-        self.version = version
-        self.project = Project()
-        self.libname = "libsndfile"
-        self.src = self.project.downloads / self.libname
+class SndfileBuilder(Builder):
+    LIBNAME = "libsndfile"
+
+    def __init__(self, version="0.0.1"):
+        super().__init__(version)
+        self.src = self.project.downloads / self.LIBNAME
         self.build_dir = self.src / "build"
         self.prefix = self.project.build / "prefix"
         self.log = logging.getLogger(self.__class__.__name__)
 
     def process(self):
+        self.setup_project()
         self.makedirs(self.project.downloads)
         self.makedirs(self.prefix)
         self.chdir(self.project.downloads)
@@ -415,23 +433,24 @@ class SndfileBuilder(ShellCmd):
         )
         self.cmake_build(self.build_dir)
         self.cmake_install(self.build_dir, prefix=self.prefix)
-        self.log.info("installing libsndfile to %s", self.project.lib_static)
+        self.log.info("installing %s", self.staticlib)
         self.copy(
-            self.prefix / 'lib' / f"{self.libname}.a", 
+            self.prefix / 'lib' / self.staticlib_name,
             self.project.lib_static)
 
 
-class SamplerateBuilder(ShellCmd):
-    def __init__(self, version="2.69.3"):
-        self.version = version
-        self.project = Project()
-        self.libname = "libsamplerate"
-        self.src = self.project.downloads / self.libname
+class SamplerateBuilder(Builder):
+    LIBNAME = "libsamplerate"
+
+    def __init__(self, version="0.0.1"):
+        super().__init__(version)
+        self.src = self.project.downloads / self.LIBNAME
         self.build_dir = self.src / "build"
         self.prefix = self.project.build / "prefix"
         self.log = logging.getLogger(self.__class__.__name__)
 
     def process(self):
+        self.setup_project()
         self.makedirs(self.project.downloads)
         self.makedirs(self.prefix)
         self.chdir(self.project.downloads)
@@ -448,9 +467,9 @@ class SamplerateBuilder(ShellCmd):
         )
         self.cmake_build(self.build_dir)
         self.cmake_install(self.build_dir, prefix=self.prefix)
-        self.log.info("installing libsamplerate to %s", self.project.lib_static)
+        self.log.info("installing %s", self.staticlib)
         self.copy(
-            self.prefix / 'lib' / f"{self.libname}.a", 
+            self.prefix / 'lib' / self.staticlib_name,
             self.project.lib_static)
 
 
