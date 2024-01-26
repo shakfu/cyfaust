@@ -1,6 +1,7 @@
+# editor config
 .vscode
 
-# don't include faust binaries and resources 
+# don't include project 'prefix' folders 
 bin/
 lib/
 share/

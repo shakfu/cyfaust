@@ -3,7 +3,8 @@ from libcpp.vector cimport vector
 
 from .faust_box cimport Box, Signal, tvec
 
-# DEF SNDFILE = False
+
+DEF INCLUDE_SNDFILE = False
 
 
 cdef extern from "faust/gui/CInterface.h":
@@ -36,40 +37,40 @@ cdef extern from "faust/gui/PrintUI.h":
         # void addSoundfile(const char* label, const char* filename,  Soundfile** sf_zone)
         void declare(FAUSTFLOAT* zone, const char* key, const char* val)
 
-# IF SNDFILE:
+IF INCLUDE_SNDFILE:
 
-#     cdef extern from "faust/gui/Soundfile.h":
-#         cdef cppclass Soundfile:
-#             void* fBuffers # will correspond to a double** or float** pointer chosen at runtime
-#             int* fLength   # length of each part (so fLength[P] contains the length in frames of part P)
-#             int* fSR       # sample rate of each part (so fSR[P] contains the SR of part P)
-#             int* fOffset   # offset of each part in the global buffer (so fOffset[P] contains the offset in frames of part P)
-#             int fChannels  # max number of channels of all concatenated files
-#             int fParts     # the total number of loaded parts
-#             bint fIsDouble # keep the sample format (float or double)
+    cdef extern from "faust/gui/Soundfile.h":
+        cdef cppclass Soundfile:
+            void* fBuffers # will correspond to a double** or float** pointer chosen at runtime
+            int* fLength   # length of each part (so fLength[P] contains the length in frames of part P)
+            int* fSR       # sample rate of each part (so fSR[P] contains the SR of part P)
+            int* fOffset   # offset of each part in the global buffer (so fOffset[P] contains the offset in frames of part P)
+            int fChannels  # max number of channels of all concatenated files
+            int fParts     # the total number of loaded parts
+            bint fIsDouble # keep the sample format (float or double)
 
-#             Soundfile(int cur_chan, int length, int max_chan, int total_parts, bint is_double)
-#             void* allocBufferReal[REAL](int cur_chan, int length, int max_chan)            
-#             void copyToOut(int size, int channels, int max_channels, int offset, void* buffer)
-#             void shareBuffers(int cur_chan, int max_chan)
-#             void copyToOutReal[REAL](int size, int channels, int max_channels, int offset, void* buffer)
-#             void getBuffersOffsetReal[REAL](void* buffers, int offset)
-#             void emptyFile(int part, int& offset)
+            Soundfile(int cur_chan, int length, int max_chan, int total_parts, bint is_double)
+            void* allocBufferReal[REAL](int cur_chan, int length, int max_chan)            
+            void copyToOut(int size, int channels, int max_channels, int offset, void* buffer)
+            void shareBuffers(int cur_chan, int max_chan)
+            void copyToOutReal[REAL](int size, int channels, int max_channels, int offset, void* buffer)
+            void getBuffersOffsetReal[REAL](void* buffers, int offset)
+            void emptyFile(int part, int& offset)
 
-#         cdef cppclass SoundfileReader:
-#             SoundfileReader() except +
-#             void setSampleRate(int sample_rate)   
-#             Soundfile* createSoundfile(const vector[string]& path_name_list, int max_chan, bint is_double)
-#             vector[string] checkFiles(const vector[string]& sound_directories, const vector[string]& file_name_list)
+        cdef cppclass SoundfileReader:
+            SoundfileReader() except +
+            void setSampleRate(int sample_rate)   
+            Soundfile* createSoundfile(const vector[string]& path_name_list, int max_chan, bint is_double)
+            vector[string] checkFiles(const vector[string]& sound_directories, const vector[string]& file_name_list)
         
-#     cdef extern from "faust/gui/SoundUI.h":
-#         cdef cppclass SoundUI:
-#             SoundUI(const string& sound_directory = "", int sample_rate = -1, SoundfileReader* reader = nullptr, bint is_double = false)
-#             void addSoundfile(const char* label, const char* url, Soundfile** sf_zone)
-#             @staticmethod
-#             string getBinaryPath()
-#             @staticmethod
-#             string getBinaryPathFrom(const string& path)
+    cdef extern from "faust/gui/SoundUI.h":
+        cdef cppclass SoundUI:
+            SoundUI(const string& sound_directory = "", int sample_rate = -1, SoundfileReader* reader = nullptr, bint is_double = false)
+            void addSoundfile(const char* label, const char* url, Soundfile** sf_zone)
+            @staticmethod
+            string getBinaryPath()
+            @staticmethod
+            string getBinaryPathFrom(const string& path)
 
 cdef extern from "faust/dsp/dsp.h":
     cdef cppclass dsp_memory_manager

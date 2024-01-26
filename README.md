@@ -78,9 +78,7 @@ While this project has been developed and tested primarily on macOS (`x86_64` an
 
 - Provides two dynamically-linked and statically-linked build variants
 
-
 Current priorities are to Work through remaining items in the `TODO` list.
-
 
 ## Setup and Requirements
 

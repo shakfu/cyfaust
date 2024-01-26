@@ -17,6 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### cyfaust
 
+- Added thirdparty licenses to `docs/licenses`
+
+- Added `scripts/setup_cyfaust.py` script which integrates a number of scripts.
+
 - Added `libsndfile` & `libsamplerate` setup script
 
 - Added working github workflows
