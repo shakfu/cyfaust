@@ -19,13 +19,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Fixed issue with upload artifact which caused an error in wheel building. Now artifact names are properly differentiated as per the new `actions/upload-artifact@v4` requirements.
 
-- Added caching to github workflows using `actions/cache@v4`: this means that libfaust dynamic/static libs keyed by runner-os are cached between runs which dramatically reduces workflow run times.
+- Added caching to github workflows using `actions/cache@v4`: this means that `libfaust` dynamic/static libs keyed by `runner-os` are now cached (across all workflows) between runs which greatly reduces workflow run times. For example, `cyfaust-test` which previously ran for 32 mins now runs in 5.2 mins if a cached lib is available.
 
 - Changed workflow actions, as nodejs 16 actions are deprecated, to latest versions: actions/checkout@v4, actions/setup-python@v5, and actions/upload-artifact@v4
 
 - Added thirdparty licenses to `docs/licenses`
 
-- Added `scripts/setup_cyfaust.py` script which integrates a number of scripts.
+- Added `scripts/setup_cyfaust.py` which consolidates the following scripts:
+
+	- `setup_faust.py`
+	- `setup_sndfile.py`
+	- `install_deps.py`
 
 - Added `libsndfile` & `libsamplerate` setup script
 
@@ -53,7 +57,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### cyfaust.interp
 
-- Added improved dsp resource cleanup mechanism for `InterpreterFactoryDSP`
+- Added improved dsp resource cleanup mechanism for `InterpreterFactoryDSP` which greatly improved stability (see [docs/cleanuping-up.md](https://github.com/shakfu/cyfaust/blob/main/docs/devnotes/cleaning-up.md))
+
+- Fixed test code to ensure rtaudio streams were properly stopped and closed.
 
 ### cyfaust.box
 
@@ -64,9 +70,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### cyfaust
 
-- Embedded faust architecture and standard library files in the package
+- Embedded faust architecture and standard library files in the cyfaust package
 
-- Created two variants (dynamic, static) of cyfaust package
+- Created two build variants (dynamic, static) of cyfaust package
 
 - Added cyfaust project
 

@@ -25,7 +25,7 @@ interpreter_dsp* interpreter_dsp_factory::createDSPInstance();
 
 ## Current Solution
 
-The solution below keeps has an `InterpreterDspFactory` instance keep track of created `InterpreterDsp` and cleans up them before a factory instance is deallocated. This works, but further checks are ncessary using a python debug build.
+The solution below makes an `InterpreterDspFactory` instance keep track of created `InterpreterDsp` instances and ensures that they are cleaned up before the factory instance is deallocated. This works well and resolves this issue.
 
 ```python
 cdef class InterpreterDspFactory:
