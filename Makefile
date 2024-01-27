@@ -20,7 +20,7 @@ TESTS := \
 
 
 .PHONY: all setup_faust build wheel release test pytest test_wheel \
-		testcpp memray clean reset
+		testcpp memray docs clean reset
 
 
 all: build
@@ -64,6 +64,13 @@ memray:
 	@for bin in tests/*.bin ; do \
         $(MEMRAY) flamegraph $$bin ; \
     done
+
+docs: clean
+	@make
+	@$(PYTHON) scripts/gen_htmldoc.py
+	@make clean
+	@make STATIC=1
+	@$(PYTHON) scripts/gen_htmldoc.py
 
 clean:
 	@rm -rf build dist venv .venv MANIFEST.in

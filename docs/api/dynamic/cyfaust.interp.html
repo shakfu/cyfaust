@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Python: module cyfaust.interp</title>
-<link rel="stylesheet" href="styles.css">
-</head><body>
+	<meta charset="utf-8">
+	<title>cyfaust.interp</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h2>module cyfaust.interp in cyfaust</h2>
+
 
 <table class="heading">
 <tr class="heading-text decor">
 <td class="title">&nbsp;<br><strong class="title"><a href="cyfaust.html" class="white">cyfaust</a>.interp</strong></td>
-<td class="extra"><a href=".">index</a><br><a href="#">cyfaust/interp.so</a></td></tr></table>
+<td class="extra"><a href=".">index</a><br><a href="file:./cyfaust/interp.cpython-311-darwin.so">./cyfaust/interp.cpython-311-darwin.so</a></td></tr></table>
     <p></p>
 <p>
 <table class="section">
@@ -48,11 +51,15 @@
 <dl><dt><a name="InterpreterDsp-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
 
 <dl><dt><a name="InterpreterDsp-build_user_interface"><strong>build_user_interface</strong></a>(self)</dt><dd><span class="code">Trigger&nbsp;the&nbsp;ui_interface&nbsp;parameter&nbsp;with&nbsp;instance&nbsp;specific&nbsp;calls<br>
-to&nbsp;'openTabBox',&nbsp;'addButton',&nbsp;'addVerticalSlider'...&nbsp;in&nbsp;order&nbsp;to&nbsp;build&nbsp;the&nbsp;UI.<br>
+&nbsp;<br>
+Calls&nbsp;are&nbsp;made&nbsp;to&nbsp;'openTabBox',&nbsp;'addButton',<br>
+'addVerticalSlider'...&nbsp;in&nbsp;order&nbsp;to&nbsp;build&nbsp;the&nbsp;UI.<br>
 &nbsp;<br>
 ui_interface&nbsp;-&nbsp;the&nbsp;user&nbsp;interface&nbsp;builder</span></dd></dl>
 
 <dl><dt><a name="InterpreterDsp-clone"><strong>clone</strong></a>(self) -&gt; 'InterpreterDsp'</dt><dd><span class="code">Return&nbsp;a&nbsp;clone&nbsp;of&nbsp;the&nbsp;instance.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-delete"><strong>delete</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="InterpreterDsp-get_numinputs"><strong>get_numinputs</strong></a>(self) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;instance&nbsp;number&nbsp;of&nbsp;audio&nbsp;inputs.</span></dd></dl>
 
@@ -117,9 +124,10 @@ Static methods defined here:<br>
 
 <dl><dt><a name="InterpreterDspFactory-from_bitcode"><strong>from_bitcode</strong></a>(bitcode) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;string.<br>
 &nbsp;<br>
-Note&nbsp;that&nbsp;the&nbsp;library&nbsp;keeps&nbsp;an&nbsp;internal&nbsp;cache&nbsp;of&nbsp;all&nbsp;allocated&nbsp;factories&nbsp;so&nbsp;that<br>
-the&nbsp;compilation&nbsp;of&nbsp;the&nbsp;same&nbsp;DSP&nbsp;code&nbsp;(that&nbsp;is&nbsp;the&nbsp;same&nbsp;bitcode&nbsp;code&nbsp;string)&nbsp;will&nbsp;return<br>
-the&nbsp;same&nbsp;(reference&nbsp;counted)&nbsp;factory&nbsp;pointer.<br>
+Note&nbsp;that&nbsp;the&nbsp;library&nbsp;keeps&nbsp;an&nbsp;internal&nbsp;cache&nbsp;of&nbsp;all&nbsp;allocated<br>
+factories&nbsp;so&nbsp;that&nbsp;the&nbsp;compilation&nbsp;of&nbsp;the&nbsp;same&nbsp;DSP&nbsp;code&nbsp;(that&nbsp;is<br>
+the&nbsp;same&nbsp;bitcode&nbsp;code&nbsp;string)&nbsp;will&nbsp;return&nbsp;the&nbsp;same<br>
+(reference&nbsp;counted)&nbsp;factory&nbsp;pointer.<br>
 &nbsp;<br>
 bitcode&nbsp;-&nbsp;the&nbsp;bitcode&nbsp;string<br>
 error_msg&nbsp;-&nbsp;the&nbsp;error&nbsp;string&nbsp;to&nbsp;be&nbsp;filled<br>
@@ -136,7 +144,7 @@ returns&nbsp;the&nbsp;DSP&nbsp;factory&nbsp;on&nbsp;success,&nbsp;otherwise&nbsp
 
 <dl><dt><a name="InterpreterDspFactory-from_signals"><strong>from_signals</strong></a>(name_app, signals, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;vector&nbsp;of&nbsp;output&nbsp;signals.</span></dd></dl>
 
-<dl><dt><a name="InterpreterDspFactory-from_string"><strong>from_string</strong></a>(name_app, code, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;string</span></dd></dl>
+<dl><dt><a name="InterpreterDspFactory-from_string"><strong>from_string</strong></a>(name_app, code, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;string</span></dd></dl>
 
 <hr>
 Data and other attributes defined here:<br>
@@ -197,15 +205,17 @@ Data descriptors defined here:<br>
  <dl><dt><a name="-expand_dsp_from_file"><strong>expand_dsp_from_file</strong></a>(filename: 'str', *args) -&gt; 'tuple(str, str)'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.<br>
 &nbsp;<br>
 Returns&nbsp;sha&nbsp;key&nbsp;for&nbsp;expanded&nbsp;dsp&nbsp;string&nbsp;and&nbsp;expanded&nbsp;dsp&nbsp;string</span></dd></dl>
- <dl><dt><a name="-expand_dsp_from_string"><strong>expand_dsp_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'str'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.</span></dd></dl>
- <dl><dt><a name="-generate_auxfiles_from_file"><strong>generate_auxfiles_from_file</strong></a>(filename: 'str', *args) -&gt; 'bool'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;(other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...)&nbsp;from&nbsp;a&nbsp;file.</span></dd></dl>
- <dl><dt><a name="-generate_auxfiles_from_string"><strong>generate_auxfiles_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'bool'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;(other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...)&nbsp;from&nbsp;a&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-expand_dsp_from_string"><strong>expand_dsp_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'tuple(str, str)'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-generate_auxfiles_from_file"><strong>generate_auxfiles_from_file</strong></a>(filename: 'str', *args) -&gt; 'bool'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;from&nbsp;a&nbsp;file.<br>
+&nbsp;<br>
+Auxfiles&nbsp;can&nbsp;be&nbsp;other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...</span></dd></dl>
+ <dl><dt><a name="-generate_auxfiles_from_string"><strong>generate_auxfiles_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'bool'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;from&nbsp;a&nbsp;string.<br>
+&nbsp;<br>
+Auxfiles&nbsp;can&nbsp;be&nbsp;other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...</span></dd></dl>
  <dl><dt><a name="-generate_sha1"><strong>generate_sha1</strong></a>(data: 'str') -&gt; 'str'</dt><dd><span class="code">Generate&nbsp;SHA1&nbsp;key&nbsp;from&nbsp;a&nbsp;string.</span></dd></dl>
  <dl><dt><a name="-get_all_dsp_factories"><strong>get_all_dsp_factories</strong></a>()</dt><dd><span class="code">Return&nbsp;Faust&nbsp;DSP&nbsp;factories&nbsp;of&nbsp;the&nbsp;library&nbsp;cache&nbsp;as&nbsp;a&nbsp;vector&nbsp;of&nbsp;their&nbsp;SHA&nbsp;keys.</span></dd></dl>
  <dl><dt><a name="-get_dsp_factory_from_sha_key"><strong>get_dsp_factory_from_sha_key</strong></a>(sha_key) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Get&nbsp;the&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;associated&nbsp;with&nbsp;a&nbsp;given&nbsp;SHA&nbsp;key.</span></dd></dl>
- <dl><dt><a name="-get_version"><strong>get_version</strong></a>()</dt><dd><span class="code">Get&nbsp;the&nbsp;version&nbsp;of&nbsp;the&nbsp;library.<br>
-&nbsp;<br>
-returns&nbsp;the&nbsp;library&nbsp;version&nbsp;as&nbsp;a&nbsp;static&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-get_version"><strong>get_version</strong></a>()</dt><dd><span class="code">Returns&nbsp;the&nbsp;library&nbsp;version&nbsp;as&nbsp;a&nbsp;static&nbsp;string.</span></dd></dl>
  <dl><dt><a name="-read_dsp_factory_from_bitcode"><strong>read_dsp_factory_from_bitcode</strong></a>(bitcode) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;string.</span></dd></dl>
  <dl><dt><a name="-read_dsp_factory_from_bitcode_file"><strong>read_dsp_factory_from_bitcode_file</strong></a>(bitcode_path) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;file.</span></dd></dl>
  <dl><dt><a name="-start_multithreaded_access_mode"><strong>start_multithreaded_access_mode</strong></a>() -&gt; 'bool'</dt><dd><span class="code">Start&nbsp;multi-thread&nbsp;access&nbsp;mode.</span></dd></dl>
@@ -216,5 +226,5 @@ returns&nbsp;the&nbsp;library&nbsp;version&nbsp;as&nbsp;a&nbsp;static&nbsp;strin
 <td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
     
 <tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
-<td class="singlecolumn"><strong>__test__</strong> = {}</td></tr></table>
-</body></html>
+<td class="singlecolumn"><strong>__test__</strong> = {}</td></tr></table></body>
+</html>

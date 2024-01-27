@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Python: module cyfaust.cyfaust</title>
-<link rel="stylesheet" href="styles.css">
-</head><body>
+	<meta charset="utf-8">
+	<title>cyfaust.cyfaust</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h2>module cyfaust.cyfaust in cyfaust</h2>
+
 
 <table class="heading">
 <tr class="heading-text decor">
 <td class="title">&nbsp;<br><strong class="title"><a href="cyfaust.html" class="white">cyfaust</a>.cyfaust</strong></td>
-<td class="extra"><a href=".">index</a><br><a href="#">cyfaust/cyfaust.so</a></td></tr></table>
+<td class="extra"><a href=".">index</a><br><a href="file:./cyfaust/cyfaust.cpython-311-darwin.so">./cyfaust/cyfaust.cpython-311-darwin.so</a></td></tr></table>
     <p></p>
 <p>
 <table class="section">
@@ -113,6 +116,8 @@
 
 <dl><dt><a name="Box-acos"><strong>acos</strong></a>(self) -&gt; 'Box'</dt><dd><span class="code">returns&nbsp;an&nbsp;arccosine&nbsp;box&nbsp;of&nbsp;this&nbsp;instance.</span></dd></dl>
 
+<dl><dt><a name="Box-arightshift"><strong>arightshift</strong></a>(self, other) -&gt; 'Box'</dt><dd><span class="code">bitwise&nbsp;arithmetic&nbsp;right&nbsp;shift</span></dd></dl>
+
 <dl><dt><a name="Box-asin"><strong>asin</strong></a>(self) -&gt; 'Box'</dt><dd><span class="code">returns&nbsp;an&nbsp;arc&nbsp;sine&nbsp;box&nbsp;of&nbsp;this&nbsp;instance.</span></dd></dl>
 
 <dl><dt><a name="Box-atan"><strong>atan</strong></a>(self) -&gt; 'Box'</dt><dd><span class="code">returns&nbsp;an&nbsp;arc&nbsp;tangent&nbsp;box&nbsp;of&nbsp;this&nbsp;instance.</span></dd></dl>
@@ -169,75 +174,77 @@ else&nbsp;returns&nbsp;None</span></dd></dl>
 
 <dl><dt><a name="Box-int_cast"><strong>int_cast</strong></a>(self) -&gt; 'Box'</dt><dd><span class="code">return&nbsp;an&nbsp;int&nbsp;casted&nbsp;box.</span></dd></dl>
 
-<dl><dt><a name="Box-is_abstr"><strong>is_abstr</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_abstr"><strong>is_abstr</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;abstraction.<br>
+&nbsp;<br>
+see:&nbsp;<a href="https://faustdoc.grame.fr/manual/syntax">https://faustdoc.grame.fr/manual/syntax</a></span></dd></dl>
 
-<dl><dt><a name="Box-is_appl"><strong>is_appl</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_appl"><strong>is_appl</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;application.</span></dd></dl>
 
-<dl><dt><a name="Box-is_button"><strong>is_button</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_button"><strong>is_button</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;button.</span></dd></dl>
 
 <dl><dt><a name="Box-is_case"><strong>is_case</strong></a>(self) -&gt; 'bool'</dt></dl>
 
-<dl><dt><a name="Box-is_checkbox"><strong>is_checkbox</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_checkbox"><strong>is_checkbox</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;checkbox.</span></dd></dl>
 
-<dl><dt><a name="Box-is_cut"><strong>is_cut</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_cut"><strong>is_cut</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;cut.</span></dd></dl>
 
-<dl><dt><a name="Box-is_environment"><strong>is_environment</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_environment"><strong>is_environment</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;environmnent.</span></dd></dl>
 
-<dl><dt><a name="Box-is_error"><strong>is_error</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_error"><strong>is_error</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;error.</span></dd></dl>
 
-<dl><dt><a name="Box-is_fconst"><strong>is_fconst</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_fconst"><strong>is_fconst</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;fconst.</span></dd></dl>
 
-<dl><dt><a name="Box-is_ffun"><strong>is_ffun</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_ffun"><strong>is_ffun</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;ffun.</span></dd></dl>
 
-<dl><dt><a name="Box-is_fvar_"><strong>is_fvar_</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_fvar"><strong>is_fvar</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;fvar.</span></dd></dl>
 
-<dl><dt><a name="Box-is_hbargraph"><strong>is_hbargraph</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_hbargraph"><strong>is_hbargraph</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;hbargraph.</span></dd></dl>
 
-<dl><dt><a name="Box-is_hgroup"><strong>is_hgroup</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_hgroup"><strong>is_hgroup</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;hgroup.</span></dd></dl>
 
-<dl><dt><a name="Box-is_hslider"><strong>is_hslider</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_hslider"><strong>is_hslider</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;horizontal&nbsp;slider.</span></dd></dl>
 
-<dl><dt><a name="Box-is_ident"><strong>is_ident</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_ident"><strong>is_ident</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;indentifier.</span></dd></dl>
 
-<dl><dt><a name="Box-is_int"><strong>is_int</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_int"><strong>is_int</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;int.</span></dd></dl>
 
-<dl><dt><a name="Box-is_nil"><strong>is_nil</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Check&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;nil.</span></dd></dl>
+<dl><dt><a name="Box-is_nil"><strong>is_nil</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;nil.</span></dd></dl>
 
-<dl><dt><a name="Box-is_numentry"><strong>is_numentry</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_numentry"><strong>is_numentry</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;an&nbsp;numentry.</span></dd></dl>
 
-<dl><dt><a name="Box-is_prim0"><strong>is_prim0</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_prim0"><strong>is_prim0</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;nullary&nbsp;function.</span></dd></dl>
 
-<dl><dt><a name="Box-is_prim1"><strong>is_prim1</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_prim1"><strong>is_prim1</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;unitary&nbsp;function.</span></dd></dl>
 
-<dl><dt><a name="Box-is_prim2"><strong>is_prim2</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_prim2"><strong>is_prim2</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;binary&nbsp;function.</span></dd></dl>
 
-<dl><dt><a name="Box-is_prim3"><strong>is_prim3</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_prim3"><strong>is_prim3</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;ternary&nbsp;function.</span></dd></dl>
 
-<dl><dt><a name="Box-is_prim4"><strong>is_prim4</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_prim4"><strong>is_prim4</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;4&nbsp;param&nbsp;function.</span></dd></dl>
 
-<dl><dt><a name="Box-is_prim5"><strong>is_prim5</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_prim5"><strong>is_prim5</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;5&nbsp;param&nbsp;function.</span></dd></dl>
 
-<dl><dt><a name="Box-is_real"><strong>is_real</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_real"><strong>is_real</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;real&nbsp;or&nbsp;floot&nbsp;box.</span></dd></dl>
 
-<dl><dt><a name="Box-is_slot"><strong>is_slot</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_slot"><strong>is_slot</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;slot.</span></dd></dl>
 
-<dl><dt><a name="Box-is_soundfile"><strong>is_soundfile</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_soundfile"><strong>is_soundfile</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;soundfile.</span></dd></dl>
 
-<dl><dt><a name="Box-is_symbolic"><strong>is_symbolic</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_symbolic"><strong>is_symbolic</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;symbolic.</span></dd></dl>
 
-<dl><dt><a name="Box-is_tgroup"><strong>is_tgroup</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_tgroup"><strong>is_tgroup</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;tab&nbsp;group.</span></dd></dl>
 
 <dl><dt><a name="Box-is_valid"><strong>is_valid</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Return&nbsp;true&nbsp;if&nbsp;box&nbsp;is&nbsp;defined,&nbsp;false&nbsp;otherwise<br>
 &nbsp;<br>
 sets&nbsp;number&nbsp;of&nbsp;inputs&nbsp;and&nbsp;outputs&nbsp;as&nbsp;a&nbsp;side-effect</span></dd></dl>
 
-<dl><dt><a name="Box-is_vgroup"><strong>is_vgroup</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_vgroup"><strong>is_vgroup</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;vertical&nbsp;group.</span></dd></dl>
 
-<dl><dt><a name="Box-is_vslider"><strong>is_vslider</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_vslider"><strong>is_vslider</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;vertical&nbsp;slider.</span></dd></dl>
 
-<dl><dt><a name="Box-is_waveform"><strong>is_waveform</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_waveform"><strong>is_waveform</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;waveform.</span></dd></dl>
 
-<dl><dt><a name="Box-is_wire"><strong>is_wire</strong></a>(self) -&gt; 'bool'</dt></dl>
+<dl><dt><a name="Box-is_wire"><strong>is_wire</strong></a>(self) -&gt; 'bool'</dt><dd><span class="code">Test&nbsp;if&nbsp;a&nbsp;box&nbsp;is&nbsp;a&nbsp;wire&nbsp;(pass-through)&nbsp;box.</span></dd></dl>
 
 <dl><dt><a name="Box-log"><strong>log</strong></a>(self) -&gt; 'Box'</dt><dd><span class="code">returns&nbsp;a&nbsp;log&nbsp;box&nbsp;of&nbsp;this&nbsp;instance.</span></dd></dl>
 
@@ -330,7 +337,7 @@ returns&nbsp;the&nbsp;split&nbsp;box.</span></dd></dl>
 
 <dl><dt><a name="Box-tan"><strong>tan</strong></a>(self) -&gt; 'Box'</dt><dd><span class="code">returns&nbsp;a&nbsp;tangent&nbsp;box&nbsp;of&nbsp;this&nbsp;instance.</span></dd></dl>
 
-<dl><dt><a name="Box-to_string"><strong>to_string</strong></a>(self, shared: 'bool' = False, max_size: 'int' = 256) -&gt; 'str'</dt><dd><span class="code">Convert&nbsp;the&nbsp;box&nbsp;to&nbsp;a&nbsp;string<br>
+<dl><dt><a name="Box-to_string"><strong>to_string</strong></a>(self, shared: 'bool' = False, max_size: 'int' = 256) -&gt; 'str'</dt><dd><span class="code">Convert&nbsp;the&nbsp;box&nbsp;to&nbsp;a&nbsp;string&nbsp;via&nbsp;printBox&nbsp;mechanism<br>
 &nbsp;<br>
 box&nbsp;-&nbsp;the&nbsp;box&nbsp;to&nbsp;be&nbsp;converted<br>
 shared&nbsp;-&nbsp;whether&nbsp;the&nbsp;identical&nbsp;sub&nbsp;boxes&nbsp;are&nbsp;converted&nbsp;as&nbsp;identifiers<br>
@@ -351,7 +358,7 @@ Static methods defined here:<br>
 
 <dl><dt><a name="Box-from_fconst"><strong>from_fconst</strong></a>(type, name, file) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;foreign&nbsp;constant&nbsp;box.<br>
 &nbsp;<br>
-type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;type&nbsp;of&nbsp;<a href="#SType">SType</a><br>
+type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;type&nbsp;of&nbsp;<a href="#SType">SType</a>&nbsp;{kSInt,&nbsp;kSReal}<br>
 name&nbsp;-&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;name<br>
 file&nbsp;-&nbsp;the&nbsp;include&nbsp;file&nbsp;where&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;is&nbsp;defined<br>
 &nbsp;<br>
@@ -361,7 +368,7 @@ returns&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;box.</span></dd></dl>
 
 <dl><dt><a name="Box-from_fvar"><strong>from_fvar</strong></a>(type, name, file) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;foreign&nbsp;variable&nbsp;box.<br>
 &nbsp;<br>
-type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;type&nbsp;of&nbsp;<a href="#SType">SType</a><br>
+type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;type&nbsp;of&nbsp;<a href="#SType">SType</a>&nbsp;{kSInt,&nbsp;kSReal}<br>
 name&nbsp;-&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;name<br>
 file&nbsp;-&nbsp;the&nbsp;include&nbsp;file&nbsp;where&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;is&nbsp;defined<br>
 &nbsp;<br>
@@ -371,7 +378,7 @@ returns&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;box.</span></dd></dl>
 
 <dl><dt><a name="Box-from_readonly_table"><strong>from_readonly_table</strong></a>(n: 'Box | int', init, ridx: 'Box | int') -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;read&nbsp;only&nbsp;table.<br>
 &nbsp;<br>
-n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+n&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
 ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;int&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
 &nbsp;<br>
@@ -382,10 +389,8 @@ returns&nbsp;the&nbsp;table&nbsp;box.</span></dd></dl>
 <dl><dt><a name="Box-from_soundfile"><strong>from_soundfile</strong></a>(label, chan: 'Box | int', part: 'Box | None', ridx: 'Box | int | None') -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;soundfile&nbsp;block.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;of&nbsp;form&nbsp;"label[url:{'path1';'path2';'path3'}]"&nbsp;to&nbsp;describe&nbsp;a&nbsp;list&nbsp;of&nbsp;soundfiles<br>
-chan&nbsp;-&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs&nbsp;channels,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-&nbsp;<br>
-(box_soundfile2&nbsp;parameters)<br>
-part&nbsp;-&nbsp;in&nbsp;the&nbsp;[0..255]&nbsp;range&nbsp;to&nbsp;select&nbsp;a&nbsp;given&nbsp;sound&nbsp;number,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+chan&nbsp;-&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs&nbsp;channels,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+part&nbsp;-&nbsp;in&nbsp;the&nbsp;[0..255]&nbsp;range&nbsp;to&nbsp;select&nbsp;a&nbsp;given&nbsp;sound&nbsp;number,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;the&nbsp;selected&nbsp;sound&nbsp;length)<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;soundfile&nbsp;box.</span></dd></dl>
@@ -400,7 +405,7 @@ returns&nbsp;the&nbsp;waveform&nbsp;box.</span></dd></dl>
 
 <dl><dt><a name="Box-from_write_read_table"><strong>from_write_read_table</strong></a>(n: 'Box | int', init, widx: 'Box | int', wsig, ridx: 'Box | int') -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;read/write&nbsp;table.<br>
 &nbsp;<br>
-n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+n&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
 widx&nbsp;-&nbsp;the&nbsp;write&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
 wsig&nbsp;-&nbsp;the&nbsp;input&nbsp;of&nbsp;the&nbsp;table<br>
@@ -435,7 +440,9 @@ Data and other attributes defined here:<br>
 
 <dl><dt><a name="BoxVector-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
 
-<dl><dt><a name="BoxVector-add"><strong>add</strong></a>(self, b)</dt></dl>
+<dl><dt><a name="BoxVector-add"><strong>add</strong></a>(self, b)</dt><dd><span class="code">add&nbsp;wrapped&nbsp;<a href="#Box">Box</a></span></dd></dl>
+
+<dl><dt><a name="BoxVector-create_source"><strong>create_source</strong></a>(self, name_app: 'str', lang, *args) -&gt; 'str'</dt><dd><span class="code">Create&nbsp;source&nbsp;code&nbsp;in&nbsp;a&nbsp;target&nbsp;language&nbsp;from&nbsp;a&nbsp;box&nbsp;expression.</span></dd></dl>
 
 <hr>
 Static methods defined here:<br>
@@ -459,11 +466,15 @@ Data and other attributes defined here:<br>
 <dl><dt><a name="InterpreterDsp-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
 
 <dl><dt><a name="InterpreterDsp-build_user_interface"><strong>build_user_interface</strong></a>(self)</dt><dd><span class="code">Trigger&nbsp;the&nbsp;ui_interface&nbsp;parameter&nbsp;with&nbsp;instance&nbsp;specific&nbsp;calls<br>
-to&nbsp;'openTabBox',&nbsp;'addButton',&nbsp;'addVerticalSlider'...&nbsp;in&nbsp;order&nbsp;to&nbsp;build&nbsp;the&nbsp;UI.<br>
+&nbsp;<br>
+Calls&nbsp;are&nbsp;made&nbsp;to&nbsp;'openTabBox',&nbsp;'addButton',<br>
+'addVerticalSlider'...&nbsp;in&nbsp;order&nbsp;to&nbsp;build&nbsp;the&nbsp;UI.<br>
 &nbsp;<br>
 ui_interface&nbsp;-&nbsp;the&nbsp;user&nbsp;interface&nbsp;builder</span></dd></dl>
 
 <dl><dt><a name="InterpreterDsp-clone"><strong>clone</strong></a>(self) -&gt; 'InterpreterDsp'</dt><dd><span class="code">Return&nbsp;a&nbsp;clone&nbsp;of&nbsp;the&nbsp;instance.</span></dd></dl>
+
+<dl><dt><a name="InterpreterDsp-delete"><strong>delete</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="InterpreterDsp-get_numinputs"><strong>get_numinputs</strong></a>(self) -&gt; 'int'</dt><dd><span class="code">Return&nbsp;instance&nbsp;number&nbsp;of&nbsp;audio&nbsp;inputs.</span></dd></dl>
 
@@ -528,9 +539,10 @@ Static methods defined here:<br>
 
 <dl><dt><a name="InterpreterDspFactory-from_bitcode"><strong>from_bitcode</strong></a>(bitcode) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;bitcode&nbsp;string.<br>
 &nbsp;<br>
-Note&nbsp;that&nbsp;the&nbsp;library&nbsp;keeps&nbsp;an&nbsp;internal&nbsp;cache&nbsp;of&nbsp;all&nbsp;allocated&nbsp;factories&nbsp;so&nbsp;that<br>
-the&nbsp;compilation&nbsp;of&nbsp;the&nbsp;same&nbsp;DSP&nbsp;code&nbsp;(that&nbsp;is&nbsp;the&nbsp;same&nbsp;bitcode&nbsp;code&nbsp;string)&nbsp;will&nbsp;return<br>
-the&nbsp;same&nbsp;(reference&nbsp;counted)&nbsp;factory&nbsp;pointer.<br>
+Note&nbsp;that&nbsp;the&nbsp;library&nbsp;keeps&nbsp;an&nbsp;internal&nbsp;cache&nbsp;of&nbsp;all&nbsp;allocated<br>
+factories&nbsp;so&nbsp;that&nbsp;the&nbsp;compilation&nbsp;of&nbsp;the&nbsp;same&nbsp;DSP&nbsp;code&nbsp;(that&nbsp;is<br>
+the&nbsp;same&nbsp;bitcode&nbsp;code&nbsp;string)&nbsp;will&nbsp;return&nbsp;the&nbsp;same<br>
+(reference&nbsp;counted)&nbsp;factory&nbsp;pointer.<br>
 &nbsp;<br>
 bitcode&nbsp;-&nbsp;the&nbsp;bitcode&nbsp;string<br>
 error_msg&nbsp;-&nbsp;the&nbsp;error&nbsp;string&nbsp;to&nbsp;be&nbsp;filled<br>
@@ -547,7 +559,7 @@ returns&nbsp;the&nbsp;DSP&nbsp;factory&nbsp;on&nbsp;success,&nbsp;otherwise&nbsp
 
 <dl><dt><a name="InterpreterDspFactory-from_signals"><strong>from_signals</strong></a>(name_app, signals, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;a&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;from&nbsp;a&nbsp;vector&nbsp;of&nbsp;output&nbsp;signals.</span></dd></dl>
 
-<dl><dt><a name="InterpreterDspFactory-from_string"><strong>from_string</strong></a>(name_app, code, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;string</span></dd></dl>
+<dl><dt><a name="InterpreterDspFactory-from_string"><strong>from_string</strong></a>(name_app, code, *args) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Create&nbsp;an&nbsp;interpreter&nbsp;dsp&nbsp;factory&nbsp;from&nbsp;a&nbsp;string</span></dd></dl>
 
 <hr>
 Data and other attributes defined here:<br>
@@ -618,26 +630,32 @@ Static methods defined here:<br>
 
 <dl><dt><a name="RtAudioDriver-__setstate__"><strong>__setstate__</strong></a> = __setstate_cython__(...)</dt></dl>
 
-<dl><dt><a name="RtAudioDriver-get_buffersize"><strong>get_buffersize</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="RtAudioDriver-get_numinputs"><strong>get_numinputs</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="RtAudioDriver-get_numoutputs"><strong>get_numoutputs</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="RtAudioDriver-get_samplerate"><strong>get_samplerate</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="RtAudioDriver-init"><strong>init</strong></a>(self, dsp: 'InterpreterDsp') -&gt; 'bool'</dt><dd><span class="code">initialize&nbsp;with&nbsp;dsp&nbsp;instance.</span></dd></dl>
 
-<dl><dt><a name="RtAudioDriver-set_dsp"><strong>set_dsp</strong></a>(self, dsp: 'InterpreterDsp')</dt></dl>
+<dl><dt><a name="RtAudioDriver-set_dsp"><strong>set_dsp</strong></a>(self, dsp: 'InterpreterDsp')</dt><dd><span class="code">"set&nbsp;<a href="#InterpreterDsp">InterpreterDsp</a>&nbsp;instance.</span></dd></dl>
 
-<dl><dt><a name="RtAudioDriver-start"><strong>start</strong></a>(self)</dt></dl>
+<dl><dt><a name="RtAudioDriver-start"><strong>start</strong></a>(self)</dt><dd><span class="code">start&nbsp;audio&nbsp;driver.</span></dd></dl>
 
-<dl><dt><a name="RtAudioDriver-stop"><strong>stop</strong></a>(self)</dt></dl>
+<dl><dt><a name="RtAudioDriver-stop"><strong>stop</strong></a>(self)</dt><dd><span class="code">stop&nbsp;audio&nbsp;driver.</span></dd></dl>
 
 <hr>
 Static methods defined here:<br>
 <dl><dt><a name="RtAudioDriver-__new__"><strong>__new__</strong></a>(*args, **kwargs)<span class="grey"><span class="heading-text"> from <a href="builtins.html#type">builtins.type</a></span></span></dt><dd><span class="code">Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;<a href="builtins.html#object">object</a>.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
 
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>buffersize</strong></dt>
+<dd><span class="code">get&nbsp;buffersize</span></dd>
+</dl>
+<dl><dt><strong>numinputs</strong></dt>
+<dd><span class="code">get&nbsp;number&nbsp;of&nbsp;inputs.</span></dd>
+</dl>
+<dl><dt><strong>numoutputs</strong></dt>
+<dd><span class="code">get&nbsp;number&nbsp;of&nbsp;outputs.</span></dd>
+</dl>
+<dl><dt><strong>samplerate</strong></dt>
+<dd><span class="code">get&nbsp;samplerate.</span></dd>
+</dl>
 </td></tr></table> <p>
 <table class="section">
 <tr class="decor title-decor heading-text">
@@ -1522,7 +1540,11 @@ Data and other attributes defined here:<br>
 <tr class="decor title-decor heading-text">
 <td class="section-title" colspan=3>&nbsp;<br><a name="box_context">class <strong>box_context</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
     
-<tr><td class="decor title-decor"><span class="code">&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code">box&nbsp;context&nbsp;manager<br>
+&nbsp;<br>
+required&nbsp;for&nbsp;box&nbsp;operations<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
 <td class="singlecolumn">Methods defined here:<br>
 <dl><dt><a name="box_context-__enter__"><strong>__enter__</strong></a>(self)</dt></dl>
 
@@ -1563,22 +1585,22 @@ Data descriptors defined here:<br>
 <tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
 <td class="singlecolumn"><dl><dt><a name="-__reduce_cython__"><strong>__reduce_cython__</strong></a>(self)</dt></dl>
  <dl><dt><a name="-__setstate_cython__"><strong>__setstate_cython__</strong></a>(self, __pyx_state)</dt></dl>
- <dl><dt><a name="-box_abs"><strong>box_abs</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_abs_op"><strong>box_abs_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_acos"><strong>box_acos</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_acos_op"><strong>box_acos_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_add"><strong>box_add</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_add_op"><strong>box_add_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_and"><strong>box_and</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_and_op"><strong>box_and_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_arightshift"><strong>box_arightshift</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_arightshift_op"><strong>box_arightshift_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_asin"><strong>box_asin</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_asin_op"><strong>box_asin_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_atan"><strong>box_atan</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_atan2"><strong>box_atan2</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_atan2_op"><strong>box_atan2_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_atan_op"><strong>box_atan_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_abs"><strong>box_abs</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;absolute&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_abs_op"><strong>box_abs_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;absolute&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_acos"><strong>box_acos</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;arccosine&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_acos_op"><strong>box_acos_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;arccosine&nbsp;than&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_add"><strong>box_add</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;add&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_add_op"><strong>box_add_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;box&nbsp;add&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_and"><strong>box_and</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;AND&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_and_op"><strong>box_and_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;AND&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_arightshift"><strong>box_arightshift</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">bitwise&nbsp;arithmetic&nbsp;right&nbsp;shift</span></dd></dl>
+ <dl><dt><a name="-box_arightshift_op"><strong>box_arightshift_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">bitwise&nbsp;arithmetic&nbsp;right&nbsp;bit&nbsp;shift&nbsp;op</span></dd></dl>
+ <dl><dt><a name="-box_asin"><strong>box_asin</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;arcsine&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_asin_op"><strong>box_asin_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;arcsine&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_atan"><strong>box_atan</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;arctangent&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_atan2"><strong>box_atan2</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;arctan2&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_atan2_op"><strong>box_atan2_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;arctangent2&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_atan_op"><strong>box_atan_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;arc&nbsp;tangent&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_attach"><strong>box_attach</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;an&nbsp;attach&nbsp;box.<br>
 &nbsp;<br>
 The&nbsp;attach&nbsp;primitive&nbsp;takes&nbsp;two&nbsp;input&nbsp;boxes&nbsp;and&nbsp;produces&nbsp;one&nbsp;output&nbsp;box<br>
@@ -1604,15 +1626,15 @@ returns&nbsp;the&nbsp;result&nbsp;box&nbsp;of&nbsp;op(x,y).</span></dd></dl>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;button&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_ceil"><strong>box_ceil</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_ceil_op"><strong>box_ceil_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_ceil"><strong>box_ceil</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;ceiling&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_ceil_op"><strong>box_ceil_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;ceiling&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_checkbox"><strong>box_checkbox</strong></a>(label) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;checkbox&nbsp;box.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;checkbox&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_cos"><strong>box_cos</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_cos_op"><strong>box_cos_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_cos"><strong>box_cos</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;cosine&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_cos_op"><strong>box_cos_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;cosine&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_cut"><strong>box_cut</strong></a>() -&gt; 'Box'</dt><dd><span class="code">The&nbsp;cut&nbsp;box,&nbsp;to&nbsp;stop/terminate&nbsp;a&nbsp;signal.<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;cut&nbsp;box.</span></dd></dl>
@@ -1626,14 +1648,14 @@ returns&nbsp;the&nbsp;delayed&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_delay_op"><strong>box_delay_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;delayed&nbsp;box.<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;delayed&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_div"><strong>box_div</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_div_op"><strong>box_div_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_eq"><strong>box_eq</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_eq_op"><strong>box_eq_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_exp"><strong>box_exp</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_exp10"><strong>box_exp10</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_exp10_op"><strong>box_exp10_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_exp_op"><strong>box_exp_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_div"><strong>box_div</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;divide&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_div_op"><strong>box_div_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;box&nbsp;divide&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_eq"><strong>box_eq</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;equals&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_eq_op"><strong>box_eq_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;equal&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_exp"><strong>box_exp</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;exp&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_exp10"><strong>box_exp10</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;exp10&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_exp10_op"><strong>box_exp10_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;exp10&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_exp_op"><strong>box_exp_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;exp&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_fconst"><strong>box_fconst</strong></a>(type, name, file) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;foreign&nbsp;constant&nbsp;box.<br>
 &nbsp;<br>
 type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;constant&nbsp;type&nbsp;of&nbsp;<a href="#SType">SType</a><br>
@@ -1653,10 +1675,10 @@ s&nbsp;-&nbsp;the&nbsp;signal&nbsp;to&nbsp;be&nbsp;casted&nbsp;as&nbsp;float/dou
 &nbsp;<br>
 returns&nbsp;the&nbsp;casted&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_float_cast_op"><strong>box_float_cast_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;casted&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_floor"><strong>box_floor</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_floor_op"><strong>box_floor_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_fmod"><strong>box_fmod</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_fmod_op"><strong>box_fmod_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_floor"><strong>box_floor</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;floor&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_floor_op"><strong>box_floor_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;floor&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_fmod"><strong>box_fmod</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;fmod&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_fmod_op"><strong>box_fmod_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;fmod&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_fvar"><strong>box_fvar</strong></a>(type, name, file) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;foreign&nbsp;variable&nbsp;box.<br>
 &nbsp;<br>
 type&nbsp;-&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;type&nbsp;of&nbsp;<a href="#SType">SType</a><br>
@@ -1664,23 +1686,23 @@ name&nbsp;-&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;name<br>
 file&nbsp;-&nbsp;the&nbsp;include&nbsp;file&nbsp;where&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;is&nbsp;defined<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;foreign&nbsp;variable&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_ge"><strong>box_ge</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_ge_op"><strong>box_ge_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_gt"><strong>box_gt</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_gt_op"><strong>box_gt_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_ge"><strong>box_ge</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;greater&nbsp;than&nbsp;or&nbsp;equal&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_ge_op"><strong>box_ge_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;greater&nbsp;than&nbsp;or&nbsp;equal&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_gt"><strong>box_gt</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;greater&nbsp;than&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_gt_op"><strong>box_gt_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;greater&nbsp;than&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_hbargraph"><strong>box_hbargraph</strong></a>(label, min, max) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;horizontal&nbsp;bargraph&nbsp;box.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
-min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 x&nbsp;-&nbsp;the&nbsp;input&nbsp;box<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;horizontal&nbsp;bargraph&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_hbargraph2"><strong>box_hbargraph2</strong></a>(label, min, max, x) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;horizontal&nbsp;bargraph&nbsp;box.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
-min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 x&nbsp;-&nbsp;the&nbsp;input&nbsp;box<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;horizontal&nbsp;bargraph&nbsp;box.</span></dd></dl>
@@ -1693,10 +1715,10 @@ returns&nbsp;the&nbsp;horizontal&nbsp;group&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_hslider"><strong>box_hslider</strong></a>(label, init, min, max, step) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;an&nbsp;horizontal&nbsp;slider&nbsp;box.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
-init&nbsp;-&nbsp;the&nbsp;init&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-step&nbsp;-&nbsp;the&nbsp;step&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+init&nbsp;-&nbsp;the&nbsp;init&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+step&nbsp;-&nbsp;the&nbsp;step&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;horizontal&nbsp;slider&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_int"><strong>box_int</strong></a>(n) -&gt; 'Box'</dt><dd><span class="code">Constant&nbsp;integer&nbsp;:&nbsp;for&nbsp;all&nbsp;t,&nbsp;x(t)&nbsp;=&nbsp;n.<br>
@@ -1717,45 +1739,46 @@ returns&nbsp;the&nbsp;casted&nbsp;box.</span></dd></dl>
 b&nbsp;-&nbsp;the&nbsp;box<br>
 &nbsp;<br>
 returns&nbsp;true&nbsp;if&nbsp;the&nbsp;box&nbsp;is&nbsp;nil,&nbsp;otherwise&nbsp;false.</span></dd></dl>
- <dl><dt><a name="-box_le"><strong>box_le</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_le_op"><strong>box_le_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_leftshift"><strong>box_leftshift</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_leftshift_op"><strong>box_leftshift_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_log"><strong>box_log</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_log10"><strong>box_log10</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_log10_op"><strong>box_log10_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_log_op"><strong>box_log_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_lrightshift"><strong>box_lrightshift</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_lrightshift_op"><strong>box_lrightshift_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_lt"><strong>box_lt</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_lt_op"><strong>box_lt_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_max"><strong>box_max</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_max_op"><strong>box_max_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_le"><strong>box_le</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;lesser&nbsp;than&nbsp;or&nbsp;equaloperation.</span></dd></dl>
+ <dl><dt><a name="-box_le_op"><strong>box_le_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;less&nbsp;than&nbsp;than&nbsp;equal&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_leftshift"><strong>box_leftshift</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;left&nbsp;bit&nbsp;shift&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_leftshift_op"><strong>box_leftshift_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;box&nbsp;left&nbsp;bitshift&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_log"><strong>box_log</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;log&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_log10"><strong>box_log10</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;log10&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_log10_op"><strong>box_log10_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;log10&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_log_op"><strong>box_log_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;log&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_lrightshift"><strong>box_lrightshift</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;logical&nbsp;right&nbsp;bit&nbsp;shift&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_lrightshift_op"><strong>box_lrightshift_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;box&nbsp;logical&nbsp;right&nbsp;bit&nbsp;shift&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_lt"><strong>box_lt</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;lesser&nbsp;than&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_lt_op"><strong>box_lt_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;less&nbsp;than&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_max"><strong>box_max</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;maximum&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_max_op"><strong>box_max_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;maximum&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_merge"><strong>box_merge</strong></a>(x, y) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;merge&nbsp;composition&nbsp;(e.g.,&nbsp;A:&gt;B)&nbsp;is&nbsp;the&nbsp;dual&nbsp;of&nbsp;the&nbsp;split&nbsp;composition.<br>
 &nbsp;<br>
 The&nbsp;number&nbsp;of&nbsp;outputs&nbsp;of&nbsp;A&nbsp;must&nbsp;be&nbsp;a&nbsp;multiple&nbsp;of&nbsp;the&nbsp;number&nbsp;of&nbsp;inputs&nbsp;of&nbsp;B:<br>
 outputs(A)=k.inputs(B)<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;merge&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_min"><strong>box_min</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_min_op"><strong>box_min_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_mul"><strong>box_mul</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_mul_op"><strong>box_mul_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_ne"><strong>box_ne</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_ne_op"><strong>box_ne_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_min"><strong>box_min</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;minimum&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_min_op"><strong>box_min_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;minimum&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_mul"><strong>box_mul</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;multiply&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_mul_op"><strong>box_mul_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;box&nbsp;multipy&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_ne"><strong>box_ne</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;not&nbsp;equals&nbsp;than&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_ne_op"><strong>box_ne_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;not&nbsp;equal&nbsp;than&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_numentry"><strong>box_numentry</strong></a>(label, init, min, max, step) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;num&nbsp;entry&nbsp;box.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
-init&nbsp;-&nbsp;the&nbsp;init&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-step&nbsp;-&nbsp;the&nbsp;step&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+init&nbsp;-&nbsp;the&nbsp;init&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+step&nbsp;-&nbsp;the&nbsp;step&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;num&nbsp;entry&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_or"><strong>box_or</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_or_float"><strong>box_or_float</strong></a>(var)</dt></dl>
- <dl><dt><a name="-box_or_int"><strong>box_or_int</strong></a>(var)</dt></dl>
- <dl><dt><a name="-box_or_op"><strong>box_or_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_or"><strong>box_or</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;OR&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_or_float"><strong>box_or_float</strong></a>(var: 'Box | float') -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_or_int"><strong>box_or_int</strong></a>(var: 'Box | int') -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_or_number"><strong>box_or_number</strong></a>(var: 'Box | float | int') -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_or_op"><strong>box_or_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;OR&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_par"><strong>box_par</strong></a>(x, y) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;parallel&nbsp;composition&nbsp;of&nbsp;two&nbsp;blocks&nbsp;(e.g.,&nbsp;A,B).<br>
 &nbsp;<br>
 It&nbsp;places&nbsp;the&nbsp;two&nbsp;block-diagrams&nbsp;one&nbsp;on&nbsp;top&nbsp;of&nbsp;the&nbsp;other,<br>
@@ -1780,11 +1803,11 @@ It&nbsp;places&nbsp;the&nbsp;five&nbsp;block-diagrams&nbsp;one&nbsp;on&nbsp;top&
 without&nbsp;connections.<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;par&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_pow"><strong>box_pow</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_pow_op"><strong>box_pow_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_pow"><strong>box_pow</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;power&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_pow_op"><strong>box_pow_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;power&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_readonly_table"><strong>box_readonly_table</strong></a>(n, init, ridx) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;read&nbsp;only&nbsp;table.<br>
 &nbsp;<br>
-n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
 ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;int&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
 &nbsp;<br>
@@ -1804,14 +1827,14 @@ It&nbsp;is&nbsp;the&nbsp;most&nbsp;complex&nbsp;operation&nbsp;in&nbsp;terms&nbs
 outputs(A)≥inputs(B)&nbsp;and&nbsp;inputs(A)≥outputs(B)<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;rec&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_rem"><strong>box_rem</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_rem_op"><strong>box_rem_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_remainder"><strong>box_remainder</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_remainder_op"><strong>box_remainder_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_rint"><strong>box_rint</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_rint_op"><strong>box_rint_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_round"><strong>box_round</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_round_op"><strong>box_round_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_rem"><strong>box_rem</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;modulo&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_rem_op"><strong>box_rem_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;box&nbsp;modulo&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_remainder"><strong>box_remainder</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;remainder&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_remainder_op"><strong>box_remainder_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;remainder&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_rint"><strong>box_rint</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;round&nbsp;int&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_rint_op"><strong>box_rint_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;round&nbsp;int&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_round"><strong>box_round</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;round&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_round_op"><strong>box_round_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;round&nbsp;float&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_route"><strong>box_route</strong></a>(n, m, r) -&gt; 'Box'</dt><dd><span class="code">The&nbsp;route&nbsp;primitive&nbsp;facilitates&nbsp;the&nbsp;routing&nbsp;of&nbsp;signals&nbsp;in&nbsp;Faust.<br>
 &nbsp;<br>
 It&nbsp;has&nbsp;the&nbsp;following&nbsp;syntax:<br>
@@ -1846,15 +1869,15 @@ returns&nbsp;the&nbsp;selected&nbsp;box&nbsp;depending&nbsp;of&nbsp;the&nbsp;sel
 expects:&nbsp;outputs(A)=inputs(B)<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;seq&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_sin"><strong>box_sin</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_sin_op"><strong>box_sin_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_sin"><strong>box_sin</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;sine&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_sin_op"><strong>box_sin_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;sine&nbsp;op&nbsp;than&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_soundfile"><strong>box_soundfile</strong></a>(label, chan: 'Box | int', part: 'Box | None', ridx: 'Box | int | None') -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;soundfile&nbsp;block.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;of&nbsp;form&nbsp;"label[url:{'path1';'path2';'path3'}]"&nbsp;to&nbsp;describe&nbsp;a&nbsp;list&nbsp;of&nbsp;soundfiles<br>
-chan&nbsp;-&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs&nbsp;channels,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+chan&nbsp;-&nbsp;the&nbsp;number&nbsp;of&nbsp;outputs&nbsp;channels,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 &nbsp;<br>
 (box_soundfile2&nbsp;parameters)<br>
-part&nbsp;-&nbsp;in&nbsp;the&nbsp;[0..255]&nbsp;range&nbsp;to&nbsp;select&nbsp;a&nbsp;given&nbsp;sound&nbsp;number,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+part&nbsp;-&nbsp;in&nbsp;the&nbsp;[0..255]&nbsp;range&nbsp;to&nbsp;select&nbsp;a&nbsp;given&nbsp;sound&nbsp;number,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 ridx&nbsp;-&nbsp;the&nbsp;read&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;the&nbsp;selected&nbsp;sound&nbsp;length)<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;soundfile&nbsp;box.</span></dd></dl>
@@ -1866,12 +1889,12 @@ must&nbsp;be&nbsp;a&nbsp;multiple&nbsp;of&nbsp;the&nbsp;number&nbsp;of&nbsp;outp
 outputs(A).k=inputs(B)<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;split&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_sqrt"><strong>box_sqrt</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_sqrt_op"><strong>box_sqrt_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_sub"><strong>box_sub</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_sub_op"><strong>box_sub_op</strong></a>() -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_tan"><strong>box_tan</strong></a>(x) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_tan_op"><strong>box_tan_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_sqrt"><strong>box_sqrt</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;sqrt&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_sqrt_op"><strong>box_sqrt_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;square&nbsp;root&nbsp;than&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_sub"><strong>box_sub</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;substract&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_sub_op"><strong>box_sub_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;box&nbsp;substract&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_tan"><strong>box_tan</strong></a>(x) -&gt; 'Box'</dt><dd><span class="code">unitary&nbsp;box&nbsp;tangent&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_tan_op"><strong>box_tan_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;tangent&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-box_tgroup"><strong>box_tgroup</strong></a>(label, group) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;tab&nbsp;group&nbsp;box.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
@@ -1881,16 +1904,16 @@ returns&nbsp;the&nbsp;tab&nbsp;group&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_vbargraph"><strong>box_vbargraph</strong></a>(label, min, max) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;bargraph&nbsp;box.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
-min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 x&nbsp;-&nbsp;the&nbsp;input&nbsp;box<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;vertical&nbsp;bargraph&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_vbargraph2"><strong>box_vbargraph2</strong></a>(label, min, max, x) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;bargraph&nbsp;box.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
-min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 x&nbsp;-&nbsp;the&nbsp;input&nbsp;box<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;vertical&nbsp;bargraph&nbsp;box.</span></dd></dl>
@@ -1903,10 +1926,10 @@ returns&nbsp;the&nbsp;vertical&nbsp;group&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_vslider"><strong>box_vslider</strong></a>(label, init, min, max, step) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;vertical&nbsp;slider&nbsp;box.<br>
 &nbsp;<br>
 label&nbsp;-&nbsp;the&nbsp;label&nbsp;definition&nbsp;(see&nbsp;[2])<br>
-init&nbsp;-&nbsp;the&nbsp;init&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
-step&nbsp;-&nbsp;the&nbsp;step&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+init&nbsp;-&nbsp;the&nbsp;init&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+min&nbsp;-&nbsp;the&nbsp;min&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+max&nbsp;-&nbsp;the&nbsp;max&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
+step&nbsp;-&nbsp;the&nbsp;step&nbsp;box,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;vertical&nbsp;slider&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_waveform"><strong>box_waveform</strong></a>(wf)</dt><dd><span class="code">Create&nbsp;a&nbsp;waveform.<br>
@@ -1919,7 +1942,7 @@ returns&nbsp;the&nbsp;waveform&nbsp;box.</span></dd></dl>
 returns&nbsp;the&nbsp;identity&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_write_read_table"><strong>box_write_read_table</strong></a>(n, init, widx, wsig, ridx) -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;read/write&nbsp;table.<br>
 &nbsp;<br>
-n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression&nbsp;(see&nbsp;[1])<br>
+n&nbsp;-&nbsp;the&nbsp;table&nbsp;size,&nbsp;a&nbsp;constant&nbsp;numerical&nbsp;expression<br>
 init&nbsp;-&nbsp;the&nbsp;table&nbsp;content<br>
 widx&nbsp;-&nbsp;the&nbsp;write&nbsp;index&nbsp;(an&nbsp;integer&nbsp;between&nbsp;0&nbsp;and&nbsp;n-1)<br>
 wsig&nbsp;-&nbsp;the&nbsp;input&nbsp;of&nbsp;the&nbsp;table<br>
@@ -1929,8 +1952,8 @@ returns&nbsp;the&nbsp;table&nbsp;box.</span></dd></dl>
  <dl><dt><a name="-box_write_read_table_op"><strong>box_write_read_table_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">Create&nbsp;a&nbsp;read/write&nbsp;table.<br>
 &nbsp;<br>
 returns&nbsp;the&nbsp;table&nbsp;box.</span></dd></dl>
- <dl><dt><a name="-box_xor"><strong>box_xor</strong></a>(b1, b2) -&gt; 'Box'</dt></dl>
- <dl><dt><a name="-box_xor_op"><strong>box_xor_op</strong></a>() -&gt; 'Box'</dt></dl>
+ <dl><dt><a name="-box_xor"><strong>box_xor</strong></a>(b1, b2) -&gt; 'Box'</dt><dd><span class="code">binary&nbsp;box&nbsp;XOR&nbsp;operation.</span></dd></dl>
+ <dl><dt><a name="-box_xor_op"><strong>box_xor_op</strong></a>() -&gt; 'Box'</dt><dd><span class="code">nullary&nbsp;XOR&nbsp;operation.</span></dd></dl>
  <dl><dt><a name="-boxes_to_signals"><strong>boxes_to_signals</strong></a>(b) -&gt; 'SignalVector | None'</dt><dd><span class="code">Compile&nbsp;a&nbsp;box&nbsp;expression&nbsp;in&nbsp;a&nbsp;list&nbsp;of&nbsp;signals&nbsp;in&nbsp;normal&nbsp;form<br>
 (see&nbsp;simplifyToNormalForm&nbsp;in&nbsp;libfaust-signal.h)<br>
 &nbsp;<br>
@@ -1986,7 +2009,7 @@ returns&nbsp;a&nbsp;flattened&nbsp;box&nbsp;on&nbsp;success,&nbsp;otherwise&nbsp
  <dl><dt><a name="-expand_dsp_from_file"><strong>expand_dsp_from_file</strong></a>(filename: 'str', *args) -&gt; 'tuple(str, str)'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.<br>
 &nbsp;<br>
 Returns&nbsp;sha&nbsp;key&nbsp;for&nbsp;expanded&nbsp;dsp&nbsp;string&nbsp;and&nbsp;expanded&nbsp;dsp&nbsp;string</span></dd></dl>
- <dl><dt><a name="-expand_dsp_from_string"><strong>expand_dsp_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'str'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-expand_dsp_from_string"><strong>expand_dsp_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'tuple(str, str)'</dt><dd><span class="code">Expand&nbsp;dsp&nbsp;in&nbsp;a&nbsp;file&nbsp;into&nbsp;a&nbsp;self-contained&nbsp;dsp&nbsp;string.</span></dd></dl>
  <dl><dt><a name="-extract_name"><strong>extract_name</strong></a>(full_label) -&gt; 'str'</dt><dd><span class="code">Extract&nbsp;the&nbsp;name&nbsp;from&nbsp;a&nbsp;label.<br>
 &nbsp;<br>
 full_label&nbsp;the&nbsp;label&nbsp;to&nbsp;be&nbsp;analyzed<br>
@@ -2000,8 +2023,12 @@ returns&nbsp;the&nbsp;name</span></dd></dl>
 &nbsp;<br>
 s&nbsp;-&nbsp;the&nbsp;signal<br>
 returns&nbsp;the&nbsp;name</span></dd></dl>
- <dl><dt><a name="-generate_auxfiles_from_file"><strong>generate_auxfiles_from_file</strong></a>(filename: 'str', *args) -&gt; 'str'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;(other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...)&nbsp;from&nbsp;a&nbsp;file.</span></dd></dl>
- <dl><dt><a name="-generate_auxfiles_from_string"><strong>generate_auxfiles_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'str'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;(other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...)&nbsp;from&nbsp;a&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-generate_auxfiles_from_file"><strong>generate_auxfiles_from_file</strong></a>(filename: 'str', *args) -&gt; 'bool'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;from&nbsp;a&nbsp;file.<br>
+&nbsp;<br>
+Auxfiles&nbsp;can&nbsp;be&nbsp;other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...</span></dd></dl>
+ <dl><dt><a name="-generate_auxfiles_from_string"><strong>generate_auxfiles_from_string</strong></a>(name_app: 'str', dsp_content: 'str', *args) -&gt; 'bool'</dt><dd><span class="code">Generate&nbsp;additional&nbsp;files&nbsp;from&nbsp;a&nbsp;string.<br>
+&nbsp;<br>
+Auxfiles&nbsp;can&nbsp;be&nbsp;other&nbsp;backends,&nbsp;SVG,&nbsp;XML,&nbsp;JSON...</span></dd></dl>
  <dl><dt><a name="-generate_sha1"><strong>generate_sha1</strong></a>(data: 'str') -&gt; 'str'</dt><dd><span class="code">Generate&nbsp;SHA1&nbsp;key&nbsp;from&nbsp;a&nbsp;string.</span></dd></dl>
  <dl><dt><a name="-get_all_dsp_factories"><strong>get_all_dsp_factories</strong></a>()</dt><dd><span class="code">Return&nbsp;Faust&nbsp;DSP&nbsp;factories&nbsp;of&nbsp;the&nbsp;library&nbsp;cache&nbsp;as&nbsp;a&nbsp;vector&nbsp;of&nbsp;their&nbsp;SHA&nbsp;keys.</span></dd></dl>
  <dl><dt><a name="-get_box_id"><strong>get_box_id</strong></a>(t) -&gt; 'str | None'</dt></dl>
@@ -2021,9 +2048,7 @@ returns&nbsp;the&nbsp;identifier&nbsp;if&nbsp;the&nbsp;expression&nbsp;b&nbsp;wa
 else&nbsp;returns&nbsp;None</span></dd></dl>
  <dl><dt><a name="-get_dsp_factory_from_sha_key"><strong>get_dsp_factory_from_sha_key</strong></a>(sha_key) -&gt; 'InterpreterDspFactory'</dt><dd><span class="code">Get&nbsp;the&nbsp;Faust&nbsp;DSP&nbsp;factory&nbsp;associated&nbsp;with&nbsp;a&nbsp;given&nbsp;SHA&nbsp;key.</span></dd></dl>
  <dl><dt><a name="-get_package_resources"><strong>get_package_resources</strong></a>() -&gt; 'tuple[str, str, str, str]'</dt><dd><span class="code">provides&nbsp;the&nbsp;paths&nbsp;of&nbsp;package&nbsp;architecture&nbsp;and&nbsp;library&nbsp;files.</span></dd></dl>
- <dl><dt><a name="-get_version"><strong>get_version</strong></a>()</dt><dd><span class="code">Get&nbsp;the&nbsp;version&nbsp;of&nbsp;the&nbsp;library.<br>
-&nbsp;<br>
-returns&nbsp;the&nbsp;library&nbsp;version&nbsp;as&nbsp;a&nbsp;static&nbsp;string.</span></dd></dl>
+ <dl><dt><a name="-get_version"><strong>get_version</strong></a>()</dt><dd><span class="code">Returns&nbsp;the&nbsp;library&nbsp;version&nbsp;as&nbsp;a&nbsp;static&nbsp;string.</span></dd></dl>
  <dl><dt><a name="-getparams_box_abstr"><strong>getparams_box_abstr</strong></a>(t) -&gt; 'dict'</dt></dl>
  <dl><dt><a name="-getparams_box_access"><strong>getparams_box_access</strong></a>(t) -&gt; 'dict'</dt></dl>
  <dl><dt><a name="-getparams_box_appl"><strong>getparams_box_appl</strong></a>(t) -&gt; 'dict'</dt></dl>
@@ -2062,23 +2087,23 @@ returns&nbsp;the&nbsp;library&nbsp;version&nbsp;as&nbsp;a&nbsp;static&nbsp;strin
  <dl><dt><a name="-getparams_box_vgroup"><strong>getparams_box_vgroup</strong></a>(b) -&gt; 'dict'</dt></dl>
  <dl><dt><a name="-getparams_box_vslider"><strong>getparams_box_vslider</strong></a>(b) -&gt; 'dict'</dt></dl>
  <dl><dt><a name="-getparams_box_with_local_def"><strong>getparams_box_with_local_def</strong></a>(t) -&gt; 'dict'</dt></dl>
- <dl><dt><a name="-is_box_abstr"><strong>is_box_abstr</strong></a>(t) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_appl"><strong>is_box_appl</strong></a>(t) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_button"><strong>is_box_button</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_case"><strong>is_box_case</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_checkbox"><strong>is_box_checkbox</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_cut"><strong>is_box_cut</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_abstr"><strong>is_box_abstr</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;abtraction.</span></dd></dl>
+ <dl><dt><a name="-is_box_appl"><strong>is_box_appl</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;application.</span></dd></dl>
+ <dl><dt><a name="-is_box_button"><strong>is_box_button</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;button.</span></dd></dl>
+ <dl><dt><a name="-is_box_case"><strong>is_box_case</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;case.</span></dd></dl>
+ <dl><dt><a name="-is_box_checkbox"><strong>is_box_checkbox</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;checkbox.</span></dd></dl>
+ <dl><dt><a name="-is_box_cut"><strong>is_box_cut</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;cut.</span></dd></dl>
  <dl><dt><a name="-is_box_environment"><strong>is_box_environment</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_error"><strong>is_box_error</strong></a>(t) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_fconst"><strong>is_box_fconst</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_ffun"><strong>is_box_ffun</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_fvar"><strong>is_box_fvar</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_hbargraph"><strong>is_box_hbargraph</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_hgroup"><strong>is_box_hgroup</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_hslider"><strong>is_box_hslider</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_ident"><strong>is_box_ident</strong></a>(t) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_int"><strong>is_box_int</strong></a>(t) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_numentry"><strong>is_box_numentry</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_error"><strong>is_box_error</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;error.</span></dd></dl>
+ <dl><dt><a name="-is_box_fconst"><strong>is_box_fconst</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;fconst.</span></dd></dl>
+ <dl><dt><a name="-is_box_ffun"><strong>is_box_ffun</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;ffun.</span></dd></dl>
+ <dl><dt><a name="-is_box_fvar"><strong>is_box_fvar</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;fvar.</span></dd></dl>
+ <dl><dt><a name="-is_box_hbargraph"><strong>is_box_hbargraph</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;hbargraph.</span></dd></dl>
+ <dl><dt><a name="-is_box_hgroup"><strong>is_box_hgroup</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;horizontal&nbsp;group.</span></dd></dl>
+ <dl><dt><a name="-is_box_hslider"><strong>is_box_hslider</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;horizontal&nbsp;slider.</span></dd></dl>
+ <dl><dt><a name="-is_box_ident"><strong>is_box_ident</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;indentifier.</span></dd></dl>
+ <dl><dt><a name="-is_box_int"><strong>is_box_int</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;an&nbsp;int.</span></dd></dl>
+ <dl><dt><a name="-is_box_numentry"><strong>is_box_numentry</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;numentry.</span></dd></dl>
  <dl><dt><a name="-is_box_prim0"><strong>is_box_prim0</strong></a>(b) -&gt; 'bool'</dt></dl>
  <dl><dt><a name="-is_box_prim0_"><strong>is_box_prim0_</strong></a>(b) -&gt; 'bool'</dt></dl>
  <dl><dt><a name="-is_box_prim1"><strong>is_box_prim1</strong></a>(b) -&gt; 'bool'</dt></dl>
@@ -2091,16 +2116,16 @@ returns&nbsp;the&nbsp;library&nbsp;version&nbsp;as&nbsp;a&nbsp;static&nbsp;strin
  <dl><dt><a name="-is_box_prim4_"><strong>is_box_prim4_</strong></a>(b) -&gt; 'bool'</dt></dl>
  <dl><dt><a name="-is_box_prim5"><strong>is_box_prim5</strong></a>(b) -&gt; 'bool'</dt></dl>
  <dl><dt><a name="-is_box_prim5_"><strong>is_box_prim5_</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_real"><strong>is_box_real</strong></a>(t) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_slot"><strong>is_box_slot</strong></a>(t) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_soundfile"><strong>is_box_soundfile</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_symbolic"><strong>is_box_symbolic</strong></a>(t) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_tgroup"><strong>is_box_tgroup</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_vbargraph"><strong>is_box_vbargraph</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_vgroup"><strong>is_box_vgroup</strong></a>(b) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_real"><strong>is_box_real</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;real&nbsp;or&nbsp;float.</span></dd></dl>
+ <dl><dt><a name="-is_box_slot"><strong>is_box_slot</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;slot.</span></dd></dl>
+ <dl><dt><a name="-is_box_soundfile"><strong>is_box_soundfile</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;soundfile.</span></dd></dl>
+ <dl><dt><a name="-is_box_symbolic"><strong>is_box_symbolic</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;symbolic.</span></dd></dl>
+ <dl><dt><a name="-is_box_tgroup"><strong>is_box_tgroup</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;tab&nbsp;group.</span></dd></dl>
+ <dl><dt><a name="-is_box_vbargraph"><strong>is_box_vbargraph</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;vertical&nbsp;bargraph.</span></dd></dl>
+ <dl><dt><a name="-is_box_vgroup"><strong>is_box_vgroup</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;vertical&nbsp;group.</span></dd></dl>
  <dl><dt><a name="-is_box_vslider"><strong>is_box_vslider</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_waveform"><strong>is_box_waveform</strong></a>(b) -&gt; 'bool'</dt></dl>
- <dl><dt><a name="-is_box_wire"><strong>is_box_wire</strong></a>(t) -&gt; 'bool'</dt></dl>
+ <dl><dt><a name="-is_box_waveform"><strong>is_box_waveform</strong></a>(b) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;waveform.</span></dd></dl>
+ <dl><dt><a name="-is_box_wire"><strong>is_box_wire</strong></a>(t) -&gt; 'bool'</dt><dd><span class="code">test&nbsp;if&nbsp;box&nbsp;is&nbsp;a&nbsp;wire.</span></dd></dl>
  <dl><dt><a name="-is_nil"><strong>is_nil</strong></a>(s) -&gt; 'bool'</dt><dd><span class="code">Check&nbsp;if&nbsp;a&nbsp;signal&nbsp;is&nbsp;nil.<br>
 &nbsp;<br>
 s&nbsp;-&nbsp;the&nbsp;signal<br>
@@ -2296,8 +2321,8 @@ step&nbsp;-&nbsp;the&nbsp;step&nbsp;signal,&nbsp;a&nbsp;constant&nbsp;numerical&
 &nbsp;<br>
 returns&nbsp;the&nbsp;num&nbsp;entry&nbsp;signal.</span></dd></dl>
  <dl><dt><a name="-sig_or"><strong>sig_or</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
- <dl><dt><a name="-sig_or_float"><strong>sig_or_float</strong></a>(var)</dt></dl>
- <dl><dt><a name="-sig_or_int"><strong>sig_or_int</strong></a>(var)</dt></dl>
+ <dl><dt><a name="-sig_or_float"><strong>sig_or_float</strong></a>(var: 'Signal | float') -&gt; 'Signal'</dt></dl>
+ <dl><dt><a name="-sig_or_int"><strong>sig_or_int</strong></a>(var: 'Signal | int') -&gt; 'Signal'</dt></dl>
  <dl><dt><a name="-sig_pow"><strong>sig_pow</strong></a>(x, y) -&gt; 'Signal'</dt></dl>
  <dl><dt><a name="-sig_readonly_table"><strong>sig_readonly_table</strong></a>(n, init, ridx) -&gt; 'Signal'</dt><dd><span class="code">Create&nbsp;a&nbsp;read&nbsp;only&nbsp;table.<br>
 &nbsp;<br>
@@ -2477,7 +2502,7 @@ returns&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;xtended&nbsp;signal.</span></dd
 <td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
     
 <tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
-<td class="singlecolumn"><strong>PACKAGE_RESOURCES</strong> = ('-A', './resources/architecture', '-I', './resources/libraries')<br>
+<td class="singlecolumn"><strong>PACKAGE_RESOURCES</strong> = ('-A', './cyfaust/resources/architecture', '-I', './cyfaust/resources/libraries')<br>
 <strong>__test__</strong> = {}<br>
 <strong>kAND</strong> = &lt;SOperator.kAND: 14&gt;<br>
 <strong>kARsh</strong> = &lt;SOperator.kARsh: 6&gt;<br>
@@ -2497,5 +2522,5 @@ returns&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;xtended&nbsp;signal.</span></dd
 <strong>kSInt</strong> = &lt;SType.kSInt: 0&gt;<br>
 <strong>kSReal</strong> = &lt;SType.kSReal: 1&gt;<br>
 <strong>kSub</strong> = &lt;SOperator.kSub: 1&gt;<br>
-<strong>kXOR</strong> = &lt;SOperator.kXOR: 16&gt;</td></tr></table>
-</body></html>
+<strong>kXOR</strong> = &lt;SOperator.kXOR: 16&gt;</td></tr></table></body>
+</html>
