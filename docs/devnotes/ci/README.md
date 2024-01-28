@@ -1,4 +1,10 @@
-This folder contains the following shelfed files which were related to supporting [cibuildwheel](https://cibuildwheel.readthedocs.io/en/stable/)
+# Continuous Integration Experiments
+
+This folder contains some notes on continuous integration experiments.
+
+## cibuildwheel
+
+This section contains the following shelfed files which were related to supporting [cibuildwheel](https://cibuildwheel.readthedocs.io/en/stable/)
 
 - cyfaust-cibuildwheel.yml
 
@@ -7,3 +13,8 @@ This folder contains the following shelfed files which were related to supportin
 Without a linux machine with docker installed, testing `cibuildwheel` becomes a huge pain, especially c onsidering the difference between `manylinux` variants.
 
 This may be revisited again at a later point.
+
+
+## faust on windows
+
+Currently exploring how it is done on the faust project itself. Initial result of this is the `winplus.yml` workflow which builds `libfaust.(dll|a)` from a modified faust workflow.
