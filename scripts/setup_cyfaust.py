@@ -81,7 +81,7 @@ class ShellCmd:
         """git clone a repository source tree from a url"""
         _cmds = ["git clone --depth 1"]
         if branch:
-            _cmds.append(f"--branch '{branch}'")
+            _cmds.append(f"--branch {branch}")
         if recurse:
             _cmds.append("--recurse-submodules --shallow-submodules")
         _cmds.append(url)
@@ -395,7 +395,8 @@ class FaustBuilder(Builder):
                 BUILD_HTTP_STATIC="OFF",
             )
             self.cmake_build(build_dir=self.faustdir, release=True)
-            self.cmake_install(build_dir=self.faustdir, prefix=self.prefix)
+            # install doesn't work on windows
+            # self.cmake_install(build_dir=self.faustdir, prefix=self.prefix)
 
         else:
             raise SystemExit("platform not supported")
