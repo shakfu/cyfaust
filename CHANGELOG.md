@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### cyfaust
 
+- Added Windows support to `setup_cyfaust.py`. It can now build a faust interpreter-centric `libfaust.lib`, `libfaust.dll` and `faust.exe`.
+
 - Added experimental faust github workflow to build faust interp-enabled `libfaust.(a|dll)`
 
 - Added enhancements to `gen_htmldoc.py` python script and makefile target, `make docs`, to generate api docs in html for both build variants.
