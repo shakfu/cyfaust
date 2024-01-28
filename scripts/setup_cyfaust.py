@@ -403,8 +403,9 @@ class FaustBuilder(Builder):
 
         if PLATFORM == "Windows":
             self.remove(self.project.bin / "faust.exe")
-            if self.dylib.exists():
-                self.remove(self.dylib)
+            dylib = self.lib / "faust.dll"
+            if dylib.exists():
+                self.remove(dylib)
             if self.staticlib.exists():
                 self.remove(self.staticlib)
         else:
@@ -422,7 +423,8 @@ class FaustBuilder(Builder):
     def copy_executables(self):
         self.log.info("copy executables")
         if PLATFORM == "Windows":
-            self.copy(self.sourcedir / "bin" / "Release", "faust.exe", self.project.bin)
+            self.copy(self.sourcedir / "bin" / "Release" / "faust.exe", 
+                self.project.bin)
         else:
             for e in ["faust", "faust-config", "faustpath"]:
                 self.copy(self.prefix / "bin" / e, self.project.bin / e)
@@ -435,9 +437,9 @@ class FaustBuilder(Builder):
         self.log.info("copy_sharedlib")
         if PLATFORM == "Windows":
             self.copy(
-                self.sourcedir / "lib" / "Release" / "libfaust.dll",
-                self.dylib
-                # self.project.lib
+                self.sourcedir / "lib" / "Release" / "faust.dll",
+                # self.dylib
+                self.project.lib
             )
         else:
             self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
