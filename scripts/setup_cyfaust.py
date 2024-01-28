@@ -35,7 +35,8 @@ DEBUG = True
 
 
 class CustomFormatter(logging.Formatter):
-    """custom logging formatting class""" 
+    """custom logging formatting class"""
+
     white = "\x1b[97;20m"
     grey = "\x1b[38;20m"
     green = "\x1b[32;20m"
@@ -176,14 +177,21 @@ class ShellCmd:
             self.cmd("brew update")
         self.cmd(f"brew install {_pkgs}")
 
-    def cmake_config(self, src_dir: Pathlike, build_dir: Pathlike, **options):
+    def cmake_config(self, src_dir: Pathlike, build_dir: Pathlike, *scripts, **options):
         """activate cmake configuration / generation stage"""
-        opts = " ".join(f"-D{k}={v}" for k, v in options.items())
-        self.cmd(f"cmake -S {src_dir} -B {build_dir} {opts}")
+        _cmds = [f"cmake -S {src_dir} -B {build_dir}"]
+        if scripts:
+            _cmds.append(" ".join(f"-C {path}" for path in scripts))
+        if options:
+            _cmds.append(" ".join(f"-D{k}={v}" for k, v in options.items()))
+        self.cmd(" ".join(_cmds))
 
-    def cmake_build(self, build_dir: Pathlike):
+    def cmake_build(self, build_dir: Pathlike, release=False):
         """activate cmake build stage"""
-        self.cmd(f"cmake --build {build_dir}")
+        _cmd = f"cmake --build {build_dir}"
+        if release:
+            _cmd += " --config Release"
+        self.cmd(_cmd)
 
     def cmake_install(self, build_dir: Pathlike, prefix: str | None = None):
         """activate cmake install stage"""
@@ -253,7 +261,10 @@ class Project:
 
 
 class Builder(ShellCmd):
-    LIBNAME="libname"
+    LIBNAME = "libname"
+    DYLIB_SUFFIX_OSX = ".0.dylib"
+    DYLIB_SUFFIX_LIN = ".so.0"
+    DYLIB_SUFFIX_WIN = ".dll"
 
     def __init__(self, version="0.0.1"):
         self.version = version
@@ -273,14 +284,19 @@ class Builder(ShellCmd):
 
     @property
     def staticlib_name(self):
-        return f"{self.LIBNAME}.a"
+        suffix = ".a"
+        if PLATFORM == "Windows":
+            suffix = ".lib"
+        return f"{self.LIBNAME}{suffix}"
 
     @property
     def dylib_name(self):
         if PLATFORM == "Darwin":
-            return f"{self.LIBNAME}.2.dylib"
+            return f"{self.LIBNAME}{self.DYLIB_SUFFIX_OSX}"
         if PLATFORM == "Linux":
-            return f"{self.LIBNAME}.so.2"
+            return f"{self.LIBNAME}{self.DYLIB_SUFFIX_LIN}"
+        if PLATFORM == "Windows":
+            return f"{self.LIBNAME}{self.DYLIB_SUFFIX_WIN}"
         raise SystemExit("platform not supported")
 
     @property
@@ -305,13 +321,18 @@ class Builder(ShellCmd):
 
 
 class FaustBuilder(Builder):
-    LIBNAME="libfaust"
+    LIBNAME = "libfaust"
+    DYLIB_SUFFIX_OSX = ".2.dylib"
+    DYLIB_SUFFIX_LIN = ".so.2"
+    DYLIB_SUFFIX_WIN = ".dll"
 
     def __init__(self, version="2.69.3"):
         super().__init__(version)
         self.src = self.project.downloads / "faust"
-        self.backends = self.src / "build" / "backends"
-        self.targets = self.src / "build" / "targets"
+        self.sourcedir = self.src / "build"
+        self.faustdir = self.sourcedir / "faustdir"
+        self.backends = self.sourcedir / "backends"
+        self.targets = self.sourcedir / "targets"
         self.prefix = self.project.build / "prefix"
         self.log = logging.getLogger(self.__class__.__name__)
 
@@ -320,20 +341,64 @@ class FaustBuilder(Builder):
         self.setup_project()
         self.makedirs(self.project.downloads)
         self.chdir(self.project.downloads)
-        self.git_clone("https://github.com/grame-cncm/faust.git", branch=self.version)
-        self.makedirs(self.src / "build" / "faustdir")
-        self.copy(self.project.patch / "faust.mk", self.src / "Makefile")
-        self.copy(
-            self.project.patch / "interp_plus_backend.cmake",
-            self.backends / "interp_plus.cmake",
-        )
-        self.copy(
-            self.project.patch / "interp_plus_target.cmake",
-            self.targets / "interp_plus.cmake",
-        )
-        self.chdir(self.src)
-        self.cmd("make interp")
-        self.cmd(f"PREFIX={self.prefix} make install")
+        self.git_clone("https://github.com/grame-cncm/faust.git",
+            branch=self.version)
+
+    def build_faust(self):
+        self.makedirs(self.faustdir)
+
+        if PLATFORM in ["Linux", "Darwin"]:
+            self.copy(
+                self.project.patch / "faust.mk", 
+                self.src / "Makefile")
+
+            self.copy(
+                self.project.patch / "interp_plus_backend.cmake",
+                self.backends / "interp_plus.cmake",
+            )
+            self.copy(
+                self.project.patch / "interp_plus_target.cmake",
+                self.targets / "interp_plus.cmake",
+            )
+
+            self.chdir(self.src)
+            self.cmd("make interp")
+            self.cmd(f"PREFIX={self.prefix} make install")
+
+        elif PLATFORM == "Windows":
+            self.copy(
+                self.project.patch / "interp_plus_backend.cmake",
+                self.backends / "interp.cmake",
+            )
+            self.copy(
+                self.project.patch / "interp_plus_target.cmake",
+                self.targets / "interp.cmake",
+            )
+            self.cmake_config(
+                self.sourcedir,
+                self.faustdir,
+                # scripts
+                self.backends / "interp.cmake",
+                self.targets / "interp.cmake",
+                # options
+                CMAKE_BUILD_TYPE="Release",
+                WORKLET="OFF",
+                INCLUDE_LLVM="OFF",
+                USE_LLVM_CONFIG="OFF",
+                LLVM_PACKAGE_VERSION="",
+                LLVM_LIBS="",
+                LLVM_LIB_DIR="",
+                LLVM_INCLUDE_DIRS="",
+                LLVM_DEFINITIONS="",
+                LLVM_LD_FLAGS="",
+                LIBSDIR="lib",
+                BUILD_HTTP_STATIC="OFF",
+            )
+            self.cmake_build(build_dir=self.faustdir, release=True)
+            self.cmake_install(build_dir=self.faustdir, prefix=self.prefix)
+
+        else:
+            raise SystemExit("platform not supported")
 
     def remove_current(self):
         self.log.info("remove current faust libs")
@@ -350,7 +415,10 @@ class FaustBuilder(Builder):
 
     def copy_executables(self):
         self.log.info("copy executables")
-        for e in ["faust", "faust-config", "faustpath"]:
+        executables = ["faust", "faust-config", "faustpath"]
+        if PLATFORM == "Windows":
+            executables = [e + ".exe" for e in executables]
+        for e in executables:
             self.copy(self.prefix / "bin" / e, self.project.bin / e)
 
     def copy_headers(self):
@@ -360,7 +428,8 @@ class FaustBuilder(Builder):
     def copy_sharedlib(self):
         self.log.info("copy_sharedlib")
         self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
-        self.dylib_link.symlink_to(self.dylib)
+        if PLATFORM in ["Darwin", "Linux"]:
+            self.dylib_link.symlink_to(self.dylib)
 
     def copy_staticlib(self):
         self.log.info("copy staticlib")
@@ -389,6 +458,7 @@ class FaustBuilder(Builder):
 
     def process(self):
         self.get_faust()
+        self.build_faust()
         self.remove_current()
         self.copy_executables()
         self.copy_headers()
@@ -434,9 +504,7 @@ class SndfileBuilder(Builder):
         self.cmake_build(self.build_dir)
         self.cmake_install(self.build_dir, prefix=self.prefix)
         self.log.info("installing %s", self.staticlib)
-        self.copy(
-            self.prefix / 'lib' / self.staticlib_name,
-            self.project.lib_static)
+        self.copy(self.prefix / "lib" / self.staticlib_name, self.project.lib_static)
 
 
 class SamplerateBuilder(Builder):
@@ -468,9 +536,7 @@ class SamplerateBuilder(Builder):
         self.cmake_build(self.build_dir)
         self.cmake_install(self.build_dir, prefix=self.prefix)
         self.log.info("installing %s", self.staticlib)
-        self.copy(
-            self.prefix / 'lib' / self.staticlib_name,
-            self.project.lib_static)
+        self.copy(self.prefix / "lib" / self.staticlib_name, self.project.lib_static)
 
 
 if __name__ == "__main__":

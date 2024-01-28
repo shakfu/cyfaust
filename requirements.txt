@@ -12,7 +12,7 @@ delocate; sys_platform == 'darwin'
 auditwheel; sys_platform == 'linux'
 
 # windows fix wheel tool
-# delvewheel; sys_platform == 'windows'
+delvewheel; sys_platform == 'windows'
 
 # wheel building and testing
 wheel

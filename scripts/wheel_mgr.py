@@ -237,8 +237,10 @@ class WheelBuilder:
             self.cmd(f"delocate-wheel -v --wheel-dir {dst} {src}/*.whl")
         elif PLATFORM == "Linux":
             self.cmd(f"auditwheel repair --plat linux_{ARCH} --wheel-dir {dst} {src}/*.whl")
+        elif PLATFORM == "Windows":
+            self.cmd(f"delvewheel repair --wheel-dir {dst} {src}/*.whl")
         else:
-            raise SystemExit("Windows platform not supported")
+            raise SystemExit("platform not supported")
 
     def build_static_wheel(self):
         print("building static build wheel")
