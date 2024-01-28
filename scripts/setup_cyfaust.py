@@ -403,7 +403,7 @@ class FaustBuilder(Builder):
 
         if PLATFORM == "Windows":
             self.remove(self.project.bin / "faust.exe")
-            dylib = self.lib / "faust.dll"
+            dylib = self.project.lib / "faust.dll"
             if dylib.exists():
                 self.remove(dylib)
             if self.staticlib.exists():
