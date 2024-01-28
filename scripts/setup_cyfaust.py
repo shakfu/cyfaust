@@ -341,16 +341,13 @@ class FaustBuilder(Builder):
         self.setup_project()
         self.makedirs(self.project.downloads)
         self.chdir(self.project.downloads)
-        self.git_clone("https://github.com/grame-cncm/faust.git",
-            branch=self.version)
+        self.git_clone("https://github.com/grame-cncm/faust.git", branch=self.version)
 
     def build_faust(self):
         self.makedirs(self.faustdir)
 
         if PLATFORM in ["Linux", "Darwin"]:
-            self.copy(
-                self.project.patch / "faust.mk", 
-                self.src / "Makefile")
+            self.copy(self.project.patch / "faust.mk", self.src / "Makefile")
 
             self.copy(
                 self.project.patch / "interp_plus_backend.cmake",
@@ -403,24 +400,32 @@ class FaustBuilder(Builder):
 
     def remove_current(self):
         self.log.info("remove current faust libs")
-        for e in ["faust", "faust-config", "faustpath"]:
-            self.remove(self.project.bin / e)
-        self.remove(self.project.include / "faust")
-        if self.dylib.exists():
-            self.remove(self.dylib)
-        if self.dylib_link.exists():
-            self.remove(self.dylib_link)
-        if self.staticlib.exists():
-            self.remove(self.staticlib)
-        self.remove(self.project.share / "faust")
+
+        if PLATFORM == "Windows":
+            self.remove(self.project.bin / "faust.exe")
+            if self.dylib.exists():
+                self.remove(self.dylib)
+            if self.staticlib.exists():
+                self.remove(self.staticlib)
+        else:
+            for e in ["faust", "faust-config", "faustpath"]:
+                self.remove(self.project.bin / e)
+            self.remove(self.project.include / "faust")
+            if self.dylib.exists():
+                self.remove(self.dylib)
+            if self.dylib_link.exists():
+                self.remove(self.dylib_link)
+            if self.staticlib.exists():
+                self.remove(self.staticlib)
+            self.remove(self.project.share / "faust")
 
     def copy_executables(self):
         self.log.info("copy executables")
-        executables = ["faust", "faust-config", "faustpath"]
         if PLATFORM == "Windows":
-            executables = [e + ".exe" for e in executables]
-        for e in executables:
-            self.copy(self.prefix / "bin" / e, self.project.bin / e)
+            self.copy(self.sourcedir / "bin" / "Release", "faust.exe", self.project.bin)
+        else:
+            for e in ["faust", "faust-config", "faustpath"]:
+                self.copy(self.prefix / "bin" / e, self.project.bin / e)
 
     def copy_headers(self):
         self.log.info("update headers")
@@ -428,13 +433,26 @@ class FaustBuilder(Builder):
 
     def copy_sharedlib(self):
         self.log.info("copy_sharedlib")
-        self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
-        if PLATFORM in ["Darwin", "Linux"]:
+        if PLATFORM == "Windows":
+            self.copy(
+                self.sourcedir / "lib" / "Release" / "libfaust.dll",
+                self.dylib
+                # self.project.lib
+            )
+        else:
+            self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
             self.dylib_link.symlink_to(self.dylib)
 
     def copy_staticlib(self):
         self.log.info("copy staticlib")
-        self.copy(self.prefix / "lib" / self.staticlib_name, self.staticlib)
+        if PLATFORM == "Windows":
+            self.copy(
+                self.sourcedir / "lib" / "libfaust.lib",
+                self.staticlib
+                # self.project.lib_static
+            )
+        else:
+            self.copy(self.prefix / "lib" / self.staticlib_name, self.staticlib)
 
     def copy_stdlib(self):
         self.log.info("copy stdlib")
@@ -462,12 +480,14 @@ class FaustBuilder(Builder):
         self.build_faust()
         self.remove_current()
         self.copy_executables()
-        self.copy_headers()
         self.copy_staticlib()
         self.copy_sharedlib()
-        self.copy_stdlib()
-        self.copy_examples()
-        self.patch_audio_driver()
+        if PLATFORM in ["Linux", "Darwin"]:
+            self.copy_headers()
+            self.patch_audio_driver()
+        # skip since resources already contains these
+        # self.copy_stdlib()
+        # self.copy_examples()
 
 
 class SndfileBuilder(Builder):
