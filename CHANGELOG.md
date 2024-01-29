@@ -17,6 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### cyfaust
 
+- Added script, `manage.py` which consolidates `setup_cyfaust.py` and `wheel_mgr.py` as well as some high-level frontend commands to facilitate cross-platform operations.
+
+- Added preliminary Windows support, building dynamic and static variants are working with most tests passing, wheel building support still a work-in-progress.
+
 - Added Windows support to `setup_cyfaust.py`. It can now build a faust interpreter-centric `libfaust.lib`, `libfaust.dll` and `faust.exe`.
 
 - Added experimental faust github workflow to build faust interp-enabled `libfaust.(a|dll)`

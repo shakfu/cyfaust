@@ -1,29 +1,48 @@
 #!/usr/bin/env python3
-"""setup_cyfaust.py
 
-class structure:
+"""manage.py: cross-platform cyfaust build manager.
+
+- Shell ops
+- Dependency Building:
+- Module compilation
+- Wheel build ops
+
+models:
     CustomFormatter(logging.Formatter)
+    MetaCommander(type)
     Project
     ShellCmd
         DependencyMgr
-        FaustBuilder
-        SndfileBuilder
-        SamplerateBuilder
+        Builder
+            FaustBuilder
+            SndfileBuilder
+            SamplerateBuilder
+        Application
+    WheelFile(dataclass)
+    WheelBuilder
+
 """
+import argparse
 import logging
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 Pathlike = str | Path
 
 PLATFORM = platform.system()
 ARCH = platform.machine()
-
+PY_VER_MINOR = sys.version_info.minor
 DEBUG = True
+
+
+# ----------------------------------------------------------------------------
+# setup_cyfaust
 
 
 class CustomFormatter(logging.Formatter):
@@ -118,18 +137,21 @@ class ShellCmd:
         else:
             shutil.copy2(src, dst)
 
-    def remove(self, path: Pathlike):
+    def remove(self, path: Pathlike, silent=False):
         """Remove file or folder."""
         path = Path(path)
         if path.is_dir():
-            self.log.info("remove folder: %s", path)
+            if not silent:
+                self.log.info("remove folder: %s", path)
             shutil.rmtree(path, ignore_errors=not DEBUG)
         else:
-            self.log.info("remove file: %s", path)
+            if not silent:
+                self.log.info("remove file: %s", path)
             try:
                 path.unlink()
             except FileNotFoundError:
-                self.log.warning("file not found: %s", path)
+                if not silent:
+                    self.log.warning("file not found: %s", path)
 
     def pip_install(
         self,
@@ -249,6 +271,7 @@ class Project:
         self.scripts = self.cwd / "scripts"
         self.patch = self.scripts / "patch"
         self.build = self.cwd / "build"
+        self.tests = self.cwd / "tests"
         self.downloads = self.build / "downloads"
 
 
@@ -415,8 +438,9 @@ class FaustBuilder(Builder):
     def copy_executables(self):
         self.log.info("copy executables")
         if PLATFORM == "Windows":
-            self.copy(self.sourcedir / "bin" / "Release" / "faust.exe", 
-                self.project.bin)
+            self.copy(
+                self.sourcedir / "bin" / "Release" / "faust.exe", self.project.bin
+            )
         else:
             for e in ["faust", "faust-config", "faustpath"]:
                 self.copy(self.prefix / "bin" / e, self.project.bin / e)
@@ -429,12 +453,10 @@ class FaustBuilder(Builder):
         self.log.info("copy_sharedlib")
         if PLATFORM == "Windows":
             self.copy(
-                self.sourcedir / "lib" / "Release" / "faust.dll",
-                self.project.lib
+                self.sourcedir / "lib" / "Release" / "faust.dll", self.project.lib
             )
             self.copy(
-                self.sourcedir / "lib" / "Release" / "faust.lib",
-                self.project.lib
+                self.sourcedir / "lib" / "Release" / "faust.lib", self.project.lib
             )
         else:
             self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
@@ -557,45 +579,475 @@ class SamplerateBuilder(Builder):
         self.copy(self.prefix / "lib" / self.staticlib_name, self.project.lib_static)
 
 
-if __name__ == "__main__":
-    import argparse
+# ----------------------------------------------------------------------------
+# wheel_builder
 
-    parser = argparse.ArgumentParser(description="setup cyfaust project dependencies")
 
-    def opt(long_opt, short_opt, desc):
-        return parser.add_argument(long_opt, short_opt, action="store_true", help=desc)
+@dataclass
+class WheelFilename:
+    """Wheel filename dataclass with parser.
 
-    opt("--deps", "-d", "install platform dependencies")
-    opt("--faust", "-f", "build/install libfaust")
-    opt("--sndfile", "-s", "build/install libsndfile")
-    opt("--samplerate", "-r", "build/install libsamplerate")
-    opt("--all", "-a", "build/install all")
+    credits:
+        wheel parsing code is derived from
+        from https://github.com/wheelodex/wheel-filename
+        Copyright (c) 2020-2022 John Thorvald Wodder II
 
-    args = parser.parse_args()
+    This version uses dataclasses instead of NamedTuples in the original
+    and packages the parsing function and the regex patterns in the
+    class itself.
+    """
 
-    if args.all:
-        for mgr_class in [
+    PYTHON_TAG_RGX = r"[\w\d]+"
+    ABI_TAG_RGX = r"[\w\d]+"
+    PLATFORM_TAG_RGX = r"[\w\d]+"
+
+    WHEEL_FILENAME_PATTERN = re.compile(
+        r"(?P<project>[A-Za-z0-9](?:[A-Za-z0-9._]*[A-Za-z0-9])?)"
+        r"-(?P<version>[A-Za-z0-9_.!+]+)"
+        r"(?:-(?P<build>[0-9][\w\d.]*))?"
+        r"-(?P<python_tags>{0}(?:\.{0})*)"
+        r"-(?P<abi_tags>{1}(?:\.{1})*)"
+        r"-(?P<platform_tags>{2}(?:\.{2})*)"
+        r"\.[Ww][Hh][Ll]".format(PYTHON_TAG_RGX, ABI_TAG_RGX, PLATFORM_TAG_RGX)
+    )
+
+    project: str
+    version: str
+    build: str | None
+    python_tags: list[str]
+    abi_tags: list[str]
+    platform_tags: list[str]
+
+    def __str__(self) -> str:
+        if self.build:
+            fmt = "{0.project}-{0.version}-{0.build}-{1}-{2}-{3}.whl"
+        else:
+            fmt = "{0.project}-{0.version}-{1}-{2}-{3}.whl"
+        return fmt.format(
+            self,
+            ".".join(self.python_tags),
+            ".".join(self.abi_tags),
+            ".".join(self.platform_tags),
+        )
+
+    @classmethod
+    def from_path(cls, path: str | Path) -> "WheelFilename":
+        """Parse a wheel filename into its components"""
+        basename = Path(path).name
+        m = cls.WHEEL_FILENAME_PATTERN.fullmatch(basename)
+        if not m:
+            raise TypeError("incorrect wheel name")
+        return cls(
+            project=m.group("project"),
+            version=m.group("version"),
+            build=m.group("build"),
+            python_tags=m.group("python_tags").split("."),
+            abi_tags=m.group("abi_tags").split("."),
+            platform_tags=m.group("platform_tags").split("."),
+        )
+
+
+class WheelBuilder:
+    """cyfaust wheel builder
+
+    Automates wheel building and handle special cases
+    when building cyfaust locally and on github actions,
+    especially whenc considering the number of different products given
+    build-variants * platforms * architectures:
+        {dynamic, static} * {macos, linux} * {x86_64, arm64|aarch64}
+    """
+
+    def __init__(self, src_folder="dist", dst_folder="wheels", universal=False):
+        self.cwd = Path.cwd()
+        self.src_folder = self.cwd / src_folder
+        self.dst_folder = self.cwd / dst_folder
+        self.build_folder = self.cwd / "build"
+        self.universal = universal
+
+    def cmd(self, shellcmd, cwd="."):
+        subprocess.call(shellcmd, shell=True, cwd=str(cwd))
+
+    def get(self, shellcmd, cwd=".", shell=False) -> str:
+        """get output of shellcmd"""
+        if not shell:
+            shellcmd = shellcmd.split()
+        return subprocess.check_output(
+            shellcmd, encoding="utf8", shell=shell, cwd=str(cwd)
+        ).strip()
+
+    def getenv(self, key):
+        """convert '0','1' env values to bool {True, False}"""
+        return bool(int(os.getenv(key, False)))
+
+    def get_min_osx_ver(self):
+        """set MACOSX_DEPLOYMENT_TARGET
+
+        credits: cibuildwheel
+        ref: https://github.com/pypa/cibuildwheel/blob/main/cibuildwheel/macos.py
+        thanks: @henryiii
+        post: https://github.com/pypa/wheel/issues/573
+
+        For arm64, the minimal deployment target is 11.0.
+        On x86_64 (or universal2), use 10.9 as a default.
+        """
+        min_osx_ver = "10.9"
+        if self.is_macos_arm64 and not self.universal:
+            min_osx_ver = "11.0"
+        os.environ["MACOSX_DEPLOYMENT_TARGET"] = min_osx_ver
+        return min_osx_ver
+
+    @property
+    def is_static(self):
+        return self.getenv("STATIC")
+
+    @property
+    def is_macos_arm64(self):
+        return PLATFORM == "Darwin" and ARCH == "arm64"
+
+    @property
+    def is_macos_x86_64(self):
+        return PLATFORM == "Darwin" and ARCH == "x86_64"
+
+    @property
+    def is_linux_x86_64(self):
+        return PLATFORM == "Linux" and ARCH == "x86_64"
+
+    @property
+    def is_linux_aarch64(self):
+        return PLATFORM == "Linux" and ARCH == "aarch64"
+
+    def clean(self):
+        if self.build_folder.exists():
+            shutil.rmtree(self.build_folder)
+        if self.src_folder.exists():
+            shutil.rmtree(self.src_folder)
+
+    def reset(self):
+        self.clean()
+        if self.dst_folder.exists():
+            shutil.rmtree(self.dst_folder)
+
+    def check(self):
+        assert self.dst_folder.glob("*.whl"), "no 'fixed' wheels created"
+
+    def makedirs(self):
+        if not self.dst_folder.exists():
+            self.dst_folder.mkdir()
+
+    def build_wheel(self, static=False, override=True):
+        assert PY_VER_MINOR >= 8, "only supporting python >= 3.8"
+
+        _cmd = "python3 setup.py bdist_wheel"
+
+        if PLATFORM == "Darwin":
+            ver = self.get_min_osx_ver()
+            if self.universal:
+                prefix = (
+                    f"ARCHFLAGS='-arch arm64 -arch x86_64' "
+                    f"_PYTHON_HOST_PLATFORM='macosx-{ver}-universal2' "
+                )
+            else:
+                prefix = (
+                    f"ARCHFLAGS='-arch {ARCH}' "
+                    f"_PYTHON_HOST_PLATFORM='macosx-{ver}-{ARCH}' "
+                )
+
+            _cmd = prefix + _cmd
+
+        if static:
+            self.cmd(f"STATIC=1 {_cmd}")
+        else:
+            self.cmd(_cmd)
+
+    def test_wheels(self):
+        venv = self.dst_folder / "venv"
+        if venv.exists():
+            shutil.rmtree(venv)
+
+        for wheel in self.dst_folder.glob("*.whl"):
+            self.cmd("virtualenv venv", cwd=self.dst_folder)
+            vpy = venv / "bin" / "python"
+            vpip = venv / "bin" / "pip"
+            self.cmd(f"{vpip} install {wheel}")
+            if "static" in str(wheel):
+                target = "static"
+                imported = "cyfaust"
+                print("static variant test")
+            else:
+                target = "dynamic"
+                imported = "interp"
+                print("dynamic variant test")
+            val = self.get(
+                f"{vpy} -c 'from cyfaust import {imported};print(len(dir({imported})))'",
+                shell=True,
+                cwd=self.dst_folder,
+            )
+            print(f"cyfaust.{imported} # objects: {val}")
+            assert val, f"cyfaust {target} wheel test: FAILED"
+            print(f"cyfaust {target} wheel test: OK")
+            if venv.exists():
+                shutil.rmtree(venv)
+
+    def build_dynamic_wheel(self):
+        print("building dynamic build wheel")
+        self.clean()
+        self.makedirs()
+        self.build_wheel()
+        src = self.src_folder
+        dst = self.dst_folder
+        if PLATFORM == "Darwin":
+            self.cmd(f"delocate-wheel -v --wheel-dir {dst} {src}/*.whl")
+        elif PLATFORM == "Linux":
+            self.cmd(
+                f"auditwheel repair --plat linux_{ARCH} --wheel-dir {dst} {src}/*.whl"
+            )
+        elif PLATFORM == "Windows":
+            self.cmd(f"delvewheel repair --wheel-dir {dst} {src}/*.whl")
+        else:
+            raise SystemExit("platform not supported")
+
+    def build_static_wheel(self):
+        print("building static build wheel")
+        self.clean()
+        self.makedirs()
+        self.build_wheel(static=True)
+        for wheel in self.src_folder.glob("*.whl"):
+            w = WheelFilename.from_path(wheel)
+            w.project = "cyfaust-static"
+            renamed_wheel = str(w)
+            os.rename(wheel, renamed_wheel)
+            shutil.move(renamed_wheel, self.dst_folder)
+
+    def build(self):
+        if self.is_static:
+            self.build_static_wheel()
+        else:
+            self.build_dynamic_wheel()
+        self.check()
+        self.clean()
+
+    def release(self):
+        self.reset()
+        self.build_dynamic_wheel()
+        self.build_static_wheel()
+        self.check()
+        self.clean()
+
+
+# ----------------------------------------------------------------------------
+# commandline machinery
+
+
+cmd = os.system
+
+
+# option decorator
+def option(*args, **kwds):
+    def _decorator(func):
+        _option = (args, kwds)
+        if hasattr(func, "options"):
+            func.options.append(_option)
+        else:
+            func.options = [_option]
+        return func
+
+    return _decorator
+
+
+# arg decorator
+arg = option
+
+
+# combines option decorators
+def option_group(*options):
+    def _decorator(func):
+        for option in options:
+            func = option(func)
+        return func
+
+    return _decorator
+
+
+class MetaCommander(type):
+    def __new__(cls, classname, bases, classdict):
+        classdict = dict(classdict)
+        subcmds = {}
+        for name, func in list(classdict.items()):
+            if name.startswith("do_"):
+                name = name[3:]
+                subcmd = {"name": name, "func": func, "options": []}
+                if hasattr(func, "options"):
+                    subcmd["options"] = func.options
+                subcmds[name] = subcmd
+        classdict["_argparse_subcmds"] = subcmds
+        return type.__new__(cls, classname, bases, classdict)
+
+
+class Application(ShellCmd, metaclass=MetaCommander):
+    name = "app"
+    description = "a description"
+    version = "0.0.3"
+    epilog = ""
+    default_args = ["--help"]
+
+    def __init__(self):
+        self.project = Project()
+        self.log = logging.getLogger(self.__class__.__name__)
+
+    def parse_args(self):
+        parser = argparse.ArgumentParser(
+            # prog = self.name,
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            description=self.__doc__,
+            epilog=self.epilog,
+        )
+        return parser
+
+    def cmdline(self):
+        self.parser = self.parse_args()
+
+        self.parser.add_argument(
+            "-v", "--version", action="version", version="%(prog)s " + self.version
+        )
+
+        subparsers = self.parser.add_subparsers(
+            title="subcommands",
+            description="valid subcommands",
+            help="additional help",
+            metavar="",
+        )
+
+        for name in sorted(self._argparse_subcmds.keys()):
+            subcmd = self._argparse_subcmds[name]
+            subparser = subparsers.add_parser(
+                subcmd["name"], help=subcmd["func"].__doc__
+            )
+            for args, kwds in subcmd["options"]:
+                subparser.add_argument(*args, **kwds)
+            subparser.set_defaults(func=subcmd["func"])
+
+        if len(sys.argv) <= 1:
+            options = self.parser.parse_args(self.default_args)
+        else:
+            options = self.parser.parse_args()
+
+        self.options = options
+        options.func(self, options)
+
+    # ------------------------------------------------------------------------
+
+    @option("--deps", "-d", help="install platform dependencies", action="store_true")
+    @option("--faust", "-f", help="build libfaust", action="store_true")
+    @option("--sndfile", "-s", help="build libsndfile", action="store_true")
+    @option("--samplerate", "-r", help="build libsamplerate", action="store_true")
+    @option("--all", "-a", help="build all", action="store_true")
+    def do_setup(self, args):
+        """setup faust"""
+
+        _classes = [
             DependencyMgr,
             FaustBuilder,
             SndfileBuilder,
             SamplerateBuilder,
-        ]:
-            mgr = mgr_class()
+        ]
+
+        if args.all:
+            for mgr_class in _classes:
+                mgr = mgr_class()
+                mgr.process()
+                sys.exit()
+
+        if args.deps:
+            mgr = DependencyMgr()
             mgr.process()
-            sys.exit()
 
-    if args.deps:
-        mgr = DependencyMgr()
-        mgr.process()
+        if args.faust:
+            fb = FaustBuilder()
+            fb.process()
 
-    if args.faust:
-        fb = FaustBuilder()
-        fb.process()
+        if args.sndfile:
+            sfb = SndfileBuilder()
+            sfb.process()
 
-    if args.sndfile:
-        sfb = SndfileBuilder()
-        sfb.process()
+        if args.samplerate:
+            srb = SamplerateBuilder()
+            srb.process()
 
-    if args.samplerate:
-        srb = SamplerateBuilder()
-        srb.process()
+    @option("--static", "-s", action="store_true", help="build static variant")
+    def do_build(self, args):
+        """build cyfaust"""
+        _cmd = "python3 setup.py build --build-lib build"
+        if args.static:
+            _cmd = "STATIC=1" + _cmd
+        self.cmd(_cmd)
+        if PLATFORM == "Windows":
+            self.copy("lib/faust.dll", "build/cyfaust")
+            self.copy("resources", "build/cyfaust/resources")
+
+    @option("--release", "-r", help="build and release all wheels", action="store_true")
+    @option("--build", "-b",help="build single wheel based on STATIC env var", action="store_true")
+    @option("--build-dynamic", "-d", help="build dynamic variant", action="store_true")
+    @option("--build-static", "-s", help="build static variant", action="store_true")
+    @option("--universal", "-u", help="build universal wheel", action="store_true")
+    @option("--test", "-t", help="test built wheels", action="store_true")
+    def do_wheel(self, args):
+        """build cyfaust wheel"""
+
+        if args.release:
+            b = WheelBuilder(universal=args.universal)
+            b.release()
+
+        elif args.build:
+            b = WheelBuilder(universal=args.universal)
+            b.build()
+
+        elif args.build_dynamic:
+            b = WheelBuilder()
+            b.build_dynamic_wheel(universal=args.universal)
+            b.check()
+            b.clean()
+
+        elif args.build_static:
+            b = WheelBuilder()
+            b.build_static_wheel(universal=args.universal)
+            b.check()
+            b.clean()
+
+        if args.test:
+            b = WheelBuilder()
+            b.test_wheels()
+
+    @option("--pytest", "-p", help="run pytest", action="store_true")    
+    def do_test(self, args):
+        """test cyfaust modules"""
+        if args.pytest:
+            self.cmd("pytest -vv tests")
+        else:
+            for t in self.project.tests.glob("test_*.py"):
+                self.cmd(f"python3 {t}")
+
+    @option("--reset", "-r", help="reset project", action="store_true")
+    @option("--verbose", "-v", help="verbose cleaning ops", action="store_true")
+    def do_clean(self, args):
+        """clean project detritus"""
+        cwd = self.project.cwd
+        _targets = ["build", "dist", "venv", "MANIFEST.in"]
+        if args.reset:
+            _targets += ["python", "bin", "lib", "share", "wheels"]
+        _pats = [
+            ".*_cache",
+            "**/.*_cache",
+            "*.egg-info",
+            "**/*.egg-info",
+            "**/__pycache__",
+        ]
+        for t in _targets:
+            self.remove(cwd / t, silent=not args.verbose)
+        for p in _pats:
+            for m in cwd.glob(p):
+                self.remove(m, silent=not args.verbose)
+
+
+if __name__ == "__main__":
+    Application().cmdline()
+
