@@ -38,9 +38,14 @@ STATIC = getenv("STATIC")
 INCLUDE_SNDFILE = getenv("INCLUDE_SNDFILE", default=False)
 
 # rtaudio apis
+# linux
 ALSA = getenv("ALSA", default=True)
 PULSE = getenv("PULSE")
 JACK = getenv("JACK")
+# windows
+ASIO = getenv("ASIO", default=True)
+WASAPI = getenv("WASAPI")
+DS = getenv("DS")
 
 # ----------------------------------------------------------------------------
 # COMMON
@@ -71,10 +76,14 @@ RTAUDIO_SRC = [
 # CONDITIONAL CONFIGURATION
 
 if STATIC:
-    EXTRA_OBJECTS.append("lib/static/libfaust.a")
+    if PLATFORM == "Windows":
+        EXTRA_OBJECTS.append("lib/static/libfaust.lib")
+    else:
+        EXTRA_OBJECTS.append("lib/static/libfaust.a")
 else:
     LIBRARIES.append("faust")
-    EXTRA_LINK_ARGS.append("-Wl,-rpath," + LIB)  # add local rpath
+    if PLATFORM in ["Linux", "Darwin"]:
+        EXTRA_LINK_ARGS.append("-Wl,-rpath," + LIB)  # add local rpath
 
 if INCLUDE_SNDFILE:
     DEFINE_MACROS.append(("INCLUDE_SNDFILE", 1))
@@ -112,6 +121,15 @@ elif PLATFORM == "Linux":
     if JACK:
         DEFINE_MACROS.append(("__UNIX_JACK__", None))
         LIBRARIES.append("jack")
+
+elif PLATFORM == "Windows":
+    EXTRA_COMPILE_ARGS.append("-std=c++11")
+    if ASIO:
+        DEFINE_MACROS.append(("__WINDOWS_ASIO__", None))
+    if WASAPI:
+        DEFINE_MACROS.append(("__WINDOWS_WASAPI__", None))
+    if DS:
+        DEFINE_MACROS.append(("__WINDOWS_DS__", None))
 
 else:
     raise SystemExit(f"platform '{PLATFORM}' not currently supported")
