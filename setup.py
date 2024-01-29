@@ -43,9 +43,9 @@ ALSA = getenv("ALSA", default=True)
 PULSE = getenv("PULSE")
 JACK = getenv("JACK")
 # windows
-ASIO = getenv("ASIO", default=True)
-WASAPI = getenv("WASAPI")
-DS = getenv("DS")
+ASIO = getenv("ASIO")
+WASAPI = getenv("WASAPI", default=True)
+DSOUND = getenv("DSOUND")
 
 # ----------------------------------------------------------------------------
 # COMMON
@@ -64,7 +64,7 @@ INCLUDE_DIRS = [INCLUDE]
 LIBRARY_DIRS = [LIB]
 EXTRA_OBJECTS = []
 EXTRA_LINK_ARGS = []
-LIBRARIES = ["pthread"]
+LIBRARIES = []
 DEFINE_MACROS = [("INTERP_DSP", 1)]
 EXTRA_COMPILE_ARGS = []
 RTAUDIO_SRC = [
@@ -78,8 +78,14 @@ RTAUDIO_SRC = [
 if STATIC:
     if PLATFORM == "Windows":
         EXTRA_OBJECTS.append("lib/static/libfaust.lib")
+        EXTRA_OBJECTS.extend([
+            # "msvcrt.lib",
+            "Ws2_32.lib",
+        ])
+        # EXTRA_COMPILE_ARGS.append("/MT")
     else:
         EXTRA_OBJECTS.append("lib/static/libfaust.a")
+
 else:
     LIBRARIES.append("faust")
     if PLATFORM in ["Linux", "Darwin"]:
@@ -96,6 +102,9 @@ if INCLUDE_SNDFILE:
 
 
 # platform specific configuration
+if PLATFORM in ["Darwin", "Linux"]:
+    LIBRARIES.append("pthread")
+
 if PLATFORM == "Darwin":
     MIN_OSX_VER = get_min_osx_ver(PLATFORM, ARCH)
     os.environ["MACOSX_DEPLOYMENT_TARGET"] = MIN_OSX_VER
@@ -123,13 +132,29 @@ elif PLATFORM == "Linux":
         LIBRARIES.append("jack")
 
 elif PLATFORM == "Windows":
-    EXTRA_COMPILE_ARGS.append("-std=c++11")
+    LIBRARIES.extend([
+        "winmm",
+        "ole32",
+    ])
     if ASIO:
         DEFINE_MACROS.append(("__WINDOWS_ASIO__", None))
+        RTAUDIO_SRC.extend([
+            "include/rtaudio/asio/asio.cpp",
+            "include/rtaudio/asio/asiodrivers.cpp",
+            "include/rtaudio/asio/asiolist.cpp",
+            "include/rtaudio/asio/iasiothiscallresolver.cpp",
+        ])
     if WASAPI:
         DEFINE_MACROS.append(("__WINDOWS_WASAPI__", None))
-    if DS:
+        LIBRARIES.extend([
+            "ksuser",
+            "mfplat",
+            "mfuuid",
+            "wmcodecdspuuid",
+        ])
+    if DSOUND:
         DEFINE_MACROS.append(("__WINDOWS_DS__", None))
+        LIBRARIES.append("dsound")
 
 else:
     raise SystemExit(f"platform '{PLATFORM}' not currently supported")

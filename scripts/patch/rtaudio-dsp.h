@@ -61,10 +61,14 @@ class rtaudio : public audio {
         virtual int processAudio(double streamTime, void* inbuf, void* outbuf, unsigned long frames) 
         {
             AVOIDDENORMALS;
-            
+#ifdef _WIN32 
+            float** inputs = (float**)malloc(fDsp->getNumInputs() * sizeof(float*));
+            float** outputs = (float**)malloc(fDsp->getNumOutputs() * sizeof(float*));
+#else
             float* inputs[fDsp->getNumInputs()];
             float* outputs[fDsp->getNumOutputs()];
-            
+#endif
+
             for (int i = 0; i < fDsp->getNumInputs(); i++) {
                 inputs[i] = &(static_cast<float*>(inbuf))[i * frames];
             }
@@ -74,6 +78,10 @@ class rtaudio : public audio {
 
             // process samples
             fDsp->compute(streamTime * 1000000., frames, inputs, outputs);
+#ifdef _WIN32
+            free(inputs);
+            free(outputs);
+#endif
             return 0;
         }
     

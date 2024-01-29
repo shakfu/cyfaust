@@ -438,7 +438,10 @@ class FaustBuilder(Builder):
         if PLATFORM == "Windows":
             self.copy(
                 self.sourcedir / "lib" / "Release" / "faust.dll",
-                # self.dylib
+                self.project.lib
+            )
+            self.copy(
+                self.sourcedir / "lib" / "Release" / "faust.lib",
                 self.project.lib
             )
         else:
