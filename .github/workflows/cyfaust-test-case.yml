@@ -1,0 +1,112 @@
+
+name: cyfaust-test-case
+
+on:
+  workflow_dispatch:
+    inputs:
+      variant:
+        type: choice
+        description: Please select a build variant
+        default: dynamic
+        required: true
+        options: 
+          - dynamic
+          - static
+      py_version:
+        type: choice
+        description: Please select a python version
+        default: '3.11'
+        required: true
+        options:
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+      os:
+        type: choice
+        description: Please select os
+        default: 'macos-latest'
+        required: true
+        options:
+          - macos-latest
+          - macos-12
+          - macos-11
+          - ubuntu-latest
+          - ubuntu-22.04
+          - ubuntu-20.04
+          - windows-latest
+          - windows-2022
+          - windows-2019
+
+jobs:
+  build:
+    runs-on: ${{ github.event.inputs.os }}
+
+    steps:
+
+    - name: Summarize run options
+      run: |
+          echo "cyfaust-test run summary:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+          echo "- build-variant: ${{ github.event.inputs.variant }}" >> $GITHUB_STEP_SUMMARY
+          echo "- py-version: ${{ github.event.inputs.py_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- os: ${{ github.event.inputs.os }}" >> $GITHUB_STEP_SUMMARY
+
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+        fetch-depth: '1'
+
+    - name: Cache libfaust 
+      id: cache-libfaust
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ github.workspace }}/lib/libfaust.*
+          ${{ github.workspace }}/lib/faust.*
+          ${{ github.workspace }}/lib/static/libfaust.*
+        key: ${{ runner.os }}-libfaust
+
+    - name: Setup python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ github.event.inputs.py_version }}
+        cache: 'pip' # caching pip dependencies
+
+    - name: Display python version
+      run: python3 --version
+
+    - name: Install prerequisites
+      run: python3 scripts/manage.py setup --deps
+
+    - name: Setup faust
+      if: steps.cache-libfaust.outputs.cache-hit != 'true'
+      run: python3 scripts/manage.py setup --faust
+
+    - name: Build dynamic cyfaust variant
+      if: github.event.inputs.variant == 'dynamic'
+      run: |
+        echo "building dynamic cyfaust variant"
+        python3 scripts/manage.py build
+
+    - name: Build static cyfaust variant
+      if: github.event.inputs.variant == 'static'
+      run: |
+        echo "building static cyfaust variant"
+        python3 scripts/manage.py build --static
+
+    - name: Test cyfaust
+      run: pytest -vv tests
+
+    - name: Build wheels (both variants)
+      run: python3 scripts/manage.py wheel --release
+
+    - name: Test wheel
+      run: python3 scripts/manage.py wheel --test
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: cyfaust-${{ github.event.inputs.os }}-py${{ github.event.inputs.py_version }}
+        path: ./wheels/*.whl
+

@@ -797,18 +797,19 @@ class WheelBuilder:
                 prefix = (
                     f"ARCHFLAGS='-arch arm64 -arch x86_64' "
                     f"_PYTHON_HOST_PLATFORM='macosx-{ver}-universal2' "
+                    f"MACOSX_DEPLOYMENT_TARGET={ver} "
                 )
             else:
                 prefix = (
                     f"ARCHFLAGS='-arch {ARCH}' "
                     f"_PYTHON_HOST_PLATFORM='macosx-{ver}-{ARCH}' "
+                    f"MACOSX_DEPLOYMENT_TARGET={ver} "
                 )
 
             _cmd = prefix + _cmd
 
         if static:
             os.environ["STATIC"] = "1"
-        os.environ["MACOSX_DEPLOYMENT_TARGET"] = ver
         self.cmd(_cmd)
 
     def test_wheels(self):
