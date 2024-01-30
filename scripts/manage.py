@@ -51,7 +51,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union
+from typing import Union, Optional
 
 
 PYTHON = sys.executable
@@ -115,7 +115,7 @@ class ShellCmd:
         self.log.info(shellcmd)
         subprocess.call(shellcmd, shell=True, cwd=str(cwd))
 
-    def git_clone(self, url: str, recurse: bool = False, branch: str | None = None):
+    def git_clone(self, url: str, recurse: bool = False, branch: Optional[str] = None):
         """git clone a repository source tree from a url"""
         _cmds = ["git clone --depth 1"]
         if branch:
@@ -183,9 +183,9 @@ class ShellCmd:
     def pip_install(
         self,
         *pkgs,
-        reqs: str | None = None,
+        reqs: Optional[str] = None,
         upgrade: bool = False,
-        pip: str | None = None,
+        pip: Optional[str] = None,
     ):
         """Install python packages using pip"""
         _cmds = []
@@ -234,7 +234,7 @@ class ShellCmd:
             _cmd += " --config Release"
         self.cmd(_cmd)
 
-    def cmake_install(self, build_dir: Pathlike, prefix: str | None = None):
+    def cmake_install(self, build_dir: Pathlike, prefix: Optional[str] = None):
         """activate cmake install stage"""
         _cmds = ["cmake --install", str(build_dir)]
         if prefix:
@@ -249,6 +249,11 @@ class ShellCmd:
 
 
 class DependencyMgr(ShellCmd):
+    """Manages cyfaust pip and system dependencies.
+
+    
+    platforms: ["Darwin", "Linux (debian)", Windowss]
+    """
     def __init__(self):
         self.log = logging.getLogger(self.__class__.__name__)
 
@@ -290,11 +295,14 @@ class DependencyMgr(ShellCmd):
             pass
 
     def process(self):
+        """run all relevant processes"""
         self.install_py_pkgs()
         self.install_sys_pkgs()
 
 
 class Project:
+    """Utility class to hold project directory structure
+    """
     def __init__(self):
         self.cwd = Path.cwd()
         self.bin = self.cwd / "bin"
@@ -310,6 +318,8 @@ class Project:
 
 
 class Builder(ShellCmd):
+    """Abstract builder class with additional methods common to subclasses.
+    """
     LIBNAME = "libname"
     DYLIB_SUFFIX_OSX = ".0.dylib"
     DYLIB_SUFFIX_LIN = ".so.0"
@@ -370,6 +380,8 @@ class Builder(ShellCmd):
 
 
 class FaustBuilder(Builder):
+    """Manages all aspects of the interpreter-centric faust build for cyfaust,
+    """
     LIBNAME = "libfaust"
     DYLIB_SUFFIX_OSX = ".2.dylib"
     DYLIB_SUFFIX_LIN = ".so.2"
@@ -544,6 +556,8 @@ class FaustBuilder(Builder):
 
 
 class SndfileBuilder(Builder):
+    """Builds mimimal version of libsndfile
+    """
     LIBNAME = "libsndfile"
 
     def __init__(self, version="0.0.1"):
@@ -582,6 +596,8 @@ class SndfileBuilder(Builder):
 
 
 class SamplerateBuilder(Builder):
+    """Builds mimimal version of libsamplerate
+    """
     LIBNAME = "libsamplerate"
 
     def __init__(self, version="0.0.1"):
@@ -647,7 +663,7 @@ class WheelFilename:
 
     project: str
     version: str
-    build: str | None
+    build: Optional[str]
     python_tags: list[str]
     abi_tags: list[str]
     platform_tags: list[str]
@@ -790,7 +806,7 @@ class WheelBuilder:
             _cmd = prefix + _cmd
 
         if static:
-            os.environ['STATIC'] = "1"
+            os.environ["STATIC"] = "1"
         self.cmd(_cmd)
 
     def test_wheels(self):
@@ -882,6 +898,7 @@ class WheelBuilder:
 
 cmd = os.system
 
+
 # option decorator
 def option(*args, **kwds):
     def _decorator(func):
@@ -925,6 +942,9 @@ class MetaCommander(type):
 
 
 class Application(ShellCmd, metaclass=MetaCommander):
+    """
+    Commandline class for `manage.py`
+    """
     name = "manage"
     description = "cyfaust build manager"
     version = "0.0.4"
@@ -1026,18 +1046,23 @@ class Application(ShellCmd, metaclass=MetaCommander):
             os.environ["STATIC"] = "1"
         self.cmd(_cmd)
         if PLATFORM == "Windows":
-            cyfaust = self.project.build / 'cyfaust'
+            cyfaust = self.project.build / "cyfaust"
             if cyfaust.exists():
-                if not (cyfaust / 'faust.dll').exists():
+                if not (cyfaust / "faust.dll").exists():
                     self.copy("lib/faust.dll", "build/cyfaust")
-                if not (cyfaust / 'resources').exists():
+                if not (cyfaust / "resources").exists():
                     self.copy("resources", "build/cyfaust/resources")
 
     # ------------------------------------------------------------------------
     # wheel
 
     @option("--release", "-r", help="build and release all wheels", action="store_true")
-    @option("--build", "-b",help="build single wheel based on STATIC env var", action="store_true")
+    @option(
+        "--build",
+        "-b",
+        help="build single wheel based on STATIC env var",
+        action="store_true",
+    )
     @option("--dynamic", "-d", help="build dynamic variant", action="store_true")
     @option("--static", "-s", help="build static variant", action="store_true")
     @option("--universal", "-u", help="build universal wheel", action="store_true")
@@ -1072,7 +1097,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
     # ------------------------------------------------------------------------
     # test
 
-    @option("--pytest", "-p", help="run pytest", action="store_true")    
+    @option("--pytest", "-p", help="run pytest", action="store_true")
     def do_test(self, args):
         """test cyfaust modules"""
         if args.pytest:
@@ -1098,10 +1123,9 @@ class Application(ShellCmd, metaclass=MetaCommander):
         for p in _pats:
             for m in cwd.glob(p):
                 self.remove(m, silent=not args.verbose)
-            for m in cwd.glob("**/"+p):
+            for m in cwd.glob("**/" + p):
                 self.remove(m, silent=not args.verbose)
 
 
 if __name__ == "__main__":
     Application().cmdline()
-
