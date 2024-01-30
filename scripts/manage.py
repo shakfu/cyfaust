@@ -420,7 +420,10 @@ class FaustBuilder(Builder):
             )
 
             self.chdir(self.src)
-            self.cmd("make interp")
+            if PLATFORM == "Darwin" and PY_VER_MINOR == 8:
+                self.cmd("MACOSX_DEPLOYMENT_TARGET=10.9 make interp")
+            else:
+                self.cmd("make interp")
             self.cmd(f"PREFIX={self.prefix} make install")
 
         elif PLATFORM == "Windows":
