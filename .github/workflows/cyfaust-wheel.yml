@@ -1,5 +1,5 @@
 
-name: cyfaust-wheel
+name: cyfaust-wheel2
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
 
@@ -36,9 +36,9 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          ${{ github.workspace }}/lib/libfaust.2.dylib
-          ${{ github.workspace }}/lib/libfaust.dylib 
-          ${{ github.workspace }}/lib/static/libfaust.a
+          ${{ github.workspace }}/lib/libfaust.*
+          ${{ github.workspace }}/lib/faust.*
+          ${{ github.workspace }}/lib/static/libfaust.*
         key: ${{ runner.os }}-libfaust
 
     - name: Setup python
@@ -47,18 +47,11 @@ jobs:
         python-version: ${{ github.event.inputs.py_version }}
         cache: 'pip' # caching pip dependencies
 
-    - name: Install python requirements
-      run: pip install -r requirements.txt
-
     - name: Display python version
       run: python3 --version
 
-    - name: Setup platform-specific requirements
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        echo "install linux system dependencies"
-        sudo apt update
-        sudo apt install libasound2-dev patchelf
+    - name: Install prerequisites
+      run: python3 scripts/manage.py setup --deps
 
     - name: Setup faust
       if: steps.cache-libfaust.outputs.cache-hit != 'true'
@@ -74,5 +67,4 @@ jobs:
       with:
         name: dist-${{ matrix.os }}-py${{ github.event.inputs.py_version }}
         path: ./wheels/*.whl
-
 
