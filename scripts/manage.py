@@ -507,7 +507,7 @@ class FaustBuilder(Builder):
             )
         else:
             self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
-            if not dylib_link.exists():
+            if not self.dylib_link.exists():
                 self.dylib_link.symlink_to(self.dylib)
 
     def copy_staticlib(self):
