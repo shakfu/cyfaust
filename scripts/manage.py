@@ -222,6 +222,9 @@ class ShellCmd:
 
 
 class DependencyMgr(ShellCmd):
+    def __init__(self):
+        self.log = logging.getLogger(self.__class__.__name__)
+
     def install_py_pkgs(self):
         """install python packages"""
         self.pip_install(reqs="requirements.txt")
