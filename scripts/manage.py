@@ -1017,14 +1017,15 @@ class Application(ShellCmd, metaclass=MetaCommander):
         """build cyfaust"""
         _cmd = f'"{PYTHON}" setup.py build --build-lib build'
         if args.static:
-            _cmd = "STATIC=1" + _cmd
+            os.environ["STATIC"] = "1"
         self.cmd(_cmd)
         if PLATFORM == "Windows":
             cyfaust = self.project.build / 'cyfaust'
-            if not (cyfaust / 'faust.dll').exists():
-                self.copy("lib/faust.dll", "build/cyfaust")
-            if not (cyfaust / 'resources').exists():
-                self.copy("resources", "build/cyfaust/resources")
+            if cyfaust.exists():
+                if not (cyfaust / 'faust.dll').exists():
+                    self.copy("lib/faust.dll", "build/cyfaust")
+                if not (cyfaust / 'resources').exists():
+                    self.copy("resources", "build/cyfaust/resources")
 
     # ------------------------------------------------------------------------
     # wheel
