@@ -681,7 +681,7 @@ class WheelFilename:
         )
 
     @classmethod
-    def from_path(cls, path: str | Path) -> "WheelFilename":
+    def from_path(cls, path: Pathlike) -> "WheelFilename":
         """Parse a wheel filename into its components"""
         basename = Path(path).name
         m = cls.WHEEL_FILENAME_PATTERN.fullmatch(basename)
