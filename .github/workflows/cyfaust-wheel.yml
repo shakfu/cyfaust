@@ -1,5 +1,5 @@
 
-name: cyfaust-wheel2
+name: cyfaust-wheel
 
 on:
   workflow_dispatch:
