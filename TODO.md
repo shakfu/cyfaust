@@ -8,8 +8,6 @@
 
 - [ ] Add additional python debug checks
 
-- [ ] Add Windows support
-
 ## cyfaust.interp
 
 - [ ] Complete `InterpreterDsp.build_user_interface` to properly accept `fi.UI* instances`

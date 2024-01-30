@@ -15,15 +15,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
+
+
+## [0.0.4]
+
 ### cyfaust
 
-- Added script, `manage.py` which now consolidates and replaces `setup_cyfaust.py` and `wheel_mgr.py` as well as some high-level frontend commands to facilitate cross-platform operations.
+- Added Windows support (MSVC): building dynamic and static variants are working with tests passing, wheels building. WASAPI audio has been tested t
 
-- Added preliminary Windows support, building dynamic and static variants are working with most tests passing, wheel building support still a work-in-progress.
-
-- Added Windows support to `setup_cyfaust.py`. It can now build the same faust interpreter-centric `libfaust.lib`, `libfaust.dll` and `faust.exe` executable as the other supported platforms.
-
-- Added experimental faust github workflow to build faust interp-enabled `libfaust.(a|dll)`
+- Added script, `manage.py` which now consolidates and replaces all prior python scripts and provides high-level frontend commands to facilitate cross-platform operations.
 
 - Added enhancements to `gen_htmldoc.py` python script and makefile target, `make docs`, to generate api docs in html for both build variants.
 
@@ -35,19 +35,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Added thirdparty licenses to `docs/licenses`
 
-- Added `scripts/setup_cyfaust.py` which consolidates the following scripts:
-
-	- `setup_faust.py`
-	- `setup_sndfile.py`
-	- `install_deps.py`
-
-- Added `libsndfile` & `libsamplerate` setup script
-
 - Added working github workflows
 
 - Fixed github action wheel building issue (thanks to [@henryiii for the solution](https://github.com/pypa/wheel/issues/573#issuecomment-1902083893!). This means that cyfaust workflows are now working as expected.
 
-- Added `scripts/build_wheel.py` example of solution for above case.
+- Added `scripts/archive/build_wheel.py` example of solution for above case.
 
 - Added infrastructure for additional rtaudio audio driver support
 

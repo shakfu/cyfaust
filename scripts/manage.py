@@ -2,10 +2,13 @@
 
 """manage.py: cross-platform cyfaust build manager.
 
-- Shell ops
-- Dependency Building:
+It only uses python stdlib modules to do the following:
+
+- General Shell ops
+- Dependency download, build, install
 - Module compilation
-- Wheel build ops
+- Wheel building
+- Alternative frontend to Makefile
 
 models:
     CustomFormatter(logging.Formatter)
@@ -21,6 +24,22 @@ models:
     WheelFile(dataclass)
     WheelBuilder
 
+It has an argparse-based cli api:
+
+usage: manage.py [-h] [-v]  ...
+
+    options:
+    -h, --help     show this help message and exit
+    -v, --version  show program's version number and exit
+
+    subcommands:
+                    additional help
+        build        build cyfaust
+        clean        clean project detritus
+        setup        setup faust
+        test         test cyfaust modules
+        wheel        build cyfaust wheel
+
 """
 import argparse
 import logging
@@ -35,9 +54,11 @@ from pathlib import Path
 
 Pathlike = str | Path
 
+PYTHON = sys.executable
 PLATFORM = platform.system()
 ARCH = platform.machine()
 PY_VER_MINOR = sys.version_info.minor
+
 DEBUG = True
 
 
@@ -668,6 +689,7 @@ class WheelBuilder:
         self.cwd = Path.cwd()
         self.src_folder = self.cwd / src_folder
         self.dst_folder = self.cwd / dst_folder
+        self.lib_folder = self.cwd / "lib"
         self.build_folder = self.cwd / "build"
         self.universal = universal
 
@@ -744,7 +766,7 @@ class WheelBuilder:
     def build_wheel(self, static=False, override=True):
         assert PY_VER_MINOR >= 8, "only supporting python >= 3.8"
 
-        _cmd = "python3 setup.py bdist_wheel"
+        _cmd = f'"{PYTHON}" setup.py bdist_wheel'
 
         if PLATFORM == "Darwin":
             ver = self.get_min_osx_ver()
@@ -762,9 +784,8 @@ class WheelBuilder:
             _cmd = prefix + _cmd
 
         if static:
-            self.cmd(f"STATIC=1 {_cmd}")
-        else:
-            self.cmd(_cmd)
+            os.environ['STATIC'] = "1"
+        self.cmd(_cmd)
 
     def test_wheels(self):
         venv = self.dst_folder / "venv"
@@ -773,8 +794,15 @@ class WheelBuilder:
 
         for wheel in self.dst_folder.glob("*.whl"):
             self.cmd("virtualenv venv", cwd=self.dst_folder)
-            vpy = venv / "bin" / "python"
-            vpip = venv / "bin" / "pip"
+            if PLATFORM in ["Linux", "Darwin"]:
+                vpy = venv / "bin" / "python"
+                vpip = venv / "bin" / "pip"
+            elif PLATFORM == "Windows":
+                vpy = venv / "Scripts" / "python"
+                vpip = venv / "Scripts" / "pip"
+            else:
+                raise SystemExit("platform not supported")
+
             self.cmd(f"{vpip} install {wheel}")
             if "static" in str(wheel):
                 target = "static"
@@ -785,7 +813,7 @@ class WheelBuilder:
                 imported = "interp"
                 print("dynamic variant test")
             val = self.get(
-                f"{vpy} -c 'from cyfaust import {imported};print(len(dir({imported})))'",
+                f'{vpy} -c "from cyfaust import {imported};print(len(dir({imported})))"',
                 shell=True,
                 cwd=self.dst_folder,
             )
@@ -802,6 +830,7 @@ class WheelBuilder:
         self.build_wheel()
         src = self.src_folder
         dst = self.dst_folder
+        lib = self.lib_folder
         if PLATFORM == "Darwin":
             self.cmd(f"delocate-wheel -v --wheel-dir {dst} {src}/*.whl")
         elif PLATFORM == "Linux":
@@ -809,7 +838,8 @@ class WheelBuilder:
                 f"auditwheel repair --plat linux_{ARCH} --wheel-dir {dst} {src}/*.whl"
             )
         elif PLATFORM == "Windows":
-            self.cmd(f"delvewheel repair --wheel-dir {dst} {src}/*.whl")
+            for whl in self.src_folder.glob("*.whl"):
+                self.cmd(f"delvewheel repair --add-path {lib} --wheel-dir {dst} {whl}")
         else:
             raise SystemExit("platform not supported")
 
@@ -842,11 +872,9 @@ class WheelBuilder:
 
 
 # ----------------------------------------------------------------------------
-# commandline machinery
-
+# argdeclare
 
 cmd = os.system
-
 
 # option decorator
 def option(*args, **kwds):
@@ -891,9 +919,9 @@ class MetaCommander(type):
 
 
 class Application(ShellCmd, metaclass=MetaCommander):
-    name = "app"
-    description = "a description"
-    version = "0.0.3"
+    name = "manage"
+    description = "cyfaust build manager"
+    version = "0.0.4"
     epilog = ""
     default_args = ["--help"]
 
@@ -942,6 +970,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
         options.func(self, options)
 
     # ------------------------------------------------------------------------
+    # setup
 
     @option("--deps", "-d", help="install platform dependencies", action="store_true")
     @option("--faust", "-f", help="build libfaust", action="store_true")
@@ -980,10 +1009,13 @@ class Application(ShellCmd, metaclass=MetaCommander):
             srb = SamplerateBuilder()
             srb.process()
 
+    # ------------------------------------------------------------------------
+    # build
+
     @option("--static", "-s", action="store_true", help="build static variant")
     def do_build(self, args):
         """build cyfaust"""
-        _cmd = "python3 setup.py build --build-lib build"
+        _cmd = f'"{PYTHON}" setup.py build --build-lib build'
         if args.static:
             _cmd = "STATIC=1" + _cmd
         self.cmd(_cmd)
@@ -994,10 +1026,13 @@ class Application(ShellCmd, metaclass=MetaCommander):
             if not (cyfaust / 'resources').exists():
                 self.copy("resources", "build/cyfaust/resources")
 
+    # ------------------------------------------------------------------------
+    # wheel
+
     @option("--release", "-r", help="build and release all wheels", action="store_true")
     @option("--build", "-b",help="build single wheel based on STATIC env var", action="store_true")
-    @option("--build-dynamic", "-d", help="build dynamic variant", action="store_true")
-    @option("--build-static", "-s", help="build static variant", action="store_true")
+    @option("--dynamic", "-d", help="build dynamic variant", action="store_true")
+    @option("--static", "-s", help="build static variant", action="store_true")
     @option("--universal", "-u", help="build universal wheel", action="store_true")
     @option("--test", "-t", help="test built wheels", action="store_true")
     def do_wheel(self, args):
@@ -1011,21 +1046,24 @@ class Application(ShellCmd, metaclass=MetaCommander):
             b = WheelBuilder(universal=args.universal)
             b.build()
 
-        elif args.build_dynamic:
-            b = WheelBuilder()
-            b.build_dynamic_wheel(universal=args.universal)
+        elif args.dynamic:
+            b = WheelBuilder(universal=args.universal)
+            b.build_dynamic_wheel()
             b.check()
             b.clean()
 
-        elif args.build_static:
-            b = WheelBuilder()
-            b.build_static_wheel(universal=args.universal)
+        elif args.static:
+            b = WheelBuilder(universal=args.universal)
+            b.build_static_wheel()
             b.check()
             b.clean()
 
         if args.test:
             b = WheelBuilder()
             b.test_wheels()
+
+    # ------------------------------------------------------------------------
+    # test
 
     @option("--pytest", "-p", help="run pytest", action="store_true")    
     def do_test(self, args):
@@ -1034,7 +1072,10 @@ class Application(ShellCmd, metaclass=MetaCommander):
             self.cmd("pytest -vv tests")
         else:
             for t in self.project.tests.glob("test_*.py"):
-                self.cmd(f"python3 {t}")
+                self.cmd(f'"{PYTHON}" {t}')
+
+    # ------------------------------------------------------------------------
+    # clean
 
     @option("--reset", "-r", help="reset project", action="store_true")
     @option("--verbose", "-v", help="verbose cleaning ops", action="store_true")
@@ -1044,19 +1085,13 @@ class Application(ShellCmd, metaclass=MetaCommander):
         _targets = ["build", "dist", "venv", "MANIFEST.in"]
         if args.reset:
             _targets += ["python", "bin", "lib", "share", "wheels"]
-        _pats = [
-            ".*_cache",
-            "**/.*_cache",
-            "*.egg-info",
-            "**/*.egg-info",
-            "**/__pycache__",
-            ".DS_Store",
-            "**/.DS_Store",
-        ]
+        _pats = [".*_cache", "*.egg-info", "__pycache__", ".DS_Store"]
         for t in _targets:
             self.remove(cwd / t, silent=not args.verbose)
         for p in _pats:
             for m in cwd.glob(p):
+                self.remove(m, silent=not args.verbose)
+            for m in cwd.glob("**/"+p):
                 self.remove(m, silent=not args.verbose)
 
 
