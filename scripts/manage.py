@@ -51,8 +51,8 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Union
 
-Pathlike = str | Path
 
 PYTHON = sys.executable
 PLATFORM = platform.system()
@@ -60,6 +60,12 @@ ARCH = platform.machine()
 PY_VER_MINOR = sys.version_info.minor
 
 DEBUG = True
+
+
+# ----------------------------------------------------------------------------
+# type aliases
+
+Pathlike = Union[str, Path]
 
 
 # ----------------------------------------------------------------------------

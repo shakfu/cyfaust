@@ -35,11 +35,12 @@ It has two build variants:
             └── libraries
     ```
 
-While this project has been developed and tested primarily on macOS (`x86_64` and `arm64`), there have been recent efforts to support Linux (`amd64` and `aarch64`).
+While this project was initially developed and tested primarily on macOS (`x86_64` and `arm64`), a focus on cross-platform development and testing has led to Linux (`amd64` and `aarch64`) and Windows (`MSVC` / `amd64`) support.
+
 
 ## Features
 
-- Python-oriented implementation of the [faust interpreter](https://faustdoc.grame.fr/manual/embedding/#using-libfaust-with-the-interpreter-backend)
+- Python-oriented cross-platform implementation of the [faust interpreter](https://faustdoc.grame.fr/manual/embedding/#using-libfaust-with-the-interpreter-backend)
 
 - Provides the following submodules (in the default build):
 
@@ -70,34 +71,34 @@ While this project has been developed and tested primarily on macOS (`x86_64` an
 
 - Both dynamic and static build variants can be packaged as a self-contained python wheel.
 
+- Includes several github workflows to automate the testing and building of cyfaust wheels for a number of supported platforms
+
 ## Status
 
-- Supports most of faust interpreter, box and signals apis (see [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md))
+- Supports most of faust interpreter (of Faust version `2.69.3`), and also the box and signals apis (see [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md)) and integrate rtaudio cross-platform audio driver.
 
-- Works on macOS and Linux {x86_64, arm64}
+- Works on macOS, and Linux {x86_64, arm64} and Windows.
 
 - Provides two build variants: one dynamically-linked to `libfaust.[so|dylib]` and the other statically-linked to `libfaust.a`
-
-- Several github workflows are provided which automate the testing and building of cyfaust wheels using supported github runners.
 
 Current priorities are to work through remaining items in the `TODO` list.
 
 ## Setup and Requirements
 
-In summary,
+cyfaust has a `manage.py` script, it simplifies cross-platform project setup and build automation.
 
 | #  | platform | step                    | command                                                      |
 |:--:|:-------- | :---------------------- |:------------------------------------------------------------ |
-| 1a | macOS    | install pre-reqs        | `brew install python cmake`                                  |
-| 1b | linux    | install pre-reqs        | `sudo apt install python3-dev cmake libasound2-dev patchelf` |
-| 2  | common   | install python pkgs     | `pip3 install -r requirements.txt`                           |
-| 3* | common   | build/install faustlib  | `./scripts/setup_faust.py`                                   |
-| 4  | common   | build cyfaust           | `make`                                                       |
-| 5  | common   | test cyfaust            | `make pytest`                                                |
+| 1  | common   | install prerequisites   | `python3 scripts/manage.py setup --deps`                     |
+| 2  | common   | build/install faustlib  | `python3 scripts/manage.py setup --faust`                    |
+| 3  | common   | build cyfaust (dynamic) | `python3 scripts/manage.py build`                            |
+| 3  | common   | build cyfaust (static)  | `python3 scripts/manage.py build --static`                   |
+| 4  | common   | test cyfaust            | `python3 scripts/manage.py test` or `pytest`                 |
+| 5  | common   | build cyfaust wheels    | `python3 scripts/manage.py wheel --release`                  |
+| 6  | common   | test cyfaust wheels     | `python3 scripts/manage.py wheel --test`                     |
 
-`*`: Note that step 3 can be skipped: you don't have to manually type `./scripts/setup_faust.py` if you just type `make` (see 3 below).
 
-Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done once to set up the build environment, while 4 and 5 can be run any number of times thereafter.
+On macOS and Linux, a `Makefile` is available as a frontend to the above `manage.py` script. The following sequence is illustrative of this use and is also useful if you want to setup cyfaust manually.
 
 1. Platform specific requirements are as follows:
 
@@ -114,13 +115,13 @@ Also note that 1a and 1b are platform-specific, and that 1-3 are only to be done
     sudo apt install python3-dev cmake libasound2-dev patchelf
     ```
 
-2. Then (in either case) install the required python packages as follows:
+2. Then install the required python packages as follows:
 
     ```bash
     pip3 install -r requirements
     ```
 
-3. Run `./scripts/setup_faust.py`:
+3. Run `python3 scripts/manage.py setup --faust`:
 
     - Manually running this step is not strictly necessary, as the default `make` command will check if `libfaust.a` has been built and if it hasn't it will run  `./scripts/setup_faust.py`.
 
