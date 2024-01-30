@@ -62,13 +62,13 @@ jobs:
 
     - name: Setup faust
       if: steps.cache-libfaust.outputs.cache-hit != 'true'
-      run: python3 scripts/setup_cyfaust.py --faust
+      run: python3 scripts/manage.py setup --faust
 
     - name: Build wheels
-      run: python3 scripts/wheel_mgr.py --release
+      run: python3 scripts/manage.py wheel --release
 
     - name: Test wheels
-      run: python3 scripts/wheel_mgr.py --test
+      run: python3 scripts/manage.py wheel --test
 
     - uses: actions/upload-artifact@v4
       with:

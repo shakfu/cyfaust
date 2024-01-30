@@ -5,19 +5,48 @@ This folder contains some python and shell scripts which may be required trigger
 
 ## Required
 
-- `setup_faust.py`: downloads, builds, and installs faust into the project's `bin`, `lib`, and `share` folders. It uses the following patches files in the `scripts/patch` folder:
+- `manage.py`: main cross-platform cyfaust project mgmt script which can used directly or called by the `Makefile` frontend and the github workflwos. 
 
-	- `faust.mk`
+	```bash
+	% ./scripts/manage.py --help
+	usage: manage.py [-h] [-v]  ...
 
-	- `interp_plus_backend.cmake`
+	options:
+	  -h, --help     show this help message and exit
+	  -v, --version  show program's version number and exit
 
-	- `interp_plus_target.cmake`
+	subcommands:
+	  valid subcommands
 
-	- `rtaudio-dsp.h`
+	                 additional help
+	    build        build cyfaust
+	    clean        clean project detritus
+	    setup        setup faust
+	    test         test cyfaust modules
+	    wheel        build cyfaust wheel
+	```
 
-- `setup_sndfile.sh`: downloads, builds, and installs libsndfile and libsamplerate into project's `lib` and `include` folders (wip).
+	It has the following features:
 
-- `wheel_mgr.py`: handles wheel building ops.
+	- installs all dependencies irrespective of platform.
+
+	- downloads, builds, and installs faust into the project's `bin`, `lib`, and `share` folders. It uses the following patches files in the `scripts/patch` folder:
+
+		- `faust.mk`
+
+		- `interp_plus_backend.cmake`
+
+		- `interp_plus_target.cmake`
+
+		- `rtaudio-dsp.h`
+
+	- downloads, builds, and installs libsndfile and libsamplerate into project's `lib` and `include` folders (wip).
+
+	- handles wheel building ops.
+
+
+- `gen_htmldoc.py`: a script to generate htmldocs from cyfaust writing to `docs/api`. (may be integrated into `manage.py` at some point.)
+
 
 ## Testing
 
@@ -32,13 +61,9 @@ This folder contains some python and shell scripts which may be required trigger
 
 ## Unused or used just once
 
-- `install_deps.py`: install all dependencies irrespective of platform.
-
 - `setup_libfaust_llvm.sh`: downloads, builds llvm faust.
 
 - `build_wheel.py`: example of solving macos wheel building on github runners which default to `universal2` wheel builds.
-
-- `gen_htmldoc.py`: beginnings of a script to generate htmldocs from cyfaust (not really working).
 
 - contents of the `scripts/static` folder, contains scripts which were use to parse and generate code and also for a prior cmake-based build.
 

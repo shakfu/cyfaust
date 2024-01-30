@@ -62,7 +62,7 @@ jobs:
 
     - name: Setup faust
       if: steps.cache-libfaust.outputs.cache-hit != 'true'
-      run: python3 scripts/setup_cyfaust.py --faust
+      run: python3 scripts/manage.py setup --faust
 
     - name: Build dynamic cyfaust variant
       if: matrix.variant == 'dynamic'

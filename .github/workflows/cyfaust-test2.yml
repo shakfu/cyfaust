@@ -1,5 +1,5 @@
 
-name: cyfaust-test
+name: cyfaust-test2
 
 on:
   workflow_dispatch:
@@ -64,9 +64,9 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          ${{ github.workspace }}/lib/libfaust.2.dylib
-          ${{ github.workspace }}/lib/libfaust.dylib 
-          ${{ github.workspace }}/lib/static/libfaust.a
+          ${{ github.workspace }}/lib/libfaust.*
+          ${{ github.workspace }}/lib/faust.*
+          ${{ github.workspace }}/lib/static/libfaust.*
         key: ${{ runner.os }}-libfaust
 
     - name: Setup python
@@ -75,20 +75,11 @@ jobs:
         python-version: ${{ github.event.inputs.py_version }}
         cache: 'pip' # caching pip dependencies
 
-    - name: Install python requirements
-      run: |
-        pip install wheel virtualenv
-        pip install -r requirements.txt
-
     - name: Display python version
       run: python3 --version
 
-    - name: Setup platform-specific requirements
-      if: github.event.inputs.os == 'ubuntu-latest'
-      run: |
-        echo "install linux system dependencies"
-        sudo apt update
-        sudo apt install libasound2-dev patchelf
+    - name: Install prerequisites
+      run: python3 scripts/manage.py setup --deps
 
     - name: Setup faust
       if: steps.cache-libfaust.outputs.cache-hit != 'true'
@@ -98,25 +89,25 @@ jobs:
       if: github.event.inputs.variant == 'dynamic'
       run: |
         echo "building dynamic cyfaust variant"
-        make
+        python3 scripts/manage.py build
 
     - name: Build static cyfaust variant
       if: github.event.inputs.variant == 'static'
       run: |
         echo "building static cyfaust variant"
-        make STATIC=1
+        python3 scripts/manage.py build --static
 
     - name: Test dynamic cyfaust variant
       if: github.event.inputs.variant == 'dynamic'
       run: |
         echo "testing dynamic cyfaust variant"
-        make pytest
+        python3 scripts/manage.py test --pytest
 
     - name: Test static cyfaust variant
       if: github.event.inputs.variant == 'static'
       run: |
         echo "testing static cyfaust variant"
-        make pytest STATIC=1
+        STATIC=1 python3 scripts/manage.py test --pytest
 
     - name: Build wheel
       run: python3 scripts/manage.py wheel --build

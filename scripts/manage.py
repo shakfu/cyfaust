@@ -255,6 +255,10 @@ class DependencyMgr(ShellCmd):
             print("install linux system dependencies")
             self.apt_install(*sys_pkgs)
 
+        elif PLATFORM == "Windows":
+            # this is a placeholder
+            pass
+
     def process(self):
         self.install_py_pkgs()
         self.install_sys_pkgs()
@@ -1040,6 +1044,8 @@ class Application(ShellCmd, metaclass=MetaCommander):
             "*.egg-info",
             "**/*.egg-info",
             "**/__pycache__",
+            ".DS_Store",
+            "**/.DS_Store",
         ]
         for t in _targets:
             self.remove(cwd / t, silent=not args.verbose)
