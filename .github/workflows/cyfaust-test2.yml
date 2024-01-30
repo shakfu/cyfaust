@@ -96,7 +96,7 @@ jobs:
           echo "building static cyfaust variant"
           python3 scripts/manage.py build --static
 
-     - name: Test cyfaust
+      - name: Test cyfaust
         run: pytest -vv tests
 
       - name: Build wheel
