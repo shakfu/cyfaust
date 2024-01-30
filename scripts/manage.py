@@ -808,6 +808,7 @@ class WheelBuilder:
 
         if static:
             os.environ["STATIC"] = "1"
+        os.environ["MACOSX_DEPLOYMENT_TARGET"] = ver
         self.cmd(_cmd)
 
     def test_wheels(self):
