@@ -178,7 +178,7 @@ class ShellCmd:
     def apt_install(self, *pkgs, update: bool = False):
         """install debian packages using apt"""
         _cmds = []
-        _cmds.append("apt install")
+        _cmds.append("sudo apt install")
         if update:
             _cmds.append("--upgrade")
         _cmds.extend(pkgs)
@@ -725,7 +725,7 @@ class WheelBuilder:
 
     def clean(self):
         if self.build_folder.exists():
-            shutil.rmtree(self.build_folder)
+            shutil.rmtree(self.build_folder, ignore_errors=True)
         if self.src_folder.exists():
             shutil.rmtree(self.src_folder)
 
