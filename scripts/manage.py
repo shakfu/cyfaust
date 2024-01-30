@@ -51,7 +51,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union, Optional
+from typing import Union, Optional, List
 
 
 PYTHON = sys.executable
@@ -145,7 +145,7 @@ class ShellCmd:
         self.log.info("getting output of '%s'", shellcmd)
         return subprocess.check_output(shellcmd.split(), encoding="utf8").strip()
 
-    def makedirs(self, path: Pathlike, mode=511, exist_ok=True):
+    def makedirs(self, path: Pathlike, mode: int = 511, exist_ok: bool = True):
         """Recursive directory creation function"""
         self.log.info("making directory: %s", path)
         os.makedirs(path, mode, exist_ok)
@@ -164,7 +164,7 @@ class ShellCmd:
         else:
             shutil.copy2(src, dst)
 
-    def remove(self, path: Pathlike, silent=False):
+    def remove(self, path: Pathlike, silent:bool = False):
         """Remove file or folder."""
         path = Path(path)
         if path.is_dir():
@@ -211,7 +211,7 @@ class ShellCmd:
         _cmds.extend(pkgs)
         self.cmd(" ".join(_cmds))
 
-    def brew_install(self, *pkgs, update=False):
+    def brew_install(self, *pkgs, update: bool = False):
         """install using homebrew"""
         _pkgs = " ".join(pkgs)
         if update:
@@ -227,7 +227,7 @@ class ShellCmd:
             _cmds.append(" ".join(f"-D{k}={v}" for k, v in options.items()))
         self.cmd(" ".join(_cmds))
 
-    def cmake_build(self, build_dir: Pathlike, release=False):
+    def cmake_build(self, build_dir: Pathlike, release: bool = False):
         """activate cmake build stage"""
         _cmd = f"cmake --build {build_dir}"
         if release:
@@ -325,7 +325,7 @@ class Builder(ShellCmd):
     DYLIB_SUFFIX_LIN = ".so.0"
     DYLIB_SUFFIX_WIN = ".dll"
 
-    def __init__(self, version="0.0.1"):
+    def __init__(self, version: str = "0.0.1"):
         self.version = version
         self.project = Project()
 
@@ -387,7 +387,7 @@ class FaustBuilder(Builder):
     DYLIB_SUFFIX_LIN = ".so.2"
     DYLIB_SUFFIX_WIN = ".dll"
 
-    def __init__(self, version="2.69.3"):
+    def __init__(self, version: str = "2.69.3"):
         super().__init__(version)
         self.src = self.project.downloads / "faust"
         self.sourcedir = self.src / "build"
@@ -485,7 +485,8 @@ class FaustBuilder(Builder):
         self.log.info("copy executables")
         if PLATFORM == "Windows":
             self.copy(
-                self.sourcedir / "bin" / "Release" / "faust.exe", self.project.bin
+                self.sourcedir / "bin" / "Release" / "faust.exe",
+                self.project.bin
             )
         else:
             for e in ["faust", "faust-config", "faustpath"]:
@@ -560,7 +561,7 @@ class SndfileBuilder(Builder):
     """
     LIBNAME = "libsndfile"
 
-    def __init__(self, version="0.0.1"):
+    def __init__(self, version: str = "0.0.1"):
         super().__init__(version)
         self.src = self.project.downloads / self.LIBNAME
         self.build_dir = self.src / "build"
@@ -664,9 +665,9 @@ class WheelFilename:
     project: str
     version: str
     build: Optional[str]
-    python_tags: list[str]
-    abi_tags: list[str]
-    platform_tags: list[str]
+    python_tags: List[str]
+    abi_tags: List[str]
+    platform_tags: List[str]
 
     def __str__(self) -> str:
         if self.build:
@@ -707,7 +708,7 @@ class WheelBuilder:
         {dynamic, static} * {macos, linux} * {x86_64, arm64|aarch64}
     """
 
-    def __init__(self, src_folder="dist", dst_folder="wheels", universal=False):
+    def __init__(self, src_folder: str ="dist", dst_folder: str = "wheels", universal: bool = False):
         self.cwd = Path.cwd()
         self.src_folder = self.cwd / src_folder
         self.dst_folder = self.cwd / dst_folder
@@ -715,10 +716,10 @@ class WheelBuilder:
         self.build_folder = self.cwd / "build"
         self.universal = universal
 
-    def cmd(self, shellcmd, cwd="."):
+    def cmd(self, shellcmd, cwd: Pathlike = "."):
         subprocess.call(shellcmd, shell=True, cwd=str(cwd))
 
-    def get(self, shellcmd, cwd=".", shell=False) -> str:
+    def get(self, shellcmd, cwd: Pathlike = ".", shell: bool = False) -> str:
         """get output of shellcmd"""
         if not shell:
             shellcmd = shellcmd.split()
@@ -726,11 +727,11 @@ class WheelBuilder:
             shellcmd, encoding="utf8", shell=shell, cwd=str(cwd)
         ).strip()
 
-    def getenv(self, key):
+    def getenv(self, key: str) -> bool:
         """convert '0','1' env values to bool {True, False}"""
         return bool(int(os.getenv(key, False)))
 
-    def get_min_osx_ver(self):
+    def get_min_osx_ver(self) -> str:
         """set MACOSX_DEPLOYMENT_TARGET
 
         credits: cibuildwheel
@@ -778,14 +779,14 @@ class WheelBuilder:
         if self.dst_folder.exists():
             shutil.rmtree(self.dst_folder)
 
-    def check(self):
+    def check(self) -> bool:
         assert self.dst_folder.glob("*.whl"), "no 'fixed' wheels created"
 
     def makedirs(self):
         if not self.dst_folder.exists():
             self.dst_folder.mkdir()
 
-    def build_wheel(self, static=False, override=True):
+    def build_wheel(self, static: bool = False, override: bool = True):
         assert PY_VER_MINOR >= 8, "only supporting python >= 3.8"
 
         _cmd = f'"{PYTHON}" setup.py bdist_wheel'
