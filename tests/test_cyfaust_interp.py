@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'bui
 
 import time
 import shutil
+import tempfile
 from pathlib import Path
 
 try:
@@ -59,7 +60,8 @@ except (ModuleNotFoundError, ImportError) as err:
 
 from testutils import print_section, print_entry
 
-TEMP_PATH = "/tmp/FaustDSP.fbc"
+TEMP_DIR = tempfile.gettempdir()
+TEMP_PATH = os.path.join(TEMP_DIR, "FaustDSP.fbc")
 
 # FIXME:
 # if audio is skipped, avoids occassional errors
@@ -160,7 +162,7 @@ def test_interp_create_dsp_factory_from_file2():
 
 def test_interp_create_dsp_factory_from_file2():
     assert dsp_from_file(
-        testname="test_interp_create_dsp_factory_from_file3",
+        testname="test_interp_create_dsp_factory_from_file2",
         dsp_path="tests/dsp/vco.dsp",
         skip_audio=SKIP_AUDIO,
     )
@@ -292,7 +294,8 @@ def test_interp_read_dsp_factory_from_bitcode_file():
 def test_interp_generate_auxfiles_from_string():
     print_entry("test_interp_generate_auxfiles_from_string")
     eg = "process = _,3.14 : +;"
-    assert generate_auxfiles_from_string("svgdsp", eg, "-svg", "-o", "/tmp/out.cpp")
+    out_cpp = os.path.join(TEMP_DIR, "out.cpp")
+    assert generate_auxfiles_from_string("svgdsp", eg, "-svg", "-o", out_cpp)
     svg_folder = Path("svgdsp-svg")
     process_svg = svg_folder / "process.svg"
     assert svg_folder.exists()
@@ -378,7 +381,8 @@ def test_expand_dsp_from_string():
 
 def test_generate_auxfiles_from_file():
     print_entry("test_generate_auxfiles_from_file")
-    assert generate_auxfiles_from_file("tests/dsp/osc.dsp", "-svg", "-o", "/tmp/out.cpp")
+    out_cpp = os.path.join(TEMP_DIR, "out.cpp")
+    assert generate_auxfiles_from_file("tests/dsp/osc.dsp", "-svg", "-o", out_cpp)
     svg_folder = Path("osc-svg")
     process_svg = svg_folder / "process.svg"
     assert svg_folder.exists()

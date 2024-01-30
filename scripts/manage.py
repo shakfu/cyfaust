@@ -178,7 +178,7 @@ class ShellCmd:
     def apt_install(self, *pkgs, update: bool = False):
         """install debian packages using apt"""
         _cmds = []
-        _cmds.append("install")
+        _cmds.append("apt install")
         if update:
             _cmds.append("--upgrade")
         _cmds.extend(pkgs)
@@ -988,8 +988,11 @@ class Application(ShellCmd, metaclass=MetaCommander):
             _cmd = "STATIC=1" + _cmd
         self.cmd(_cmd)
         if PLATFORM == "Windows":
-            self.copy("lib/faust.dll", "build/cyfaust")
-            self.copy("resources", "build/cyfaust/resources")
+            cyfaust = self.project.build / 'cyfaust'
+            if not (cyfaust / 'faust.dll').exists():
+                self.copy("lib/faust.dll", "build/cyfaust")
+            if not (cyfaust / 'resources').exists():
+                self.copy("resources", "build/cyfaust/resources")
 
     @option("--release", "-r", help="build and release all wheels", action="store_true")
     @option("--build", "-b",help="build single wheel based on STATIC env var", action="store_true")
