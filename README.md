@@ -75,7 +75,7 @@ While this project was initially developed and tested primarily on macOS (`x86_6
 
 ## Status
 
-- Supports most of faust interpreter (of Faust version `2.69.3`), and also the box and signals apis (see [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md)) and integrate rtaudio cross-platform audio driver.
+- Supports most of the faust interpreter (in Faust version `2.69.3`), and also the box and signals apis (see [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md)) and integrates the rtaudio cross-platform audio driver.
 
 - Works on macOS, and Linux {x86_64, arm64} and Windows.
 
@@ -124,7 +124,7 @@ A brief guide to its use is provided in the following table:
 
 To build cyfaust you will need a c++ compiler such as [visual studio community edition](https://visualstudio.microsoft.com/vs/community/) and make sure to install c++/windows sdk build support, `git`, and `cmake`.
 
-Then do something linke the following:
+Then do something like the following:
 
 ```bash
 git clone https://github.com/shakfu/cyfaust.git
@@ -157,7 +157,7 @@ sudo apt install build-essential git cmake # you probably have these already
 sudo apt install python3-dev cmake libasound2-dev patchelf
 ```
 
-Then clone the cyfaust repo
+Then
 
 ```bash
 git clone https://github.com/shakfu/cyfaust.git
