@@ -38,6 +38,10 @@ on:
 
 jobs:
   build:
+
+    env:
+      MACOSX_DEPLOYMENT_TARGET: 10.9
+
     runs-on: ${{ github.event.inputs.os }}
 
     steps:
