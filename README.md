@@ -85,95 +85,137 @@ Current priorities are to work through remaining items in the `TODO` list.
 
 ## Setup and Requirements
 
-cyfaust has a `manage.py` script, it simplifies cross-platform project setup and build automation.
+cyfaust has a build management script, `scripts/manage.py`, which simplifies cross-platform project setup and also build automation in the case of github workflows.
+
+```bash
+usage: manage.py [-h] [-v]  ...
+
+cyfaust build manager
+
+options:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
+
+subcommands:
+  valid subcommands
+
+                 additional help
+    build        build packages
+    clean        clean detritus
+    setup        setup prerequisites
+    test         test modules
+    wheel        build wheels
+```
+
+A brief guide to its use is provided in the following table:
 
 | #  | platform | step                    | command                                                      |
 |:--:|:-------- | :---------------------- |:------------------------------------------------------------ |
 | 1  | common   | install prerequisites   | `python3 scripts/manage.py setup --deps`                     |
 | 2  | common   | build/install faustlib  | `python3 scripts/manage.py setup --faust`                    |
 | 3  | common   | build cyfaust (dynamic) | `python3 scripts/manage.py build`                            |
-| 3  | common   | build cyfaust (static)  | `python3 scripts/manage.py build --static`                   |
-| 4  | common   | test cyfaust            | `python3 scripts/manage.py test` or `pytest`                 |
-| 5  | common   | build cyfaust wheels    | `python3 scripts/manage.py wheel --release`                  |
-| 6  | common   | test cyfaust wheels     | `python3 scripts/manage.py wheel --test`                     |
+| 4  | common   | build cyfaust (static)  | `python3 scripts/manage.py build --static`                   |
+| 5  | common   | test cyfaust            | `python3 scripts/manage.py test` or `pytest`                 |
+| 6  | common   | build cyfaust wheels    | `python3 scripts/manage.py wheel --release`                  |
+| 7  | common   | test cyfaust wheels     | `python3 scripts/manage.py wheel --test`                     |
 
 
-On macOS and Linux, a `Makefile` is available as a frontend to the above `manage.py` script. The following sequence is illustrative of this use and is also useful if you want to setup cyfaust manually.
+## Windows
 
-1. Platform specific requirements are as follows:
+To build cyfaust you will need a c++ compiler such as [visual studio community edition](https://visualstudio.microsoft.com/vs/community/) and make sure to install c++/windows sdk build support, `git`, and `cmake`.
 
-    For macOS, something like this:
+Then do something linke the following:
 
-    ```bash
-    brew install python cmake
-    ```
+```bash
+git clone https://github.com/shakfu/cyfaust.git
+cd cyfaust
+pip install -r requirements.txt # or python3 scripts/manage.py setup --deps
+python scripts/manage.py setup --faust
+# then pick from 3a-6. For example
+python3 scripts/manage.py build
+pytest
+# etc..
+```
 
-    For Linux, something like this:
+## macOS & Linux
 
-    ```bash
-    sudo apt update
-    sudo apt install python3-dev cmake libasound2-dev patchelf
-    ```
+On macOS and Linux, a `Makefile` is available as a frontend to the above `manage.py` script to make it a little quicker to use.
 
-2. Then install the required python packages as follows:
+The following setup sequence is illustrative of this and is also useful if you want to setup cyfaust manually.
 
-    ```bash
-    pip3 install -r requirements
-    ```
+For macOS, having Xcode or the CommandLine tools installed is required, and then you will need to have python and cmake installed. If you use [Homebrew](https://brew.sh), this is simple:
 
-3. Run `python3 scripts/manage.py setup --faust`:
+```bash
+brew install python cmake
+```
 
-    - Manually running this step is not strictly necessary, as the default `make` command will check if `libfaust.a` has been built and if it hasn't it will run  `./scripts/setup_faust.py`.
+For Linux, if you are on a debian system, you will need something like the following:
 
-    - This will download faust into the `build` directory, then configure (and patch) it for an interpreter build, build it, and install it into the following (.gitignored) folders in the project directory:
+```bash
+sudo apt update
+sudo apt install build-essential git cmake # you probably have these already
+sudo apt install python3-dev cmake libasound2-dev patchelf
+```
 
-        - `bin`, containing the faust executables,
-        - `lib`, the dynamic and static versions of `libfaust` and
-        - `share`, the faust standard libs and examples.
+Then clone the cyfaust repo
 
-    - Faust version `2.69.3` will be used as it is known to work and is used by the setup scripts.
+```bash
+git clone https://github.com/shakfu/cyfaust.git
+cd cyfaust
+pip3 install -r requirements
+python3 scripts/manage.py setup --faust
+```
 
-    - The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
+- This will download faust into the `build` directory, then configure (and patch) it for an interpreter build, build it, and install it into the following (.gitignored) folders in the project directory:
 
-4. To build the default dynamically-linked package and/or wheel:
+    - `bin`, containing the faust executables,
+    - `lib`, the dynamic and static versions of `libfaust` and
+    - `share`, the faust standard libs and examples.
 
-    ```bash
-    make
-    ```
+- Faust version `2.69.3` will be used as it is a stable reference to work with and is used by the setup scripts.
 
-    or
+- The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
 
-    ```bash
-    python3 setup.py build
-    ```
 
-    and for a wheel:
+To build the default dynamically-linked package and/or wheel:
 
-    ```bash
-    make wheel
-    ```
+```bash
+make
+```
 
-    For the static variant just set the environment variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands.
+or
 
-    For example:
+```bash
+python3 setup.py build
+```
 
-    ```bash
-    make STATIC=1
-    ```
+and for a wheel:
 
-    etc.
+```bash
+make wheel
+```
 
-5. To run the tests
+For the static variant just set the environment variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands.
 
-    ```bash
-    make test
-    ```
+For example:
 
-    or
+```bash
+make STATIC=1
+```
 
-    ```bash
-    make pytest
-    ```
+etc.
+
+To run the tests
+
+```bash
+make test
+```
+
+or
+
+```bash
+make pytest
+```
 
 ## Prior Art of Faust + Python
 

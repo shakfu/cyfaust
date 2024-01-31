@@ -15,16 +15,42 @@ on:
           - '3.10'
           - '3.11'
           - '3.12'
+      os:
+        type: choice
+        description: Please select os
+        default: 'macos-latest'
+        required: true
+        options:
+          - macos-latest
+          - macos-12
+          - macos-11
+          - ubuntu-latest
+          - ubuntu-22.04
+          - ubuntu-20.04
+          - windows-latest
+          - windows-2022
+          - windows-2019
+      disable_cache:
+        type: boolean
+        description: Disable use of cached libfaust in this run
+        required: true
+        default: false
+
+run-name: cyfaust-test-case-${{ github.event.inputs.os }}-${{ github.event.inputs.py_version }}
 
 jobs:
-  build_wheels:
-    name: Build ${{ github.event.inputs.py_version }} wheels on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+  build:
+
+    runs-on: ${{ github.event.inputs.os }}
 
     steps:
+
+    - name: Summarize run options
+      run: |
+          echo "cyfaust-test run summary:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+          echo "- py-version: ${{ github.event.inputs.py_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- os: ${{ github.event.inputs.os }}" >> $GITHUB_STEP_SUMMARY
 
     - uses: actions/checkout@v4
       with:
@@ -54,17 +80,19 @@ jobs:
       run: python3 scripts/manage.py setup --deps
 
     - name: Setup faust
-      if: steps.cache-libfaust.outputs.cache-hit != 'true'
+      if: |
+        steps.cache-libfaust.outputs.cache-hit != 'true'
+        || github.event.inputs.disable_cache == 'true'
       run: python3 scripts/manage.py setup --faust
 
-    - name: Build wheels
+    - name: Build wheels (both variants)
       run: python3 scripts/manage.py wheel --release
 
-    - name: Test wheels
+    - name: Test wheel
       run: python3 scripts/manage.py wheel --test
 
     - uses: actions/upload-artifact@v4
       with:
-        name: dist-${{ matrix.os }}-py${{ github.event.inputs.py_version }}
+        name: cyfaust-${{ github.event.inputs.os }}-py${{ github.event.inputs.py_version }}
         path: ./wheels/*.whl
 

@@ -944,11 +944,7 @@ class MetaCommander(type):
 
 
 class Application(ShellCmd, metaclass=MetaCommander):
-    """
-    Commandline class for `manage.py`
-    """
-    name = "manage"
-    description = "cyfaust build manager"
+    """cyfaust build manager"""
     version = "0.0.4"
     epilog = ""
     default_args = ["--help"]
@@ -1006,7 +1002,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
     @option("--samplerate", "-r", help="build libsamplerate", action="store_true")
     @option("--all", "-a", help="build all", action="store_true")
     def do_setup(self, args):
-        """setup faust"""
+        """setup prerequisites"""
 
         _classes = [
             DependencyMgr,
@@ -1042,7 +1038,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
 
     @option("--static", "-s", action="store_true", help="build static variant")
     def do_build(self, args):
-        """build cyfaust"""
+        """build packages"""
         _cmd = f'"{PYTHON}" setup.py build --build-lib build'
         if args.static:
             os.environ["STATIC"] = "1"
@@ -1070,7 +1066,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
     @option("--universal", "-u", help="build universal wheel", action="store_true")
     @option("--test", "-t", help="test built wheels", action="store_true")
     def do_wheel(self, args):
-        """build cyfaust wheel"""
+        """build wheels"""
 
         if args.release:
             b = WheelBuilder(universal=args.universal)
@@ -1101,7 +1097,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
 
     @option("--pytest", "-p", help="run pytest", action="store_true")
     def do_test(self, args):
-        """test cyfaust modules"""
+        """test modules"""
         if args.pytest:
             self.cmd("pytest -vv tests")
         else:
@@ -1114,7 +1110,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
     @option("--reset", "-r", help="reset project", action="store_true")
     @option("--verbose", "-v", help="verbose cleaning ops", action="store_true")
     def do_clean(self, args):
-        """clean project detritus"""
+        """clean detritus"""
         cwd = self.project.cwd
         _targets = ["build", "dist", "venv", "MANIFEST.in"]
         if args.reset:

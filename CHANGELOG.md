@@ -21,27 +21,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### cyfaust
 
-- Added Windows support (MSVC): building dynamic and static variants are working with tests passing, wheels building. WASAPI audio has been tested t
+- Added Windows support (MSVC): both dynamic and static variants can now be built on Windows with 100% tests passing (only WASAPI audio has been tested so far).
 
-- Added script, `manage.py` which now consolidates and replaces all prior python scripts and provides high-level frontend commands to facilitate cross-platform operations.
+- Added  `manage.py`, a cross-platform python build management script for cyfaust, which consolidates and replaces all prior build-related scripts. It is used by the `Makefile` frontend and can also be used on its own to facilitate cross-platform build operations.
 
 - Added enhancements to `gen_htmldoc.py` python script and makefile target, `make docs`, to generate api docs in html for both build variants.
 
-- Fixed issue with upload artifact which caused an error in wheel building. Now artifact names are properly differentiated as per the new `actions/upload-artifact@v4` requirements.
-
-- Added caching to github workflows using `actions/cache@v4`: this means that `libfaust` dynamic/static libs keyed by `runner-os` are now cached (across all workflows) between runs which greatly reduces workflow run times. For example, `cyfaust-test` which previously ran for 32 mins now runs in 5.2 mins if a cached lib is available.
-
-- Changed workflow actions, as nodejs 16 actions are deprecated, to latest versions: actions/checkout@v4, actions/setup-python@v5, and actions/upload-artifact@v4
-
 - Added thirdparty licenses to `docs/licenses`
 
-- Added working github workflows
-
-- Fixed github action wheel building issue (thanks to [@henryiii for the solution](https://github.com/pypa/wheel/issues/573#issuecomment-1902083893!). This means that cyfaust workflows are now working as expected.
-
-- Added `scripts/archive/build_wheel.py` example of solution for above case.
-
 - Added infrastructure for additional rtaudio audio driver support
+
+- Added cyfaust github workflows:
+
+	- Added several working github workflows:
+
+		- `cyfaust-test`: to test individual build case, 
+
+		- `cyfaust-test-all`: to test all builds, 
+
+		- `cyfaust-wheel`: to test and produce a wheel release, 
+
+		- `cyfaust-wheel-all`: to test and produce wheels across supported platforms.
+
+	- Fixed github action wheel building issue (thanks to [@henryiii for the solution](https://github.com/pypa/wheel/issues/573#issuecomment-1902083893!). This means that cyfaust workflows are now working as expected.
+
+	- Added caching to github workflows using `actions/cache@v4`: this means that `libfaust` dynamic/static libs keyed by `runner-os` are now cached (across all workflows) between runs which greatly reduces workflow run times. As a case in point,`cyfaust-test` which previously ran for 32 mins now runs in 5.2 mins if a cached lib is available.
+
+	- Changed workflow actions, as nodejs 16 actions are deprecated, to latest versions: actions/checkout@v4, actions/setup-python@v5, and actions/upload-artifact@v4
+
+	- Fixed issue with upload artifact which caused an error in wheel building. Now artifact names are properly differentiated as per the new `actions/upload-artifact@v4` requirements.
 
 ### cyfaust.interp
 
