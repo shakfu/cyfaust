@@ -1,6 +1,5 @@
 # Soundfile
 
-
 ## Links
 
 - [Developing a New Soundfile Loader](https://faustdoc.grame.fr/manual/architectures/#developing-a-new-soundfile-loader)
@@ -8,8 +7,6 @@
 - [Sound files Support](https://faustdoc.grame.fr/manual/soundfiles/)
 
 - [Soundfile Primitive](https://faustdoc.grame.fr/manual/syntax/#soundfile-primitive)
-
-
 
 ## Api
 
@@ -103,7 +100,6 @@ class SoundUI(SoundUIInterface):
     def get_binary_path_from(str path) -> str:
 
 ```
-
 
 ```python
 ## gui/SoundUI.h
@@ -276,10 +272,6 @@ class SoundfileReader:
 
 ```
 
-
-
-
-
 ## gui/MemoryReader.h
 
 ```python
@@ -305,10 +297,7 @@ class MemoryReader(SoundfileReader):
 
 ```
 
-
-
 ## gui/WaveReader.h
-
 
 ```c++
 
@@ -756,8 +745,8 @@ struct VFLibsndfile {
         VFLibsndfile* vf = static_cast<VFLibsndfile*>(user_data);
         
         /*
-         **	This will break badly for files over 2Gig in length, but
-         **	is sufficient for testing.
+         ** This will break badly for files over 2Gig in length, but
+         ** is sufficient for testing.
          */
         if (vf->fOffset + count > vf->fLength) {
             count = vf->fLength - vf->fOffset;
@@ -774,8 +763,8 @@ struct VFLibsndfile {
         VFLibsndfile* vf = static_cast<VFLibsndfile*>(user_data);
         
         /*
-         **	This will break badly for files over 2Gig in length, but
-         **	is sufficient for testing.
+         ** This will break badly for files over 2Gig in length, but
+         ** is sufficient for testing.
          */
         if (vf->fOffset >= SIGNED_SIZEOF(vf->fBuffer)) {
             return 0;
@@ -804,11 +793,11 @@ struct VFLibsndfile {
 };
 
 struct LibsndfileReader : public SoundfileReader {
-	
+ 
     LibsndfileReader() {}
-	
+ 
     typedef sf_count_t (* sample_read)(SNDFILE* sndfile, void* buffer, sf_count_t frames);
-	
+ 
     // Check file
     bool checkFile(const string& path_name) override
     {
@@ -857,7 +846,7 @@ struct LibsndfileReader : public SoundfileReader {
     // Open the file and returns its length and channels
     void getParamsFile(const string& path_name, int& channels, int& length) override
     {
-        SF_INFO	snd_info;
+        SF_INFO snd_info;
         snd_info.format = 0;
         SNDFILE* snd_file = sf_open(path_name.c_str(), SFM_READ, &snd_info);
         getParamsFileAux(snd_file, snd_info, channels, length);
@@ -865,7 +854,7 @@ struct LibsndfileReader : public SoundfileReader {
     
     void getParamsFile(unsigned char* buffer, size_t size, int& channels, int& length) override
     {
-        SF_INFO	snd_info;
+        SF_INFO snd_info;
         snd_info.format = 0;
         VFLibsndfile vio(buffer, size);
         SNDFILE* snd_file = sf_open_virtual(&vio.fVIO, SFM_READ, &snd_info, &vio);
@@ -887,7 +876,7 @@ struct LibsndfileReader : public SoundfileReader {
     // Read the file
     void readFile(Soundfile* soundfile, const string& path_name, int part, int& offset, int max_chan) override
     {
-        SF_INFO	snd_info;
+        SF_INFO snd_info;
         snd_info.format = 0;
         SNDFILE* snd_file = sf_open(path_name.c_str(), SFM_READ, &snd_info);
         readFileAux(soundfile, snd_file, snd_info, part, offset, max_chan);
@@ -895,13 +884,13 @@ struct LibsndfileReader : public SoundfileReader {
     
     void readFile(Soundfile* soundfile, unsigned char* buffer, size_t length, int part, int& offset, int max_chan) override
     {
-        SF_INFO	snd_info;
+        SF_INFO snd_info;
         snd_info.format = 0;
         VFLibsndfile vio(buffer, length);
         SNDFILE* snd_file = sf_open_virtual(&vio.fVIO, SFM_READ, &snd_info, &vio);
         readFileAux(soundfile, snd_file, snd_info, part, offset, max_chan);
     }
-	
+ 
     // Will be called to fill all parts from 0 to MAX_SOUNDFILE_PARTS-1
     void readFileAux(Soundfile* soundfile, SNDFILE* snd_file, const SF_INFO& snd_info, int part, int& offset, int max_chan)
     {
@@ -920,7 +909,7 @@ struct LibsndfileReader : public SoundfileReader {
         soundfile->fSR[part] = snd_info.samplerate;
     #endif
         soundfile->fOffset[part] = offset;
-		
+  
         // Read and fill snd_info.channels number of channels
         sf_count_t nbf;
         
@@ -1008,7 +997,7 @@ struct LibsndfileReader : public SoundfileReader {
             offset += nbf;
         #endif
         } while (nbf == BUFFER_SIZE);
-		
+  
         sf_close(snd_file);
     #ifdef SAMPLERATE
         if (resampler) src_delete(resampler);
@@ -1024,8 +1013,7 @@ struct LibsndfileReader : public SoundfileReader {
 
 ## libsndfile with rtaudio
 
-ref: https://stackoverflow.com/questions/34135031/combining-libsndfile-and-rtaudio
-
+ref: <https://stackoverflow.com/questions/34135031/combining-libsndfile-and-rtaudio>
 
 ```c++
 #include <iostream>
@@ -1126,4 +1114,3 @@ int main () {
 
 }
 ```
-

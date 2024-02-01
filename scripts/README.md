@@ -2,53 +2,51 @@
 
 This folder contains some python and shell scripts which may be run directly or triggered by the Makefile.
 
-
 ## Required
 
-- `manage.py`: main cross-platform cyfaust project mgmt script which can be used directly or called by the `Makefile` frontend in the case of macos and linux as well as the github workflows. 
+- `manage.py`: main cross-platform cyfaust project mgmt script which can be used directly or called by the `Makefile` frontend in the case of macos and linux as well as the github workflows.
 
-	```bash
-	% ./scripts/manage.py --help
-	usage: manage.py [-h] [-v]  ...
+```bash
+usage: manage.py [-h] [-v]  ...
 
-	options:
-	  -h, --help     show this help message and exit
-	  -v, --version  show program's version number and exit
+cyfaust build manager
 
-	subcommands:
-	  valid subcommands
+options:
+  -h, --help     show this help message and exit
+  -v, --version  show program's version number and exit
 
-	                 additional help
-	    build        build cyfaust
-	    clean        clean project detritus
-	    setup        setup faust
-	    test         test cyfaust modules
-	    wheel        build cyfaust wheel
-	```
+subcommands:
+  valid subcommands
 
-	It has the following features:
+                 additional help
+    build        build packages
+    clean        clean detritus
+    setup        setup prerequisites
+    test         test modules
+    wheel        build wheels
+```
 
-	- installs all platform-specific dependencies.
+It has the following features:
 
-	- downloads, builds, and installs `faust`` into the project's `bin`, `lib`, and `share` folders. It uses the following patched files in the `scripts/patch` folder:
+- installs all platform-specific dependencies.
 
-		- `faust.mk`
+- downloads, builds, and installs `faust` into the project's `bin`, `lib`, and `share` folders. It uses the following patched files in the `scripts/patch` folder:
 
-		- `interp_plus_backend.cmake`
+  - `faust.mk`
 
-		- `interp_plus_target.cmake`
+  - `interp_plus_backend.cmake`
 
-		- `rtaudio-dsp.h`
+  - `interp_plus_target.cmake`
 
-	- downloads, builds, and installs `libsndfile` and `libsamplerate` into project's `lib` and `include` folders (wip).
+  - `rtaudio-dsp.h`
 
-	- handles wheel building ops.
+- downloads, builds, and installs `libsndfile` and `libsamplerate` into project's `lib` and `include` folders (wip).
 
-	- etc..
+- handles wheel building ops.
 
+- etc..
 
 - `gen_htmldoc.py`: a script to use pydoc to generate html documentation of the cyfaust api writing to `docs/api`. (may be integrated into `manage.py` at some point.)
-
 
 ## Testing
 
@@ -60,7 +58,6 @@ This folder contains some python and shell scripts which may be run directly or 
 
 - `inspect_cyfaust.py`: cyfaust object reflection code using `inspect` module
 
-
 ## Unused or used just once
 
 - `setup_libfaust_llvm.sh`: downloads, builds llvm faust.
@@ -68,5 +65,3 @@ This folder contains some python and shell scripts which may be run directly or 
 - `build_wheel.py`: example of solving macos wheel building issues on github runners which default to `universal2` wheel builds.
 
 - contents of the `scripts/static` folder, contains scripts which were use to parse and generate code and also for a prior cmake-based build.
-
-

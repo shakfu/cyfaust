@@ -15,8 +15,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
-
-
 ## [0.0.4]
 
 ### cyfaust
@@ -33,31 +31,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Added cyfaust github workflows:
 
-	- Added several working github workflows:
+  - Added several working github workflows:
 
-		- `cyfaust-test`: to test individual build case, 
+    - `cyfaust-test`: to test individual build case,
 
-		- `cyfaust-test-all`: to test all builds, 
+    - `cyfaust-test-all`: to test all builds,
 
-		- `cyfaust-wheel`: to test and produce a wheel release, 
+    - `cyfaust-wheel`: to test and produce a wheel release,
 
-		- `cyfaust-wheel-all`: to test and produce wheels across supported platforms.
+    - `cyfaust-wheel-all`: to test and produce wheels across supported platforms.
 
-	- Fixed github action wheel building issue (thanks to [@henryiii for the solution](https://github.com/pypa/wheel/issues/573#issuecomment-1902083893!). This means that cyfaust workflows are now working as expected.
+  - Fixed github action wheel building issue (thanks to [@henryiii for the solution](https://github.com/pypa/wheel/issues/573#issuecomment-1902083893!). This means that cyfaust workflows are now working as expected.
 
-	- Added caching to github workflows using `actions/cache@v4`: this means that `libfaust` dynamic/static libs keyed by `runner-os` are now cached (across all workflows) between runs which greatly reduces workflow run times. As a case in point,`cyfaust-test` which previously ran for 32 mins now runs in 5.2 mins if a cached lib is available.
+  - Added caching to github workflows using `actions/cache@v4`: this means that `libfaust` dynamic/static libs keyed by `runner-os` are now cached (across all workflows) between runs which greatly reduces workflow run times. As a case in point,`cyfaust-test` which previously ran for 32 mins now runs in 5.2 mins if a cached lib is available.
 
-	- Changed workflow actions, as nodejs 16 actions are deprecated, to latest versions: actions/checkout@v4, actions/setup-python@v5, and actions/upload-artifact@v4
+  - Changed workflow actions, as nodejs 16 actions are deprecated, to latest versions: actions/checkout@v4, actions/setup-python@v5, and actions/upload-artifact@v4
 
-	- Fixed issue with upload artifact which caused an error in wheel building. Now artifact names are properly differentiated as per the new `actions/upload-artifact@v4` requirements.
-
-### cyfaust.interp
-
-### cyfaust.box
-
-### cyfaust.signal
-
-
+  - Fixed issue with upload artifact which caused an error in wheel building. Now artifact names are properly differentiated as per the new `actions/upload-artifact@v4` requirements.
 
 ## [0.0.3]
 
@@ -67,14 +57,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### cyfaust.interp
 
-- Added improved dsp resource cleanup mechanism for `InterpreterFactoryDSP` which greatly improved stability (see [docs/cleanuping-up.md](https://github.com/shakfu/cyfaust/blob/main/docs/devnotes/cleaning-up.md))
+- Added improved dsp resource cleanup mechanism for `InterpreterFactoryDSP` which greatly improved stability (see [docs/cle§anuping-up.md](https://github.com/shakfu/cyfaust/blob/main/docs/devnotes/cleaning-up.md))
 
 - Fixed test code to ensure rtaudio streams were properly stopped and closed.
 
 ### cyfaust.box
 
 - Added additional docstrings
-
 
 ## [0.0.1-2]
 

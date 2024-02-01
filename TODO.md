@@ -24,7 +24,6 @@
 
 - [ ] Add more box api tests
 
-
 ## cyfaust.signal
 
 - [ ] Fix `Interval` wrapper and `get_interval`, `set_interval` methods

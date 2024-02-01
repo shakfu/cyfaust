@@ -37,7 +37,6 @@ It has two build variants:
 
 While this project was initially developed and tested primarily on macOS (`x86_64` and `arm64`), a focus on cross-platform development and testing has led to Linux (`amd64` and `aarch64`) and Windows (`MSVC` / `amd64`) support.
 
-
 ## Features
 
 - Python-oriented cross-platform implementation of the [faust interpreter](https://faustdoc.grame.fr/manual/embedding/#using-libfaust-with-the-interpreter-backend)
@@ -119,7 +118,6 @@ A brief guide to its use is provided in the following table:
 | 6  | common   | build cyfaust wheels    | `python3 scripts/manage.py wheel --release`                  |
 | 7  | common   | test cyfaust wheels     | `python3 scripts/manage.py wheel --test`                     |
 
-
 ## Windows
 
 To build cyfaust you will need a c++ compiler such as [visual studio community edition](https://visualstudio.microsoft.com/vs/community/) and make sure to install c++/windows sdk build support, `git`, and `cmake`.
@@ -168,14 +166,13 @@ python3 scripts/manage.py setup --faust
 
 - This will download faust into the `build` directory, then configure (and patch) it for an interpreter build, build it, and install it into the following (.gitignored) folders in the project directory:
 
-    - `bin`, containing the faust executables,
-    - `lib`, the dynamic and static versions of `libfaust` and
-    - `share`, the faust standard libs and examples.
+  - `bin`, containing the faust executables,
+  - `lib`, the dynamic and static versions of `libfaust` and
+  - `share`, the faust standard libs and examples.
 
 - Faust version `2.69.3` will be used as it is a stable reference to work with and is used by the setup scripts.
 
 - The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
-
 
 To build the default dynamically-linked package and/or wheel:
 

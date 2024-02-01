@@ -1,5 +1,5 @@
 # Resource cleanup of factory created dsp instances
- 
+
 ## The Problem
 
 - `interpreter_dsp` objects are allocated using `interpreter_dsp_factory::createDSPInstance()`:

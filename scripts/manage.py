@@ -51,8 +51,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union, Optional, List
-
+from typing import List, Optional, Union
 
 PYTHON = sys.executable
 PLATFORM = platform.system()
@@ -180,13 +179,8 @@ class ShellCmd:
                 if not silent:
                     self.log.warning("file not found: %s", path)
 
-    def pip_install(
-        self,
-        *pkgs,
-        reqs: Optional[str] = None,
-        upgrade: bool = False,
-        pip: Optional[str] = None,
-    ):
+    def pip_install(self, *pkgs, reqs: Optional[str] = None,
+                    upgrade: bool = False, pip: Optional[str] = None):
         """Install python packages using pip"""
         _cmds = []
         if pip:
@@ -251,7 +245,6 @@ class ShellCmd:
 class DependencyMgr(ShellCmd):
     """Manages cyfaust pip and system dependencies.
 
-    
     platforms: ["Darwin", "Linux (debian)", Windowss]
     """
     def __init__(self):
@@ -898,9 +891,6 @@ class WheelBuilder:
 # ----------------------------------------------------------------------------
 # argdeclare
 
-cmd = os.system
-
-
 # option decorator
 def option(*args, **kwds):
     def _decorator(func):
@@ -910,13 +900,14 @@ def option(*args, **kwds):
         else:
             func.options = [_option]
         return func
-
     return _decorator
 
+# bool option decorator
+def opt(long, short, help):
+    return option(long, short, help=help, action="store_true")
 
 # arg decorator
 arg = option
-
 
 # combines option decorators
 def option_group(*options):
@@ -996,11 +987,11 @@ class Application(ShellCmd, metaclass=MetaCommander):
     # ------------------------------------------------------------------------
     # setup
 
-    @option("--deps", "-d", help="install platform dependencies", action="store_true")
-    @option("--faust", "-f", help="build libfaust", action="store_true")
-    @option("--sndfile", "-s", help="build libsndfile", action="store_true")
-    @option("--samplerate", "-r", help="build libsamplerate", action="store_true")
-    @option("--all", "-a", help="build all", action="store_true")
+    @opt("--deps", "-d", "install platform dependencies")
+    @opt("--faust", "-f", "build libfaust")
+    @opt("--sndfile", "-s", "build libsndfile")
+    @opt("--samplerate", "-r", "build libsamplerate")
+    @opt("--all", "-a", "build all")
     def do_setup(self, args):
         """setup prerequisites"""
 
@@ -1036,7 +1027,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
     # ------------------------------------------------------------------------
     # build
 
-    @option("--static", "-s", action="store_true", help="build static variant")
+    @opt("--static", "-s", "build static variant")
     def do_build(self, args):
         """build packages"""
         _cmd = f'"{PYTHON}" setup.py build --build-lib build'
@@ -1054,17 +1045,12 @@ class Application(ShellCmd, metaclass=MetaCommander):
     # ------------------------------------------------------------------------
     # wheel
 
-    @option("--release", "-r", help="build and release all wheels", action="store_true")
-    @option(
-        "--build",
-        "-b",
-        help="build single wheel based on STATIC env var",
-        action="store_true",
-    )
-    @option("--dynamic", "-d", help="build dynamic variant", action="store_true")
-    @option("--static", "-s", help="build static variant", action="store_true")
-    @option("--universal", "-u", help="build universal wheel", action="store_true")
-    @option("--test", "-t", help="test built wheels", action="store_true")
+    @opt("--release", "-r", "build and release all wheels")
+    @opt("--build", "-b", "build single wheel based on STATIC env var")
+    @opt("--dynamic", "-d", "build dynamic variant")
+    @opt("--static", "-s", "build static variant")
+    @opt("--universal", "-u", "build universal wheel")
+    @opt("--test", "-t", "test built wheels")
     def do_wheel(self, args):
         """build wheels"""
 
@@ -1095,7 +1081,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
     # ------------------------------------------------------------------------
     # test
 
-    @option("--pytest", "-p", help="run pytest", action="store_true")
+    @opt("--pytest", "-p", "run pytest")
     def do_test(self, args):
         """test modules"""
         if args.pytest:
@@ -1107,8 +1093,8 @@ class Application(ShellCmd, metaclass=MetaCommander):
     # ------------------------------------------------------------------------
     # clean
 
-    @option("--reset", "-r", help="reset project", action="store_true")
-    @option("--verbose", "-v", help="verbose cleaning ops", action="store_true")
+    @opt("--reset", "-r", "reset project")
+    @opt("--verbose", "-v", "verbose cleaning ops")
     def do_clean(self, args):
         """clean detritus"""
         cwd = self.project.cwd

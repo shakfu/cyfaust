@@ -36,11 +36,9 @@ ImportError: dlopen($HOME/venv/lib/python3.11/site-packages/cyfaust/interp.cpyth
 
 ## Sketching the Solution
 
-One of 
+One of
 
-1. Compile binary dependencies (`libfaust.a`) as universal binaries
-
-	OR
+1. Compile binary dependencies (`libfaust.a`) as universal binaries OR
 
 2. Force the wheel on the runner to be compiled as its native architecture: x86_64.
 
@@ -48,29 +46,27 @@ Now (2) should be easy, but somehow it isn't...
 
 What to do?
 
-
-## Tried the following:
+## Tried the following
 
 1. Prefix `ARCHFLAGS='-arch {ARCH}` to `python3 setup.py`
 
-	```bash
-	ARCHFLAGS='-arch x86_64' python3 setup.py bdist_wheel
-	```
+ ```bash
+ ARCHFLAGS='-arch x86_64' python3 setup.py bdist_wheel
+ ```
 
-	This **does** force the contents of the wheel to be `{ARCH}` but does not change its tag which remains `universal2`.
-
+ This **does** force the contents of the wheel to be `{ARCH}` but does not change its tag which remains `universal2`.
 
 2. Set the tag using `--plat-name {tag-name}` to `python3 setup.py bdist_wheel`:
 
-	```bash
-	python3 setup.py bdist_wheel --plat-name macosx_13_x86_64
-	```
+ ```bash
+ python3 setup.py bdist_wheel --plat-name macosx_13_x86_64
+ ```
 
-	This doesn't work and gives an error while testing the wheel:
+ This doesn't work and gives an error while testing the wheel:
 
-	```bash
-	ERROR: cyfaust-0.0.3-cp311-cp311-macosx_13_x86_64.whl is not a supported wheel on this platform.
-	```
+ ```bash
+ ERROR: cyfaust-0.0.3-cp311-cp311-macosx_13_x86_64.whl is not a supported wheel on this platform.
+ ```
 
 What to do?
 
@@ -123,6 +119,3 @@ def build_wheel(universal=False):
 if __name__ == '__main__':
     build_wheel()
 ```
-
-
-
