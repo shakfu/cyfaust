@@ -38,6 +38,13 @@ on:
           - windows-latest
           - windows-2022
           - windows-2019
+      disable_cache:
+        type: boolean
+        description: Disable use of cached libfaust in this run
+        required: true
+        default: false
+
+run-name: cyfaust-test-${{ github.event.inputs.os }}-${{ github.event.inputs.py_version }}-${{ github.event.inputs.variant }}
 
 jobs:
   build:
@@ -84,7 +91,9 @@ jobs:
       run: python3 scripts/manage.py setup --deps
 
     - name: Setup faust
-      if: steps.cache-libfaust.outputs.cache-hit != 'true'
+      if: |
+        steps.cache-libfaust.outputs.cache-hit != 'true'
+        || github.event.inputs.disable_cache == 'true'
       run: python3 scripts/manage.py setup --faust
 
     - name: Build dynamic cyfaust variant

@@ -16,6 +16,8 @@ on:
           - '3.11'
           - '3.12'
 
+run-name: cyfaust-wheel-all-${{ github.event.inputs.py_version }}
+
 jobs:
   build_wheels:
     name: Build ${{ github.event.inputs.py_version }} wheels on ${{ matrix.os }}

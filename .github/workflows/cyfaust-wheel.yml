@@ -36,7 +36,7 @@ on:
         required: true
         default: false
 
-run-name: cyfaust-test-case-${{ github.event.inputs.os }}-${{ github.event.inputs.py_version }}
+run-name: cyfaust-wheel-${{ github.event.inputs.os }}-${{ github.event.inputs.py_version }}
 
 jobs:
   build:

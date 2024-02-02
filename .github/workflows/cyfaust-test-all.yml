@@ -15,6 +15,9 @@ on:
           - '3.10'
           - '3.11'
           - '3.12'
+
+run-name: cyfaust-test-all-${{ github.event.inputs.py_version }}
+
 jobs:
   test_cyfaust:
     name: Build python cyfaust ${{ matrix.variant }}-${{ github.event.inputs.py_version }}-${{ matrix.os }} wheel
