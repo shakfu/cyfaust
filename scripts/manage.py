@@ -575,7 +575,7 @@ class FaustBuilder(Builder):
                     self.sourcedir / "lib" / "Release" / "faust.lib", faust_lib
                 )
             finally:
-                if not (faust_dll.exists() and faust_lib.exist()):
+                if not (faust_dll.exists() and faust_lib.exists()):
                     self.fail("copy_sharedlib failed: %s", self.dylib)
         else:
             try:
