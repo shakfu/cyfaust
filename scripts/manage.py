@@ -373,7 +373,7 @@ class Builder(ShellCmd):
         if PLATFORM == "Linux":
             return f"{self.LIBNAME}{self.DYLIB_SUFFIX_LIN}"
         if PLATFORM == "Windows":
-            return f"{self.LIBNAME}{self.DYLIB_SUFFIX_WIN}"
+            return f"{self.NAME}{self.DYLIB_SUFFIX_WIN}"
         raise SystemExit("platform not supported")
 
     @property
@@ -563,22 +563,28 @@ class FaustBuilder(Builder):
                 self.fail("copy_headers failed")
 
     def copy_sharedlib(self):
-        try:
-            self.log.info("copy_sharedlib")
-            if PLATFORM == "Windows":
+        self.log.info("copy_sharedlib")
+        if PLATFORM == "Windows":
+            faust_dll = self.project.lib / "faust.dll"
+            faust_lib = self.project.lib / "faust.lib"
+            try:
                 self.copy(
-                    self.sourcedir / "lib" / "Release" / "faust.dll", self.project.lib
+                    self.sourcedir / "lib" / "Release" / "faust.dll", faust_dll
                 )
                 self.copy(
-                    self.sourcedir / "lib" / "Release" / "faust.lib", self.project.lib
+                    self.sourcedir / "lib" / "Release" / "faust.lib", faust_lib
                 )
-            else:
+            finally:
+                if not (faust_dll.exists() and faust_lib.exist()):
+                    self.fail("copy_sharedlib failed: %s", self.dylib)
+        else:
+            try:
                 self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
                 if not self.dylib_link.exists():
                     self.dylib_link.symlink_to(self.dylib)
-        finally:
-            if not self.dylib.exists():
-                self.fail("copy_sharedlib failed")
+            finally:
+                if not self.dylib.exists():
+                    self.fail("copy_sharedlib failed: %s", self.dylib)
 
     def copy_staticlib(self):
         try:
