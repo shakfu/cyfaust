@@ -1,0 +1,78 @@
+version: '3'
+
+# taskfile: curently only used on windows
+# see: https://taskfile.dev/installation
+
+env:
+  # PYTHON: python.exe
+  PYTHON: python3
+
+
+
+tasks:
+  faust:
+    cmds:
+      - $PYTHON scripts/manage.py setup --faust
+    status:
+      - test -f lib/status/libfaust.a
+
+  sndfile:
+    cmds:
+      - $PYTHON scripts/manage.py setup --sndfile
+    status:
+      - test -f lib/status/libsndfile.a
+
+  samplerate:
+    cmds:
+      - $PYTHON scripts/manage.py setup --samplerate
+    status:
+      - test -f lib/status/libsamplerate.a
+
+  build:
+    cmds:
+      - $PYTHON scripts/manage.py build
+    sources:
+      - src/cyfaust/*.pyx
+      - src/cyfaust/*.pxd
+      - src/cyfaust/*.cpp
+    generates:
+      - build/cyfaust/*.so
+
+  build-static:
+    cmds:
+      - $PYTHON scripts/manage.py build --static
+
+  wheel:
+    cmds:
+      - $PYTHON scripts/manage.py wheel --dynamic
+
+  wheel-static:
+    cmds:
+      - $PYTHON scripts/manage.py wheel --static
+
+  release:
+    cmds:
+      - $PYTHON scripts/manage.py wheel --release
+
+  test_wheel:
+    cmds:
+      - $PYTHON scripts/manage.py wheel --test
+
+  test:
+    cmds:
+      - $PYTHON scripts/manage.py test
+
+  pytest:
+    cmds:
+      - $PYTHON scripts/manage.py test --pytest
+
+  clean:
+    silent: true
+    cmds:
+      - $PYTHON scripts/manage.py clean
+
+  reset:
+    silent: true
+    cmds:
+      - $PYTHON scripts/manage.py clean --reset
+

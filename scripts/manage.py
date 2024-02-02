@@ -42,6 +42,7 @@ usage: manage.py [-h] [-v]  ...
 
 """
 import argparse
+import filecmp
 import logging
 import os
 import platform
@@ -114,6 +115,12 @@ class ShellCmd:
         self.log.info(shellcmd)
         subprocess.call(shellcmd, shell=True, cwd=str(cwd))
 
+    def fail(self, msg: Optional[str] = None, *args):
+        """exits the program with an optional error msg."""
+        if msg:
+            self.log.critical(msg, *args)
+        sys.exit(1)
+
     def git_clone(self, url: str, recurse: bool = False, branch: Optional[str] = None):
         """git clone a repository source tree from a url"""
         _cmds = ["git clone --depth 1"]
@@ -163,7 +170,7 @@ class ShellCmd:
         else:
             shutil.copy2(src, dst)
 
-    def remove(self, path: Pathlike, silent:bool = False):
+    def remove(self, path: Pathlike, silent: bool = False):
         """Remove file or folder."""
         path = Path(path)
         if path.is_dir():
@@ -179,8 +186,13 @@ class ShellCmd:
                 if not silent:
                     self.log.warning("file not found: %s", path)
 
-    def pip_install(self, *pkgs, reqs: Optional[str] = None,
-                    upgrade: bool = False, pip: Optional[str] = None):
+    def pip_install(
+        self,
+        *pkgs,
+        reqs: Optional[str] = None,
+        upgrade: bool = False,
+        pip: Optional[str] = None,
+    ):
         """Install python packages using pip"""
         _cmds = []
         if pip:
@@ -247,6 +259,7 @@ class DependencyMgr(ShellCmd):
 
     platforms: ["Darwin", "Linux (debian)", Windowss]
     """
+
     def __init__(self):
         self.log = logging.getLogger(self.__class__.__name__)
 
@@ -294,8 +307,8 @@ class DependencyMgr(ShellCmd):
 
 
 class Project:
-    """Utility class to hold project directory structure
-    """
+    """Utility class to hold project directory structure"""
+
     def __init__(self):
         self.cwd = Path.cwd()
         self.bin = self.cwd / "bin"
@@ -311,9 +324,10 @@ class Project:
 
 
 class Builder(ShellCmd):
-    """Abstract builder class with additional methods common to subclasses.
-    """
-    LIBNAME = "libname"
+    """Abstract builder class with additional methods common to subclasses."""
+
+    NAME = "name"
+    LIBNAME = f"lib{NAME}"
     DYLIB_SUFFIX_OSX = ".0.dylib"
     DYLIB_SUFFIX_LIN = ".so.0"
     DYLIB_SUFFIX_WIN = ".dll"
@@ -333,6 +347,17 @@ class Builder(ShellCmd):
         for folder in folders:
             if not folder.exists():
                 self.makedirs(folder)
+
+    @property
+    def executable_name(self):
+        name = self.NAME
+        if PLATFORM == "Windows":
+            name = f"{self.NAME}.exe"
+        return name
+
+    @property
+    def executable(self):
+        return self.project.bin / self.executable_name
 
     @property
     def staticlib_name(self):
@@ -373,9 +398,10 @@ class Builder(ShellCmd):
 
 
 class FaustBuilder(Builder):
-    """Manages all aspects of the interpreter-centric faust build for cyfaust,
-    """
-    LIBNAME = "libfaust"
+    """Manages all aspects of the interpreter-centric faust build for cyfaust,"""
+
+    NAME = "faust"
+    LIBNAME = f"lib{NAME}"
     DYLIB_SUFFIX_OSX = ".2.dylib"
     DYLIB_SUFFIX_LIN = ".so.2"
     DYLIB_SUFFIX_WIN = ".dll"
@@ -390,150 +416,217 @@ class FaustBuilder(Builder):
         self.prefix = self.project.build / "prefix"
         self.log = logging.getLogger(self.__class__.__name__)
 
+    @property
+    def headers(self):
+        return self.project.include / "faust"
+
     def get_faust(self):
-        self.log.info("update from faust main repo")
-        self.setup_project()
-        self.makedirs(self.project.downloads)
-        self.chdir(self.project.downloads)
-        self.git_clone("https://github.com/grame-cncm/faust.git", branch=self.version)
+        try:
+            self.log.info("update from faust main repo")
+            self.setup_project()
+            self.makedirs(self.project.downloads)
+            self.chdir(self.project.downloads)
+            self.git_clone(
+                "https://github.com/grame-cncm/faust.git", branch=self.version
+            )
+        finally:
+            if not self.src.exists():
+                self.fail("git clone faust failed.")
 
     def build_faust(self):
         self.makedirs(self.faustdir)
 
         if PLATFORM in ["Linux", "Darwin"]:
-            self.copy(self.project.patch / "faust.mk", self.src / "Makefile")
+            try:
+                self.copy(self.project.patch / "faust.mk", self.src / "Makefile")
 
-            self.copy(
-                self.project.patch / "interp_plus_backend.cmake",
-                self.backends / "interp_plus.cmake",
-            )
-            self.copy(
-                self.project.patch / "interp_plus_target.cmake",
-                self.targets / "interp_plus.cmake",
-            )
+                self.copy(
+                    self.project.patch / "interp_plus_backend.cmake",
+                    self.backends / "interp_plus.cmake",
+                )
+                self.copy(
+                    self.project.patch / "interp_plus_target.cmake",
+                    self.targets / "interp_plus.cmake",
+                )
 
-            self.chdir(self.src)
-            self.cmd("make interp")
-            self.cmd(f"PREFIX={self.prefix} make install")
+                self.chdir(self.src)
+                self.cmd("make interp")
+                self.cmd(f"PREFIX={self.prefix} make install")
+            finally:
+                # validate build
+                dylib = self.prefix / "lib" / self.dylib_name
+                if not dylib.exists():
+                    self.fail("build faust failed: dylib not found: %s", dylib)
+
+                staticlib = self.prefix / "lib" / self.staticlib_name
+                if not staticlib.exists():
+                    self.fail("build faust failed: staticlib not found %s", staticlib)
 
         elif PLATFORM == "Windows":
-            self.copy(
-                self.project.patch / "interp_plus_backend.cmake",
-                self.backends / "interp.cmake",
-            )
-            self.copy(
-                self.project.patch / "interp_plus_target.cmake",
-                self.targets / "interp.cmake",
-            )
-            self.cmake_config(
-                self.sourcedir,
-                self.faustdir,
-                # scripts
-                self.backends / "interp.cmake",
-                self.targets / "interp.cmake",
-                # options
-                CMAKE_BUILD_TYPE="Release",
-                WORKLET="OFF",
-                INCLUDE_LLVM="OFF",
-                USE_LLVM_CONFIG="OFF",
-                LLVM_PACKAGE_VERSION="",
-                LLVM_LIBS="",
-                LLVM_LIB_DIR="",
-                LLVM_INCLUDE_DIRS="",
-                LLVM_DEFINITIONS="",
-                LLVM_LD_FLAGS="",
-                LIBSDIR="lib",
-                BUILD_HTTP_STATIC="OFF",
-            )
-            self.cmake_build(build_dir=self.faustdir, release=True)
-            # install doesn't work on windows
-            # self.cmake_install(build_dir=self.faustdir, prefix=self.prefix)
+            try:
+                self.copy(
+                    self.project.patch / "interp_plus_backend.cmake",
+                    self.backends / "interp.cmake",
+                )
+                self.copy(
+                    self.project.patch / "interp_plus_target.cmake",
+                    self.targets / "interp.cmake",
+                )
+                self.cmake_config(
+                    self.sourcedir,
+                    self.faustdir,
+                    # scripts
+                    self.backends / "interp.cmake",
+                    self.targets / "interp.cmake",
+                    # options
+                    CMAKE_BUILD_TYPE="Release",
+                    WORKLET="OFF",
+                    INCLUDE_LLVM="OFF",
+                    USE_LLVM_CONFIG="OFF",
+                    LLVM_PACKAGE_VERSION="",
+                    LLVM_LIBS="",
+                    LLVM_LIB_DIR="",
+                    LLVM_INCLUDE_DIRS="",
+                    LLVM_DEFINITIONS="",
+                    LLVM_LD_FLAGS="",
+                    LIBSDIR="lib",
+                    BUILD_HTTP_STATIC="OFF",
+                )
+                self.cmake_build(build_dir=self.faustdir, release=True)
+                # install doesn't work on windows
+                # self.cmake_install(build_dir=self.faustdir, prefix=self.prefix)
+            finally:
+                dylib = self.sourcedir / "lib" / "Release" / "faust.dll"
+                if not dylib.exists():
+                    self.fail("build faust failed: dylib not found: %s", dylib)
+
+                staticlib = self.sourcedir / "lib" / "Release" / "faust.lib"
+                if not staticlib.exists():
+                    self.fail("build faust failed: staticlib not found %s", staticlib)
 
         else:
             raise SystemExit("platform not supported")
 
-    def remove_current(self):
-        self.log.info("remove current faust libs")
 
-        if PLATFORM == "Windows":
-            self.remove(self.project.bin / "faust.exe")
-            dylib = self.project.lib / "faust.dll"
-            if dylib.exists():
-                self.remove(dylib)
-            if self.staticlib.exists():
-                self.remove(self.staticlib)
-        else:
-            for e in ["faust", "faust-config", "faustpath"]:
-                self.remove(self.project.bin / e)
-            self.remove(self.project.include / "faust")
+    def remove_current(self):
+        try:
+            self.log.info("remove current faust libs")
+
+            # common
+            if self.executable.exists():
+                self.remove(self.executable)
             if self.dylib.exists():
                 self.remove(self.dylib)
-            if self.dylib_link.exists():
-                self.remove(self.dylib_link)
             if self.staticlib.exists():
                 self.remove(self.staticlib)
-            self.remove(self.project.share / "faust")
+
+            if PLATFORM in ["Linux", "Darwin"]:
+                for e in ["faust-config", "faustpath"]:
+                    executable = self.project.bin / e
+                    if executable.exists():
+                        self.remove(executable)
+                include = self.project.include / "faust"
+                if include.exists():
+                    self.remove(include)
+                if self.dylib_link.exists():
+                    self.remove(self.dylib_link)
+                self.remove(self.project.share / "faust")
+        finally:
+            paths = [
+                self.executable,
+                self.dylib,
+                self.staticlib,
+            ]
+            if any(p.exists() for p in paths):
+                self.fail("remove_current failed")
 
     def copy_executables(self):
-        self.log.info("copy executables")
-        if PLATFORM == "Windows":
-            self.copy(
-                self.sourcedir / "bin" / "Release" / "faust.exe",
-                self.project.bin
-            )
-        else:
-            for e in ["faust", "faust-config", "faustpath"]:
-                self.copy(self.prefix / "bin" / e, self.project.bin / e)
+        try:
+            self.log.info("copy executables")
+            if PLATFORM == "Windows":
+                self.copy(
+                    self.sourcedir / "bin" / "Release" / "faust.exe", self.project.bin
+                )
+            else:
+                for e in ["faust", "faust-config", "faustpath"]:
+                    self.copy(self.prefix / "bin" / e, self.project.bin / e)
+        finally:
+            if not self.executable.exists():
+                self.fail("copy_executables failed")
 
     def copy_headers(self):
-        self.log.info("update headers")
-        self.copy(self.prefix / "include" / "faust", self.project.include / "faust")
+        try:
+            self.log.info("update headers")
+            self.copy(self.prefix / "include" / "faust", self.headers)
+        finally:
+            if not self.headers.exists():
+                self.fail("copy_headers failed")
 
     def copy_sharedlib(self):
-        self.log.info("copy_sharedlib")
-        if PLATFORM == "Windows":
-            self.copy(
-                self.sourcedir / "lib" / "Release" / "faust.dll", self.project.lib
-            )
-            self.copy(
-                self.sourcedir / "lib" / "Release" / "faust.lib", self.project.lib
-            )
-        else:
-            self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
-            if not self.dylib_link.exists():
-                self.dylib_link.symlink_to(self.dylib)
+        try:
+            self.log.info("copy_sharedlib")
+            if PLATFORM == "Windows":
+                self.copy(
+                    self.sourcedir / "lib" / "Release" / "faust.dll", self.project.lib
+                )
+                self.copy(
+                    self.sourcedir / "lib" / "Release" / "faust.lib", self.project.lib
+                )
+            else:
+                self.copy(self.prefix / "lib" / self.dylib_name, self.dylib)
+                if not self.dylib_link.exists():
+                    self.dylib_link.symlink_to(self.dylib)
+        finally:
+            if not self.dylib.exists():
+                self.fail("copy_sharedlib failed")
 
     def copy_staticlib(self):
-        self.log.info("copy staticlib")
-        if PLATFORM == "Windows":
-            self.copy(
-                self.sourcedir / "lib" / "libfaust.lib",
-                self.staticlib
-                # self.project.lib_static
-            )
-        else:
-            self.copy(self.prefix / "lib" / self.staticlib_name, self.staticlib)
+        try:
+            self.log.info("copy staticlib")
+            if PLATFORM == "Windows":
+                self.copy(
+                    self.sourcedir / "lib" / "libfaust.lib",
+                    self.staticlib,
+                    # self.project.lib_static
+                )
+            else:
+                self.copy(self.prefix / "lib" / self.staticlib_name, self.staticlib)
+        finally:
+            if not self.staticlib.exists():
+                self.fail("copy_staticlib failed")
 
     def copy_stdlib(self):
-        self.log.info("copy stdlib")
-        self.makedirs(self.project.share / "faust")
-        for lib in (self.prefix / "share" / "faust").glob("*.lib"):
-            self.copy(lib, self.project.share / "faust" / lib.name)
+        share_faust = self.project.share / "faust"
+        try:
+            self.log.info("copy stdlib")
+            self.makedirs(share_faust)
+            for lib in (self.prefix / "share" / "faust").glob("*.lib"):
+                self.copy(lib, share_faust / lib.name)
+        finally:
+            if not share_faust.exists():
+                self.fail("copy_stdlib failed")
 
     def copy_examples(self):
-        self.log.info("copy examples")
-        self.copy(
-            self.prefix / "share" / "faust" / "examples",
-            self.project.share / "faust" / "examples",
-        )
-        self.remove(self.project.share / "faust" / "examples" / "SAM")
-        self.remove(self.project.share / "faust" / "examples" / "bela")
+        try:
+            self.log.info("copy examples")
+            self.copy(
+                self.prefix / "share" / "faust" / "examples",
+                self.project.share / "faust" / "examples",
+            )
+            self.remove(self.project.share / "faust" / "examples" / "SAM")
+            self.remove(self.project.share / "faust" / "examples" / "bela")
+        finally:
+            if not (self.project.share / "faust" / "examples").exists():
+                self.fail("copy_examples failed")
 
     def patch_audio_driver(self):
-        self.copy(
-            self.project.patch / "rtaudio-dsp.h",
-            self.project.include / "faust" / "audio" / "rtaudio-dsp.h",
-        )
+        src = self.project.patch / "rtaudio-dsp.h"
+        dst = self.project.include / "faust" / "audio" / "rtaudio-dsp.h"
+        try:
+            self.copy(src, dst)
+        finally:
+            if not filecmp.cmp(src, dst):
+                self.fail("patch_audio_driver failed")
 
     def process(self):
         self.get_faust()
@@ -545,15 +638,17 @@ class FaustBuilder(Builder):
         if PLATFORM in ["Linux", "Darwin"]:
             self.copy_headers()
             self.patch_audio_driver()
-        # skip since resources already contains these
+        # skip since `resources` already contains these
         # self.copy_stdlib()
         # self.copy_examples()
+        self.log.info("faust build DONE")
 
 
 class SndfileBuilder(Builder):
-    """Builds mimimal version of libsndfile
-    """
-    LIBNAME = "libsndfile"
+    """Builds mimimal version of libsndfile"""
+
+    NAME = "sndfile"
+    LIBNAME = f"lib{NAME}"
 
     def __init__(self, version: str = "0.0.1"):
         super().__init__(version)
@@ -587,13 +682,18 @@ class SndfileBuilder(Builder):
         self.cmake_build(self.build_dir)
         self.cmake_install(self.build_dir, prefix=self.prefix)
         self.log.info("installing %s", self.staticlib)
-        self.copy(self.prefix / "lib" / self.staticlib_name, self.project.lib_static)
+        staticlib = self.prefix / "lib" / self.staticlib_name
+        if not staticlib.exists():
+            self.fail("%s build failed", self.staticlib_name)
+        self.copy(staticlib, self.staticlib)
+        self.log.info(f"{self.staticlib_name} build/install DONE")
 
 
 class SamplerateBuilder(Builder):
-    """Builds mimimal version of libsamplerate
-    """
-    LIBNAME = "libsamplerate"
+    """Builds mimimal version of libsamplerate"""
+
+    NAME = "samplerate"
+    LIBNAME = f"lib{NAME}"
 
     def __init__(self, version="0.0.1"):
         super().__init__(version)
@@ -621,7 +721,11 @@ class SamplerateBuilder(Builder):
         self.cmake_build(self.build_dir)
         self.cmake_install(self.build_dir, prefix=self.prefix)
         self.log.info("installing %s", self.staticlib)
-        self.copy(self.prefix / "lib" / self.staticlib_name, self.project.lib_static)
+        staticlib = self.prefix / "lib" / self.staticlib_name
+        if not staticlib.exists():
+            self.fail("%s build failed", self.staticlib_name)
+        self.copy(staticlib, self.staticlib)
+        self.log.info(f"{self.staticlib_name} build/install DONE")
 
 
 # ----------------------------------------------------------------------------
@@ -702,7 +806,12 @@ class WheelBuilder:
         {dynamic, static} * {macos, linux} * {x86_64, arm64|aarch64}
     """
 
-    def __init__(self, src_folder: str ="dist", dst_folder: str = "wheels", universal: bool = False):
+    def __init__(
+        self,
+        src_folder: str = "dist",
+        dst_folder: str = "wheels",
+        universal: bool = False,
+    ):
         self.cwd = Path.cwd()
         self.src_folder = self.cwd / src_folder
         self.dst_folder = self.cwd / dst_folder
@@ -773,9 +882,11 @@ class WheelBuilder:
         if self.dst_folder.exists():
             shutil.rmtree(self.dst_folder)
 
-    def check(self) -> bool:
-        assert self.dst_folder.glob("*.whl"), "no 'fixed' wheels created"
-
+    def check(self):
+        have_wheels = bool(self.dst_folder.glob("*.whl"))
+        if not have_wheels:
+            self.fail("no wheels created")
+ 
     def makedirs(self):
         if not self.dst_folder.exists():
             self.dst_folder.mkdir()
@@ -891,6 +1002,7 @@ class WheelBuilder:
 # ----------------------------------------------------------------------------
 # argdeclare
 
+
 # option decorator
 def option(*args, **kwds):
     def _decorator(func):
@@ -900,14 +1012,18 @@ def option(*args, **kwds):
         else:
             func.options = [_option]
         return func
+
     return _decorator
 
+
 # bool option decorator
-def opt(long, short, help):
-    return option(long, short, help=help, action="store_true")
+def opt(long, short, desc):
+    return option(long, short, help=desc, action="store_true")
+
 
 # arg decorator
 arg = option
+
 
 # combines option decorators
 def option_group(*options):
@@ -936,6 +1052,7 @@ class MetaCommander(type):
 
 class Application(ShellCmd, metaclass=MetaCommander):
     """cyfaust build manager"""
+
     version = "0.0.4"
     epilog = ""
     default_args = ["--help"]

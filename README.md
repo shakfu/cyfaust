@@ -35,7 +35,7 @@ It has two build variants:
             └── libraries
     ```
 
-While this project was initially developed and tested primarily on macOS (`x86_64` and `arm64`), a focus on cross-platform development and testing has led to Linux (`amd64` and `aarch64`) and Windows (`MSVC` / `amd64`) support.
+While this project was initially developed and tested primarily on macOS (`x86_64` and `arm64`), a recent focus on cross-platform development and testing has led to Linux (`amd64` and `aarch64`) and Windows (`MSVC` / `amd64`) support.
 
 ## Features
 
@@ -108,15 +108,15 @@ subcommands:
 
 A brief guide to its use is provided in the following table:
 
-| #  | platform | step                    | command                                                      |
-|:--:|:-------- | :---------------------- |:------------------------------------------------------------ |
-| 1  | common   | install prerequisites   | `python3 scripts/manage.py setup --deps`                     |
-| 2  | common   | build/install faustlib  | `python3 scripts/manage.py setup --faust`                    |
-| 3  | common   | build cyfaust (dynamic) | `python3 scripts/manage.py build`                            |
-| 4  | common   | build cyfaust (static)  | `python3 scripts/manage.py build --static`                   |
-| 5  | common   | test cyfaust            | `python3 scripts/manage.py test` or `pytest`                 |
-| 6  | common   | build cyfaust wheels    | `python3 scripts/manage.py wheel --release`                  |
-| 7  | common   | test cyfaust wheels     | `python3 scripts/manage.py wheel --test`                     |
+| #  | platform | step                    | command                                       |
+|:--:|:-------- | :---------------------- |:--------------------------------------------- |
+| 1  | common   | install prerequisites   | `python3 scripts/manage.py setup --deps`      |
+| 2  | common   | build/install faustlib  | `python3 scripts/manage.py setup --faust`     |
+| 3  | common   | build cyfaust (dynamic) | `python3 scripts/manage.py build`             |
+| 4  | common   | build cyfaust (static)  | `python3 scripts/manage.py build --static`    |
+| 5  | common   | test cyfaust            | `python3 scripts/manage.py test` or `pytest`  |
+| 6  | common   | build cyfaust wheels    | `python3 scripts/manage.py wheel --release`   |
+| 7  | common   | test cyfaust wheels     | `python3 scripts/manage.py wheel --test`      |
 
 ## Windows
 
@@ -129,8 +129,8 @@ git clone https://github.com/shakfu/cyfaust.git
 cd cyfaust
 pip install -r requirements.txt # or python3 scripts/manage.py setup --deps
 python scripts/manage.py setup --faust
-# then pick from 3a-6. For example
-python3 scripts/manage.py build
+# then pick from 3, 4 or 6. For example
+python scripts/manage.py build
 pytest
 # etc..
 ```
@@ -141,7 +141,7 @@ On macOS and Linux, a `Makefile` is available as a frontend to the above `manage
 
 The following setup sequence is illustrative of this and is also useful if you want to setup cyfaust manually.
 
-For macOS, having Xcode or the CommandLine tools installed is required, and then you will need to have python and cmake installed. If you use [Homebrew](https://brew.sh), this is simple:
+For macOS, having Xcode installed or the CommandLine tools installed (`xcode-select --install`)is required, and then you will need to have python and cmake installed. If you use [Homebrew](https://brew.sh), this is simple:
 
 ```bash
 brew install python cmake
@@ -151,8 +151,8 @@ For Linux, if you are on a debian system, you will need something like the follo
 
 ```bash
 sudo apt update
-sudo apt install build-essential git cmake # you probably have these already
-sudo apt install python3-dev cmake libasound2-dev patchelf
+sudo apt install build-essential git cmake python3-dev # you probably have these already
+sudo apt install libasound2-dev patchelf
 ```
 
 Then

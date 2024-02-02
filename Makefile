@@ -10,7 +10,10 @@ else
 	MEMRAY := python3 -m memray
 endif
 
-FAUST_STATICLIB := ./lib/static/libfaust.a
+LIBFAUST := ./lib/static/libfaust.a
+LIBSAMPLERATE := ./lib/static/libsamplerate.a
+LIBSNDFILE := ./lib/static/libsndfile.a
+
 
 TESTS := \
 	test_cyfaust_interp.py 	\
@@ -19,29 +22,45 @@ TESTS := \
 	test_cyfaust_common.py
 
 
-.PHONY: all setup_faust build wheel release test pytest test_wheel \
-		testcpp memray docs clean reset
+.PHONY: all faust samplerate sndfile build wheel release \
+		test pytest test_wheel testcpp memray docs clean reset
 
 
 all: build
 
-$(FAUST_STATICLIB):
+$(LIBFAUST):
 	$(PYTHON) scripts/manage.py setup --faust
 
-setup_faust: $(FAUST_STATICLIB)
-	@echo "faust is setup for cyfaust"
+$(LIBSAMPLERATE):
+	$(PYTHON) scripts/manage.py setup --samplerate
 
-# build: setup_faust
+$(LIBSNDFILE):
+	$(PYTHON) scripts/manage.py setup --sndfile
+
+
+
+faust: $(LIBFAUST)
+	@echo "libfaust DONE"
+
+samplerate: $(LIBSAMPLERATE)
+	@echo "libsamplerate DONE"
+
+sndfile: $(LIBSAMPLERATE) $(LIBSNDFILE)
+	@echo "libsndfile DONE"
+
+
+
+# build: faust
 # 	@mkdir -p build
 # 	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
-build: setup_faust
+build: faust
 	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py build
 
-wheel: setup_faust
+wheel: faust
 	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py wheel --build
 
-release: setup_faust
+release: faust
 	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py wheel --release
 
 test: build
@@ -51,10 +70,10 @@ test: build
 test_wheel:
 	@$(PYTHON) scripts/manage.py wheel --test
 
-testcpp: setup_faust
+testcpp: faust
 	@scripts/test_cpp_tests.sh
 
-pytest: setup_faust
+pytest: faust
 	@$(PYTHON) -Xfaulthandler -mpytest -vv ./tests
 
 memray:

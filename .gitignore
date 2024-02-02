@@ -70,6 +70,7 @@ venv.bak/
 # cache
 .mypy_cache/
 .ruff_cache/
+.pylint_cache/
 
 
 # Prerequisites

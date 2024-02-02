@@ -25,16 +25,10 @@
 #ifndef __rtaudio_dsp__
 #define __rtaudio_dsp__
 
-
-#include <assert.h>
 #include <stdio.h>
-#if defined(__WIN32__) || defined(WIN32) || defined(_WIN32)
-#include <malloc.h> // for alloca
-#else
-#include <stdlib.h>
-#endif
-
+#include <assert.h>
 #include <rtaudio/RtAudio.h>
+#include <stdlib.h>
 
 #include "faust/audio/audio.h"
 #include "faust/dsp/dsp-adapter.h"
@@ -67,9 +61,9 @@ class rtaudio : public audio {
         virtual int processAudio(double streamTime, void* inbuf, void* outbuf, unsigned long frames) 
         {
             AVOIDDENORMALS;
-#if defined(__WIN32__) || defined(WIN32) || defined(_WIN32) 
-            float** inputs = (float**)alloca(fDsp->getNumInputs() * sizeof(float*));
-            float** outputs = (float**)alloca(fDsp->getNumOutputs() * sizeof(float*));
+#ifdef _WIN32 
+            float** inputs = (float**)malloc(fDsp->getNumInputs() * sizeof(float*));
+            float** outputs = (float**)malloc(fDsp->getNumOutputs() * sizeof(float*));
 #else
             float* inputs[fDsp->getNumInputs()];
             float* outputs[fDsp->getNumOutputs()];
@@ -84,7 +78,10 @@ class rtaudio : public audio {
 
             // process samples
             fDsp->compute(streamTime * 1000000., frames, inputs, outputs);
-
+#ifdef _WIN32
+            free(inputs);
+            free(outputs);
+#endif
             return 0;
         }
     
