@@ -121,14 +121,3 @@ jobs:
       with:
         name: cyfaust-${{ github.event.inputs.variant }}-${{ github.event.inputs.os }}-py${{ github.event.inputs.py_version }}
         path: ./wheels/*.whl
-
-    - uses: actions/cache/save@v3
-      id: save-cache
-      if: github.event.inputs.disable_cache == 'true'
-      with:
-        path: |
-          ${{ github.workspace }}/lib/libfaust.*
-          ${{ github.workspace }}/lib/faust.*
-          ${{ github.workspace }}/lib/static/libfaust.*
-        key: ${{ runner.os }}-libfaust
-
