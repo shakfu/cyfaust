@@ -28,7 +28,7 @@
 
 #include <assert.h>
 #include <stdio.h>
-#if defined(__WIN32__) || defined(WIN32) || defined(_WIN32)
+#if defined(__WIN32__) || defined(WIN32) || defined(_WIN32) 
 #include <malloc.h> // for alloca
 #else
 #include <stdlib.h>

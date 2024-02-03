@@ -122,12 +122,11 @@ A brief guide to its use is provided in the following table:
 | 6  | common   | build cyfaust wheels    | `python3 scripts/manage.py wheel --release`   |
 | 7  | common   | test cyfaust wheels     | `python3 scripts/manage.py wheel --test`      |
 
-
-[`*`] Prerequisites consists of general and platform-specific requirements. 
+[`*`] Prerequisites consists of general and platform-specific requirements.
 
 The general requirements are:
 
-1.  `libfaust` configured to be built with the c, c++, codebox, interp_comp, and rust backends and the executable, static and dynamic targets.
+1. `libfaust` configured to be built with the c, c++, codebox, interp_comp, and rust backends and the executable, static and dynamic targets.
 
 2. `libsndile` and `libsamplerate` for faust `soundfile` primitive support (not yet implemented)
 
