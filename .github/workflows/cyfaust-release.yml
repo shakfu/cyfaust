@@ -1,0 +1,60 @@
+
+name: cyfaust-release
+
+on: workflow_dispatch
+
+run-name: cyfaust-release-${{ GITHUB_REF_NAME }}-${{ GITHUB_RUN_NUMBER }}
+
+jobs:
+  build_wheels:
+    name: Build ${{ github.event.inputs.py_version }} wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        py_version: ['3.9', '3.10', '3.11', '3.12']
+
+    steps:
+
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+        fetch-depth: '1'
+
+    - name: Cache libfaust 
+      id: cache-libfaust
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ github.workspace }}/lib/libfaust.*
+          ${{ github.workspace }}/lib/faust.*
+          ${{ github.workspace }}/lib/static/libfaust.*
+        key: ${{ runner.os }}-libfaust
+
+    - name: Setup python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.py_version }}
+        cache: 'pip' # caching pip dependencies
+
+    - name: Display python version
+      run: python3 --version
+
+    - name: Install prerequisites
+      run: python3 scripts/manage.py setup --deps
+
+    - name: Setup faust
+      if: steps.cache-libfaust.outputs.cache-hit != 'true'
+      run: python3 scripts/manage.py setup --faust
+
+    - name: Build wheels
+      run: python3 scripts/manage.py wheel --release
+
+    - name: Test wheels
+      run: python3 scripts/manage.py wheel --test
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: dist-${{ matrix.os }}-py${{ matrix.py_version }}
+        path: ./wheels/*.whl
+

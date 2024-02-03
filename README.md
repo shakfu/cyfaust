@@ -122,7 +122,6 @@ A brief guide to its use is provided in the following table:
 | 6  | common   | build cyfaust wheels    | `python3 scripts/manage.py wheel --release`   |
 | 7  | common   | test cyfaust wheels     | `python3 scripts/manage.py wheel --test`      |
 
-Notes*
 
 [`*`] Prerequisites consists of general and platform-specific requirements. 
 
