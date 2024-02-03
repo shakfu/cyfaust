@@ -1,12 +1,12 @@
 # cyfaust
 
-Intended to be a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
+cyfaust is an early stage project that aims to be a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
-This project started off as a [faustlab](https://github.com/shakfu/faustlab) subproject of the same name.
+To this end, a decent amount of progress has been made, with some key work left to do (see [Project Status](project-status) below).
 
 It has two build variants:
 
-1. The default build is dynamically linked to `libfaust.dylib` or `libfaust.so` and consists of a python package with multiple compiled submodules and embedded resources (faust libraries and architecture files):
+1. The default build is dynamically linked to `libfaust.dylib`, `libfaust.so` or `faust.dll` depending on your platform and consists of a python package with multiple compiled submodules and embedded resources (faust libraries and architecture files):
 
     ```bash
     % tree -L 3
@@ -22,7 +22,7 @@ It has two build variants:
             └── libraries
     ```
 
-2. The static build is statically linked (with `libfaust.a`) and consists of a python package with a single compiled submodule and embedded resources (faust libraries and architecture files):
+2. The static build is statically linked (with `libfaust.a` or `libfaust.lib`) and consists of a python package with a single compiled submodule and embedded resources (faust libraries and architecture files):
 
     ```bash
     % tree -L 3
@@ -35,7 +35,7 @@ It has two build variants:
             └── libraries
     ```
 
-While this project was initially developed and tested primarily on macOS (`x86_64` and `arm64`), a recent focus on cross-platform development and testing has led to Linux (`amd64` and `aarch64`) and Windows (`MSVC` / `amd64`) support.
+While this project was initially developed and tested primarily on macOS (`x86_64`, `arm64`), Linux (`amd64`, `aarch64`) and Windows (`amd64`) are now supported in recent releases.
 
 ## Features
 
@@ -72,19 +72,23 @@ While this project was initially developed and tested primarily on macOS (`x86_6
 
 - Includes several github workflows to automate the testing and building of cyfaust wheels for a number of supported platforms
 
-## Status
+## Project Status
 
-- Supports most of the faust interpreter (in Faust version `2.69.3`), and also the box and signals apis (see [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md)) and integrates the rtaudio cross-platform audio driver.
+The project is still early stage and a work-in-progress, with key remaining parts not yet implemented (see the project's [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md) file.
 
-- Works on macOS, and Linux {x86_64, arm64} and Windows.
+Nonetheless,
 
-- Provides two build variants: one dynamically-linked to `libfaust.[so|dylib]` and the other statically-linked to `libfaust.a`
+- A good chunk of the faust interpreter (in Faust version `2.69.3`), and also the box and signal apis have been wrapped with tntegration of the rtaudio cross-platform audio driver.
+
+- Works on macOS, Linux and Windows.
+
+- Provides two build variants: one dynamically-linked to `libfaust.(so|dylib)` and the other statically-linked to `libfaust.(a|lib)`
 
 Current priorities are to work through remaining items in the `TODO` list.
 
 ## Setup and Requirements
 
-cyfaust has a build management script, `scripts/manage.py`, which simplifies cross-platform project setup and also build automation in the case of github workflows.
+cyfaust has a build management script, `scripts/manage.py`, which simplifies cross-platform project setup and builds and also build automation in the case of github workflows.
 
 ```bash
 usage: manage.py [-h] [-v]  ...
@@ -110,7 +114,7 @@ A brief guide to its use is provided in the following table:
 
 | #  | platform | step                    | command                                       |
 |:--:|:-------- | :---------------------- |:--------------------------------------------- |
-| 1  | common   | install prerequisites   | `python3 scripts/manage.py setup --deps`      |
+| 1* | common   | install prerequisites   | `python3 scripts/manage.py setup --deps`      |
 | 2  | common   | build/install faustlib  | `python3 scripts/manage.py setup --faust`     |
 | 3  | common   | build cyfaust (dynamic) | `python3 scripts/manage.py build`             |
 | 4  | common   | build cyfaust (static)  | `python3 scripts/manage.py build --static`    |
@@ -118,11 +122,23 @@ A brief guide to its use is provided in the following table:
 | 6  | common   | build cyfaust wheels    | `python3 scripts/manage.py wheel --release`   |
 | 7  | common   | test cyfaust wheels     | `python3 scripts/manage.py wheel --test`      |
 
+Notes*
+
+[`*`] Prerequisites consists of general and platform-specific requirements. 
+
+The general requirements are:
+
+1.  `libfaust` configured to be built with the c, c++, codebox, interp_comp, and rust backends and the executable, static and dynamic targets.
+
+2. `libsndile` and `libsamplerate` for faust `soundfile` primitive support (not yet implemented)
+
+Platform specific requirements are covered in the next sections.
+
 ## Windows
 
-To build cyfaust you will need a c++ compiler such as [visual studio community edition](https://visualstudio.microsoft.com/vs/community/) and make sure to install c++/windows sdk build support, `git`, and `cmake`.
+To build cyfaust you will need python to be installed (3.9+), a c++ compiler such as [visual studio community edition](https://visualstudio.microsoft.com/vs/community/) and make sure to install c++ and Windows SDK development support, as well as `git`, and `cmake`.
 
-Then do something like the following:
+Then do something like the following in a terminal:
 
 ```bash
 git clone https://github.com/shakfu/cyfaust.git
@@ -141,13 +157,13 @@ On macOS and Linux, a `Makefile` is available as a frontend to the above `manage
 
 The following setup sequence is illustrative of this and is also useful if you want to setup cyfaust manually.
 
-For macOS, having Xcode installed or the CommandLine tools installed (`xcode-select --install`)is required, and then you will need to have python and cmake installed. If you use [Homebrew](https://brew.sh), this is simple:
+For macOS, having Xcode or the CommandLine tools (`xcode-select --install`) installed is required, and then you will need to have python and cmake installed. If you use [Homebrew](https://brew.sh), this is simply:
 
 ```bash
 brew install python cmake
 ```
 
-For Linux, if you are on a debian system, you will need something like the following:
+For Linux, if you are on a Debian-derived system, you will need something like the following:
 
 ```bash
 sudo apt update
@@ -161,7 +177,7 @@ Then
 git clone https://github.com/shakfu/cyfaust.git
 cd cyfaust
 pip3 install -r requirements
-python3 scripts/manage.py setup --faust
+make # or python3 scripts/manage.py setup --faust
 ```
 
 - This will download faust into the `build` directory, then configure (and patch) it for an interpreter build, build it, and install it into the following (.gitignored) folders in the project directory:
