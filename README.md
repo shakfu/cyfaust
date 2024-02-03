@@ -2,7 +2,7 @@
 
 cyfaust is an early stage project that aims to be a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
-To this end, a decent amount of progress has been made, with some key work left to do (see [Project Status](project-status) below).
+To this end, a decent amount of progress has been made, with some key work left to do (see [Project Status](https://github.com/shakfu/cyfaust?tab=readme-ov-file#project-status) below).
 
 It has two build variants:
 
