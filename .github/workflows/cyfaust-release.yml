@@ -3,7 +3,7 @@ name: cyfaust-release
 
 on: workflow_dispatch
 
-run-name: cyfaust-release-${{ env.GITHUB_REF_NAME }}-${{ env.GITHUB_RUN_NUMBER }}
+run-name: cyfaust-release-$GITHUB_REF_NAME-$GITHUB_RUN_NUMBER
 
 jobs:
   build_wheels:
