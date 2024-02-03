@@ -69,7 +69,26 @@ Pathlike = Union[str, Path]
 
 
 # ----------------------------------------------------------------------------
-# setup_cyfaust
+# setup
+
+
+class Project:
+    """Utility class to hold project directory structure"""
+
+    def __init__(self):
+        self.cwd = Path.cwd()
+        self.bin = self.cwd / "bin"
+        self.include = self.cwd / "include"
+        self.lib = self.cwd / "lib"
+        self.lib_static = self.lib / "static"
+        self.share = self.cwd / "share"
+        self.scripts = self.cwd / "scripts"
+        self.patch = self.scripts / "patch"
+        self.tests = self.cwd / "tests"
+        self.dist = self.cwd / "dist"
+        self.wheels = self.cwd / "wheels"
+        self.build = self.cwd / "build"
+        self.downloads = self.build / "downloads"
 
 
 class CustomFormatter(logging.Formatter):
@@ -146,10 +165,18 @@ class ShellCmd:
         self.log.info("change permission of %s to %s", path, perm)
         os.chmod(path, perm)
 
-    def get(self, shellcmd: str) -> str:
+    # def get(self, shellcmd: str) -> str:
+    #     """get output of shellcmd"""
+    #     self.log.info("getting output of '%s'", shellcmd)
+    #     return subprocess.check_output(shellcmd.split(), encoding="utf8").strip()
+
+    def get(self, shellcmd, cwd: Pathlike = ".", shell: bool = False) -> str:
         """get output of shellcmd"""
-        self.log.info("getting output of '%s'", shellcmd)
-        return subprocess.check_output(shellcmd.split(), encoding="utf8").strip()
+        if not shell:
+            shellcmd = shellcmd.split()
+        return subprocess.check_output(
+            shellcmd, encoding="utf8", shell=shell, cwd=str(cwd)
+        ).strip()
 
     def makedirs(self, path: Pathlike, mode: int = 511, exist_ok: bool = True):
         """Recursive directory creation function"""
@@ -274,7 +301,7 @@ class DependencyMgr(ShellCmd):
         if PLATFORM == "Darwin":
             sys_pkgs.extend(["python", "cmake"])
 
-            print("install macos system dependencies")
+            self.log.info("install macOS system dependencies")
             self.brew_install(*sys_pkgs)
 
         elif PLATFORM == "Linux":
@@ -293,7 +320,7 @@ class DependencyMgr(ShellCmd):
             if JACK:
                 sys_pkgs.append("libjack-jackd2-dev")
 
-            print("install linux system dependencies")
+            self.log.info("install Linux system dependencies")
             self.apt_install(*sys_pkgs)
 
         elif PLATFORM == "Windows":
@@ -304,23 +331,6 @@ class DependencyMgr(ShellCmd):
         """run all relevant processes"""
         self.install_py_pkgs()
         self.install_sys_pkgs()
-
-
-class Project:
-    """Utility class to hold project directory structure"""
-
-    def __init__(self):
-        self.cwd = Path.cwd()
-        self.bin = self.cwd / "bin"
-        self.include = self.cwd / "include"
-        self.lib = self.cwd / "lib"
-        self.lib_static = self.lib / "static"
-        self.share = self.cwd / "share"
-        self.scripts = self.cwd / "scripts"
-        self.patch = self.scripts / "patch"
-        self.build = self.cwd / "build"
-        self.tests = self.cwd / "tests"
-        self.downloads = self.build / "downloads"
 
 
 class Builder(ShellCmd):
@@ -802,7 +812,7 @@ class WheelFilename:
         )
 
 
-class WheelBuilder:
+class WheelBuilder(ShellCmd):
     """cyfaust wheel builder
 
     Automates wheel building and handle special cases
@@ -812,33 +822,10 @@ class WheelBuilder:
         {dynamic, static} * {macos, linux} * {x86_64, arm64|aarch64}
     """
 
-    def __init__(
-        self,
-        src_folder: str = "dist",
-        dst_folder: str = "wheels",
-        universal: bool = False,
-    ):
-        self.cwd = Path.cwd()
-        self.src_folder = self.cwd / src_folder
-        self.dst_folder = self.cwd / dst_folder
-        self.lib_folder = self.cwd / "lib"
-        self.build_folder = self.cwd / "build"
+    def __init__(self, universal: bool = False):
         self.universal = universal
-
-    def cmd(self, shellcmd, cwd: Pathlike = "."):
-        subprocess.call(shellcmd, shell=True, cwd=str(cwd))
-
-    def get(self, shellcmd, cwd: Pathlike = ".", shell: bool = False) -> str:
-        """get output of shellcmd"""
-        if not shell:
-            shellcmd = shellcmd.split()
-        return subprocess.check_output(
-            shellcmd, encoding="utf8", shell=shell, cwd=str(cwd)
-        ).strip()
-
-    def getenv(self, key: str) -> bool:
-        """convert '0','1' env values to bool {True, False}"""
-        return bool(int(os.getenv(key, False)))
+        self.project = Project()
+        self.log = logging.getLogger(self.__class__.__name__)
 
     def get_min_osx_ver(self) -> str:
         """set MACOSX_DEPLOYMENT_TARGET
@@ -878,24 +865,24 @@ class WheelBuilder:
         return PLATFORM == "Linux" and ARCH == "aarch64"
 
     def clean(self):
-        if self.build_folder.exists():
-            shutil.rmtree(self.build_folder, ignore_errors=True)
-        if self.src_folder.exists():
-            shutil.rmtree(self.src_folder)
+        if self.project.build.exists():
+            shutil.rmtree(self.project.build, ignore_errors=True)
+        if self.project.dist.exists():
+            shutil.rmtree(self.project.dist)
 
     def reset(self):
         self.clean()
-        if self.dst_folder.exists():
-            shutil.rmtree(self.dst_folder)
+        if self.project.wheels.exists():
+            shutil.rmtree(self.project.wheels)
 
     def check(self):
-        have_wheels = bool(self.dst_folder.glob("*.whl"))
+        have_wheels = bool(self.project.wheels.glob("*.whl"))
         if not have_wheels:
             self.fail("no wheels created")
  
     def makedirs(self):
-        if not self.dst_folder.exists():
-            self.dst_folder.mkdir()
+        if not self.project.wheels.exists():
+            self.project.wheels.mkdir()
 
     def build_wheel(self, static: bool = False, override: bool = True):
         assert PY_VER_MINOR >= 8, "only supporting python >= 3.8"
@@ -922,12 +909,12 @@ class WheelBuilder:
         self.cmd(_cmd)
 
     def test_wheels(self):
-        venv = self.dst_folder / "venv"
+        venv = self.project.wheels / "venv"
         if venv.exists():
             shutil.rmtree(venv)
 
-        for wheel in self.dst_folder.glob("*.whl"):
-            self.cmd("virtualenv venv", cwd=self.dst_folder)
+        for wheel in self.project.wheels.glob("*.whl"):
+            self.cmd("virtualenv venv", cwd=self.project.wheels)
             if PLATFORM in ["Linux", "Darwin"]:
                 vpy = venv / "bin" / "python"
                 vpip = venv / "bin" / "pip"
@@ -941,30 +928,30 @@ class WheelBuilder:
             if "static" in str(wheel):
                 target = "static"
                 imported = "cyfaust"
-                print("static variant test")
+                self.log.info("static variant test")
             else:
                 target = "dynamic"
                 imported = "interp"
-                print("dynamic variant test")
+                self.log.info("dynamic variant test")
             val = self.get(
                 f'{vpy} -c "from cyfaust import {imported};print(len(dir({imported})))"',
                 shell=True,
-                cwd=self.dst_folder,
+                cwd=self.project.wheels,
             )
-            print(f"cyfaust.{imported} # objects: {val}")
+            self.log.info(f"cyfaust.{imported} # objects: {val}")
             assert val, f"cyfaust {target} wheel test: FAILED"
-            print(f"cyfaust {target} wheel test: OK")
+            self.log.info(f"cyfaust {target} wheel test: OK")
             if venv.exists():
                 shutil.rmtree(venv)
 
     def build_dynamic_wheel(self):
-        print("building dynamic build wheel")
+        self.log.info("building dynamic build wheel")
         self.clean()
         self.makedirs()
         self.build_wheel()
-        src = self.src_folder
-        dst = self.dst_folder
-        lib = self.lib_folder
+        src = self.project.dist
+        dst = self.project.wheels
+        lib = self.project.lib
         if PLATFORM == "Darwin":
             self.cmd(f"delocate-wheel -v --wheel-dir {dst} {src}/*.whl")
         elif PLATFORM == "Linux":
@@ -972,22 +959,22 @@ class WheelBuilder:
                 f"auditwheel repair --plat linux_{ARCH} --wheel-dir {dst} {src}/*.whl"
             )
         elif PLATFORM == "Windows":
-            for whl in self.src_folder.glob("*.whl"):
+            for whl in self.project.dist.glob("*.whl"):
                 self.cmd(f"delvewheel repair --add-path {lib} --wheel-dir {dst} {whl}")
         else:
             raise SystemExit("platform not supported")
 
     def build_static_wheel(self):
-        print("building static build wheel")
+        self.log.info("building static build wheel")
         self.clean()
         self.makedirs()
         self.build_wheel(static=True)
-        for wheel in self.src_folder.glob("*.whl"):
+        for wheel in self.project.dist.glob("*.whl"):
             w = WheelFilename.from_path(wheel)
             w.project = "cyfaust-static"
             renamed_wheel = str(w)
             os.rename(wheel, renamed_wheel)
-            shutil.move(renamed_wheel, self.dst_folder)
+            shutil.move(renamed_wheel, self.project.wheels)
 
     def build(self):
         if self.is_static:
@@ -1018,7 +1005,6 @@ def option(*args, **kwds):
         else:
             func.options = [_option]
         return func
-
     return _decorator
 
 
@@ -1037,7 +1023,6 @@ def option_group(*options):
         for option in options:
             func = option(func)
         return func
-
     return _decorator
 
 

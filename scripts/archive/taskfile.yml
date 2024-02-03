@@ -8,13 +8,13 @@ env:
   PYTHON: python3
 
 
-
 tasks:
+
   faust:
     cmds:
       - $PYTHON scripts/manage.py setup --faust
     status:
-      - test -f lib/status/libfaust.a
+      - test -f lib/static/libfaust.a
 
   sndfile:
     cmds:
@@ -29,6 +29,7 @@ tasks:
       - test -f lib/status/libsamplerate.a
 
   build:
+    deps: [faust]
     cmds:
       - $PYTHON scripts/manage.py build
     sources:
@@ -39,20 +40,50 @@ tasks:
       - build/cyfaust/*.so
 
   build-static:
+    deps: [faust]
     cmds:
       - $PYTHON scripts/manage.py build --static
+    sources:
+      - src/static/cyfaust/*.pyx
+      - src/static/cyfaust/*.pxd
+      - src/static/cyfaust/*.cpp
+    generates:
+      - build/static/cyfaust/*.so
 
   wheel:
+    deps:
+      - faust
+      - clean
     cmds:
       - $PYTHON scripts/manage.py wheel --dynamic
+    sources:
+      - src/static/cyfaust/*.pyx
+      - src/static/cyfaust/*.pxd
+      - src/static/cyfaust/*.cpp
+    generates:
+      - wheels/*.whl
 
   wheel-static:
+    deps:
+      - faust
+      - clean
     cmds:
       - $PYTHON scripts/manage.py wheel --static
+    sources:
+      - src/static/cyfaust/*.pyx
+      - src/static/cyfaust/*.pxd
+      - src/static/cyfaust/*.cpp
+    generates:
+      - wheels/*-static-*.whl
 
   release:
+    deps:
+      - faust
+      - clean
     cmds:
       - $PYTHON scripts/manage.py wheel --release
+      - task: test_wheel
+
 
   test_wheel:
     cmds:

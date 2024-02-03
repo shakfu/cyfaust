@@ -20,6 +20,8 @@ src/static/cyfaust/cyfaust.cpp
 # general macos detritus
 .DS_Store
 
+# taskfile
+.task
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
