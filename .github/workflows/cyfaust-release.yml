@@ -3,11 +3,11 @@ name: cyfaust-release
 
 on: workflow_dispatch
 
-run-name: cyfaust-release-$GITHUB_REF_NAME-$GITHUB_RUN_NUMBER
+run-name: cyfaust-release-${{ github.ref.name }}-${{ github.run.number }}
 
 jobs:
   build_wheels:
-    name: Build ${{ github.event.inputs.py_version }} wheels on ${{ matrix.os }}
+    name: Build ${{ matrix.py_version }} wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
