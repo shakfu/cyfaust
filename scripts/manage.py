@@ -673,6 +673,12 @@ class SndfileBuilder(Builder):
         self.prefix = self.project.build / "prefix"
         self.log = logging.getLogger(self.__class__.__name__)
 
+    @property
+    def staticlib_name(self):
+        if PLATFORM == "Windows":
+            return f"{self.NAME}.lib"
+        return f"{self.LIBNAME}.a"
+
     def process(self):
         self.setup_project()
         self.makedirs(self.project.downloads)
@@ -695,10 +701,13 @@ class SndfileBuilder(Builder):
             INSTALL_PKGCONFIG_MODULE="OFF",
             INSTALL_MANPAGES="OFF",
         )
-        self.cmake_build(self.build_dir)
-        self.cmake_install(self.build_dir, prefix=self.prefix)
-        self.log.info("installing %s", self.staticlib)
-        staticlib = self.prefix / "lib" / self.staticlib_name
+        self.cmake_build(build_dir=self.build_dir, release=True)
+        if PLATFORM == "Windows":
+            staticlib = self.build_dir / 'Release' / self.staticlib_name
+        else:
+            self.cmake_install(self.build_dir, prefix=self.prefix)
+            self.log.info("installing %s", self.staticlib)
+            staticlib = self.prefix / "lib" / self.staticlib_name
         if not staticlib.exists():
             self.fail("%s build failed", self.staticlib_name)
         self.copy(staticlib, self.staticlib)
@@ -718,6 +727,12 @@ class SamplerateBuilder(Builder):
         self.prefix = self.project.build / "prefix"
         self.log = logging.getLogger(self.__class__.__name__)
 
+    @property
+    def staticlib_name(self):
+        if PLATFORM == "Windows":
+            return f"{self.NAME}.lib"
+        return f"{self.LIBNAME}.a"
+
     def process(self):
         self.setup_project()
         self.makedirs(self.project.downloads)
@@ -734,15 +749,17 @@ class SamplerateBuilder(Builder):
             LIBSAMPLERATE_EXAMPLES="OFF",
             LIBSAMPLERATE_INSTALL="ON",
         )
-        self.cmake_build(self.build_dir)
-        self.cmake_install(self.build_dir, prefix=self.prefix)
-        self.log.info("installing %s", self.staticlib)
-        staticlib = self.prefix / "lib" / self.staticlib_name
+        self.cmake_build(build_dir=self.build_dir, release=True)
+        if PLATFORM == "Windows":
+            staticlib = self.build_dir / 'src' / 'Release' / self.staticlib_name
+        else:
+            self.cmake_install(self.build_dir, prefix=self.prefix)
+            self.log.info("installing %s", self.staticlib)
+            staticlib = self.prefix / "lib" / self.staticlib_name
         if not staticlib.exists():
             self.fail("%s build failed", self.staticlib_name)
         self.copy(staticlib, self.staticlib)
         self.log.info(f"{self.staticlib_name} build/install DONE")
-
 
 # ----------------------------------------------------------------------------
 # wheel_builder

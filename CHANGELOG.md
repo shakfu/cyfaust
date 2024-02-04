@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
+- Fixed `SndfileBuilder` and `SamplerateBuilder` in `manage.py` such that `sndfile.lib` and `samplerate.lib` can be built on Windows.
+
 - Changed `rtaudio::processAudio()` in `faust/audio/rtaudi-dsp.h` to the more efficient `alloca` based memory allocation to enable faust to build on windows and for consistency with other faust code (thanks @sletz).
 
 - Added [taskfile.yml](https://taskfile.dev/) as optional windows frontend to `manage.py`
