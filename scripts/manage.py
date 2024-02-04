@@ -20,6 +20,7 @@ models:
             FaustBuilder
             SndfileBuilder
             SamplerateBuilder
+            PythonBuilder
         Application
     WheelFile(dataclass)
     WheelBuilder
@@ -50,8 +51,10 @@ import re
 import shutil
 import subprocess
 import sys
+import tarfile
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.request import urlretrieve
 from typing import List, Optional, Union
 
 PYTHON = sys.executable
@@ -134,13 +137,32 @@ class ShellCmd:
         self.log.info(shellcmd)
         subprocess.call(shellcmd, shell=True, cwd=str(cwd))
 
+    def download(self, url: str, tofolder: Optional[Pathlike] = None) -> Pathlike:
+        """Download a file from a url to an optional folder"""
+        _path = os.path.basename(url)
+        if tofolder:
+            _path = Path(tofolder).joinpath(_path)
+        filename, _ = urlretrieve(url, filename=_path)
+        return Path(filename)
+
+    def extract(self, archive: Pathlike, tofolder: Pathlike = '.'):
+        """extract a tar archive"""
+        if tarfile.is_tarfile(archive):
+            with tarfile.open(archive) as f:
+                f.extractall(tofolder)
+        # elif zipfile.is_zipfile(archive):
+        #     with zipfile.open(archive) as f:
+        #         f.extractall(tofolder)
+        else:
+            raise TypeError("cannot extract from this file.")
+
     def fail(self, msg: Optional[str] = None, *args):
         """exits the program with an optional error msg."""
         if msg:
             self.log.critical(msg, *args)
         sys.exit(1)
 
-    def git_clone(self, url: str, recurse: bool = False, branch: Optional[str] = None):
+    def git_clone(self, url: str, recurse: bool = False, branch: Optional[str] = None, cwd: Pathlike = "."):
         """git clone a repository source tree from a url"""
         _cmds = ["git clone --depth 1"]
         if branch:
@@ -148,7 +170,7 @@ class ShellCmd:
         if recurse:
             _cmds.append("--recurse-submodules --shallow-submodules")
         _cmds.append(url)
-        self.cmd(" ".join(_cmds))
+        self.cmd(" ".join(_cmds), cwd=cwd)
 
     def getenv(self, key: str, default: bool = False) -> bool:
         """convert '0','1' env values to bool {True, False}"""
@@ -384,7 +406,7 @@ class Builder(ShellCmd):
             return f"{self.LIBNAME}{self.DYLIB_SUFFIX_LIN}"
         if PLATFORM == "Windows":
             return f"{self.NAME}{self.DYLIB_SUFFIX_WIN}"
-        raise SystemExit("platform not supported")
+        raise self.fail("platform not supported")
 
     @property
     def dylib_linkname(self):
@@ -392,7 +414,7 @@ class Builder(ShellCmd):
             return f"{self.LIBNAME}.dylib"
         if PLATFORM == "Linux":
             return f"{self.LIBNAME}.so"
-        raise SystemExit("platform not supported")
+        raise self.fail("platform not supported")
 
     @property
     def dylib(self):
@@ -515,7 +537,7 @@ class FaustBuilder(Builder):
                     self.fail("build faust failed: staticlib not found %s", staticlib)
 
         else:
-            raise SystemExit("platform not supported")
+            raise self.fail("platform not supported")
 
 
     def remove_current(self):
@@ -762,6 +784,106 @@ class SamplerateBuilder(Builder):
         self.log.info(f"{self.staticlib_name} build/install DONE")
 
 # ----------------------------------------------------------------------------
+# python_builder
+
+class PythonBuilder(Builder):
+    """Builds python locally"""
+
+    NAME = "python"
+    LIBNAME = f"lib{NAME}"
+
+    CONFIG_OPTIONS = [
+        "--enable-shared",
+        "--disable-test-modules",
+        "--without-static-libpython",
+    ]
+
+    REQUIRED_PACKAGES = [
+        "cython",
+        "pytest",
+    ]
+
+    def __init__(self, version="3.11.7"):
+        super().__init__(version)
+        self.src = self.project.downloads / self.src_name
+        self.build_dir = self.src / "build"
+        self.prefix = self.project.cwd / "python"
+        self.python = self.prefix / 'bin' / 'python3'
+        self.pip = self.prefix / 'bin' / 'pip3'
+        self.log = logging.getLogger(self.__class__.__name__)
+
+    @property
+    def url(self):
+        ver = self.version
+        return f"https://www.python.org/ftp/python/{ver}/Python-{ver}.tar.xz"
+
+    @property
+    def archive(self):
+        return os.path.basename(self.url)
+
+    @property
+    def src_name(self):
+        return (self.archive).rstrip('.tar.xz')
+
+    def pre_process(self):
+        """override by subclass if needed"""
+
+    def post_process(self):
+        """override by subclass if needed"""
+
+    def process(self):
+        self.pre_process()
+        self.project.build.mkdir(exist_ok=True)
+        self.project.downloads.mkdir(exist_ok=True)
+        self.prefix.mkdir(exist_ok=True)
+        archive = self.download(self.url, tofolder=self.project.downloads)
+        self.log.info("downloaded %s", archive)
+        self.extract(archive, tofolder=self.project.downloads)
+        assert self.src.exists(), f"could not extract from {archive}"
+        self.build_dir.mkdir(exist_ok=True)
+        config_opts = " ".join(self.CONFIG_OPTIONS)
+        self.cmd(f"../configure --prefix={self.prefix} {config_opts}", 
+            cwd=self.build_dir)
+        self.cmd("make", cwd=self.build_dir)
+        self.cmd("make install", cwd=self.build_dir)
+        required_pkgs = " ".join(self.REQUIRED_PACKAGES)
+        self.cmd(f"{self.pip} install --upgrade pip", cwd=self.project.cwd)
+        self.cmd(f"{self.pip} install {required_pkgs}", cwd=self.project.cwd)
+        self.post_process()
+
+class PythonDebugBuilder(PythonBuilder):
+    """Builds debug python locally"""
+
+    NAME = "python"
+    LIBNAME = f"lib{NAME}"
+
+    CONFIG_OPTIONS = [
+        "--enable-shared",
+        "--disable-test-modules",
+        "--without-static-libpython",
+
+        "--with-pydebug",
+        # "--with-trace-refs",
+        # "--with-valgrind",
+        # "--with-address-sanitizer",
+        # "--with-memory-sanitizer",
+        # "--with-undefined-behavior-sanitizer",
+    ]
+
+    REQUIRED_PACKAGES = [
+        "pkgconfig",
+        "cython",
+        "pytest",
+    ]
+
+    def post_process(self):
+        memray = self.project.downloads / 'memray'
+        self.git_clone("https://github.com/bloomberg/memray.git",
+            cwd=self.project.downloads)
+        self.cmd(f"{self.python} setup.py build", cwd=memray)
+        self.cmd(f"{self.python} setup.py install", cwd=memray)
+
+# ----------------------------------------------------------------------------
 # wheel_builder
 
 
@@ -939,7 +1061,7 @@ class WheelBuilder(ShellCmd):
                 vpy = venv / "Scripts" / "python"
                 vpip = venv / "Scripts" / "pip"
             else:
-                raise SystemExit("platform not supported")
+                self.fail("platform not supported")
 
             self.cmd(f"{vpip} install {wheel}")
             if "static" in str(wheel):
@@ -979,7 +1101,7 @@ class WheelBuilder(ShellCmd):
             for whl in self.project.dist.glob("*.whl"):
                 self.cmd(f"delvewheel repair --add-path {lib} --wheel-dir {dst} {whl}")
         else:
-            raise SystemExit("platform not supported")
+            raise self.fail("platform not supported")
 
     def build_static_wheel(self):
         self.log.info("building static build wheel")
@@ -1148,6 +1270,19 @@ class Application(ShellCmd, metaclass=MetaCommander):
         if args.samplerate:
             srb = SamplerateBuilder()
             srb.process()
+
+    # ------------------------------------------------------------------------
+    # python
+
+    @opt("--debug", "-d", "build debug python")
+    @option("--version", "-v", default="3.11.7", help="python version")
+    def do_python(self, args):
+        """build local python"""
+        if args.debug:
+            builder = PythonDebugBuilder(version=args.version)
+        else:
+            builder = PythonBuilder(version=args.version)
+        builder.process()
 
     # ------------------------------------------------------------------------
     # build
