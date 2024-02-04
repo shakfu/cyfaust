@@ -15,11 +15,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
+- Changed `rtaudio::processAudio()` in `faust/audio/rtaudi-dsp.h` to the more efficient `alloca` based memory allocation to enable faust to build on windows and for consistency with other faust code (thanks @sletz).
+
+- Added [taskfile.yml](https://taskfile.dev/) as optional windows frontend to `manage.py`
+
 - Added additional test-or-fail checks in `manage.py`
 
 ## [0.0.4]
-
-### cyfaust
 
 - Added Windows support (MSVC): both dynamic and static variants can now be built on Windows with 100% tests passing (only WASAPI audio has been tested so far).
 
@@ -53,23 +55,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.3]
 
-### cyfaust
-
 - Added Linux support
-
-### cyfaust.interp
 
 - Added improved dsp resource cleanup mechanism for `InterpreterFactoryDSP` which greatly improved stability (see [docs/cle§anuping-up.md](https://github.com/shakfu/cyfaust/blob/main/docs/devnotes/cleaning-up.md))
 
 - Fixed test code to ensure rtaudio streams were properly stopped and closed.
 
-### cyfaust.box
-
 - Added additional docstrings
 
 ## [0.0.1-2]
-
-### cyfaust
 
 - Embedded faust architecture and standard library files in the cyfaust package
 
@@ -77,14 +71,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Added cyfaust project
 
-### cyfaust.interp
-
 - Wrapped the faust interpreter api in cython
 
-### cyfaust.box
-
 - Wrapped most of the faust box api in cython
-
-### cyfaust.signal
 
 - Wrapped most of the faust signal api in cython

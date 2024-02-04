@@ -5,37 +5,27 @@ version: '3'
 
 env:
   PYTHON: python.exe
-  # PYTHON: python3
 
-vars:
-  LIBEXT: '{{if eq OS "windows"}}.lib{{else}}.a{{end}}'
-  PYEXT: '{{if eq OS "windows"}}.pyd{{else}}.so{{end}}'
-  # PYTHON: '{{if eq OS "windows"}}python.exe{{else}}python3{{end}}'
 
 tasks:
-
-  info:
-    cmds:
-      - echo {{.LIBEXT}}
-      - echo {{.PYEXT}}
 
   faust:
     cmds:
       - $PYTHON scripts/manage.py setup --faust
     status:
-      - test -f lib/static/libfaust{{.LIBEXT}}
+      - test -f lib/static/libfaust.lib
 
   sndfile:
     cmds:
       - $PYTHON scripts/manage.py setup --sndfile
     status:
-      - test -f lib/status/libsndfile{{.LIBEXT}}
+      - test -f lib/status/libsndfile.lib
 
   samplerate:
     cmds:
       - $PYTHON scripts/manage.py setup --samplerate
     status:
-      - test -f lib/status/libsamplerate{{.LIBEXT}}
+      - test -f lib/status/libsamplerate.lib
 
   build:
     deps: [faust]
@@ -46,7 +36,7 @@ tasks:
       - src/cyfaust/*.pxd
       - src/cyfaust/*.cpp
     generates:
-      - build/cyfaust/*{{.PYEXT}}
+      - build/cyfaust/*.pyd
 
   build-static:
     deps: [faust]
@@ -57,7 +47,7 @@ tasks:
       - src/static/cyfaust/*.pxd
       - src/static/cyfaust/*.cpp
     generates:
-      - build/static/cyfaust/*{{.PYEXT}}
+      - build/static/cyfaust/*.pyd
 
   wheel:
     deps:
