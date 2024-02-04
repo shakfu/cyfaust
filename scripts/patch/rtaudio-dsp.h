@@ -25,16 +25,10 @@
 #ifndef __rtaudio_dsp__
 #define __rtaudio_dsp__
 
-
-#include <assert.h>
 #include <stdio.h>
-#if defined(__WIN32__) || defined(WIN32) || defined(_WIN32) 
-#include <malloc.h> // for alloca
-#else
-#include <stdlib.h>
-#endif
-
+#include <assert.h>
 #include <rtaudio/RtAudio.h>
+#include <stdlib.h>
 
 #include "faust/audio/audio.h"
 #include "faust/dsp/dsp-adapter.h"
@@ -59,22 +53,18 @@ class rtaudio : public audio {
         unsigned int fBufferSize;
          
         //----------------------------------------------------------------------------
-        // 	number of physical input and output channels of the PA device
+        //  number of physical input and output channels of the PA device
         //----------------------------------------------------------------------------
-        int	fDevNumInChans;
-        int	fDevNumOutChans;
+        int fDevNumInChans;
+        int fDevNumOutChans;
         
         virtual int processAudio(double streamTime, void* inbuf, void* outbuf, unsigned long frames) 
         {
             AVOIDDENORMALS;
-#if defined(__WIN32__) || defined(WIN32) || defined(_WIN32) 
+            
             float** inputs = (float**)alloca(fDsp->getNumInputs() * sizeof(float*));
             float** outputs = (float**)alloca(fDsp->getNumOutputs() * sizeof(float*));
-#else
-            float* inputs[fDsp->getNumInputs()];
-            float* outputs[fDsp->getNumOutputs()];
-#endif
-
+            
             for (int i = 0; i < fDsp->getNumInputs(); i++) {
                 inputs[i] = &(static_cast<float*>(inbuf))[i * frames];
             }
@@ -84,7 +74,6 @@ class rtaudio : public audio {
 
             // process samples
             fDsp->compute(streamTime * 1000000., frames, inputs, outputs);
-
             return 0;
         }
     
@@ -110,6 +99,7 @@ class rtaudio : public audio {
                 fAudioDAC.closeStream();
             } catch (RtAudioError& e) {
                 std::cout << '\n' << e.getMessage() << '\n' << std::endl;
+            }
 #else
             RtAudioErrorType err = fAudioDAC.stopStream();
             if (err != RTAUDIO_NO_ERROR) {
@@ -160,6 +150,9 @@ class rtaudio : public audio {
                     fSampleRate, &fBufferSize, audioCallback, this, &options);
             } catch (RtAudioError& e) {
                 std::cout << '\n' << e.getMessage() << '\n' << std::endl;
+                return false;
+            }
+            return true;
 #else
             RtAudioErrorType err = fAudioDAC.openStream(
                 ((numOutputs > 0) ? &oParams : NULL),
@@ -167,10 +160,10 @@ class rtaudio : public audio {
                 fSampleRate, &fBufferSize, audioCallback, this, &options);
             if (err != RTAUDIO_NO_ERROR) {
                 std::cout << '\n' << fAudioDAC.getErrorText() << '\n' << std::endl;
-#endif
                 return false;
             }
             return true;
+#endif
         }
         
         void setDsp(dsp* DSP)
@@ -194,14 +187,17 @@ class rtaudio : public audio {
                 fAudioDAC.startStream();
             } catch (RtAudioError& e) {
                 std::cout << '\n' << e.getMessage() << '\n' << std::endl;
+                return false;
+            }
+            return true;
 #else
             RtAudioErrorType err = fAudioDAC.startStream();
             if (err != RTAUDIO_NO_ERROR) {
                 std::cout << '\n' << fAudioDAC.getErrorText() << '\n' << std::endl;
-#endif
                 return false;
             }
             return true;
+#endif
         }
         
         virtual void stop() 

@@ -1,10 +1,12 @@
 # cyfaust scripts
 
-This folder contains some python and shell scripts which may be run directly or triggered by the Makefile.
+This folder contains some python and shell scripts which may be run directly or triggered by a Makefile or other frontend.
 
 ## Required
 
-- `manage.py`: main cross-platform cyfaust project mgmt script which can be used directly or called by the `Makefile` frontend in the case of macos and linux as well as the github workflows.
+### manage.py
+
+The main cross-platform cyfaust project builder script which can be used directly by all supported platforms or called by the `Makefile` frontend in the case of macOS or Linux. the `taskfile.yml` frontend in the case of Windows, or in github workflows.
 
 ```bash
 usage: manage.py [-h] [-v]  ...
@@ -21,6 +23,7 @@ subcommands:
                  additional help
     build        build packages
     clean        clean detritus
+    python       build local python
     setup        setup prerequisites
     test         test modules
     wheel        build wheels
@@ -46,7 +49,17 @@ It has the following features:
 
 - etc..
 
-- `gen_htmldoc.py`: a script to use pydoc to generate html documentation of the cyfaust api writing to `docs/api`. (may be integrated into `manage.py` at some point.)
+## Utilities
+
+### faust_config.py
+
+A script to generate the faust backend.cmake and target.cmake configuration files which can adjust how faust is built.
+
+### gen_htmldoc.py
+
+A script to use pydoc to generate html documentation of the cyfaust api writing to `docs/api`. (may be integrated into `manage.py` at some point.)
+
+
 
 ## Testing
 

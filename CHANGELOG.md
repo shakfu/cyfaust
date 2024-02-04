@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
+- Added `scripts/faust_config.py` to generate faust backen and target configurations.
+
+- Added `PythonBuilder` and `PythonDebugBuilder` builders to `manage.py` to enable testing python versions against cyfaust.
+
 - Fixed `SndfileBuilder` and `SamplerateBuilder` in `manage.py` such that `sndfile.lib` and `samplerate.lib` can be built on Windows.
 
 - Changed `rtaudio::processAudio()` in `faust/audio/rtaudi-dsp.h` to the more efficient `alloca` based memory allocation to enable faust to build on windows and for consistency with other faust code (thanks @sletz).
