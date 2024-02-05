@@ -1,0 +1,17 @@
+FROM quay.io/pypa/manylinux_2_28_x86_64:latest
+
+RUN yum install -y alsa-lib-devel
+WORKDIR /
+RUN git clone --depth 1 https://github.com/shakfu/cyfaust.git
+
+WORKDIR /cyfaust
+RUN /opt/python/cp311-cp311/bin/python3 -m venv venv \
+    && source venv/bin/activate \
+    && pip install --break-system-packages -r requirements.txt \
+    && make \
+    && rm -rf build/downloads
+
+CMD ["bash"]
+
+# build: docker build -t cyfaust:manylinux -f Dockerfile.manylinux .
+# run: docker run -it --rm cyfaust:manylinux
