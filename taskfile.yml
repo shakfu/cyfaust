@@ -102,12 +102,10 @@ tasks:
       - $PYTHON scripts/manage.py test --pytest
 
   clean:
-    silent: true
     cmds:
       - $PYTHON scripts/manage.py clean
 
   reset:
-    silent: true
     cmds:
       - $PYTHON scripts/manage.py clean --reset
 

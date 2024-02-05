@@ -46,6 +46,7 @@ import argparse
 import filecmp
 import logging
 import os
+import stat
 import platform
 import re
 import shutil
@@ -221,11 +222,20 @@ class ShellCmd:
 
     def remove(self, path: Pathlike, silent: bool = False):
         """Remove file or folder."""
+
+        # handle windows error on read-only files
+        def remove_readonly(func, path, exc_info):
+            "Clear the readonly bit and reattempt the removal"
+            if func not in (os.unlink, os.rmdir) or exc_info[1].winerror != 5:
+                raise exc_info[1]
+            os.chmod(path, stat.S_IWRITE)
+            func(path)
+
         path = Path(path)
         if path.is_dir():
             if not silent:
                 self.log.info("remove folder: %s", path)
-            shutil.rmtree(path, ignore_errors=not DEBUG)
+            shutil.rmtree(path, ignore_errors=not DEBUG, onerror=remove_readonly)
         else:
             if not silent:
                 self.log.info("remove file: %s", path)
