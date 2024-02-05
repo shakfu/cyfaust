@@ -30,6 +30,18 @@ Create and run a new container from an image
 docker run -it --rm debian:bookworm
 ```
 
+Create and run a new temporary container and run a command with volume
+
+```bash
+docker run -v `pwd`/build:/cyfaust/build -it --rm cyfaust:bookworm make
+```
+
+Use mount instead of `-v` volumes
+
+```bash
+docker run --mount type=bind,src=`pwd`/wheels,dst=/cyfaust/wheels -it --rm cyfaust:bookwork make wheel
+```
+
 
 Remove specific image
 

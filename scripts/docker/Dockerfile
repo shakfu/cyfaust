@@ -17,7 +17,7 @@ RUN git clone --depth 1 https://github.com/shakfu/cyfaust.git
 
 WORKDIR /cyfaust
 RUN pip3 install --break-system-packages -r requirements.txt
-RUN make && rm -rf build/downloads
+RUN make faust && make clean
 
 RUN echo "alias ls='ls --color=auto'" > /root/.bashrc && \
     echo "alias ls='ls --color=auto -lh'" >> /root/.bashrc && \
