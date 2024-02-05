@@ -22,7 +22,7 @@ TESTS := \
 	test_cyfaust_common.py
 
 
-.PHONY: all faust samplerate sndfile build wheel release \
+.PHONY: all faust samplerate sndfile build wheel release build_with_log \
 		test pytest test_wheel testcpp memray docs clean reset
 
 
@@ -47,12 +47,6 @@ samplerate: $(LIBSAMPLERATE)
 
 sndfile: $(LIBSAMPLERATE) $(LIBSNDFILE)
 	@echo "libsndfile DONE"
-
-
-
-# build: faust
-# 	@mkdir -p build
-# 	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
 build: faust
 	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py build
@@ -92,20 +86,13 @@ docs: clean
 	@make STATIC=1
 	@$(PYTHON) scripts/gen_htmldoc.py
 
-
 clean:
 	@$(PYTHON) scripts/manage.py clean
 
 reset:
 	@$(PYTHON) scripts/manage.py clean --reset
 
+build_with_log:
+	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
-# clean:
-# 	@rm -rf build dist venv .venv MANIFEST.in
-# 	@find . -type d \( -name '.*_cache'    \
-# 					-o -name '*.egg-info'  \
-# 					-o -name '.DS_Store'   \
-# 					-o -name '__pycache__' \) -print0 | xargs -0 -I {} /bin/rm -rf "{}"
 
-# reset: clean
-# 	@rm -rf python bin lib share wheels
