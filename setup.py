@@ -79,10 +79,8 @@ if STATIC:
     if PLATFORM == "Windows":
         EXTRA_OBJECTS.append("lib/static/libfaust.lib")
         EXTRA_OBJECTS.extend([
-            # "msvcrt.lib",
             "Ws2_32.lib",
         ])
-        # EXTRA_COMPILE_ARGS.append("/MT")
     else:
         EXTRA_OBJECTS.append("lib/static/libfaust.a")
 

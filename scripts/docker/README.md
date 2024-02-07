@@ -19,9 +19,14 @@ List docker images
 docker images
 ```
 
+Execute a command in a running container
 
 
+```bash
 
+# insert here
+
+```
 
 
 Create and run a new container from an image

@@ -2,6 +2,9 @@
 
 Some sketches of different ways the faust box api can be implemented in cyfaust.
 
+Note that faust interpreter does not support vectorization, parallel code, schedular code.
+
+
 ## Example 1
 
 original cpp

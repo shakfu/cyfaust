@@ -9,6 +9,7 @@ It only uses python stdlib modules to do the following:
 - Module compilation
 - Wheel building
 - Alternative frontend to Makefile
+- Downloads/build a local version python for testing
 
 models:
     CustomFormatter(logging.Formatter)
@@ -29,34 +30,30 @@ It has an argparse-based cli api:
 
 usage: manage.py [-h] [-v]  ...
 
-    options:
-    -h, --help     show this help message and exit
-    -v, --version  show program's version number and exit
+cyfaust build manager
 
-    subcommands:
-                    additional help
-        build        build cyfaust
-        clean        clean project detritus
-        setup        setup faust
-        test         test cyfaust modules
-        wheel        build cyfaust wheel
+    clean        clean detritus
+    python       build local python
+    setup        setup prerequisites
+    test         test modules
+    wheel        build wheels
 
 """
 import argparse
 import filecmp
 import logging
 import os
-import stat
 import platform
 import re
 import shutil
+import stat
 import subprocess
 import sys
 import tarfile
 from dataclasses import dataclass
 from pathlib import Path
-from urllib.request import urlretrieve
 from typing import List, Optional, Union
+from urllib.request import urlretrieve
 
 PYTHON = sys.executable
 PLATFORM = platform.system()
@@ -1368,7 +1365,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
     def do_clean(self, args):
         """clean detritus"""
         cwd = self.project.cwd
-        _targets = ["build", "dist", "venv", "MANIFEST.in"]
+        _targets = ["build", "dist", "venv", "MANIFEST.in", ".task"]
         if args.reset:
             _targets += ["python", "bin", "lib", "share", "wheels"]
         _pats = [".*_cache", "*.egg-info", "__pycache__", ".DS_Store"]

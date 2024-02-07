@@ -22,7 +22,7 @@ TESTS := \
 	test_cyfaust_common.py
 
 
-.PHONY: all faust samplerate sndfile build wheel release build_with_log \
+.PHONY: all faust samplerate sndfile build build_log wheel release  \
 		test pytest test_wheel testcpp memray docs clean reset
 
 
@@ -51,6 +51,11 @@ sndfile: $(LIBSAMPLERATE) $(LIBSNDFILE)
 build: faust
 	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py build
 
+build_log: faust
+	@echo "rebuild with logging"
+	@touch src/cyfaust/interp.pyx
+	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
+
 wheel: faust
 	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py wheel --build
 
@@ -65,7 +70,7 @@ test_wheel:
 	@$(PYTHON) scripts/manage.py wheel --test
 
 testcpp: faust
-	@scripts/test_cpp_tests.sh
+	@tests/test_faust_interp/test_cpp_tests.sh
 
 pytest: faust
 	@$(PYTHON) -Xfaulthandler -mpytest -vv ./tests
@@ -91,8 +96,5 @@ clean:
 
 reset:
 	@$(PYTHON) scripts/manage.py clean --reset
-
-build_with_log:
-	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
 

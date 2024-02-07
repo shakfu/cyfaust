@@ -3,7 +3,9 @@
 from libcpp.string cimport string
 
 from . cimport faust_interp as fi
+from . cimport faust_gui as fg
 from . cimport faust_signal as fs
+
 
 from .common cimport ParamArray
 from .common import ParamArray
@@ -464,14 +466,14 @@ cdef class InterpreterDsp:
         
         ui_interface - the user interface builder
         """
-        cdef fi.PrintUI ui_interface
-        self.ptr.buildUserInterface(<fi.UI*>&ui_interface)
+        cdef fg.PrintUI ui_interface
+        self.ptr.buildUserInterface(<fg.UI*>&ui_interface)
 
     # cdef build_user_interface(self, fi.UI* ui_interface):
     #     """Trigger the ui_interface parameter with instance specific calls."""
     #     self.ptr.buildUserInterface(ui_interface)
 
-    cdef metadata(self, fi.Meta* m):
+    cdef metadata(self, fg.Meta* m):
         """Trigger the meta parameter with instance specific calls."""
         self.ptr.metadata(m)
 

@@ -73,11 +73,11 @@ SKIP_AUDIO = False
 ## ---------------------------------------------------------------------------
 ## utility testing functions
 
-def dsp_from_file(testname, dsp_path, skip_audio=False):
+def dsp_from_file(testname, dsp_path, skip_audio=False, *args):
 
     print_entry(testname)
 
-    factory = create_dsp_factory_from_file(dsp_path)
+    factory = create_dsp_factory_from_file(dsp_path, *args)
     assert factory
     
     print("compile options:", factory.get_compile_options())
@@ -105,10 +105,10 @@ def dsp_from_file(testname, dsp_path, skip_audio=False):
 
     return True
 
-def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=False):
+def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=False, *args):
     print_entry(testname)
 
-    factory = create_dsp_factory_from_string("FaustDSP", dsp_string)
+    factory = create_dsp_factory_from_string("FaustDSP", dsp_string, *args)
     assert factory
 
     if dump_to_bitcode:
@@ -160,9 +160,9 @@ def test_interp_create_dsp_factory_from_file2():
         skip_audio=SKIP_AUDIO,
     )
 
-def test_interp_create_dsp_factory_from_file2():
+def test_interp_create_dsp_factory_from_file3():
     assert dsp_from_file(
-        testname="test_interp_create_dsp_factory_from_file2",
+        testname="test_interp_create_dsp_factory_from_file3",
         dsp_path="tests/dsp/vco.dsp",
         skip_audio=SKIP_AUDIO,
     )
@@ -397,7 +397,7 @@ if __name__ == '__main__':
     test_interp_version()
     test_interp_create_dsp_factory_from_file1()
     test_interp_create_dsp_factory_from_file2()
-    test_interp_create_dsp_factory_from_file2()
+    test_interp_create_dsp_factory_from_file3()
     test_interp_create_dsp_factory_from_string1()
     test_interp_create_dsp_factory_from_string2()
     test_get_all_dsp_factories()
