@@ -53,7 +53,7 @@ build: faust
 
 build_log: faust
 	@echo "rebuild with logging"
-	@touch src/cyfaust/interp.pyx
+	@touch src/cyfaust/gui.pyx
 	@STATIC=$(STATIC) $(PYTHON) setup.py build --build-lib build 2>&1 | tee build/log.txt
 
 wheel: faust

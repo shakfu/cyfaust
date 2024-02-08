@@ -8,6 +8,7 @@ import tempfile
 from pathlib import Path
 
 try:
+    from cyfaust.gui import PrintUI
     from cyfaust.interp import (
         RtAudioDriver,
         InterpreterDspFactory,
@@ -92,7 +93,11 @@ def dsp_from_file(testname, dsp_path, skip_audio=False, *args):
     # dsp.build_user_interface(ui)
     
     # bypass
-    dsp.build_user_interface()
+    # dsp.build_user_interface()
+    printui = PrintUI()
+    dsp.build_user_interface(printui)
+
+
 
     if not skip_audio:
         audio = RtAudioDriver(48000, 256)
@@ -123,7 +128,8 @@ def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=Fal
     dsp = factory.create_dsp_instance()
     assert dsp
     
-    dsp.build_user_interface()
+    printui = PrintUI()
+    dsp.build_user_interface(printui)
 
     if not skip_audio:
         audio = RtAudioDriver(48000, 256)

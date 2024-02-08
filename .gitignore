@@ -11,8 +11,9 @@ python/
 MANIFEST.in
 
 # don't include cython-generated cpp
-src/cyfaust/interp.cpp
 src/cyfaust/common.cpp
+src/cyfaust/interp.cpp
+src/cyfaust/gui.cpp
 src/cyfaust/box.cpp
 src/cyfaust/signal.cpp
 src/static/cyfaust/cyfaust.cpp

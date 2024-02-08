@@ -233,6 +233,7 @@ else:
         mk_extension("cyfaust.common", ["src/cyfaust/common.pyx"]),
         mk_extension("cyfaust.signal", ["src/cyfaust/signal.pyx"]),
         mk_extension("cyfaust.box", ["src/cyfaust/box.pyx"]),
+        mk_extension("cyfaust.gui", ["src/cyfaust/gui.pyx"]),
     ]
 
     setup(

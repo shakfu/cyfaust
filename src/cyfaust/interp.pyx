@@ -16,6 +16,9 @@ from .box import Box
 from .signal cimport SignalVector
 from .signal import SignalVector
 
+from .gui cimport PrintUI
+from .gui import PrintUI
+
 
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust
@@ -458,24 +461,29 @@ cdef class InterpreterDsp:
         cdef fi.interpreter_dsp* dsp = self.ptr.clone()
         return InterpreterDsp.from_ptr(dsp)
 
-    def build_user_interface(self):
-        """Trigger the ui_interface parameter with instance specific calls
+    # def build_user_interface(self):
+    #     """Trigger the ui_interface parameter with instance specific calls
 
-        Calls are made to 'openTabBox', 'addButton',
-        'addVerticalSlider'... in order to build the UI.
+    #     Calls are made to 'openTabBox', 'addButton',
+    #     'addVerticalSlider'... in order to build the UI.
         
-        ui_interface - the user interface builder
-        """
-        cdef fg.PrintUI ui_interface
-        self.ptr.buildUserInterface(<fg.UI*>&ui_interface)
+    #     ui_interface - the user interface builder
+    #     """
+    #     cdef fg.PrintUI ui_interface
+    #     self.ptr.buildUserInterface(<fg.UI*>&ui_interface)
 
     # cdef build_user_interface(self, fi.UI* ui_interface):
     #     """Trigger the ui_interface parameter with instance specific calls."""
     #     self.ptr.buildUserInterface(ui_interface)
 
+    def build_user_interface(self, PrintUI ui):
+        """Trigger the ui_interface parameter with instance specific calls."""
+        self.ptr.buildUserInterface(<fg.UI*>ui.ptr)
+
     cdef metadata(self, fg.Meta* m):
         """Trigger the meta parameter with instance specific calls."""
         self.ptr.metadata(m)
+
 
 
 def get_dsp_factory_from_sha_key(str sha_key) -> InterpreterDspFactory:
