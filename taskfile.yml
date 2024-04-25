@@ -43,7 +43,7 @@ tasks:
     generates:
       - build/cyfaust/*{{.PYEXT}}
 
-  build-static:
+  build_static:
     deps: [faust]
     cmds:
       - $PYTHON scripts/manage.py build --static
@@ -67,7 +67,7 @@ tasks:
     generates:
       - wheels/*.whl
 
-  wheel-static:
+  wheel_static:
     deps:
       - faust
       - clean
@@ -88,11 +88,6 @@ tasks:
       - $PYTHON scripts/manage.py wheel --release
       - task: test_wheel
 
-
-  test_wheel:
-    cmds:
-      - $PYTHON scripts/manage.py wheel --test
-
   test:
     cmds:
       - $PYTHON scripts/manage.py test
@@ -100,6 +95,10 @@ tasks:
   pytest:
     cmds:
       - $PYTHON scripts/manage.py test --pytest
+
+  test_wheel:
+    cmds:
+      - $PYTHON scripts/manage.py wheel --test
 
   clean:
     cmds:

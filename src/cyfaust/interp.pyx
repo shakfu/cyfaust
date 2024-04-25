@@ -19,6 +19,9 @@ from .signal import SignalVector
 from .gui cimport PrintUI
 from .gui import PrintUI
 
+from .gui cimport UI
+from .gui import UI
+
 
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust
@@ -476,9 +479,13 @@ cdef class InterpreterDsp:
     #     """Trigger the ui_interface parameter with instance specific calls."""
     #     self.ptr.buildUserInterface(ui_interface)
 
-    def build_user_interface(self, PrintUI ui):
+    # def build_user_interface(self, PrintUI ui):
+    #     """Trigger the ui_interface parameter with instance specific calls."""
+    #     self.ptr.buildUserInterface(<fg.UI*>ui.ptr)
+
+    def build_user_interface(self, UI ui):
         """Trigger the ui_interface parameter with instance specific calls."""
-        self.ptr.buildUserInterface(<fg.UI*>ui.ptr)
+        self.ptr.buildUserInterface(<fg.UI*>ui.ui_ptr)
 
     cdef metadata(self, fg.Meta* m):
         """Trigger the meta parameter with instance specific calls."""

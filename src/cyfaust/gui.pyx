@@ -7,92 +7,135 @@ from libc.stdlib cimport malloc, free
 from . cimport faust_gui as fg
 
 
-# cdef class UIReal:
+
+cdef class UIReal:
     
-#     # cdef fg.UIReal* uireal_ptr
-#     # cdef bint uireal_ptr_owner
+    # cdef fg.UIReal[fg.FAUSTFLOAT] *uireal_ptr
 
-#     def __cinit__(self):
-#         self.uireal_ptr = new fg.UIReal()
-#         self.uireal_ptr_owner = False
+    def __cinit__(self):
+        pass
 
-#     def __dealloc__(self):
-#         if self.uireal_ptr and self.uireal_ptr_owner:
-#             del self.uireal_ptr
+    def openTabBox(self, str label):
+        """documentation here"""
+        raise NotImplementedError
 
+    # def openHorizontalBox(self, str label):
+    #     raise NotImplementedError
 
-# cdef class UI:
+    # def openVerticalBox(self, str label):
+    #     raise NotImplementedError
+
+    # def closeBox(self):
+    #     raise NotImplementedError
     
-#     # cdef fg.UI* ui_ptr
-#     # cdef bint ui_ptr_owner
+    # # -- active widgets
+    
+    # def addButton(self, str label, fg.FAUSTFLOAT[:] zone):
+    #     raise NotImplementedError
 
-#     def __cinit__(self):
-#         self.ui_ptr = new fg.UI()
-#         self.ui_ptr_owner = False
+    # def addCheckButton(self, str label, fg.FAUSTFLOAT[:] zone):
+    #     raise NotImplementedError
 
-#     def __dealloc__(self):
-#         if self.ui_ptr and self.ui_ptr_owner:
-#             del self.ui_ptr
-#             # self.ui_ptr = NULL
+    # def addVerticalSlider(self, str label, fg.FAUSTFLOAT[:] zone, fg.FAUSTFLOAT init, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max, fg.FAUSTFLOAT step):
+    #     raise NotImplementedError
+
+    # def addHorizontalSlider(self, str label, fg.FAUSTFLOAT[:] zone, fg.FAUSTFLOAT init, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max, fg.FAUSTFLOAT step):
+    #     raise NotImplementedError
+
+    # def addNumEntry(self, str label, fg.FAUSTFLOAT[:] zone, fg.FAUSTFLOAT init, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max, fg.FAUSTFLOAT step):
+    #     raise NotImplementedError
+
+    
+    # # -- passive widgets
+    
+    # def addHorizontalBargraph(self, str label, fg.FAUSTFLOAT[:] zone, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max):
+    #     raise NotImplementedError
+
+    # def addVerticalBargraph(self, str label, fg.FAUSTFLOAT[:] zone, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max):
+    #     raise NotImplementedError
+
+    
+    # # -- soundfiles
+    
+    # # def addSoundfile(self, str label, str filename, fg.Soundfile** sf_zone):
+    # #     raise NotImplementedError
+
+    
+    # # -- metadata declarations
+    
+    # def declare(self, fg.FAUSTFLOAT[:] zone, str key, str val):
+    #     raise NotImplementedError
+
+    # def sizeOfFAUSTFLOAT(self):
+    #     raise NotImplementedError
+
+
+
+cdef class UI(UIReal):
+    # cdef fg.UI* ui_ptr
+
+    def __cinit__(self):
+        pass
+
 
 
 ## ---------------------------------------------------------------------------
 ## faust/gui/PrintUI.h
 
-
-# cdef class PrintUI(UI):
-cdef class PrintUI:
+cdef class PrintUI(UI):
     """Faust Print UI."""
 
     # cdef fg.PrintUI* ptr
     # cdef bint ptr_owner
 
+
     def __cinit__(self):
         self.ptr = new fg.PrintUI()
-        self.ptr_owner = False
+        self.ui_ptr = self.ptr
 
     def __dealloc__(self):
         if self.ptr and self.ptr_owner:
             del self.ptr
             self.ptr = NULL
 
-    cdef void openTabBox(self, const char* label):
-        self.ptr.openTabBox(label)
+    def openTabBox(self, str label):
+        self.ptr.openTabBox(label.encode('utf8'))
 
-    cdef void openHorizontalBox(self, const char* label):
-        self.ptr.openHorizontalBox(label)
+    def openHorizontalBox(self, str label):
+        self.ptr.openHorizontalBox(label.encode('utf8'))
 
-    cdef void openVerticalBox(self, const char* label):
-        self.ptr.openVerticalBox(label)
+    def openVerticalBox(self, str label):
+        self.ptr.openVerticalBox(label.encode('utf8'))
 
-    cdef void closeBox(self):
+    def closeBox(self):
         self.ptr.closeBox()
 
-    cdef void addButton(self, const char* label, fg.FAUSTFLOAT* zone):
-        self.ptr.addButton(label, zone)
+    def addButton(self, str label, float zone):
+        self.ptr.addButton(label.encode('utf8'), &zone)
 
-    cdef void addCheckButton(self, const char* label, fg.FAUSTFLOAT* zone):
-        self.ptr.addCheckButton(label, zone)
+    def addCheckButton(self, str label, float zone):
+        self.ptr.addCheckButton(label.encode('utf8'), &zone)
 
-    cdef void addVerticalSlider(self, const char* label, fg.FAUSTFLOAT* zone, fg.FAUSTFLOAT init, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max, fg.FAUSTFLOAT step):
-        self.ptr.addVerticalSlider(label, zone, init, min, max, step)
+    def addVerticalSlider(self, str label, float zone, float init, float min, float max, float step):
+        self.ptr.addVerticalSlider(label.encode('utf8'), &zone, init, min, max, step)
 
-    cdef void addHorizontalSlider(self, const char* label, fg.FAUSTFLOAT* zone, fg.FAUSTFLOAT init, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max, fg.FAUSTFLOAT step):
-        self.ptr.addHorizontalSlider(label, zone, init, min, max, step)
+    def addHorizontalSlider(self, str label, float zone, float init, float min, float max, float step):
+        self.ptr.addHorizontalSlider(label.encode('utf8'), &zone, init, min, max, step)
 
-    cdef void addNumEntry(self, const char* label, fg.FAUSTFLOAT* zone, fg.FAUSTFLOAT init, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max, fg.FAUSTFLOAT step):
-        self.ptr.addNumEntry(label, zone, init, min, max, step)
+    def addNumEntry(self, str label, float zone, float init, float min, float max, float step):
+        self.ptr.addNumEntry(label.encode('utf8'), &zone, init, min, max, step)
 
-    cdef void addHorizontalBargraph(self, const char* label, fg.FAUSTFLOAT* zone, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max):
-        self.ptr.addHorizontalBargraph(label, zone, min, max)
+    def addHorizontalBargraph(self, str label, float zone, float min, float max):
+        self.ptr.addHorizontalBargraph(label.encode('utf8'), &zone, min, max)
 
-    cdef void addVerticalBargraph(self, const char* label, fg.FAUSTFLOAT* zone, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max):
-        self.ptr.addVerticalBargraph(label, zone, min, max)
+    def addVerticalBargraph(self, str label, float zone, fg.FAUSTFLOAT min, fg.FAUSTFLOAT max):
+        self.ptr.addVerticalBargraph(label.encode('utf8'), &zone, min, max)
 
-    # cdef void addSoundfile(self, const char* label, const char* filename,  fg.Soundfile** sf_zone):
-    #     self.ptr.addSoundfile(label, filename, sf_zone)
+    # def addSoundfile(self, str label, str filename,  fg.Soundfile** sf_zone):
+    #     self.ptr.addSoundfile(label.encode('utf8'), filename.encode('utf8'), sf_zone)
 
-    cdef void declare(self, fg.FAUSTFLOAT* zone,  const char* key,  const char* val):
-        self.ptr.declare(zone, key, val)
+    def declare(self, float zone,  str key,  str val):
+        self.ptr.declare(&zone, key.encode('utf8'), val.encode('utf8'))
 
-
+    def sizeOfFAUSTFLOAT(self) -> int:
+        return self.ptr.sizeOfFAUSTFLOAT()
