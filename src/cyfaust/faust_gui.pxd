@@ -96,4 +96,5 @@ IF INCLUDE_SNDFILE:
             string getBinaryPath()
             @staticmethod
             string getBinaryPathFrom(const string& path)
-
+            @staticmethod
+            vector[string] getSoundfilePaths(dsp* dsp)

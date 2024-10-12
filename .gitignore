@@ -7,6 +7,9 @@ lib/
 share/
 python/
 
+# don't include test output
+tests/output/
+
 # dynamically generated
 MANIFEST.in
 

@@ -445,7 +445,7 @@ class FaustBuilder(Builder):
     DYLIB_SUFFIX_LIN = ".so.2"
     DYLIB_SUFFIX_WIN = ".dll"
 
-    def __init__(self, version: str = "2.69.3"):
+    def __init__(self, version: str = "2.75.7"):
         super().__init__(version)
         self.src = self.project.downloads / "faust"
         self.sourcedir = self.src / "build"

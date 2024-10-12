@@ -40,12 +40,12 @@
 /**
  * Opaque types.
  */
-class LIBFAUST_API CTree;
-typedef std::vector<CTree*> tvec;
+class LIBFAUST_API CTreeBase;
+typedef std::vector<CTreeBase*> tvec;
 
-typedef CTree* Signal;
-typedef CTree* Box;
-typedef CTree* Tree;
+typedef CTreeBase* Signal;
+typedef CTreeBase* Box;
+typedef CTreeBase* Tree;
 
 typedef Tree (*prim0)();
 typedef Tree (*prim1)(Tree x);
@@ -78,6 +78,10 @@ LIBFAUST_API const char* ffname(Signal s);
 LIBFAUST_API int ffarity(Signal s);
 
 enum SType { kSInt, kSReal };
+
+typedef std::vector<SType> svec;
+
+typedef std::vector<std::string> nvec;
 
 enum SOperator { kAdd, kSub, kMul, kDiv, kRem, kLsh, kARsh, kLRsh, kGT, kLT, kGE, kLE, kEQ, kNE, kAND, kOR, kXOR };
 
@@ -141,12 +145,16 @@ inline static std::ostream& operator<<(std::ostream& dst, const Interval& it)
 }
 
 /**
- * Create global compilation context, has to be done first.
+ * Create global compilation context, has to be done first,
+ * and paired with a call to destroyLibContext().
  */
 extern "C" LIBFAUST_API void createLibContext();
 
 /**
- * Destroy global compilation context, has to be done last.
+ * Destroy global compilation context, has to be done last,
+ * and paired with a call to createLibContext().
+ * Note that the created DSP factory can be used outside
+ * of the createLibContext/destroyLibContext scope.
  */
 extern "C" LIBFAUST_API void destroyLibContext();
 
@@ -377,26 +385,40 @@ LIBFAUST_API Signal sigSelect2(Signal selector, Signal s1, Signal s2);
 LIBFAUST_API Signal sigSelect3(Signal selector, Signal s1, Signal s2, Signal s3);
 
 /**
+ * Create a foreign function signal.
+ *
+ * @param rtype - the foreign function return type of SType
+ * @param names - the list of function names for single, double, quad, fixed-point
+ * @param atypes - the list of arguments types
+ * @param incfile - the include file where the foreign function is defined
+ * @param libfile - the library file where the foreign function is defined
+ * @param largs - the list of args
+ *
+ * @return the foreign function signal.
+ */
+LIBFAUST_API Signal sigFFun(SType rtype, nvec names, svec atypes, const std::string& incfile, const std::string& libfile, tvec largs);
+
+/**
  * Create a foreign constant signal.
  *
  * @param type - the foreign constant type of SType
  * @param name - the foreign constant name
- * @param file - the include file where the foreign constant is defined
+ * @param incfile - the include file where the foreign constant is defined
  *
  * @return the foreign constant signal.
  */
-LIBFAUST_API Signal sigFConst(SType type, const std::string& name, const std::string& file);
+LIBFAUST_API Signal sigFConst(SType type, const std::string& name, const std::string& incfile);
 
 /**
  * Create a foreign variable signal.
  *
  * @param type - the foreign variable type of SType
  * @param name - the foreign variable name
- * @param file - the include file where the foreign variable is defined
+ * @param incfile - the include file where the foreign variable is defined
  *
  * @return the foreign variable signal.
  */
-LIBFAUST_API Signal sigFVar(SType type, const std::string& name, const std::string& file);
+LIBFAUST_API Signal sigFVar(SType type, const std::string& name, const std::string& incfile);
 
 /**
  * Generic binary mathematical functions.

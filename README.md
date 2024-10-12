@@ -78,7 +78,7 @@ The project is still early stage and a work-in-progress, with key remaining part
 
 Nonetheless,
 
-- A good chunk of the faust interpreter (in Faust version `2.69.3`), and also the box and signal apis have been wrapped with tntegration of the rtaudio cross-platform audio driver.
+- A good chunk of the faust interpreter (in Faust version `2.75.7`), and also the box and signal apis have been wrapped with tntegration of the rtaudio cross-platform audio driver.
 
 - Works on macOS, Linux and Windows.
 
@@ -184,7 +184,7 @@ make # or python3 scripts/manage.py setup --faust
   - `lib`, the dynamic and static versions of `libfaust` and
   - `share`, the faust standard libs and examples.
 
-- Faust version `2.69.3` will be used as it is a stable reference to work with and is used by the setup scripts.
+- Faust version `2.75.7` will be used as it is a stable reference to work with and is used by the setup scripts.
 
 - The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
 

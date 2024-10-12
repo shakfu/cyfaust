@@ -37,13 +37,13 @@
  */
 
 #ifdef _MSC_VER
-typedef void CTree;
+typedef void CTreeBase;
 #else
-typedef struct {} CTree;
+typedef struct {} CTreeBase;
 #endif
 
-typedef CTree* Signal;
-typedef CTree* Box;
+typedef CTreeBase* Signal;
+typedef CTreeBase* Box;
 
 enum SType { kSInt, kSReal };
 
@@ -91,12 +91,16 @@ extern "C"
 #endif
     
     /**
-     * Create global compilation context, has to be done first.
+     * Create global compilation context, has to be done first,
+     * and paired with a call to destroyLibContext().
      */
     LIBFAUST_API void createLibContext();
     
     /**
-     * Destroy global compilation context, has to be done last.
+     * Destroy global compilation context, has to be done last,
+     * and paired with a call to createLibContext().
+     * Note that the created DSP factory can be used outside
+     * of the createLibContext/destroyLibContext scope.
      */
     LIBFAUST_API void destroyLibContext();
     
@@ -291,6 +295,20 @@ extern "C"
      * @return the selected signal depending of the selector value at each time t.
      */
     LIBFAUST_API Signal CsigSelect3(Signal selector, Signal s1, Signal s2, Signal s3);
+    
+    /**
+     * Create a foreign function signal.
+     *
+     * @param rtype - the foreign function return type of SType
+     * @param names - the list of function names for single, double, quad, fixed-point
+     * @param atypes - the list of arguments types
+     * @param incfile - the include file where the foreign function is defined
+     * @param libfile - the library file where the foreign function is defined
+     * @param largs - the list of args
+     *
+     * @return the foreign function signal.
+     */
+    LIBFAUST_API Signal CsigFFun(enum SType rtype, const char** names, enum SType* atypes, const char* incfile, const char* libfile, Signal* largs);
       
     /**
      * Create a foreign constant signal.

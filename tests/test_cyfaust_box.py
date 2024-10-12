@@ -2,6 +2,8 @@ import os, sys, pathlib
 BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
 sys.path.insert(0, BUILD_PATH)
 
+SAVE = False
+
 try:
     from cyfaust.box import (
         create_source_from_boxes, BoxVector,
@@ -34,7 +36,7 @@ except (ModuleNotFoundError, ImportError):
         PACKAGE_RESOURCES
     )
 
-from testutils import print_section, print_entry
+from testutils import print_section, print_entry, save_to_output_dir
 
 
 def test_create_dsp_factory_from_boxes():
@@ -63,7 +65,9 @@ def test_create_source_from_boxes():
         assert b.is_valid, "box is not valid"
         print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
         code = create_source_from_boxes("test_dsp", b, "cpp")
-        assert len(code) == 1960
+        if SAVE:
+            save_to_output_dir('test_create_source_from_boxes.cpp', code)
+        assert len(code) == 1999
         assert "class mydsp : public dsp" in code
         # print(code)
 
@@ -77,7 +81,9 @@ def test_box_create_source_cpp():
         assert b.is_valid, "box is not valid"
         print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
         code = b.create_source("test_dsp", "cpp")
-        assert len(code) == 1960
+        if SAVE:
+            save_to_output_dir('test_box_create_source_cpp.cpp', code)
+        assert len(code) == 1999
         assert "class mydsp : public dsp" in code
         # print(code)
 
@@ -88,7 +94,9 @@ def test_box_create_source_c():
         assert b.is_valid, "box is not valid"
         print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
         code = b.create_source("test_dsp", "c")
-        assert len(code) == 2305
+        if SAVE:
+            save_to_output_dir('test_box_create_source_c.c', code)
+        assert len(code) == 2342
         assert "mydsp* dsp = (mydsp*)calloc(1, sizeof(mydsp))" in code
         # print(code)
 
@@ -99,7 +107,9 @@ def test_box_create_source_codebox():
         assert b.is_valid, "box is not valid"
         print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
         code = b.create_source("test_dsp", "codebox")
-        assert len(code) == 801
+        if SAVE:
+            save_to_output_dir('test_box_create_source_codebox.codebox', code)
+        assert len(code) == 822 #801
         assert "function dspsetup()" in code
         # print("code length:", len(code))
         # print(code)
@@ -111,7 +121,9 @@ def test_box_create_source_rust():
         assert b.is_valid, "box is not valid"
         print(f'Box inputs: {b.inputs}, outputs: {b.outputs}')
         code = b.create_source("test_dsp", "rust")
-        assert len(code) == 2286
+        if SAVE:
+            save_to_output_dir('test_box_create_source_rust.rs', code)
+        assert len(code) == 2755 #2286
         assert "impl FaustDsp for mydsp" in code
         # print("code length:", len(code))
         # print(code)

@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
+- Update to faust `2.75.7`
+
 - Added `scripts/faust_config.py` to generate faust backen and target configurations.
 
 - Added `PythonBuilder` and `PythonDebugBuilder` builders to `manage.py` to enable testing python versions against cyfaust.

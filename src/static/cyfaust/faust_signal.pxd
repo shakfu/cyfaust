@@ -2,11 +2,11 @@ from libcpp.string cimport string
 from libcpp.vector cimport vector
 
 cdef extern from "faust/dsp/libfaust-signal.h":
-    cdef cppclass CTree
-    ctypedef vector[CTree*] tvec
-    ctypedef CTree* Signal
-    ctypedef CTree* Box
-    ctypedef CTree* Tree
+    cdef cppclass CTreeBase
+    ctypedef vector[CTreeBase*] tvec
+    ctypedef CTreeBase* Signal
+    ctypedef CTreeBase* Box
+    ctypedef CTreeBase* Tree
 
     ctypedef Tree (*prim0)()
     ctypedef Tree (*prim1)(Tree x)
@@ -31,6 +31,9 @@ cdef extern from "faust/dsp/libfaust-signal.h":
     ctypedef enum SType: 
         kSInt
         kSReal
+
+    ctypedef vector[SType] svec
+    ctypedef vector[string] nvec
 
     ctypedef enum SOperator:
         kAdd
@@ -116,9 +119,11 @@ cdef extern from "faust/dsp/libfaust-signal.h":
 
     Signal sigSelect3(Signal selector, Signal s1, Signal s2, Signal s3)
 
-    Signal sigFConst(SType type, const string& name, const string& file)
+    Signal sigFFun(SType rtype, nvec names, svec atypes, const string& incfile, const string& libfile, tvec largs)
 
-    Signal sigFVar(SType type, const string& name, const string& file)
+    Signal sigFConst(SType type, const string& name, const string& incfile)
+
+    Signal sigFVar(SType type, const string& name, const string& incfile)
 
     Signal sigBinOp(SOperator op, Signal x, Signal y)
 

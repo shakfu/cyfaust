@@ -102,7 +102,7 @@ struct Soundfile {
     {
         if (fIsDouble) {
             copyToOutReal<double>(size, channels, max_channels, offset, buffer);
-       } else {
+        } else {
             copyToOutReal<float>(size, channels, max_channels, offset, buffer);
         }
     }
@@ -167,6 +167,8 @@ struct Soundfile {
         delete[] fOffset;
     }
 
+    typedef std::vector<std::string> Directories;
+    
 } POST_PACKED_STRUCTURE;
 
 /*
@@ -180,7 +182,7 @@ class SoundfileReader {
     int fDriverSR;
    
     // Check if a soundfile exists and return its real path_name
-    std::string checkFile(const std::vector<std::string>& sound_directories, const std::string& file_name)
+    std::string checkFile(const Soundfile::Directories& sound_directories, const std::string& file_name)
     {
         if (checkFile(file_name)) {
             return file_name;
@@ -277,13 +279,13 @@ class SoundfileReader {
             int total_length = 0;
             
             // Compute total length and channels max of all files
-            for (size_t i = 0; i < path_name_list.size(); i++) {
+            for (size_t part = 0; part < path_name_list.size(); part++) {
                 int chan, length;
-                if (path_name_list[i] == "__empty_sound__") {
+                if (path_name_list[part] == "__empty_sound__") {
                     length = BUFFER_SIZE;
                     chan = 1;
                 } else {
-                    getParamsFile(path_name_list[i], chan, length);
+                    getParamsFile(path_name_list[part], chan, length);
                 }
                 cur_chan = std::max<int>(cur_chan, chan);
                 total_length += length;
@@ -299,17 +301,17 @@ class SoundfileReader {
             int offset = 0;
             
             // Read all files
-            for (size_t i = 0; i < path_name_list.size(); i++) {
-                if (path_name_list[i] == "__empty_sound__") {
-                    soundfile->emptyFile(i, offset);
+            for (size_t part = 0; part < path_name_list.size(); part++) {
+                if (path_name_list[part] == "__empty_sound__") {
+                    soundfile->emptyFile(part, offset);
                 } else {
-                    readFile(soundfile, path_name_list[i], i, offset, max_chan);
+                    readFile(soundfile, path_name_list[part], part, offset, max_chan);
                 }
             }
             
             // Complete with empty parts
-            for (size_t i = path_name_list.size(); i < MAX_SOUNDFILE_PARTS; i++) {
-                soundfile->emptyFile(i, offset);
+            for (size_t part = path_name_list.size(); part < MAX_SOUNDFILE_PARTS; part++) {
+                soundfile->emptyFile(part, offset);
             }
             
             // Share the same buffers for all other channels so that we have max_chan channels available
@@ -322,12 +324,12 @@ class SoundfileReader {
     }
 
     // Check if all soundfiles exist and return their real path_name
-    std::vector<std::string> checkFiles(const std::vector<std::string>& sound_directories,
+    std::vector<std::string> checkFiles(const Soundfile::Directories& sound_directories,
                                         const std::vector<std::string>& file_name_list)
     {
         std::vector<std::string> path_name_list;
-        for (size_t i = 0; i < file_name_list.size(); i++) {
-            std::string path_name = checkFile(sound_directories, file_name_list[i]);
+        for (size_t part = 0; part < file_name_list.size(); part++) {
+            std::string path_name = checkFile(sound_directories, file_name_list[part]);
             // If 'path_name' is not found, it is replaced by an empty sound (= silence)
             path_name_list.push_back((path_name == "") ? "__empty_sound__" : path_name);
         }

@@ -175,7 +175,11 @@ class LIBFAUST_API llvm_dsp_factory : public dsp_factory {
         /* Get warning messages list for a given compilation */
         std::vector<std::string> getWarningMessages();
         
-        /* Create a new DSP instance, to be deleted with C++ 'delete' */
+        /* Create a new DSP instance, to be deleted with C++ 'delete'.
+         Note that the factory keeps track of all DSP allocated with 'createDSPInstance',
+         so a DSP can be manually deleted using the C++ 'delete', or will be finally garbaged
+         by 'deleteDSPFactory' if needed.
+         */
         llvm_dsp* createDSPInstance();
     
         /* Static tables initialization */
@@ -561,7 +565,11 @@ DEPRECATED(llvm_dsp* createDSPInstance(llvm_dsp_factory* factory));
 DEPRECATED(void deleteDSPInstance(llvm_dsp* dsp));
 
 /**
- * Register a custom foreign function that will be exported by the host binary running the DSP code.
+ * Register a custom foreign function in libfaust,
+ * to be compiled and exported by the host binary running the DSP code,
+ * so that to be usable in the DSP code using the 'ffunction' primitive.
+ * 
+ * Note that all needed functions have to be registered before compiling the DSP code.
  *
  * @param function_name - the function name to be available
  */

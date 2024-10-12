@@ -9,14 +9,23 @@ RESET="\x1b[0m"
 
 line="-"*79
 
+import os
+
 def print_line():
-	print(f"{BOLD}{line}{RESET}")
+    print(f"{BOLD}{line}{RESET}")
 
 def print_section(msg):
-	print_line()
-	print(f"{BOLD_CYAN}>> {msg}{RESET}")
+    print_line()
+    print(f"{BOLD_CYAN}>> {msg}{RESET}")
 
 def print_entry(msg):
-	print_line()
-	print(f"{BOLD}{msg}{RESET}")
+    print_line()
+    print(f"{BOLD}{msg}{RESET}")
 
+def save_to_output_dir(filename, content):
+    output_dir = os.path.join('tests', 'output')
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
+    target = os.path.join(output_dir, filename)
+    with open(target, 'w') as f:
+        f.write(content)
