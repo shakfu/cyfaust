@@ -48,7 +48,7 @@ samplerate: $(LIBSAMPLERATE)
 sndfile: $(LIBSAMPLERATE) $(LIBSNDFILE)
 	@echo "libsndfile DONE"
 
-build: faust
+build: faust sndfile samplerate
 	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py build
 
 build_log: faust

@@ -4,11 +4,11 @@ from libcpp.string cimport string
 from libcpp.vector cimport vector
 
 cdef extern from "faust/dsp/libfaust-box.h":
-    cdef cppclass CTree
-    ctypedef vector[CTree*] tvec
-    ctypedef CTree* Signal
-    ctypedef CTree* Box
-    ctypedef CTree* Tree
+    cdef cppclass CTreeBase
+    ctypedef vector[CTreeBase*] tvec
+    ctypedef CTreeBase* Signal
+    ctypedef CTreeBase* Box
+    ctypedef CTreeBase* Tree
 
     ctypedef Tree (*prim0)()
     ctypedef Tree (*prim1)(Tree x)
@@ -33,6 +33,9 @@ cdef extern from "faust/dsp/libfaust-box.h":
     cpdef enum SType:
         kSInt
         kSReal
+
+    ctypedef vector[SType] svec
+    ctypedef vector[string] nvec
 
     cpdef enum SOperator:
         kAdd
@@ -102,8 +105,9 @@ cdef extern from "faust/dsp/libfaust-box.h":
     Box boxSelect2(Box selector, Box b1, Box b2)
     Box boxSelect3()
     Box boxSelect3(Box selector, Box b1, Box b2, Box b3)
-    Box boxFConst(SType type, const string& name, const string& file)
-    Box boxFVar(SType type, const string& name, const string& file)
+    Box boxFFun(SType rtype, nvec names, svec atypes, const string& incfile, const string& libfile)
+    Box boxFConst(SType type, const string& name, const string& incfile)
+    Box boxFVar(SType type, const string& name, const string& incfile)
     Box boxBinOp(SOperator op)
     Box boxBinOp(SOperator op, Box b1, Box b2)
     Box boxAdd()

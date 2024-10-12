@@ -230,11 +230,23 @@ architecture section is not modified.
 #include "mydspx86_64.h"
 #endif
 
+#ifdef apple_m1
+#include "mydspapple_m1.h"
+#endif
+
+#ifdef apple_m2
+#include "mydspapple_m2.h"
+#endif
+
+#ifdef apple_m3
+#include "mydspapple_m3.h"
+#endif
+
 // Always included
 #include "mydspgeneric.h"
 
 // For 'llvm::sys::getHostCPUName' function
-#include <llvm/Support/Host.h>
+#include <llvm/TargetParser/Host.h>
 #include <llvm/ADT/StringRef.h>
 
 /*
@@ -658,6 +670,30 @@ class mydspmulti : public decorator_dsp {
                 goto adapter;
             }
         #endif
+        
+        #ifdef apple_m1
+            if (!fDSP && is_cpu("apple-m1")) {
+                std::cout << "Allocate for apple-m1" << std::endl;
+                fDSP = createmydspapple_m1();
+                goto adapter;
+            }
+        #endif
+        
+        #ifdef apple_m2
+            if (!fDSP && is_cpu("apple-m1")) {
+                std::cout << "Allocate for apple-m2" << std::endl;
+                fDSP = createmydspapple_m2();
+                goto adapter;
+            }
+        #endif
+                
+        #ifdef apple_m3
+            if (!fDSP && is_cpu("apple-m3")) {
+                std::cout << "Allocate for apple-m3" << std::endl;
+                fDSP = createmydspapple_m3();
+                goto adapter;
+            }
+        #endif
             
             // Default case: allocate generic
             if (!fDSP) {
@@ -672,7 +708,8 @@ class mydspmulti : public decorator_dsp {
             assert(fDSP);
             
             // Create a DS/US + Filter adapted DSP
-            fDSP = createSRAdapter<float>(fDSP, DOWN_SAMPLING, UP_SAMPLING, FILTER_TYPE);
+            std::string error;
+            fDSP = createSRAdapter<float>(fDSP, error, DOWN_SAMPLING, UP_SAMPLING, FILTER_TYPE);
             
             Meta1 meta;
             fDSP->metadata(&meta);

@@ -71,11 +71,11 @@ cdef class UIReal:
 
 
 
-cdef class UI(UIReal):
-    # cdef fg.UI* ui_ptr
+# cdef class UI(UIReal):
+#     # cdef fg.UI* ui_ptr
 
-    def __cinit__(self):
-        pass
+#     def __cinit__(self):
+#         pass
 
 
 
@@ -87,11 +87,12 @@ cdef class PrintUI(UI):
 
     # cdef fg.PrintUI* ptr
     # cdef bint ptr_owner
+    
 
 
     def __cinit__(self):
         self.ptr = new fg.PrintUI()
-        self.ui_ptr = self.ptr
+        self.ui_ptr = <UI.ui_ptr*>self.ptr
 
     def __dealloc__(self):
         if self.ptr and self.ptr_owner:
@@ -137,5 +138,3 @@ cdef class PrintUI(UI):
     def declare(self, float zone,  str key,  str val):
         self.ptr.declare(&zone, key.encode('utf8'), val.encode('utf8'))
 
-    def sizeOfFAUSTFLOAT(self) -> int:
-        return self.ptr.sizeOfFAUSTFLOAT()

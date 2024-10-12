@@ -28,9 +28,12 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <memory>
 
+#include "faust/dsp/dsp.h"
+#include "faust/gui/meta.h"
 #include "faust/gui/SimpleParser.h"
 #include "faust/gui/DecoratorUI.h"
 
@@ -44,12 +47,12 @@
 #if defined(JUCE_32BIT) || defined(JUCE_64BIT)
 #include "faust/gui/JuceReader.h"
 static JuceReader gReader;
+#elif defined(DAISY) || defined(SUPERCOLLIDER)
+#include "faust/gui/WaveReader.h"
+static WaveReader gReader;
 #elif defined(ESP32)
 #include "faust/gui/Esp32Reader.h"
 static Esp32Reader gReader;
-#elif defined(DAISY)
-#include "faust/gui/WaveReader.h"
-static WaveReader gReader;
 #elif defined(MEMORY_READER)
 #include "faust/gui/MemoryReader.h"
 static MemoryReader gReader;
@@ -68,7 +71,7 @@ class SoundUI : public SoundUIInterface
     protected:
     
         // The soundfile directories
-        std::vector<std::string> fSoundfileDir;
+        Soundfile::Directories fSoundfileDir;
         // Map to share loaded soundfiles
         std::map<std::string, std::shared_ptr<Soundfile>> fSoundfileMap;
         // The soundfile reader
@@ -109,7 +112,7 @@ class SoundUI : public SoundUIInterface
          *
          * @return the soundfile loader.
          */
-        SoundUI(const std::vector<std::string>& sound_directories, int sample_rate = -1, SoundfileReader* reader = nullptr, bool is_double = false)
+        SoundUI(const Soundfile::Directories& sound_directories, int sample_rate = -1, SoundfileReader* reader = nullptr, bool is_double = false)
         :fSoundfileDir(sound_directories)
         {
             fSoundReader = (reader)
@@ -211,6 +214,38 @@ class SoundUI : public SoundUIInterface
         #endif
             return bundle_path_str;
         }
+    
+        /**
+         * Decode the "declare soundfiles "url1;url2;...;urlN"; metadata and return the list of paths.
+         *
+         * @param dsp - the DSP.
+         *
+         * @return the list of paths.
+         */
+       
+        static std::vector<std::string> getSoundfilePaths(dsp* dsp)
+        {
+            // Analyse 'soundfiles' metadata to extract the list of URLs.
+            struct SoundfilesMeta : Meta
+            {
+                std::vector<std::string> fURL;
+                void declare(const char* key, const char* value)
+                {
+                    if (std::string(key) == "soundfiles") {
+                        std::stringstream ss(value);
+                        std::string item;
+                        // Use getline with ';' as the delimiter to split the string
+                        while (getline(ss, item, ';')) { fURL.push_back(item); }
+                    }
+                }
+            };
+            
+            // Use bundle path
+            SoundfilesMeta sf;
+            dsp->metadata(&sf);
+            return sf.fURL;
+        };
+
 };
 
 #endif

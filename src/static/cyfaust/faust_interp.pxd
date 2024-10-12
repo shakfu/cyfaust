@@ -71,6 +71,8 @@ IF INCLUDE_SNDFILE:
             string getBinaryPath()
             @staticmethod
             string getBinaryPathFrom(const string& path)
+            @staticmethod
+            vector[string] getSoundfilePaths(dsp* dsp)
 
 cdef extern from "faust/dsp/dsp.h":
     cdef cppclass dsp_memory_manager

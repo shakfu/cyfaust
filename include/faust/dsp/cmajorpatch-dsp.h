@@ -44,8 +44,8 @@ architecture section is not modified.
 class cmajor_dsp_factory;
 
 /**
-* Faust wrapped Cmajor DSP
-*/
+ * Faust wrapped JIT compiled Cmajor DSP
+ */
 class cmajorpatch_dsp : public dsp {
     
     private:
@@ -176,9 +176,10 @@ class cmajor_dsp_factory : public dsp_factory {
             }
         
             cmaj::BuildSettings settings;
-            settings.setFrequency(44100); // Dummy value
+            settings.setFrequency(44100);       // Dummy value
             settings.setSessionID(123456);
-            fEngine.setBuildSettings (settings);
+            settings.setOptimisationLevel(4);   // -O4 to have fastmath like in Faust/LLVM
+            fEngine.setBuildSettings(settings);
             
             if (!fEngine.load(messages, program, nullptr, nullptr)) {
                 error_msg = "ERROR : failed to load : " + messages.toString() + "\n";

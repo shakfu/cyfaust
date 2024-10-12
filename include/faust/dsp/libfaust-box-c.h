@@ -37,13 +37,15 @@
  */
 
 #ifdef _MSC_VER
-typedef void CTree;
+#define CTree_DEFINED
+typedef void CTreeBase;
 #else
-typedef struct {} CTree;
+#define CTree_DEFINED
+typedef struct {} CTreeBase;
 #endif
 
-typedef CTree* Signal;
-typedef CTree* Box;
+typedef CTreeBase* Signal;
+typedef CTreeBase* Box;
 
 enum SType { kSInt, kSReal };
 
@@ -91,12 +93,16 @@ extern "C"
 #endif
     
     /**
-     * Create global compilation context, has to be done first.
+     * Create global compilation context, has to be done first,
+     * and paired with a call to destroyLibContext().
      */
     LIBFAUST_API void createLibContext();
     
     /**
-     * Destroy global compilation context, has to be done last.
+     * Destroy global compilation context, has to be done last,
+     * and paired with a call to createLibContext().
+     * Note that the created DSP factory can be used outside
+     * of the createLibContext/destroyLibContext scope.
      */
     LIBFAUST_API void destroyLibContext();
 
@@ -387,26 +393,39 @@ extern "C"
     LIBFAUST_API Box CboxSelect3Aux(Box selector, Box b1, Box b2, Box b3);
     
     /**
+     * Create a foreign function box.
+     *
+     * @param rtype - the foreign function return type of SType
+     * @param names - the list of function names for single, double, quad, fixed-point
+     * @param atypes - the list of arguments types
+     * @param incfile - the include file where the foreign function is defined
+     * @param libfile - the library file where the foreign function is defined
+     *
+     * @return the foreign function box.
+     */
+    LIBFAUST_API Box CboxFFun(enum SType rtype, const char** names, enum SType* atypes, const char* incfile, const char* libfile);
+
+    /**
      * Create a foreign constant box.
      *
      * @param type - the foreign constant type of SType
      * @param name - the foreign constant name
-     * @param file - the include file where the foreign constant is defined
+     * @param incfile - the include file where the foreign constant is defined
      *
      * @return the foreign constant box.
      */
-    LIBFAUST_API Box CboxFConst(SType type, const char* name, const char* file);
+    LIBFAUST_API Box CboxFConst(enum SType type, const char* name, const char* incfile);
     
     /**
      * Create a foreign variable box.
      *
      * @param type - the foreign variable type of SType
      * @param name - the foreign variable name
-     * @param file - the include file where the foreign variable is defined
+     * @param incfile - the include file where the foreign variable is defined
      *
      * @return the foreign variable box.
      */
-    LIBFAUST_API Box CboxFVar(SType type, const char* name, const char* file);
+    LIBFAUST_API Box CboxFVar(enum SType type, const char* name, const char* incfile);
     
     /**
      * Generic binary mathematical functions.
@@ -735,7 +754,7 @@ extern "C"
      *
      * @return a flattened box on success, otherwise a null pointer.
      */
-    LIBFAUST_API Box CDSPToBoxes(const char* name_appp, const char* dsp_content, int argc, const char* argv[], int* inputs, int* outputs, char* error_msg);
+    LIBFAUST_API Box CDSPToBoxes(const char* name_app, const char* dsp_content, int argc, const char* argv[], int* inputs, int* outputs, char* error_msg);
     
     /**
      * Return the number of inputs and outputs of a box

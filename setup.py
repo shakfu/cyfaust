@@ -35,7 +35,7 @@ VERSION = "0.0.4"
 STATIC = getenv("STATIC")
 
 # sndfile (+ libsamplerate)
-INCLUDE_SNDFILE = getenv("INCLUDE_SNDFILE", default=False)
+INCLUDE_SNDFILE = getenv("INCLUDE_SNDFILE", default=True)
 
 # rtaudio apis
 # linux
@@ -233,7 +233,7 @@ else:
         mk_extension("cyfaust.common", ["src/cyfaust/common.pyx"]),
         mk_extension("cyfaust.signal", ["src/cyfaust/signal.pyx"]),
         mk_extension("cyfaust.box", ["src/cyfaust/box.pyx"]),
-        mk_extension("cyfaust.gui", ["src/cyfaust/gui.pyx"]),
+        # mk_extension("cyfaust.gui", ["src/cyfaust/gui.pyx"]),
     ]
 
     setup(
