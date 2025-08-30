@@ -25,6 +25,8 @@
 #ifndef LIBFAUSTCOMMON_C_H
 #define LIBFAUSTCOMMON_C_H
 
+#include <stdbool.h>
+
 #include "faust/export.h"
 
 /*!
@@ -38,14 +40,14 @@
 
 #ifdef _MSC_VER
 #define CTree_DEFINED
-typedef void CTreeBase;
+typedef void CTree;
 #else
 #define CTree_DEFINED
-typedef struct {} CTreeBase;
+typedef struct {} CTree;
 #endif
 
-typedef CTreeBase* Signal;
-typedef CTreeBase* Box;
+typedef CTree* Signal;
+typedef CTree* Box;
 
 enum SType { kSInt, kSReal };
 

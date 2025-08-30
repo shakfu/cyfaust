@@ -1,8 +1,8 @@
 # cyfaust
 
-cyfaust is an early stage project that aims to be a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
+The aim of the cyfaust project is develop a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
-To this end, a decent amount of progress has been made, with some key work left to do (see [Project Status](https://github.com/shakfu/cyfaust?tab=readme-ov-file#project-status) below).
+To this end, a decent amount of progress has been made, with current code running successfully on faust version `2.81.2`, and with some key work left to do (see [Project Status](https://github.com/shakfu/cyfaust?tab=readme-ov-file#project-status) below). 
 
 It has two build variants:
 
@@ -74,11 +74,11 @@ While this project was initially developed and tested primarily on macOS (`x86_6
 
 ## Project Status
 
-The project is still early stage and a work-in-progress, with key remaining parts not yet implemented (see the project's [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md) file.
+The project is still relatively early stage and a work-in-progress, with key remaining parts not yet implemented (see the project's [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md) file.
 
 Nonetheless,
 
-- A good chunk of the faust interpreter (in Faust version `2.75.7`), and also the box and signal apis have been wrapped with tntegration of the rtaudio cross-platform audio driver.
+- A good chunk of the faust interpreter (in Faust version `2.81.2`), and also the box and signal apis have been wrapped with tntegration of the rtaudio cross-platform audio driver.
 
 - Works on macOS, Linux and Windows.
 
@@ -184,7 +184,7 @@ make # or python3 scripts/manage.py setup --faust
   - `lib`, the dynamic and static versions of `libfaust` and
   - `share`, the faust standard libs and examples.
 
-- Faust version `2.75.7` will be used as it is a stable reference to work with and is used by the setup scripts.
+- Faust version `2.81.2` will be used as it is a stable reference to work with and is used by the setup scripts.
 
 - The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
 

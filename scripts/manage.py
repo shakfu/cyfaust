@@ -55,6 +55,9 @@ from pathlib import Path
 from typing import List, Optional, Union
 from urllib.request import urlretrieve
 
+# ----------------------------------------------------------------------------
+# constants
+
 PYTHON = sys.executable
 PLATFORM = platform.system()
 ARCH = platform.machine()
@@ -62,12 +65,12 @@ PY_VER_MINOR = sys.version_info.minor
 
 DEBUG = True
 
+FAUST_VERSION = "2.81.2"
 
 # ----------------------------------------------------------------------------
 # type aliases
 
 Pathlike = Union[str, Path]
-
 
 # ----------------------------------------------------------------------------
 # setup
@@ -445,7 +448,7 @@ class FaustBuilder(Builder):
     DYLIB_SUFFIX_LIN = ".so.2"
     DYLIB_SUFFIX_WIN = ".dll"
 
-    def __init__(self, version: str = "2.75.7"):
+    def __init__(self, version: str = FAUST_VERSION):
         super().__init__(version)
         self.src = self.project.downloads / "faust"
         self.sourcedir = self.src / "build"
@@ -981,12 +984,12 @@ class WheelBuilder(ShellCmd):
         thanks: @henryiii
         post: https://github.com/pypa/wheel/issues/573
 
-        For arm64, the minimal deployment target is 11.0.
+        From faust version 2.81.2, on arm64, the minimal deployment target is 15.0.
         On x86_64 (or universal2), use 10.9 as a default.
         """
         min_osx_ver = "10.9"
         if self.is_macos_arm64 and not self.universal:
-            min_osx_ver = "11.0"
+            min_osx_ver = "15.0"
         os.environ["MACOSX_DEPLOYMENT_TARGET"] = min_osx_ver
         return min_osx_ver
 
@@ -1120,6 +1123,9 @@ class WheelBuilder(ShellCmd):
             w.project = "cyfaust-static"
             renamed_wheel = str(w)
             os.rename(wheel, renamed_wheel)
+            dest_wheel = self.project.wheels / renamed_wheel
+            if dest_wheel.exists():
+                dest_wheel.unlink()
             shutil.move(renamed_wheel, self.project.wheels)
 
     def build(self):

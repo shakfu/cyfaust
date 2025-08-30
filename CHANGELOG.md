@@ -15,7 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
-- Update to faust `2.75.7`
+## [0.0.5]
+
+- Updated cyfaust to faust `2.81.2` (all tests pass)
+
+- Updated cyfaust to faust `2.75.7` (all tests pass)
 
 - Added `scripts/faust_config.py` to generate faust backen and target configurations.
 

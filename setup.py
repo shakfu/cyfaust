@@ -19,14 +19,14 @@ def get_min_osx_ver(platform, arch):
     if not min_osx_ver:
         min_osx_ver = "10.9"
         if platform == "Darwin" and arch == "arm64":
-            min_osx_ver = "11.0"
+            min_osx_ver = "15.0"
     return min_osx_ver
 
 
 # ----------------------------------------------------------------------------
 # VARS
 
-VERSION = "0.0.4"
+VERSION = "0.0.5"
 
 # ----------------------------------------------------------------------------
 # OPTIONS (to be set as environment variables)
