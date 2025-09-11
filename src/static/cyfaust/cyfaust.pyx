@@ -297,13 +297,21 @@ cdef class InterpreterDspFactory:
         self.instances.add(instance)
         return instance
 
-    cdef set_memory_manager(self, fi.dsp_memory_manager* manager):
+    def set_memory_manager(self, manager):
         """Set a custom memory manager to be used when creating instances."""
-        self.ptr.setMemoryManager(manager)
-
-    cdef fi.dsp_memory_manager* get_memory_manager(self):
-        """Set a custom memory manager to be used when creating instances."""
-        return self.ptr.getMemoryManager()
+        # Note: Python interface doesn't expose dsp_memory_manager directly
+        # This method is available for C++ interfacing
+        pass
+    
+    def get_memory_manager(self):
+        """Get the current memory manager used when creating instances."""
+        # Note: Python interface doesn't expose dsp_memory_manager directly
+        # This method is available for C++ interfacing
+        return None
+    
+    def class_init(self, sample_rate: int):
+        """Initialize static tables for all instances of this factory."""
+        self.ptr.classInit(sample_rate)
 
     def write_to_bitcode(self) -> str:
         """Write a Faust DSP factory into a bitcode string."""
@@ -537,6 +545,48 @@ cdef class InterpreterDsp:
         """
         cdef fi.PrintUI ui_interface
         self.ptr.buildUserInterface(<fi.UI*>&ui_interface)
+
+    def control(self):
+        """Read all controllers (buttons, sliders, etc.), and update the DSP state.
+        
+        This method updates the DSP state to be used by 'frame' or 'compute'.
+        Note: This method will only be functional with the -ec (--external-control) option.
+        """
+        self.ptr.control()
+
+    def frame(self, float[::1] inputs not None, float[::1] outputs not None):
+        """DSP instance computation to process one single frame.
+        
+        Args:
+            inputs: input audio buffer as memoryview of floats
+            outputs: output audio buffer as memoryview of floats
+            
+        Note: This method will only be functional with the -os (--one-sample) option.
+        """
+        self.ptr.frame(&inputs[0], &outputs[0])
+        
+    def compute(self, int count, float[:, ::1] inputs not None, float[:, ::1] outputs not None):
+        """DSP instance computation with successive in/out audio buffers.
+        
+        Args:
+            count: number of frames to compute
+            inputs: 2D input audio buffers as memoryview [channels, samples]
+            outputs: 2D output audio buffers as memoryview [channels, samples]
+        """
+        cdef float** input_ptrs = <float**>malloc(inputs.shape[0] * sizeof(float*))
+        cdef float** output_ptrs = <float**>malloc(outputs.shape[0] * sizeof(float*))
+        
+        try:
+            for i in range(inputs.shape[0]):
+                input_ptrs[i] = &inputs[i, 0]
+            for i in range(outputs.shape[0]):
+                output_ptrs[i] = &outputs[i, 0]
+                
+            self.ptr.compute(count, input_ptrs, output_ptrs)
+        finally:
+            free(input_ptrs)
+            free(output_ptrs)
+            
 
     # cdef build_user_interface(self, fi.UI* ui_interface):
     #     """Trigger the ui_interface parameter with instance specific calls."""

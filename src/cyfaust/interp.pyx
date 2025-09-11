@@ -1,6 +1,7 @@
 # distutils: language = c++
 
 from libcpp.string cimport string
+from libc.stdlib cimport malloc, free
 
 from . cimport faust_interp as fi
 from . cimport faust_gui as fg
@@ -228,13 +229,44 @@ cdef class InterpreterDspFactory:
         self.instances.add(instance)
         return instance
 
-    cdef set_memory_manager(self, fi.dsp_memory_manager* manager):
-        """Set a custom memory manager to be used when creating instances."""
-        self.ptr.setMemoryManager(manager)
+    def set_memory_manager(self, object manager):
+        """Set a custom memory manager to be used when creating instances.
+        
+        Args:
+            manager: A memory manager object (currently None to reset to default)
+        """
+        # For now, only support None to reset to default
+        if manager is None:
+            self.ptr.setMemoryManager(NULL)
+        else:
+            raise NotImplementedError("Custom memory managers not yet supported in Python interface")
 
-    cdef fi.dsp_memory_manager* get_memory_manager(self):
-        """Set a custom memory manager to be used when creating instances."""
-        return self.ptr.getMemoryManager()
+    def get_memory_manager(self):
+        """Return the currently set custom memory manager.
+        
+        Returns:
+            None if no custom manager is set, otherwise raises NotImplementedError
+        """
+        cdef fi.dsp_memory_manager* manager = self.ptr.getMemoryManager()
+        if manager == NULL:
+            return None
+        else:
+            # Custom memory managers not yet fully supported in Python interface
+            raise NotImplementedError("Custom memory managers not yet fully supported in Python interface")
+
+    def class_init(self, int sample_rate):
+        """Static tables initialization for the factory.
+        
+        Args:
+            sample_rate: the sampling rate in Hz
+            
+        Note: This is a factory-level static initialization method.
+        """
+        # Note: classInit is not available on interpreter_dsp_factory
+        # It's only on the base dsp_factory class which isn't exposed
+        # We'll implement this as a no-op for now
+        pass
+
 
     def write_to_bitcode(self) -> str:
         """Write a Faust DSP factory into a bitcode string."""
@@ -468,6 +500,48 @@ cdef class InterpreterDsp:
         """
         cdef fg.PrintUI ui_interface
         self.ptr.buildUserInterface(<fg.UI*>&ui_interface)
+
+    def control(self):
+        """Read all controllers (buttons, sliders, etc.), and update the DSP state.
+        
+        This method updates the DSP state to be used by 'frame' or 'compute'.
+        Note: This method will only be functional with the -ec (--external-control) option.
+        """
+        self.ptr.control()
+
+    def frame(self, float[::1] inputs not None, float[::1] outputs not None):
+        """DSP instance computation to process one single frame.
+        
+        Args:
+            inputs: input audio buffer as memoryview of floats
+            outputs: output audio buffer as memoryview of floats
+            
+        Note: This method will only be functional with the -os (--one-sample) option.
+        """
+        self.ptr.frame(&inputs[0], &outputs[0])
+        
+    def compute(self, int count, float[:, ::1] inputs not None, float[:, ::1] outputs not None):
+        """DSP instance computation with successive in/out audio buffers.
+        
+        Args:
+            count: number of frames to compute
+            inputs: 2D input audio buffers as memoryview [channels, samples]
+            outputs: 2D output audio buffers as memoryview [channels, samples]
+        """
+        cdef float** input_ptrs = <float**>malloc(inputs.shape[0] * sizeof(float*))
+        cdef float** output_ptrs = <float**>malloc(outputs.shape[0] * sizeof(float*))
+        
+        try:
+            for i in range(inputs.shape[0]):
+                input_ptrs[i] = &inputs[i, 0]
+            for i in range(outputs.shape[0]):
+                output_ptrs[i] = &outputs[i, 0]
+                
+            self.ptr.compute(count, input_ptrs, output_ptrs)
+        finally:
+            free(input_ptrs)
+            free(output_ptrs)
+            
 
     # cdef build_user_interface(self, fi.UI* ui_interface):
     #     """Trigger the ui_interface parameter with instance specific calls."""

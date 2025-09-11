@@ -12,6 +12,24 @@ cdef extern from "faust/dsp/dsp.h":
         void* allocate(size_t size) except +
         void destroy(void* ptr) except +
         
+    # Base dsp class declaration
+    cdef cppclass dsp:
+        int getNumInputs()
+        int getNumOutputs()
+        void buildUserInterface(UI* ui_interface)
+        int getSampleRate()
+        void init(int sample_rate)
+        void instanceInit(int sample_rate)
+        void instanceConstants(int sample_rate)
+        void instanceResetUserInterface()
+        void instanceClear()
+        dsp* clone()
+        void metadata(Meta* m)
+        void control()
+        void frame(float* inputs, float* outputs)
+        void compute(int count, float** inputs, float** outputs)
+        void compute(double date_usec, int count, float** inputs, float** outputs)
+        
     cdef cppclass decorator_dsp(dsp):
         decorator_dsp(dsp* dsp) except +
         int getNumInputs()
@@ -32,7 +50,7 @@ cdef extern from "faust/dsp/dsp.h":
         
     cdef cppclass ScopedNoDenormals:
         ScopedNoDenormals() except +
-        
+    
     cdef cppclass dsp_factory:
         string getName()
         string getSHAKey()
@@ -45,8 +63,6 @@ cdef extern from "faust/dsp/dsp.h":
         void classInit(int sample_rate)
         void setMemoryManager(dsp_memory_manager* manager)
         dsp_memory_manager* getMemoryManager()
-        
-    cdef cppclass dsp
 
 cdef extern from "faust/dsp/libfaust.h":
     string generateSHA1(const string& data)

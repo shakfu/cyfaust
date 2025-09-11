@@ -7,6 +7,10 @@ from libcpp.vector cimport vector
 
 DEF INCLUDE_SNDFILE = True
 
+# Forward declaration - will be fully defined in faust_interp.pxd
+cdef extern from "faust/dsp/dsp.h":
+    cdef cppclass dsp
+
 
 
 cdef extern from "faust/gui/CInterface.h":
