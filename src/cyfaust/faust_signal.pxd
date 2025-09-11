@@ -164,8 +164,6 @@ cdef extern from "faust/dsp/libfaust-signal.h":
     Signal sigAtan(Signal x)
     Signal sigAsin(Signal x)
 
-    Signal sigRound(Signal x)
-
     Signal sigRemainder(Signal x, Signal y)
     Signal sigPow(Signal x, Signal y)
     Signal sigMin(Signal x, Signal y)

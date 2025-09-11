@@ -202,24 +202,28 @@ class TestAdvancedDSPMethods:
         del factory
 
 
-class TestSignalRoundFunction:
-    """Test the newly added sigRound function"""
+class TestSignalRintFunction:
+    """Test the sigRint function (round to integer nearest)"""
     
-    def test_sig_round_function(self):
-        """Test sigRound function"""
-        print_entry("test_sig_round_function")
+    def test_sig_rint_function(self):
+        """Test sigRint function"""
+        print_entry("test_sig_rint_function")
         
         try:
-            from cyfaust.signal import sig_round, sig_real, signal_context
+            from cyfaust.signal import sig_rint, sig_real, signal_context
         except (ModuleNotFoundError, ImportError):
-            from cyfaust.cyfaust import sig_round, sig_real, signal_context
+            from cyfaust.cyfaust import sig_rint, sig_real, signal_context
         
         with signal_context():
-            # Test sigRound with a real signal
+            # Test sigRint with a real signal
             input_signal = sig_real(3.7)
-            rounded_signal = sig_round(input_signal)
+            rounded_signal = sig_rint(input_signal)
             
-            assert rounded_signal is not None, "Failed to create rounded signal"
+            assert rounded_signal is not None, "Failed to create rint signal"
+            
+            # Test Signal.rint() method
+            rounded_method = input_signal.rint()
+            assert rounded_method is not None, "Failed to create rint signal via method"
             
             # Test that we can use it in a signal vector
             from cyfaust.signal import SignalVector
@@ -227,9 +231,9 @@ class TestSignalRoundFunction:
             sv.add(rounded_signal)
             
             # Verify we can generate code with it
-            code = sv.create_source("test_round", "cpp")
-            assert len(code) > 0, "Failed to generate code with sigRound"
-            assert "round" in code.lower(), "Generated code doesn't contain rounding"
+            code = sv.create_source("test_rint", "cpp")
+            assert len(code) > 0, "Failed to generate code with sigRint"
+            assert "rint" in code.lower(), "Generated code doesn't contain rint"
 
 
 def test_gui_api_coverage():
@@ -279,8 +283,8 @@ if __name__ == '__main__':
     test_adv.test_dsp_control_and_frame_methods()
     test_adv.test_timestamped_compute()
     
-    test_round = TestSignalRoundFunction()
-    test_round.test_sig_round_function()
+    test_rint = TestSignalRintFunction()
+    test_rint.test_sig_rint_function()
     
     test_gui_api_coverage()
     

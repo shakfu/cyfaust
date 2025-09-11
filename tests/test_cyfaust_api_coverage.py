@@ -29,7 +29,7 @@ try:
     )
     from cyfaust.signal import (
         signal_context, SignalVector, sig_int, sig_real, sig_input,
-        sig_add, sig_mul, sig_delay, sig_soundfile, sig_round
+        sig_add, sig_mul, sig_delay, sig_soundfile, sig_rint
     )
     from cyfaust.common import PACKAGE_RESOURCES
     DYNAMIC_BUILD = True
@@ -43,7 +43,7 @@ except (ModuleNotFoundError, ImportError):
         box_context, BoxVector, box_int, box_real, box_add, box_mul,
         box_hslider, box_vslider, box_button, box_soundfile,
         signal_context, SignalVector, sig_int, sig_real, sig_input,
-        sig_add, sig_mul, sig_delay, sig_soundfile, sig_round,
+        sig_add, sig_mul, sig_delay, sig_soundfile, sig_rint,
         PACKAGE_RESOURCES
     )
     DYNAMIC_BUILD = False
@@ -252,9 +252,9 @@ class TestSignalAPI:
             delay_sig = sig_delay(input_sig, sig_int(1000))
             assert delay_sig is not None, "Delay signal should be created"
             
-            # Test round function (newly added)
-            round_sig = sig_round(sig_real(3.7))
-            assert round_sig is not None, "Round signal should be created"
+            # Test rint function (round to integer nearest)
+            rint_sig = sig_rint(sig_real(3.7))
+            assert rint_sig is not None, "Rint signal should be created"
 
     def test_soundfile_signal(self):
         """Test soundfile signal functionality"""
