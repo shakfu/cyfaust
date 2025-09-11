@@ -111,3 +111,8 @@ venv.bak/
 *.exe
 *.out
 *.app
+
+# claude
+.claude
+CLAUDE.md
+

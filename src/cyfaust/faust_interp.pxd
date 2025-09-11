@@ -5,7 +5,47 @@ from .faust_box cimport Box, Signal, tvec
 from .faust_gui cimport UI, Meta
 
 cdef extern from "faust/dsp/dsp.h":
-    cdef cppclass dsp_memory_manager
+    cdef cppclass dsp_memory_manager:
+        void begin(size_t count) except +
+        void info(size_t size, size_t reads, size_t writes) except +
+        void end() except +
+        void* allocate(size_t size) except +
+        void destroy(void* ptr) except +
+        
+    cdef cppclass decorator_dsp(dsp):
+        decorator_dsp(dsp* dsp) except +
+        int getNumInputs()
+        int getNumOutputs()
+        void buildUserInterface(UI* ui_interface)
+        int getSampleRate()
+        void init(int sample_rate)
+        void instanceInit(int sample_rate)
+        void instanceConstants(int sample_rate)
+        void instanceResetUserInterface()
+        void instanceClear()
+        decorator_dsp* clone()
+        void metadata(Meta* m)
+        void control()
+        void frame(float* inputs, float* outputs)
+        void compute(int count, float** inputs, float** outputs)
+        void compute(double date_usec, int count, float** inputs, float** outputs)
+        
+    cdef cppclass ScopedNoDenormals:
+        ScopedNoDenormals() except +
+        
+    cdef cppclass dsp_factory:
+        string getName()
+        string getSHAKey()
+        string getDSPCode()
+        string getCompileOptions()
+        vector[string] getLibraryList()
+        vector[string] getIncludePathnames()
+        vector[string] getWarningMessages()
+        dsp* createDSPInstance()
+        void classInit(int sample_rate)
+        void setMemoryManager(dsp_memory_manager* manager)
+        dsp_memory_manager* getMemoryManager()
+        
     cdef cppclass dsp
 
 cdef extern from "faust/dsp/libfaust.h":
@@ -36,7 +76,10 @@ cdef extern from "faust/dsp/interpreter-dsp.h":
         void instanceClear()
         interpreter_dsp* clone()
         void metadata(Meta* m)
-        # void compute(int count, float** inputs, float** outputs)
+        void control()
+        void frame(float* inputs, float* outputs)
+        void compute(int count, float** inputs, float** outputs)
+        void compute(double date_usec, int count, float** inputs, float** outputs)
 
     cdef cppclass interpreter_dsp_factory:
         # ~interpreter_dsp_factory()

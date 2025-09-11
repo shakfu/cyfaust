@@ -2,7 +2,7 @@
 
 ## general
 
-- [ ] Stay in sync with major faust releases (so far `2.81.2` is tracked)
+- [x] Stay in sync with major faust releases (so far `2.81.2` is tracked)
 
 ## cyfaust
 
