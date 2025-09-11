@@ -354,6 +354,15 @@ def test_create_dsp_factory_from_signals2():
         dsp = factory.create_dsp_instance()
         assert dsp
 
+def test_soundfile_from_file1():
+    assert dsp_from_file(
+        testname="test_soundfile_from_file1",
+        dsp_path="tests/dsp/soundfile.dsp",
+        skip_audio=False,
+    )
+
+
+
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust.h
 ##

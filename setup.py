@@ -1,6 +1,9 @@
 import os
 import platform
 import subprocess
+import shlex
+
+from typing import Optional
 
 from Cython.Build import cythonize
 from setuptools import Extension, find_namespace_packages, setup
@@ -22,11 +25,16 @@ def get_min_osx_ver(platform, arch):
             min_osx_ver = "15.0"
     return min_osx_ver
 
+def get_output(cmd: str) -> Optional[str]:
+    try:
+        return subprocess.check_output(shlex.split(cmd)).decode().strip()
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return
 
 # ----------------------------------------------------------------------------
 # VARS
 
-VERSION = "0.0.5"
+VERSION = "0.0.6"
 
 # ----------------------------------------------------------------------------
 # OPTIONS (to be set as environment variables)
@@ -35,7 +43,7 @@ VERSION = "0.0.5"
 STATIC = getenv("STATIC")
 
 # sndfile (+ libsamplerate)
-INCLUDE_SNDFILE = getenv("INCLUDE_SNDFILE", default=False)
+INCLUDE_SNDFILE = getenv("INCLUDE_SNDFILE", default=True)
 
 # rtaudio apis
 # linux
@@ -91,13 +99,6 @@ else:
 
 if INCLUDE_SNDFILE:
     DEFINE_MACROS.append(("INCLUDE_SNDFILE", 1))
-    EXTRA_OBJECTS.extend(
-        [
-            "lib/static/libsndfile.a",
-            "lib/static/libsamplerate.a",
-        ]
-    )
-
 
 # platform specific configuration
 if PLATFORM in ["Darwin", "Linux"]:
@@ -106,15 +107,33 @@ if PLATFORM in ["Darwin", "Linux"]:
 if PLATFORM == "Darwin":
     MIN_OSX_VER = get_min_osx_ver(PLATFORM, ARCH)
     os.environ["MACOSX_DEPLOYMENT_TARGET"] = MIN_OSX_VER
+    PREFIX = get_output("brew --prefix")
     EXTRA_COMPILE_ARGS.extend(["-std=c++11", "-stdlib=libc++"])
     EXTRA_LINK_ARGS.append(f"-mmacosx-version-min={MIN_OSX_VER}")
     DEFINE_MACROS.append(("__MACOSX_CORE__", None))  # rtaudio for macos
     if JACK:
         DEFINE_MACROS.append(("__UNIX_JACK__", None))
         LIBRARIES.append("jack")
-    os.environ["LDFLAGS"] = " ".join(
-        ["-framework CoreFoundation", "-framework CoreAudio"]
-    )
+    if PREFIX and INCLUDE_SNDFILE:
+        INCLUDE_DIRS.append(f"{PREFIX}/include")
+        EXTRA_OBJECTS.extend([
+            f"{PREFIX}/lib/libFLAC.a",
+            f"{PREFIX}/lib/libogg.a",
+            f"{PREFIX}/lib/libvorbis.a",
+            f"{PREFIX}/lib/libvorbisenc.a",
+            f"{PREFIX}/lib/libvorbisfile.a",
+            f"{PREFIX}/lib/libopus.a",
+            f"{PREFIX}/lib/libmpg123.a",
+            f"{PREFIX}/lib/libmp3lame.a",
+            f"{PREFIX}/lib/libsndfile.a",
+            f"{PREFIX}/lib/libsamplerate.a",
+        ])
+
+    os.environ["LDFLAGS"] = " ".join([
+        "-framework CoreFoundation", 
+        "-framework CoreAudio",
+        "-framework CoreMIDI",
+    ])
 
 elif PLATFORM == "Linux":
     os.environ["CPPFLAGS"] = "-include limits"
