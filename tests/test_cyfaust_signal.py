@@ -1,6 +1,5 @@
 import os, sys, time
-BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
-sys.path.insert(0, BUILD_PATH)
+
 
 try:
     from cyfaust.interp import create_dsp_factory_from_signals

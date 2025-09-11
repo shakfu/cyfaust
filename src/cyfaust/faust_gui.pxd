@@ -11,8 +11,6 @@ DEF INCLUDE_SNDFILE = True
 cdef extern from "faust/dsp/dsp.h":
     cdef cppclass dsp
 
-
-
 cdef extern from "faust/gui/CInterface.h":
     ctypedef float FAUSTFLOAT
     
@@ -114,6 +112,18 @@ cdef extern from "faust/gui/UI.h":
         UI() except +
         # void declare(const char* key, const char* value)
 
+cdef extern from "faust/gui/GUI.h":
+    cdef cppclass GUI:
+        GUI()
+        void addCallback(FAUSTFLOAT* zone, void* foo, void* data)
+        void removeCallback(FAUSTFLOAT* zone)
+        void updateAllGuis()
+        void updateAllZones()
+        void updateAll()
+        bint isRunning()
+        void run()
+        void stop()
+        void declare(FAUSTFLOAT* zone, const char* key, const char* val)
 
 cdef extern from "faust/gui/PrintUI.h":
     cdef cppclass PrintUI:

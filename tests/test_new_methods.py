@@ -9,8 +9,6 @@ import pytest
 import numpy as np
 from pathlib import Path
 
-BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
-sys.path.insert(0, BUILD_PATH)
 
 # Import testing utilities
 from testutils import print_section, print_entry

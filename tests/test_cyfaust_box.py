@@ -1,6 +1,4 @@
 import os, sys, pathlib
-BUILD_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'build')
-sys.path.insert(0, BUILD_PATH)
 
 SAVE = False
 
