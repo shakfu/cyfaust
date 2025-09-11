@@ -5,10 +5,10 @@ from libc.stdlib cimport malloc, free
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-cimport faust_interp as fi
-cimport faust_box as fb
-cimport faust_signal as fs
-cimport faust_gui as fg
+from . cimport faust_interp as fi
+from . cimport faust_box as fb
+from . cimport faust_signal as fs
+from . cimport faust_gui as fg
 
 
 ## ---------------------------------------------------------------------------
@@ -298,17 +298,38 @@ cdef class InterpreterDspFactory:
         self.instances.add(instance)
         return instance
 
-    def set_memory_manager(self, manager):
-        """Set a custom memory manager to be used when creating instances."""
-        # Note: Python interface doesn't expose dsp_memory_manager directly
-        # This method is available for C++ interfacing
-        pass
+    def set_memory_manager(self, object manager):
+        """Set a custom memory manager to be used when creating instances.
+        
+        Args:
+            manager: A memory manager object (currently None to reset to default)
+        """
+        # For now, only support None to reset to default
+        if manager is None:
+            self.ptr.setMemoryManager(NULL)
+        else:
+            raise NotImplementedError("Custom memory managers not yet supported in Python interface")
     
     def get_memory_manager(self):
-        """Get the current memory manager used when creating instances."""
-        # Note: Python interface doesn't expose dsp_memory_manager directly
-        # This method is available for C++ interfacing
-        return None
+        """Return the currently set custom memory manager.
+        
+        Returns:
+            None if no custom manager is set, otherwise raises NotImplementedError
+        """
+        cdef fi.dsp_memory_manager* manager = self.ptr.getMemoryManager()
+        if manager == NULL:
+            return None
+        else:
+            # Custom memory managers not yet fully supported in Python interface
+            raise NotImplementedError("Custom memory managers not yet fully supported in Python interface")
+
+    def class_init(self, int sample_rate):
+        """Initialize the static tables for all factory instances.
+        
+        Args:
+            sample_rate: The sample rate in Hz
+        """
+        self.ptr.classInit(sample_rate)
  
     def write_to_bitcode(self) -> str:
         """Write a Faust DSP factory into a bitcode string."""

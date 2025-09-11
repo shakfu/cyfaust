@@ -107,6 +107,7 @@ cdef extern from "faust/dsp/interpreter-dsp.h":
         vector[string] getIncludePathnames()
         vector[string] getWarningMessages()
         interpreter_dsp* createDSPInstance()
+        void classInit(int sample_rate)
         void setMemoryManager(dsp_memory_manager* manager)
         dsp_memory_manager* getMemoryManager()
 
