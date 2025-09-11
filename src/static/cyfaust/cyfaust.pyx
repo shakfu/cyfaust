@@ -8,6 +8,7 @@ from libcpp.vector cimport vector
 cimport faust_interp as fi
 cimport faust_box as fb
 cimport faust_signal as fs
+cimport faust_gui as fg
 
 
 ## ---------------------------------------------------------------------------
@@ -308,11 +309,7 @@ cdef class InterpreterDspFactory:
         # Note: Python interface doesn't expose dsp_memory_manager directly
         # This method is available for C++ interfacing
         return None
-    
-    def class_init(self, sample_rate: int):
-        """Initialize static tables for all instances of this factory."""
-        self.ptr.classInit(sample_rate)
-
+ 
     def write_to_bitcode(self) -> str:
         """Write a Faust DSP factory into a bitcode string."""
         return fi.writeInterpreterDSPFactoryToBitcode(self.ptr).decode()
@@ -543,7 +540,7 @@ cdef class InterpreterDsp:
         
         ui_interface - the user interface builder
         """
-        cdef fi.PrintUI ui_interface
+        cdef fg.PrintUI ui_interface
         self.ptr.buildUserInterface(<fi.UI*>&ui_interface)
 
     def control(self):

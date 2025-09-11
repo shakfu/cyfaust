@@ -254,20 +254,6 @@ cdef class InterpreterDspFactory:
             # Custom memory managers not yet fully supported in Python interface
             raise NotImplementedError("Custom memory managers not yet fully supported in Python interface")
 
-    def class_init(self, int sample_rate):
-        """Static tables initialization for the factory.
-        
-        Args:
-            sample_rate: the sampling rate in Hz
-            
-        Note: This is a factory-level static initialization method.
-        """
-        # Note: classInit is not available on interpreter_dsp_factory
-        # It's only on the base dsp_factory class which isn't exposed
-        # We'll implement this as a no-op for now
-        pass
-
-
     def write_to_bitcode(self) -> str:
         """Write a Faust DSP factory into a bitcode string."""
         return fi.writeInterpreterDSPFactoryToBitcode(self.ptr).decode()
