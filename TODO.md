@@ -6,6 +6,18 @@
 
 ## cyfaust
 
+- [ ] Complete unimplemented Python interface methods:
+  	
+  	- [ ] `control()`, `frame()` - C++ compilation-dependent methods not exposed
+  	
+  	- [ ] `get_memory_manager()`, `set_memory_manager()` - Lower-level C++ features
+  not in Python interface
+  	
+  	- [ ] `class_init()` - Factory-level method not exposed
+  	
+  	- [ ] Timestamped `compute()` - Advanced feature not in Python layer
+
+
 - [ ] Fix Soundfile support so that it works out of the box without compilation.
 
 - [ ] Add `cython/__main__.py` commandline interface.
