@@ -9,7 +9,7 @@ from . cimport faust_interp as fi
 from . cimport faust_box as fb
 from . cimport faust_signal as fs
 from . cimport faust_gui as fg
-from . cimport faust_play as fp
+from . cimport faust_player as fp
 
 ## ---------------------------------------------------------------------------
 ## python c-api functions
@@ -5175,7 +5175,7 @@ cdef class SoundBasePlayer:
                 if c_inputs != NULL:
                     free(c_inputs)
                 raise MemoryError("Failed to allocate output arrays")
-
+            
             # Map Python arrays to C arrays using memoryviews
             for i in range(num_outputs):
                 if i < len(outputs):
@@ -5183,7 +5183,7 @@ cdef class SoundBasePlayer:
                     c_outputs[i] = &output_view[0]
                 else:
                     c_outputs[i] = NULL
-
+        
         try:
             self._player.compute(count, c_inputs, c_outputs)
         finally:
@@ -5195,9 +5195,9 @@ cdef class SoundBasePlayer:
 
 cdef class SoundMemoryPlayer(SoundBasePlayer):
     """Memory-based sound player that loads entire file into memory."""
-
+    
     cdef fp.sound_memory_player* _memory_player
-
+    
     def __cinit__(self, filename: str):
         # Parent __cinit__ already called
         del self._player  # Remove base player
@@ -5205,7 +5205,7 @@ cdef class SoundMemoryPlayer(SoundBasePlayer):
         if self._memory_player == NULL:
             raise MemoryError("Failed to create sound_memory_player")
         self._player = self._memory_player  # Set base pointer
-
+    
     def __dealloc__(self):
         # Memory player cleanup handled by parent
         pass
@@ -5213,9 +5213,9 @@ cdef class SoundMemoryPlayer(SoundBasePlayer):
 
 cdef class SoundDtdPlayer(SoundBasePlayer):
     """Direct-to-disk sound player that streams from file."""
-
+    
     cdef fp.sound_dtd_player* _dtd_player
-
+    
     def __cinit__(self, filename: str):
         # Parent __cinit__ already called
         del self._player  # Remove base player
@@ -5223,7 +5223,7 @@ cdef class SoundDtdPlayer(SoundBasePlayer):
         if self._dtd_player == NULL:
             raise MemoryError("Failed to create sound_dtd_player")
         self._player = self._dtd_player  # Set base pointer
-
+    
     def __dealloc__(self):
         # DTD player cleanup handled by parent
         pass
@@ -5231,23 +5231,23 @@ cdef class SoundDtdPlayer(SoundBasePlayer):
 
 cdef class SoundPositionManager:
     """Manager for sound player position control via GUI."""
-
+    
     cdef fp.PositionManager* _manager
-
+    
     def __cinit__(self):
         self._manager = new fp.PositionManager()
         if self._manager == NULL:
             raise MemoryError("Failed to create PositionManager")
-
+    
     def __dealloc__(self):
         if self._manager != NULL:
             del self._manager
-
+    
     def add_dsp(self, SoundBasePlayer player):
         """Add a sound player to be managed."""
         if player._player != NULL:
             self._manager.addDSP(player._player)
-
+    
     def remove_dsp(self, SoundBasePlayer player):
         """Remove a sound player from management."""
         if player._player != NULL:
@@ -5255,7 +5255,7 @@ cdef class SoundPositionManager:
 
 
 ## ---------------------------------------------------------------------------
-## Sound Player Convenience functions
+## Convenience functions
 
 def create_memory_player(filename: str) -> SoundMemoryPlayer:
     """Create a memory-based sound player."""

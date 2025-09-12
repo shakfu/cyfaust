@@ -48,13 +48,8 @@ samplerate: $(LIBSAMPLERATE)
 sndfile: $(LIBSAMPLERATE) $(LIBSNDFILE)
 	@echo "libsndfile DONE"
 
-inplace: faust
-	@STATIC=$(STATIC) $(PYTHON) setup.py build_ext --inplace
-
-build: inplace
-
-# build: faust
-# 	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py build
+build: faust
+	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py build
 
 build_log: faust
 	@echo "rebuild with logging"
@@ -98,7 +93,7 @@ docs: clean
 
 clean:
 	@$(PYTHON) scripts/manage.py clean
-	@rm -f src/cyfaust/*.so
+# 	@rm -f src/cyfaust/*.so
 
 reset:
 	@$(PYTHON) scripts/manage.py clean --reset

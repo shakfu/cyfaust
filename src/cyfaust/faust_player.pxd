@@ -11,6 +11,15 @@ from .faust_gui cimport FAUSTFLOAT
 # Import GUI from faust_gui module which should have the complete definition
 from .faust_gui cimport GUI
 
+cdef extern from *:
+    """
+    #include "faust/gui/GUI.h"
+    #include "faust/gui/ring-buffer.h"
+    // Define the static member variables that are declared in GUI.h
+    std::list<GUI*> GUI::fGuiList;
+    std::map<FAUSTFLOAT*, ringbuffer_t*> GUI::gTimedZoneMap;
+    """
+
 # Forward declarations for additional types we need
 cdef extern from "faust/gui/GUI.h":
     cdef cppclass uiCallbackItem

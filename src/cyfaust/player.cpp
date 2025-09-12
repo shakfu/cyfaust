@@ -3,9 +3,7 @@
 /* BEGIN: Cython Metadata
 {
     "distutils": {
-        "depends": [
-            "/Users/sa/projects/cyfaust/include/faust/gui/GUI.h"
-        ],
+        "depends": [],
         "extra_compile_args": [
             "-std=c++11",
             "-stdlib=libc++"
@@ -38,12 +36,12 @@
         "library_dirs": [
             "/Users/sa/projects/cyfaust/lib"
         ],
-        "name": "cyfaust.play",
+        "name": "cyfaust.player",
         "sources": [
-            "src/cyfaust/play.pyx"
+            "src/cyfaust/player.pyx"
         ]
     },
-    "module_name": "cyfaust.play"
+    "module_name": "cyfaust.player"
 }
 END: Cython Metadata */
 
@@ -1174,8 +1172,8 @@ static CYTHON_INLINE float __PYX_NAN() {
     #define __PYX_EXTERN_C extern "C++"
 #endif
 
-#define __PYX_HAVE__cyfaust__play
-#define __PYX_HAVE_API__cyfaust__play
+#define __PYX_HAVE__cyfaust__player
+#define __PYX_HAVE_API__cyfaust__player
 /* Early includes */
 #include <string.h>
 #include <string_view>
@@ -1185,20 +1183,13 @@ static CYTHON_INLINE float __PYX_NAN() {
 #include "typeinfo"
 #include <string>
 #include <stdlib.h>
-#include "faust/gui/GUI.h"
-
-    #include "faust/gui/GUI.h"
-    #include "faust/gui/ring-buffer.h"
-    // Define the static member variables that are declared in GUI.h
-    std::list<GUI*> GUI::fGuiList;
-    std::map<FAUSTFLOAT*, ringbuffer_t*> GUI::gTimedZoneMap;
-    
 #include <vector>
 #include "faust/dsp/libfaust-box.h"
 #include "faust/dsp/dsp.h"
 #include "faust/gui/CInterface.h"
 #include "faust/gui/meta.h"
 #include "faust/gui/UI.h"
+#include "faust/gui/GUI.h"
 #include "faust/gui/PrintUI.h"
 #include "faust/gui/Soundfile.h"
 #include "faust/gui/SoundUI.h"
@@ -1220,6 +1211,13 @@ static CYTHON_INLINE float __PYX_NAN() {
     #endif
     
 #include <map>
+
+    #include "faust/gui/GUI.h"
+    #include "faust/gui/ring-buffer.h"
+    // Define the static member variables that are declared in GUI.h
+    std::list<GUI*> GUI::fGuiList;
+    std::map<FAUSTFLOAT*, ringbuffer_t*> GUI::gTimedZoneMap;
+    
 #include "faust/gui/ring-buffer.h"
 #include "faust/dsp/sound-player.h"
 #include "pythread.h"
@@ -1430,7 +1428,7 @@ static const char *__pyx_filename;
 /* #### Code section: filename_table ### */
 
 static const char* const __pyx_f[] = {
-  "src/cyfaust/play.pyx",
+  "src/cyfaust/player.pyx",
   "<stringsource>",
   "src/cyfaust/common.pxd",
 };
@@ -1658,10 +1656,10 @@ typedef struct {
 
 /*--- Type declarations ---*/
 struct __pyx_obj_7cyfaust_6common_ParamArray;
-struct __pyx_obj_7cyfaust_4play_SoundBasePlayer;
-struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer;
-struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer;
-struct __pyx_obj_7cyfaust_4play_SoundPositionManager;
+struct __pyx_obj_7cyfaust_6player_SoundBasePlayer;
+struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer;
+struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer;
+struct __pyx_obj_7cyfaust_6player_SoundPositionManager;
 struct __pyx_array_obj;
 struct __pyx_MemviewEnum_obj;
 struct __pyx_memoryview_obj;
@@ -1681,54 +1679,54 @@ struct __pyx_obj_7cyfaust_6common_ParamArray {
 };
 
 
-/* "cyfaust/play.pyx":32
+/* "cyfaust/player.pyx":17
  * ## Sound Player Classes
  * 
  * cdef class SoundBasePlayer:             # <<<<<<<<<<<<<<
  *     """Base class for Faust sound players."""
  * 
 */
-struct __pyx_obj_7cyfaust_4play_SoundBasePlayer {
+struct __pyx_obj_7cyfaust_6player_SoundBasePlayer {
   PyObject_HEAD
   sound_base_player *_player;
   PyObject *_filename;
 };
 
 
-/* "cyfaust/play.pyx":128
+/* "cyfaust/player.pyx":113
  * 
  * 
  * cdef class SoundMemoryPlayer(SoundBasePlayer):             # <<<<<<<<<<<<<<
  *     """Memory-based sound player that loads entire file into memory."""
  * 
 */
-struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer {
-  struct __pyx_obj_7cyfaust_4play_SoundBasePlayer __pyx_base;
+struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer {
+  struct __pyx_obj_7cyfaust_6player_SoundBasePlayer __pyx_base;
   sound_memory_player *_memory_player;
 };
 
 
-/* "cyfaust/play.pyx":146
+/* "cyfaust/player.pyx":131
  * 
  * 
  * cdef class SoundDtdPlayer(SoundBasePlayer):             # <<<<<<<<<<<<<<
  *     """Direct-to-disk sound player that streams from file."""
  * 
 */
-struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer {
-  struct __pyx_obj_7cyfaust_4play_SoundBasePlayer __pyx_base;
+struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer {
+  struct __pyx_obj_7cyfaust_6player_SoundBasePlayer __pyx_base;
   sound_dtd_player *_dtd_player;
 };
 
 
-/* "cyfaust/play.pyx":164
+/* "cyfaust/player.pyx":149
  * 
  * 
  * cdef class SoundPositionManager:             # <<<<<<<<<<<<<<
  *     """Manager for sound player position control via GUI."""
  * 
 */
-struct __pyx_obj_7cyfaust_4play_SoundPositionManager {
+struct __pyx_obj_7cyfaust_6player_SoundPositionManager {
   PyObject_HEAD
   PositionManager *_manager;
 };
@@ -2994,11 +2992,11 @@ static PyObject *__pyx_memoryviewslice__get_base(struct __pyx_memoryviewslice_ob
 
 /* Module declarations from "libcpp.pair" */
 
-/* Module declarations from "cyfaust.faust_play" */
+/* Module declarations from "cyfaust.faust_player" */
 
 /* Module declarations from "cyfaust.common" */
 
-/* Module declarations from "cyfaust.play" */
+/* Module declarations from "cyfaust.player" */
 static PyObject *__pyx_collections_abc_Sequence = 0;
 static PyObject *generic = 0;
 static PyObject *strided = 0;
@@ -3045,11 +3043,11 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *, 
 /* #### Code section: typeinfo ### */
 static const __Pyx_TypeInfo __Pyx_TypeInfo_nn_FAUSTFLOAT = { "FAUSTFLOAT", NULL, sizeof(FAUSTFLOAT), { 0 }, 0, 'R', 0, 0 };
 /* #### Code section: before_global_var ### */
-#define __Pyx_MODULE_NAME "cyfaust.play"
-extern int __pyx_module_is_main_cyfaust__play;
-int __pyx_module_is_main_cyfaust__play = 0;
+#define __Pyx_MODULE_NAME "cyfaust.player"
+extern int __pyx_module_is_main_cyfaust__player;
+int __pyx_module_is_main_cyfaust__player = 0;
 
-/* Implementation of "cyfaust.play" */
+/* Implementation of "cyfaust.player" */
 /* #### Code section: global_var ### */
 static PyObject *__pyx_builtin_MemoryError;
 static PyObject *__pyx_builtin_range;
@@ -3171,7 +3169,6 @@ static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_num_outputs[] = "num_outputs";
 static const char __pyx_k_output_view[] = "output_view";
 static const char __pyx_k_sample_rate[] = "sample_rate";
-static const char __pyx_k_cyfaust_play[] = "cyfaust.play";
 static const char __pyx_k_initializing[] = "_initializing";
 static const char __pyx_k_is_coroutine[] = "_is_coroutine";
 static const char __pyx_k_pyx_checksum[] = "__pyx_checksum";
@@ -3182,6 +3179,7 @@ static const char __pyx_k_instance_init[] = "instance_init";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_AssertionError[] = "AssertionError";
 static const char __pyx_k_SoundDtdPlayer[] = "SoundDtdPlayer";
+static const char __pyx_k_cyfaust_player[] = "cyfaust.player";
 static const char __pyx_k_get_num_inputs[] = "get_num_inputs";
 static const char __pyx_k_instance_clear[] = "instance_clear";
 static const char __pyx_k_SoundBasePlayer[] = "SoundBasePlayer";
@@ -3202,11 +3200,11 @@ static const char __pyx_k_strided_and_direct[] = "<strided and direct>";
 static const char __pyx_k_SoundBasePlayer_init[] = "SoundBasePlayer.init";
 static const char __pyx_k_SoundPositionManager[] = "SoundPositionManager";
 static const char __pyx_k_create_memory_player[] = "create_memory_player";
-static const char __pyx_k_src_cyfaust_play_pyx[] = "src/cyfaust/play.pyx";
 static const char __pyx_k_strided_and_indirect[] = "<strided and indirect>";
 static const char __pyx_k_Invalid_shape_in_axis[] = "Invalid shape in axis ";
 static const char __pyx_k_contiguous_and_direct[] = "<contiguous and direct>";
 static const char __pyx_k_Cannot_index_with_type[] = "Cannot index with type '";
+static const char __pyx_k_src_cyfaust_player_pyx[] = "src/cyfaust/player.pyx";
 static const char __pyx_k_SoundBasePlayer_compute[] = "SoundBasePlayer.compute";
 static const char __pyx_k_contiguous_and_indirect[] = "<contiguous and indirect>";
 static const char __pyx_k_create_position_manager[] = "create_position_manager";
@@ -3299,41 +3297,41 @@ static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewsl
 static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView___pyx_unpickle_Enum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
-static int __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_filename); /* proto */
-static void __pyx_pf_7cyfaust_4play_15SoundBasePlayer_2__dealloc__(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_10init(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_12instance_init(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_14instance_constants(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_16instance_reset_user_interface(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_18instance_clear(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8filename___get__(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_count, CYTHON_UNUSED PyObject *__pyx_v_inputs, PyObject *__pyx_v_outputs); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_22__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_24__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
-static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_v_self, PyObject *__pyx_v_filename); /* proto */
-static void __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_2__dealloc__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
-static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_v_self, PyObject *__pyx_v_filename); /* proto */
-static void __pyx_pf_7cyfaust_4play_14SoundDtdPlayer_2__dealloc__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_14SoundDtdPlayer_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_14SoundDtdPlayer_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
-static int __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self); /* proto */
-static void __pyx_pf_7cyfaust_4play_20SoundPositionManager_2__dealloc__(struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_4add_dsp(struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self, struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_player); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_6remove_dsp(struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self, struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_player); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
-static struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_pf_7cyfaust_4play_create_memory_player(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename); /* proto */
-static struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_pf_7cyfaust_4play_2create_dtd_player(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename); /* proto */
-static struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_pf_7cyfaust_4play_4create_position_manager(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
-static PyObject *__pyx_tp_new_7cyfaust_4play_SoundBasePlayer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
-static PyObject *__pyx_tp_new_7cyfaust_4play_SoundMemoryPlayer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
-static PyObject *__pyx_tp_new_7cyfaust_4play_SoundDtdPlayer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
-static PyObject *__pyx_tp_new_7cyfaust_4play_SoundPositionManager(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static int __pyx_pf_7cyfaust_6player_15SoundBasePlayer___cinit__(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_filename); /* proto */
+static void __pyx_pf_7cyfaust_6player_15SoundBasePlayer_2__dealloc__(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_4get_num_inputs(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_6get_num_outputs(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_8get_sample_rate(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_10init(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_12instance_init(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_14instance_constants(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_16instance_reset_user_interface(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_18instance_clear(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_8filename___get__(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_20compute(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_count, CYTHON_UNUSED PyObject *__pyx_v_inputs, PyObject *__pyx_v_outputs); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_22__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_24__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static int __pyx_pf_7cyfaust_6player_17SoundMemoryPlayer___cinit__(struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_v_self, PyObject *__pyx_v_filename); /* proto */
+static void __pyx_pf_7cyfaust_6player_17SoundMemoryPlayer_2__dealloc__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_17SoundMemoryPlayer_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_17SoundMemoryPlayer_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static int __pyx_pf_7cyfaust_6player_14SoundDtdPlayer___cinit__(struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_v_self, PyObject *__pyx_v_filename); /* proto */
+static void __pyx_pf_7cyfaust_6player_14SoundDtdPlayer_2__dealloc__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_14SoundDtdPlayer_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_14SoundDtdPlayer_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static int __pyx_pf_7cyfaust_6player_20SoundPositionManager___cinit__(struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self); /* proto */
+static void __pyx_pf_7cyfaust_6player_20SoundPositionManager_2__dealloc__(struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_20SoundPositionManager_4add_dsp(struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self, struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_player); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_20SoundPositionManager_6remove_dsp(struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self, struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_player); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_20SoundPositionManager_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7cyfaust_6player_20SoundPositionManager_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_pf_7cyfaust_6player_create_memory_player(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename); /* proto */
+static struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_pf_7cyfaust_6player_2create_dtd_player(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename); /* proto */
+static struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_pf_7cyfaust_6player_4create_position_manager(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
+static PyObject *__pyx_tp_new_7cyfaust_6player_SoundBasePlayer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_7cyfaust_6player_SoundMemoryPlayer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_7cyfaust_6player_SoundDtdPlayer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_7cyfaust_6player_SoundPositionManager(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_memoryview(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -3377,18 +3375,18 @@ typedef struct {
   PyTypeObject *__pyx_CoroutineType;
   #endif
   PyTypeObject *__pyx_ptype_7cyfaust_6common_ParamArray;
-  PyObject *__pyx_type_7cyfaust_4play_SoundBasePlayer;
-  PyObject *__pyx_type_7cyfaust_4play_SoundMemoryPlayer;
-  PyObject *__pyx_type_7cyfaust_4play_SoundDtdPlayer;
-  PyObject *__pyx_type_7cyfaust_4play_SoundPositionManager;
+  PyObject *__pyx_type_7cyfaust_6player_SoundBasePlayer;
+  PyObject *__pyx_type_7cyfaust_6player_SoundMemoryPlayer;
+  PyObject *__pyx_type_7cyfaust_6player_SoundDtdPlayer;
+  PyObject *__pyx_type_7cyfaust_6player_SoundPositionManager;
   PyObject *__pyx_type___pyx_array;
   PyObject *__pyx_type___pyx_MemviewEnum;
   PyObject *__pyx_type___pyx_memoryview;
   PyObject *__pyx_type___pyx_memoryviewslice;
-  PyTypeObject *__pyx_ptype_7cyfaust_4play_SoundBasePlayer;
-  PyTypeObject *__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer;
-  PyTypeObject *__pyx_ptype_7cyfaust_4play_SoundDtdPlayer;
-  PyTypeObject *__pyx_ptype_7cyfaust_4play_SoundPositionManager;
+  PyTypeObject *__pyx_ptype_7cyfaust_6player_SoundBasePlayer;
+  PyTypeObject *__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer;
+  PyTypeObject *__pyx_ptype_7cyfaust_6player_SoundDtdPlayer;
+  PyTypeObject *__pyx_ptype_7cyfaust_6player_SoundPositionManager;
   PyTypeObject *__pyx_array_type;
   PyTypeObject *__pyx_MemviewEnum_type;
   PyTypeObject *__pyx_memoryview_type;
@@ -3530,7 +3528,7 @@ static __pyx_mstatetype * const __pyx_mstate_global = &__pyx_mstate_global_stati
 #define __pyx_n_u_create_dtd_player __pyx_string_tab[86]
 #define __pyx_n_u_create_memory_player __pyx_string_tab[87]
 #define __pyx_n_u_create_position_manager __pyx_string_tab[88]
-#define __pyx_n_u_cyfaust_play __pyx_string_tab[89]
+#define __pyx_n_u_cyfaust_player __pyx_string_tab[89]
 #define __pyx_n_u_dict __pyx_string_tab[90]
 #define __pyx_kp_u_disable __pyx_string_tab[91]
 #define __pyx_n_u_dtype_is_object __pyx_string_tab[92]
@@ -3606,7 +3604,7 @@ static __pyx_mstatetype * const __pyx_mstate_global = &__pyx_mstate_global_stati
 #define __pyx_n_u_shape __pyx_string_tab[162]
 #define __pyx_n_u_size __pyx_string_tab[163]
 #define __pyx_n_u_spec __pyx_string_tab[164]
-#define __pyx_kp_u_src_cyfaust_play_pyx __pyx_string_tab[165]
+#define __pyx_kp_u_src_cyfaust_player_pyx __pyx_string_tab[165]
 #define __pyx_n_u_start __pyx_string_tab[166]
 #define __pyx_n_u_step __pyx_string_tab[167]
 #define __pyx_n_u_stop __pyx_string_tab[168]
@@ -3643,14 +3641,14 @@ static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
   __Pyx_State_RemoveModule(NULL);
   #endif
   Py_CLEAR(clear_module_state->__pyx_ptype_7cyfaust_6common_ParamArray);
-  Py_CLEAR(clear_module_state->__pyx_ptype_7cyfaust_4play_SoundBasePlayer);
-  Py_CLEAR(clear_module_state->__pyx_type_7cyfaust_4play_SoundBasePlayer);
-  Py_CLEAR(clear_module_state->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer);
-  Py_CLEAR(clear_module_state->__pyx_type_7cyfaust_4play_SoundMemoryPlayer);
-  Py_CLEAR(clear_module_state->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer);
-  Py_CLEAR(clear_module_state->__pyx_type_7cyfaust_4play_SoundDtdPlayer);
-  Py_CLEAR(clear_module_state->__pyx_ptype_7cyfaust_4play_SoundPositionManager);
-  Py_CLEAR(clear_module_state->__pyx_type_7cyfaust_4play_SoundPositionManager);
+  Py_CLEAR(clear_module_state->__pyx_ptype_7cyfaust_6player_SoundBasePlayer);
+  Py_CLEAR(clear_module_state->__pyx_type_7cyfaust_6player_SoundBasePlayer);
+  Py_CLEAR(clear_module_state->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer);
+  Py_CLEAR(clear_module_state->__pyx_type_7cyfaust_6player_SoundMemoryPlayer);
+  Py_CLEAR(clear_module_state->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer);
+  Py_CLEAR(clear_module_state->__pyx_type_7cyfaust_6player_SoundDtdPlayer);
+  Py_CLEAR(clear_module_state->__pyx_ptype_7cyfaust_6player_SoundPositionManager);
+  Py_CLEAR(clear_module_state->__pyx_type_7cyfaust_6player_SoundPositionManager);
   Py_CLEAR(clear_module_state->__pyx_array_type);
   Py_CLEAR(clear_module_state->__pyx_type___pyx_array);
   Py_CLEAR(clear_module_state->__pyx_MemviewEnum_type);
@@ -3690,14 +3688,14 @@ static CYTHON_SMALL_CODE int __pyx_m_traverse(PyObject *m, visitproc visit, void
   Py_VISIT(traverse_module_state->__pyx_FusedFunctionType);
   #endif
   Py_VISIT(traverse_module_state->__pyx_ptype_7cyfaust_6common_ParamArray);
-  Py_VISIT(traverse_module_state->__pyx_ptype_7cyfaust_4play_SoundBasePlayer);
-  Py_VISIT(traverse_module_state->__pyx_type_7cyfaust_4play_SoundBasePlayer);
-  Py_VISIT(traverse_module_state->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer);
-  Py_VISIT(traverse_module_state->__pyx_type_7cyfaust_4play_SoundMemoryPlayer);
-  Py_VISIT(traverse_module_state->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer);
-  Py_VISIT(traverse_module_state->__pyx_type_7cyfaust_4play_SoundDtdPlayer);
-  Py_VISIT(traverse_module_state->__pyx_ptype_7cyfaust_4play_SoundPositionManager);
-  Py_VISIT(traverse_module_state->__pyx_type_7cyfaust_4play_SoundPositionManager);
+  Py_VISIT(traverse_module_state->__pyx_ptype_7cyfaust_6player_SoundBasePlayer);
+  Py_VISIT(traverse_module_state->__pyx_type_7cyfaust_6player_SoundBasePlayer);
+  Py_VISIT(traverse_module_state->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer);
+  Py_VISIT(traverse_module_state->__pyx_type_7cyfaust_6player_SoundMemoryPlayer);
+  Py_VISIT(traverse_module_state->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer);
+  Py_VISIT(traverse_module_state->__pyx_type_7cyfaust_6player_SoundDtdPlayer);
+  Py_VISIT(traverse_module_state->__pyx_ptype_7cyfaust_6player_SoundPositionManager);
+  Py_VISIT(traverse_module_state->__pyx_type_7cyfaust_6player_SoundPositionManager);
   Py_VISIT(traverse_module_state->__pyx_array_type);
   Py_VISIT(traverse_module_state->__pyx_type___pyx_array);
   Py_VISIT(traverse_module_state->__pyx_MemviewEnum_type);
@@ -17152,7 +17150,7 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":38
+/* "cyfaust/player.pyx":23
  *     cdef object _filename
  * 
  *     def __cinit__(self, filename: str):             # <<<<<<<<<<<<<<
@@ -17161,8 +17159,8 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
 */
 
 /* Python wrapper */
-static int __pyx_pw_7cyfaust_4play_15SoundBasePlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_7cyfaust_4play_15SoundBasePlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_7cyfaust_6player_15SoundBasePlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_7cyfaust_6player_15SoundBasePlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_filename = 0;
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
@@ -17182,44 +17180,44 @@ static int __pyx_pw_7cyfaust_4play_15SoundBasePlayer_1__cinit__(PyObject *__pyx_
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_filename,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_VARARGS(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 38, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 23, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_VARARGS(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 38, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 23, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "__cinit__", 0) < 0) __PYX_ERR(0, 38, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "__cinit__", 0) < 0) __PYX_ERR(0, 23, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, i); __PYX_ERR(0, 38, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, i); __PYX_ERR(0, 23, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_VARARGS(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 38, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 23, __pyx_L3_error)
     }
     __pyx_v_filename = ((PyObject*)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 38, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 23, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 38, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self), __pyx_v_filename);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer___cinit__(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self), __pyx_v_filename);
 
   /* function exit code */
   goto __pyx_L0;
@@ -17238,7 +17236,7 @@ static int __pyx_pw_7cyfaust_4play_15SoundBasePlayer_1__cinit__(PyObject *__pyx_
   return __pyx_r;
 }
 
-static int __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_filename) {
+static int __pyx_pf_7cyfaust_6player_15SoundBasePlayer___cinit__(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_filename) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -17253,7 +17251,7 @@ static int __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "cyfaust/play.pyx":39
+  /* "cyfaust/player.pyx":24
  * 
  *     def __cinit__(self, filename: str):
  *         self._filename = filename             # <<<<<<<<<<<<<<
@@ -17266,26 +17264,26 @@ static int __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(struct __pyx_obj_
   __Pyx_DECREF(__pyx_v_self->_filename);
   __pyx_v_self->_filename = __pyx_v_filename;
 
-  /* "cyfaust/play.pyx":40
+  /* "cyfaust/player.pyx":25
  *     def __cinit__(self, filename: str):
  *         self._filename = filename
  *         self._player = new fp.sound_base_player(filename.encode('utf-8'))             # <<<<<<<<<<<<<<
  *         if self._player == NULL:
  *             raise MemoryError("Failed to create sound_base_player")
 */
-  __pyx_t_1 = PyUnicode_AsUTF8String(__pyx_v_filename); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_1 = PyUnicode_AsUTF8String(__pyx_v_filename); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 25, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 25, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   try {
     __pyx_t_3 = new sound_base_player(__pyx_t_2);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 40, __pyx_L1_error)
+    __PYX_ERR(0, 25, __pyx_L1_error)
   }
   __pyx_v_self->_player = __pyx_t_3;
 
-  /* "cyfaust/play.pyx":41
+  /* "cyfaust/player.pyx":26
  *         self._filename = filename
  *         self._player = new fp.sound_base_player(filename.encode('utf-8'))
  *         if self._player == NULL:             # <<<<<<<<<<<<<<
@@ -17295,7 +17293,7 @@ static int __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(struct __pyx_obj_
   __pyx_t_4 = (__pyx_v_self->_player == NULL);
   if (unlikely(__pyx_t_4)) {
 
-    /* "cyfaust/play.pyx":42
+    /* "cyfaust/player.pyx":27
  *         self._player = new fp.sound_base_player(filename.encode('utf-8'))
  *         if self._player == NULL:
  *             raise MemoryError("Failed to create sound_base_player")             # <<<<<<<<<<<<<<
@@ -17311,14 +17309,14 @@ static int __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(struct __pyx_obj_
       __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_6, __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 42, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 42, __pyx_L1_error)
+    __PYX_ERR(0, 27, __pyx_L1_error)
 
-    /* "cyfaust/play.pyx":41
+    /* "cyfaust/player.pyx":26
  *         self._filename = filename
  *         self._player = new fp.sound_base_player(filename.encode('utf-8'))
  *         if self._player == NULL:             # <<<<<<<<<<<<<<
@@ -17327,7 +17325,7 @@ static int __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(struct __pyx_obj_
 */
   }
 
-  /* "cyfaust/play.pyx":38
+  /* "cyfaust/player.pyx":23
  *     cdef object _filename
  * 
  *     def __cinit__(self, filename: str):             # <<<<<<<<<<<<<<
@@ -17342,14 +17340,14 @@ static int __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(struct __pyx_obj_
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":44
+/* "cyfaust/player.pyx":29
  *             raise MemoryError("Failed to create sound_base_player")
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -17358,22 +17356,22 @@ static int __pyx_pf_7cyfaust_4play_15SoundBasePlayer___cinit__(struct __pyx_obj_
 */
 
 /* Python wrapper */
-static void __pyx_pw_7cyfaust_4play_15SoundBasePlayer_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_7cyfaust_4play_15SoundBasePlayer_3__dealloc__(PyObject *__pyx_v_self) {
+static void __pyx_pw_7cyfaust_6player_15SoundBasePlayer_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
+static void __pyx_pw_7cyfaust_6player_15SoundBasePlayer_3__dealloc__(PyObject *__pyx_v_self) {
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
   __pyx_kwvalues = __Pyx_KwValues_VARARGS(__pyx_args, __pyx_nargs);
-  __pyx_pf_7cyfaust_4play_15SoundBasePlayer_2__dealloc__(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self));
+  __pyx_pf_7cyfaust_6player_15SoundBasePlayer_2__dealloc__(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
 }
 
-static void __pyx_pf_7cyfaust_4play_15SoundBasePlayer_2__dealloc__(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self) {
+static void __pyx_pf_7cyfaust_6player_15SoundBasePlayer_2__dealloc__(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self) {
   int __pyx_t_1;
 
-  /* "cyfaust/play.pyx":45
+  /* "cyfaust/player.pyx":30
  * 
  *     def __dealloc__(self):
  *         if self._player != NULL:             # <<<<<<<<<<<<<<
@@ -17383,7 +17381,7 @@ static void __pyx_pf_7cyfaust_4play_15SoundBasePlayer_2__dealloc__(struct __pyx_
   __pyx_t_1 = (__pyx_v_self->_player != NULL);
   if (__pyx_t_1) {
 
-    /* "cyfaust/play.pyx":46
+    /* "cyfaust/player.pyx":31
  *     def __dealloc__(self):
  *         if self._player != NULL:
  *             del self._player             # <<<<<<<<<<<<<<
@@ -17392,7 +17390,7 @@ static void __pyx_pf_7cyfaust_4play_15SoundBasePlayer_2__dealloc__(struct __pyx_
 */
     delete __pyx_v_self->_player;
 
-    /* "cyfaust/play.pyx":45
+    /* "cyfaust/player.pyx":30
  * 
  *     def __dealloc__(self):
  *         if self._player != NULL:             # <<<<<<<<<<<<<<
@@ -17401,7 +17399,7 @@ static void __pyx_pf_7cyfaust_4play_15SoundBasePlayer_2__dealloc__(struct __pyx_
 */
   }
 
-  /* "cyfaust/play.pyx":44
+  /* "cyfaust/player.pyx":29
  *             raise MemoryError("Failed to create sound_base_player")
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -17412,7 +17410,7 @@ static void __pyx_pf_7cyfaust_4play_15SoundBasePlayer_2__dealloc__(struct __pyx_
   /* function exit code */
 }
 
-/* "cyfaust/play.pyx":48
+/* "cyfaust/player.pyx":33
  *             del self._player
  * 
  *     def get_num_inputs(self) -> int:             # <<<<<<<<<<<<<<
@@ -17421,16 +17419,16 @@ static void __pyx_pf_7cyfaust_4play_15SoundBasePlayer_2__dealloc__(struct __pyx_
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_5get_num_inputs(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_5get_num_inputs(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs, "Get number of input channels.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_5get_num_inputs = {"get_num_inputs", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_5get_num_inputs, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_5get_num_inputs(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_15SoundBasePlayer_4get_num_inputs, "Get number of input channels.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_5get_num_inputs = {"get_num_inputs", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_5get_num_inputs, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_4get_num_inputs};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_5get_num_inputs(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -17456,14 +17454,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return NULL;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("get_num_inputs", __pyx_kwds); return NULL;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_4get_num_inputs(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_4get_num_inputs(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -17472,7 +17470,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_num_inputs", 0);
 
-  /* "cyfaust/play.pyx":50
+  /* "cyfaust/player.pyx":35
  *     def get_num_inputs(self) -> int:
  *         """Get number of input channels."""
  *         return self._player.getNumInputs()             # <<<<<<<<<<<<<<
@@ -17480,14 +17478,14 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs(struc
  *     def get_num_outputs(self) -> int:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyLong_From_int(__pyx_v_self->_player->getNumInputs()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyLong_From_int(__pyx_v_self->_player->getNumInputs()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(PyLong_CheckExact(__pyx_t_1)) || __Pyx_RaiseUnexpectedTypeError("int", __pyx_t_1))) __PYX_ERR(0, 50, __pyx_L1_error)
+  if (!(likely(PyLong_CheckExact(__pyx_t_1)) || __Pyx_RaiseUnexpectedTypeError("int", __pyx_t_1))) __PYX_ERR(0, 35, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cyfaust/play.pyx":48
+  /* "cyfaust/player.pyx":33
  *             del self._player
  * 
  *     def get_num_inputs(self) -> int:             # <<<<<<<<<<<<<<
@@ -17498,7 +17496,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs(struc
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.get_num_inputs", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.get_num_inputs", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -17506,7 +17504,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs(struc
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":52
+/* "cyfaust/player.pyx":37
  *         return self._player.getNumInputs()
  * 
  *     def get_num_outputs(self) -> int:             # <<<<<<<<<<<<<<
@@ -17515,16 +17513,16 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs(struc
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_7get_num_outputs(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_7get_num_outputs(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs, "Get number of output channels.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_7get_num_outputs = {"get_num_outputs", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_7get_num_outputs, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_7get_num_outputs(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_15SoundBasePlayer_6get_num_outputs, "Get number of output channels.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_7get_num_outputs = {"get_num_outputs", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_7get_num_outputs, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_6get_num_outputs};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_7get_num_outputs(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -17550,14 +17548,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return NULL;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("get_num_outputs", __pyx_kwds); return NULL;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_6get_num_outputs(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_6get_num_outputs(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -17566,7 +17564,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_num_outputs", 0);
 
-  /* "cyfaust/play.pyx":54
+  /* "cyfaust/player.pyx":39
  *     def get_num_outputs(self) -> int:
  *         """Get number of output channels."""
  *         return self._player.getNumOutputs()             # <<<<<<<<<<<<<<
@@ -17574,14 +17572,14 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs(stru
  *     def get_sample_rate(self) -> int:
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyLong_From_int(__pyx_v_self->_player->getNumOutputs()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyLong_From_int(__pyx_v_self->_player->getNumOutputs()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(PyLong_CheckExact(__pyx_t_1)) || __Pyx_RaiseUnexpectedTypeError("int", __pyx_t_1))) __PYX_ERR(0, 54, __pyx_L1_error)
+  if (!(likely(PyLong_CheckExact(__pyx_t_1)) || __Pyx_RaiseUnexpectedTypeError("int", __pyx_t_1))) __PYX_ERR(0, 39, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cyfaust/play.pyx":52
+  /* "cyfaust/player.pyx":37
  *         return self._player.getNumInputs()
  * 
  *     def get_num_outputs(self) -> int:             # <<<<<<<<<<<<<<
@@ -17592,7 +17590,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs(stru
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.get_num_outputs", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.get_num_outputs", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -17600,7 +17598,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs(stru
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":56
+/* "cyfaust/player.pyx":41
  *         return self._player.getNumOutputs()
  * 
  *     def get_sample_rate(self) -> int:             # <<<<<<<<<<<<<<
@@ -17609,16 +17607,16 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs(stru
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_9get_sample_rate(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_9get_sample_rate(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate, "Get sample rate.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_9get_sample_rate = {"get_sample_rate", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_9get_sample_rate, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_9get_sample_rate(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_15SoundBasePlayer_8get_sample_rate, "Get sample rate.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_9get_sample_rate = {"get_sample_rate", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_9get_sample_rate, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_8get_sample_rate};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_9get_sample_rate(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -17644,14 +17642,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return NULL;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("get_sample_rate", __pyx_kwds); return NULL;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_8get_sample_rate(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_8get_sample_rate(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -17660,7 +17658,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_sample_rate", 0);
 
-  /* "cyfaust/play.pyx":58
+  /* "cyfaust/player.pyx":43
  *     def get_sample_rate(self) -> int:
  *         """Get sample rate."""
  *         return self._player.getSampleRate()             # <<<<<<<<<<<<<<
@@ -17668,14 +17666,14 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate(stru
  *     def init(self, sample_rate: int):
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyLong_From_int(__pyx_v_self->_player->getSampleRate()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 58, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyLong_From_int(__pyx_v_self->_player->getSampleRate()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(PyLong_CheckExact(__pyx_t_1)) || __Pyx_RaiseUnexpectedTypeError("int", __pyx_t_1))) __PYX_ERR(0, 58, __pyx_L1_error)
+  if (!(likely(PyLong_CheckExact(__pyx_t_1)) || __Pyx_RaiseUnexpectedTypeError("int", __pyx_t_1))) __PYX_ERR(0, 43, __pyx_L1_error)
   __pyx_r = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cyfaust/play.pyx":56
+  /* "cyfaust/player.pyx":41
  *         return self._player.getNumOutputs()
  * 
  *     def get_sample_rate(self) -> int:             # <<<<<<<<<<<<<<
@@ -17686,7 +17684,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate(stru
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.get_sample_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.get_sample_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -17694,7 +17692,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate(stru
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":60
+/* "cyfaust/player.pyx":45
  *         return self._player.getSampleRate()
  * 
  *     def init(self, sample_rate: int):             # <<<<<<<<<<<<<<
@@ -17703,16 +17701,16 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate(stru
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_11init(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_11init(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_15SoundBasePlayer_10init, "Initialize the player with given sample rate.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_11init = {"init", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_11init, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_10init};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_11init(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_15SoundBasePlayer_10init, "Initialize the player with given sample rate.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_11init = {"init", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_11init, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_10init};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_11init(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -17742,44 +17740,44 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_sample_rate,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 60, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 45, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 60, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 45, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "init", 0) < 0) __PYX_ERR(0, 60, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "init", 0) < 0) __PYX_ERR(0, 45, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("init", 1, 1, 1, i); __PYX_ERR(0, 60, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("init", 1, 1, 1, i); __PYX_ERR(0, 45, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 60, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 45, __pyx_L3_error)
     }
     __pyx_v_sample_rate = ((PyObject*)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("init", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 60, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("init", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 45, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.init", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.init", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_sample_rate), (&PyLong_Type), 0, "sample_rate", 2))) __PYX_ERR(0, 60, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_10init(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self), __pyx_v_sample_rate);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_sample_rate), (&PyLong_Type), 0, "sample_rate", 2))) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_10init(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self), __pyx_v_sample_rate);
 
   /* function exit code */
   goto __pyx_L0;
@@ -17798,7 +17796,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_10init(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_10init(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -17807,17 +17805,17 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_10init(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("init", 0);
 
-  /* "cyfaust/play.pyx":62
+  /* "cyfaust/player.pyx":47
  *     def init(self, sample_rate: int):
  *         """Initialize the player with given sample rate."""
  *         self._player.init(sample_rate)             # <<<<<<<<<<<<<<
  * 
  *     def instance_init(self, sample_rate: int):
 */
-  __pyx_t_1 = __Pyx_PyLong_As_int(__pyx_v_sample_rate); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyLong_As_int(__pyx_v_sample_rate); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 47, __pyx_L1_error)
   __pyx_v_self->_player->init(__pyx_t_1);
 
-  /* "cyfaust/play.pyx":60
+  /* "cyfaust/player.pyx":45
  *         return self._player.getSampleRate()
  * 
  *     def init(self, sample_rate: int):             # <<<<<<<<<<<<<<
@@ -17829,7 +17827,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_10init(struct __pyx_o
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.init", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.init", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -17837,7 +17835,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_10init(struct __pyx_o
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":64
+/* "cyfaust/player.pyx":49
  *         self._player.init(sample_rate)
  * 
  *     def instance_init(self, sample_rate: int):             # <<<<<<<<<<<<<<
@@ -17846,16 +17844,16 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_10init(struct __pyx_o
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_13instance_init(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_13instance_init(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_15SoundBasePlayer_12instance_init, "Initialize the player instance with given sample rate.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_13instance_init = {"instance_init", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_13instance_init, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_12instance_init};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_13instance_init(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_15SoundBasePlayer_12instance_init, "Initialize the player instance with given sample rate.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_13instance_init = {"instance_init", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_13instance_init, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_12instance_init};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_13instance_init(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -17885,44 +17883,44 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_sample_rate,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 64, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 49, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 64, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 49, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "instance_init", 0) < 0) __PYX_ERR(0, 64, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "instance_init", 0) < 0) __PYX_ERR(0, 49, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("instance_init", 1, 1, 1, i); __PYX_ERR(0, 64, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("instance_init", 1, 1, 1, i); __PYX_ERR(0, 49, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 64, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 49, __pyx_L3_error)
     }
     __pyx_v_sample_rate = ((PyObject*)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("instance_init", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 64, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("instance_init", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 49, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.instance_init", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.instance_init", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_sample_rate), (&PyLong_Type), 0, "sample_rate", 2))) __PYX_ERR(0, 64, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_12instance_init(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self), __pyx_v_sample_rate);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_sample_rate), (&PyLong_Type), 0, "sample_rate", 2))) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_12instance_init(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self), __pyx_v_sample_rate);
 
   /* function exit code */
   goto __pyx_L0;
@@ -17941,7 +17939,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_12instance_init(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_12instance_init(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -17950,17 +17948,17 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_12instance_init(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("instance_init", 0);
 
-  /* "cyfaust/play.pyx":66
+  /* "cyfaust/player.pyx":51
  *     def instance_init(self, sample_rate: int):
  *         """Initialize the player instance with given sample rate."""
  *         self._player.instanceInit(sample_rate)             # <<<<<<<<<<<<<<
  * 
  *     def instance_constants(self, sample_rate: int):
 */
-  __pyx_t_1 = __Pyx_PyLong_As_int(__pyx_v_sample_rate); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyLong_As_int(__pyx_v_sample_rate); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
   __pyx_v_self->_player->instanceInit(__pyx_t_1);
 
-  /* "cyfaust/play.pyx":64
+  /* "cyfaust/player.pyx":49
  *         self._player.init(sample_rate)
  * 
  *     def instance_init(self, sample_rate: int):             # <<<<<<<<<<<<<<
@@ -17972,7 +17970,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_12instance_init(struc
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.instance_init", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.instance_init", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -17980,7 +17978,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_12instance_init(struc
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":68
+/* "cyfaust/player.pyx":53
  *         self._player.instanceInit(sample_rate)
  * 
  *     def instance_constants(self, sample_rate: int):             # <<<<<<<<<<<<<<
@@ -17989,16 +17987,16 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_12instance_init(struc
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_15instance_constants(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_15instance_constants(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_15SoundBasePlayer_14instance_constants, "Set instance constants for given sample rate.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_15instance_constants = {"instance_constants", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_15instance_constants, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_14instance_constants};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_15instance_constants(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_15SoundBasePlayer_14instance_constants, "Set instance constants for given sample rate.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_15instance_constants = {"instance_constants", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_15instance_constants, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_14instance_constants};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_15instance_constants(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18028,44 +18026,44 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_sample_rate,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 68, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 53, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 68, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 53, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "instance_constants", 0) < 0) __PYX_ERR(0, 68, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "instance_constants", 0) < 0) __PYX_ERR(0, 53, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("instance_constants", 1, 1, 1, i); __PYX_ERR(0, 68, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("instance_constants", 1, 1, 1, i); __PYX_ERR(0, 53, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 68, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 53, __pyx_L3_error)
     }
     __pyx_v_sample_rate = ((PyObject*)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("instance_constants", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 68, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("instance_constants", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 53, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.instance_constants", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.instance_constants", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_sample_rate), (&PyLong_Type), 0, "sample_rate", 2))) __PYX_ERR(0, 68, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_14instance_constants(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self), __pyx_v_sample_rate);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_sample_rate), (&PyLong_Type), 0, "sample_rate", 2))) __PYX_ERR(0, 53, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_14instance_constants(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self), __pyx_v_sample_rate);
 
   /* function exit code */
   goto __pyx_L0;
@@ -18084,7 +18082,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_14instance_constants(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_14instance_constants(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_sample_rate) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -18093,17 +18091,17 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_14instance_constants(
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("instance_constants", 0);
 
-  /* "cyfaust/play.pyx":70
+  /* "cyfaust/player.pyx":55
  *     def instance_constants(self, sample_rate: int):
  *         """Set instance constants for given sample rate."""
  *         self._player.instanceConstants(sample_rate)             # <<<<<<<<<<<<<<
  * 
  *     def instance_reset_user_interface(self):
 */
-  __pyx_t_1 = __Pyx_PyLong_As_int(__pyx_v_sample_rate); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyLong_As_int(__pyx_v_sample_rate); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L1_error)
   __pyx_v_self->_player->instanceConstants(__pyx_t_1);
 
-  /* "cyfaust/play.pyx":68
+  /* "cyfaust/player.pyx":53
  *         self._player.instanceInit(sample_rate)
  * 
  *     def instance_constants(self, sample_rate: int):             # <<<<<<<<<<<<<<
@@ -18115,7 +18113,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_14instance_constants(
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.instance_constants", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.instance_constants", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -18123,7 +18121,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_14instance_constants(
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":72
+/* "cyfaust/player.pyx":57
  *         self._player.instanceConstants(sample_rate)
  * 
  *     def instance_reset_user_interface(self):             # <<<<<<<<<<<<<<
@@ -18132,16 +18130,16 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_14instance_constants(
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_17instance_reset_user_interface(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_17instance_reset_user_interface(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_15SoundBasePlayer_16instance_reset_user_interface, "Reset user interface to default values.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_17instance_reset_user_interface = {"instance_reset_user_interface", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_17instance_reset_user_interface, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_16instance_reset_user_interface};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_17instance_reset_user_interface(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_15SoundBasePlayer_16instance_reset_user_interface, "Reset user interface to default values.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_17instance_reset_user_interface = {"instance_reset_user_interface", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_17instance_reset_user_interface, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_16instance_reset_user_interface};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_17instance_reset_user_interface(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18167,19 +18165,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return NULL;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("instance_reset_user_interface", __pyx_kwds); return NULL;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_16instance_reset_user_interface(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_16instance_reset_user_interface(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_16instance_reset_user_interface(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_16instance_reset_user_interface(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("instance_reset_user_interface", 0);
 
-  /* "cyfaust/play.pyx":74
+  /* "cyfaust/player.pyx":59
  *     def instance_reset_user_interface(self):
  *         """Reset user interface to default values."""
  *         self._player.instanceResetUserInterface()             # <<<<<<<<<<<<<<
@@ -18188,7 +18186,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_16instance_reset_user
 */
   __pyx_v_self->_player->instanceResetUserInterface();
 
-  /* "cyfaust/play.pyx":72
+  /* "cyfaust/player.pyx":57
  *         self._player.instanceConstants(sample_rate)
  * 
  *     def instance_reset_user_interface(self):             # <<<<<<<<<<<<<<
@@ -18203,7 +18201,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_16instance_reset_user
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":76
+/* "cyfaust/player.pyx":61
  *         self._player.instanceResetUserInterface()
  * 
  *     def instance_clear(self):             # <<<<<<<<<<<<<<
@@ -18212,16 +18210,16 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_16instance_reset_user
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_19instance_clear(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_19instance_clear(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_15SoundBasePlayer_18instance_clear, "Clear instance state.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_19instance_clear = {"instance_clear", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_19instance_clear, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_18instance_clear};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_19instance_clear(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_15SoundBasePlayer_18instance_clear, "Clear instance state.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_19instance_clear = {"instance_clear", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_19instance_clear, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_18instance_clear};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_19instance_clear(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18247,19 +18245,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return NULL;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("instance_clear", __pyx_kwds); return NULL;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_18instance_clear(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_18instance_clear(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_18instance_clear(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_18instance_clear(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("instance_clear", 0);
 
-  /* "cyfaust/play.pyx":78
+  /* "cyfaust/player.pyx":63
  *     def instance_clear(self):
  *         """Clear instance state."""
  *         self._player.instanceClear()             # <<<<<<<<<<<<<<
@@ -18268,7 +18266,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_18instance_clear(stru
 */
   __pyx_v_self->_player->instanceClear();
 
-  /* "cyfaust/play.pyx":76
+  /* "cyfaust/player.pyx":61
  *         self._player.instanceResetUserInterface()
  * 
  *     def instance_clear(self):             # <<<<<<<<<<<<<<
@@ -18283,7 +18281,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_18instance_clear(stru
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":80
+/* "cyfaust/player.pyx":65
  *         self._player.instanceClear()
  * 
  *     @property             # <<<<<<<<<<<<<<
@@ -18292,26 +18290,26 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_18instance_clear(stru
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_8filename_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_8filename_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_8filename_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_8filename_1__get__(PyObject *__pyx_v_self) {
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
   __pyx_kwvalues = __Pyx_KwValues_VARARGS(__pyx_args, __pyx_nargs);
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_8filename___get__(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_8filename___get__(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8filename___get__(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_8filename___get__(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cyfaust/play.pyx":83
+  /* "cyfaust/player.pyx":68
  *     def filename(self) -> str:
  *         """Get the filename of the sound file."""
  *         return self._filename             # <<<<<<<<<<<<<<
@@ -18323,7 +18321,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8filename___get__(str
   __pyx_r = __pyx_v_self->_filename;
   goto __pyx_L0;
 
-  /* "cyfaust/play.pyx":80
+  /* "cyfaust/player.pyx":65
  *         self._player.instanceClear()
  * 
  *     @property             # <<<<<<<<<<<<<<
@@ -18338,7 +18336,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8filename___get__(str
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":85
+/* "cyfaust/player.pyx":70
  *         return self._filename
  * 
  *     def compute(self, count: int, inputs, outputs):             # <<<<<<<<<<<<<<
@@ -18347,16 +18345,16 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_8filename___get__(str
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_21compute(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_21compute(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_15SoundBasePlayer_20compute, "Compute audio output for given number of frames.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_21compute = {"compute", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_21compute, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_20compute};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_21compute(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_15SoundBasePlayer_20compute, "Compute audio output for given number of frames.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_21compute = {"compute", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_21compute, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_20compute};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_21compute(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -18388,38 +18386,38 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_count,&__pyx_mstate_global->__pyx_n_u_inputs,&__pyx_mstate_global->__pyx_n_u_outputs,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 85, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 70, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  3:
         values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 85, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 70, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 85, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 70, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 85, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 70, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "compute", 0) < 0) __PYX_ERR(0, 85, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "compute", 0) < 0) __PYX_ERR(0, 70, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 3; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, i); __PYX_ERR(0, 85, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, i); __PYX_ERR(0, 70, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 3)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 85, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 70, __pyx_L3_error)
       values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 85, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 70, __pyx_L3_error)
       values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 85, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 70, __pyx_L3_error)
     }
     __pyx_v_count = ((PyObject*)values[0]);
     __pyx_v_inputs = values[1];
@@ -18427,19 +18425,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, __pyx_nargs); __PYX_ERR(0, 85, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, __pyx_nargs); __PYX_ERR(0, 70, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_count), (&PyLong_Type), 0, "count", 2))) __PYX_ERR(0, 85, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self), __pyx_v_count, __pyx_v_inputs, __pyx_v_outputs);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_count), (&PyLong_Type), 0, "count", 2))) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_20compute(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self), __pyx_v_count, __pyx_v_inputs, __pyx_v_outputs);
 
   /* function exit code */
   goto __pyx_L0;
@@ -18458,7 +18456,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_count, CYTHON_UNUSED PyObject *__pyx_v_inputs, PyObject *__pyx_v_outputs) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_20compute(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, PyObject *__pyx_v_count, CYTHON_UNUSED PyObject *__pyx_v_inputs, PyObject *__pyx_v_outputs) {
   int __pyx_v_num_inputs;
   int __pyx_v_num_outputs;
   FAUSTFLOAT **__pyx_v_c_inputs;
@@ -18491,7 +18489,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("compute", 0);
 
-  /* "cyfaust/play.pyx":87
+  /* "cyfaust/player.pyx":72
  *     def compute(self, count: int, inputs, outputs):
  *         """Compute audio output for given number of frames."""
  *         cdef int num_inputs = self._player.getNumInputs()             # <<<<<<<<<<<<<<
@@ -18500,7 +18498,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
   __pyx_v_num_inputs = __pyx_v_self->_player->getNumInputs();
 
-  /* "cyfaust/play.pyx":88
+  /* "cyfaust/player.pyx":73
  *         """Compute audio output for given number of frames."""
  *         cdef int num_inputs = self._player.getNumInputs()
  *         cdef int num_outputs = self._player.getNumOutputs()             # <<<<<<<<<<<<<<
@@ -18509,7 +18507,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
   __pyx_v_num_outputs = __pyx_v_self->_player->getNumOutputs();
 
-  /* "cyfaust/play.pyx":91
+  /* "cyfaust/player.pyx":76
  * 
  *         # Allocate input and output arrays
  *         cdef fg.FAUSTFLOAT** c_inputs = NULL             # <<<<<<<<<<<<<<
@@ -18518,7 +18516,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
   __pyx_v_c_inputs = NULL;
 
-  /* "cyfaust/play.pyx":92
+  /* "cyfaust/player.pyx":77
  *         # Allocate input and output arrays
  *         cdef fg.FAUSTFLOAT** c_inputs = NULL
  *         cdef fg.FAUSTFLOAT** c_outputs = NULL             # <<<<<<<<<<<<<<
@@ -18527,7 +18525,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
   __pyx_v_c_outputs = NULL;
 
-  /* "cyfaust/play.pyx":95
+  /* "cyfaust/player.pyx":80
  *         cdef fg.FAUSTFLOAT[:] output_view
  * 
  *         if num_inputs > 0:             # <<<<<<<<<<<<<<
@@ -18537,7 +18535,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
   __pyx_t_1 = (__pyx_v_num_inputs > 0);
   if (__pyx_t_1) {
 
-    /* "cyfaust/play.pyx":96
+    /* "cyfaust/player.pyx":81
  * 
  *         if num_inputs > 0:
  *             c_inputs = <fg.FAUSTFLOAT**>malloc(num_inputs * sizeof(fg.FAUSTFLOAT*))             # <<<<<<<<<<<<<<
@@ -18546,7 +18544,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
     __pyx_v_c_inputs = ((FAUSTFLOAT **)malloc((__pyx_v_num_inputs * (sizeof(FAUSTFLOAT *)))));
 
-    /* "cyfaust/play.pyx":97
+    /* "cyfaust/player.pyx":82
  *         if num_inputs > 0:
  *             c_inputs = <fg.FAUSTFLOAT**>malloc(num_inputs * sizeof(fg.FAUSTFLOAT*))
  *             if c_inputs == NULL:             # <<<<<<<<<<<<<<
@@ -18556,7 +18554,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
     __pyx_t_1 = (__pyx_v_c_inputs == NULL);
     if (unlikely(__pyx_t_1)) {
 
-      /* "cyfaust/play.pyx":98
+      /* "cyfaust/player.pyx":83
  *             c_inputs = <fg.FAUSTFLOAT**>malloc(num_inputs * sizeof(fg.FAUSTFLOAT*))
  *             if c_inputs == NULL:
  *                 raise MemoryError("Failed to allocate input arrays")             # <<<<<<<<<<<<<<
@@ -18572,14 +18570,14 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
         __pyx_t_2 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 98, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 83, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
       }
       __Pyx_Raise(__pyx_t_2, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __PYX_ERR(0, 98, __pyx_L1_error)
+      __PYX_ERR(0, 83, __pyx_L1_error)
 
-      /* "cyfaust/play.pyx":97
+      /* "cyfaust/player.pyx":82
  *         if num_inputs > 0:
  *             c_inputs = <fg.FAUSTFLOAT**>malloc(num_inputs * sizeof(fg.FAUSTFLOAT*))
  *             if c_inputs == NULL:             # <<<<<<<<<<<<<<
@@ -18588,7 +18586,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
     }
 
-    /* "cyfaust/play.pyx":101
+    /* "cyfaust/player.pyx":86
  * 
  *             # For sound players, inputs are typically not used (num_inputs = 0)
  *             for i in range(num_inputs):             # <<<<<<<<<<<<<<
@@ -18600,7 +18598,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_i = __pyx_t_8;
 
-      /* "cyfaust/play.pyx":102
+      /* "cyfaust/player.pyx":87
  *             # For sound players, inputs are typically not used (num_inputs = 0)
  *             for i in range(num_inputs):
  *                 c_inputs[i] = NULL             # <<<<<<<<<<<<<<
@@ -18610,7 +18608,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
       (__pyx_v_c_inputs[__pyx_v_i]) = NULL;
     }
 
-    /* "cyfaust/play.pyx":95
+    /* "cyfaust/player.pyx":80
  *         cdef fg.FAUSTFLOAT[:] output_view
  * 
  *         if num_inputs > 0:             # <<<<<<<<<<<<<<
@@ -18619,7 +18617,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
   }
 
-  /* "cyfaust/play.pyx":104
+  /* "cyfaust/player.pyx":89
  *                 c_inputs[i] = NULL
  * 
  *         if num_outputs > 0:             # <<<<<<<<<<<<<<
@@ -18629,7 +18627,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
   __pyx_t_1 = (__pyx_v_num_outputs > 0);
   if (__pyx_t_1) {
 
-    /* "cyfaust/play.pyx":105
+    /* "cyfaust/player.pyx":90
  * 
  *         if num_outputs > 0:
  *             c_outputs = <fg.FAUSTFLOAT**>malloc(num_outputs * sizeof(fg.FAUSTFLOAT*))             # <<<<<<<<<<<<<<
@@ -18638,7 +18636,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
     __pyx_v_c_outputs = ((FAUSTFLOAT **)malloc((__pyx_v_num_outputs * (sizeof(FAUSTFLOAT *)))));
 
-    /* "cyfaust/play.pyx":106
+    /* "cyfaust/player.pyx":91
  *         if num_outputs > 0:
  *             c_outputs = <fg.FAUSTFLOAT**>malloc(num_outputs * sizeof(fg.FAUSTFLOAT*))
  *             if c_outputs == NULL:             # <<<<<<<<<<<<<<
@@ -18648,7 +18646,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
     __pyx_t_1 = (__pyx_v_c_outputs == NULL);
     if (__pyx_t_1) {
 
-      /* "cyfaust/play.pyx":107
+      /* "cyfaust/player.pyx":92
  *             c_outputs = <fg.FAUSTFLOAT**>malloc(num_outputs * sizeof(fg.FAUSTFLOAT*))
  *             if c_outputs == NULL:
  *                 if c_inputs != NULL:             # <<<<<<<<<<<<<<
@@ -18658,7 +18656,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
       __pyx_t_1 = (__pyx_v_c_inputs != NULL);
       if (__pyx_t_1) {
 
-        /* "cyfaust/play.pyx":108
+        /* "cyfaust/player.pyx":93
  *             if c_outputs == NULL:
  *                 if c_inputs != NULL:
  *                     free(c_inputs)             # <<<<<<<<<<<<<<
@@ -18667,7 +18665,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
         free(__pyx_v_c_inputs);
 
-        /* "cyfaust/play.pyx":107
+        /* "cyfaust/player.pyx":92
  *             c_outputs = <fg.FAUSTFLOAT**>malloc(num_outputs * sizeof(fg.FAUSTFLOAT*))
  *             if c_outputs == NULL:
  *                 if c_inputs != NULL:             # <<<<<<<<<<<<<<
@@ -18676,7 +18674,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
       }
 
-      /* "cyfaust/play.pyx":109
+      /* "cyfaust/player.pyx":94
  *                 if c_inputs != NULL:
  *                     free(c_inputs)
  *                 raise MemoryError("Failed to allocate output arrays")             # <<<<<<<<<<<<<<
@@ -18692,14 +18690,14 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
         __pyx_t_2 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
       }
       __Pyx_Raise(__pyx_t_2, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __PYX_ERR(0, 109, __pyx_L1_error)
+      __PYX_ERR(0, 94, __pyx_L1_error)
 
-      /* "cyfaust/play.pyx":106
+      /* "cyfaust/player.pyx":91
  *         if num_outputs > 0:
  *             c_outputs = <fg.FAUSTFLOAT**>malloc(num_outputs * sizeof(fg.FAUSTFLOAT*))
  *             if c_outputs == NULL:             # <<<<<<<<<<<<<<
@@ -18708,7 +18706,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
     }
 
-    /* "cyfaust/play.pyx":112
+    /* "cyfaust/player.pyx":97
  * 
  *             # Map Python arrays to C arrays using memoryviews
  *             for i in range(num_outputs):             # <<<<<<<<<<<<<<
@@ -18720,34 +18718,34 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_i = __pyx_t_8;
 
-      /* "cyfaust/play.pyx":113
+      /* "cyfaust/player.pyx":98
  *             # Map Python arrays to C arrays using memoryviews
  *             for i in range(num_outputs):
  *                 if i < len(outputs):             # <<<<<<<<<<<<<<
  *                     output_view = outputs[i]
  *                     c_outputs[i] = &output_view[0]
 */
-      __pyx_t_9 = PyObject_Length(__pyx_v_outputs); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 113, __pyx_L1_error)
+      __pyx_t_9 = PyObject_Length(__pyx_v_outputs); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 98, __pyx_L1_error)
       __pyx_t_1 = (__pyx_v_i < __pyx_t_9);
       if (__pyx_t_1) {
 
-        /* "cyfaust/play.pyx":114
+        /* "cyfaust/player.pyx":99
  *             for i in range(num_outputs):
  *                 if i < len(outputs):
  *                     output_view = outputs[i]             # <<<<<<<<<<<<<<
  *                     c_outputs[i] = &output_view[0]
  *                 else:
 */
-        __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_outputs, __pyx_v_i, int, 1, __Pyx_PyLong_From_int, 0, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 114, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_outputs, __pyx_v_i, int, 1, __Pyx_PyLong_From_int, 0, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_FAUSTFLOAT(__pyx_t_2, PyBUF_WRITABLE); if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 114, __pyx_L1_error)
+        __pyx_t_10 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_FAUSTFLOAT(__pyx_t_2, PyBUF_WRITABLE); if (unlikely(!__pyx_t_10.memview)) __PYX_ERR(0, 99, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __PYX_XCLEAR_MEMVIEW(&__pyx_v_output_view, 1);
         __pyx_v_output_view = __pyx_t_10;
         __pyx_t_10.memview = NULL;
         __pyx_t_10.data = NULL;
 
-        /* "cyfaust/play.pyx":115
+        /* "cyfaust/player.pyx":100
  *                 if i < len(outputs):
  *                     output_view = outputs[i]
  *                     c_outputs[i] = &output_view[0]             # <<<<<<<<<<<<<<
@@ -18762,11 +18760,11 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
         } else if (unlikely(__pyx_t_11 >= __pyx_v_output_view.shape[0])) __pyx_t_12 = 0;
         if (unlikely(__pyx_t_12 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_12);
-          __PYX_ERR(0, 115, __pyx_L1_error)
+          __PYX_ERR(0, 100, __pyx_L1_error)
         }
         (__pyx_v_c_outputs[__pyx_v_i]) = (&(*((FAUSTFLOAT *) ( /* dim=0 */ (__pyx_v_output_view.data + __pyx_t_11 * __pyx_v_output_view.strides[0]) ))));
 
-        /* "cyfaust/play.pyx":113
+        /* "cyfaust/player.pyx":98
  *             # Map Python arrays to C arrays using memoryviews
  *             for i in range(num_outputs):
  *                 if i < len(outputs):             # <<<<<<<<<<<<<<
@@ -18776,7 +18774,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
         goto __pyx_L12;
       }
 
-      /* "cyfaust/play.pyx":117
+      /* "cyfaust/player.pyx":102
  *                     c_outputs[i] = &output_view[0]
  *                 else:
  *                     c_outputs[i] = NULL             # <<<<<<<<<<<<<<
@@ -18789,7 +18787,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
       __pyx_L12:;
     }
 
-    /* "cyfaust/play.pyx":104
+    /* "cyfaust/player.pyx":89
  *                 c_inputs[i] = NULL
  * 
  *         if num_outputs > 0:             # <<<<<<<<<<<<<<
@@ -18798,7 +18796,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
   }
 
-  /* "cyfaust/play.pyx":119
+  /* "cyfaust/player.pyx":104
  *                     c_outputs[i] = NULL
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -18807,18 +18805,18 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
   /*try:*/ {
 
-    /* "cyfaust/play.pyx":120
+    /* "cyfaust/player.pyx":105
  * 
  *         try:
  *             self._player.compute(count, c_inputs, c_outputs)             # <<<<<<<<<<<<<<
  *         finally:
  *             if c_inputs != NULL:
 */
-    __pyx_t_6 = __Pyx_PyLong_As_int(__pyx_v_count); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 120, __pyx_L14_error)
+    __pyx_t_6 = __Pyx_PyLong_As_int(__pyx_v_count); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L14_error)
     __pyx_v_self->_player->compute(__pyx_t_6, __pyx_v_c_inputs, __pyx_v_c_outputs);
   }
 
-  /* "cyfaust/play.pyx":122
+  /* "cyfaust/player.pyx":107
  *             self._player.compute(count, c_inputs, c_outputs)
  *         finally:
  *             if c_inputs != NULL:             # <<<<<<<<<<<<<<
@@ -18830,7 +18828,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
       __pyx_t_1 = (__pyx_v_c_inputs != NULL);
       if (__pyx_t_1) {
 
-        /* "cyfaust/play.pyx":123
+        /* "cyfaust/player.pyx":108
  *         finally:
  *             if c_inputs != NULL:
  *                 free(c_inputs)             # <<<<<<<<<<<<<<
@@ -18839,7 +18837,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
         free(__pyx_v_c_inputs);
 
-        /* "cyfaust/play.pyx":122
+        /* "cyfaust/player.pyx":107
  *             self._player.compute(count, c_inputs, c_outputs)
  *         finally:
  *             if c_inputs != NULL:             # <<<<<<<<<<<<<<
@@ -18848,7 +18846,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
       }
 
-      /* "cyfaust/play.pyx":124
+      /* "cyfaust/player.pyx":109
  *             if c_inputs != NULL:
  *                 free(c_inputs)
  *             if c_outputs != NULL:             # <<<<<<<<<<<<<<
@@ -18858,7 +18856,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
       __pyx_t_1 = (__pyx_v_c_outputs != NULL);
       if (__pyx_t_1) {
 
-        /* "cyfaust/play.pyx":125
+        /* "cyfaust/player.pyx":110
  *                 free(c_inputs)
  *             if c_outputs != NULL:
  *                 free(c_outputs)             # <<<<<<<<<<<<<<
@@ -18867,7 +18865,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
         free(__pyx_v_c_outputs);
 
-        /* "cyfaust/play.pyx":124
+        /* "cyfaust/player.pyx":109
  *             if c_inputs != NULL:
  *                 free(c_inputs)
  *             if c_outputs != NULL:             # <<<<<<<<<<<<<<
@@ -18898,7 +18896,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
       __pyx_t_6 = __pyx_lineno; __pyx_t_7 = __pyx_clineno; __pyx_t_13 = __pyx_filename;
       {
 
-        /* "cyfaust/play.pyx":122
+        /* "cyfaust/player.pyx":107
  *             self._player.compute(count, c_inputs, c_outputs)
  *         finally:
  *             if c_inputs != NULL:             # <<<<<<<<<<<<<<
@@ -18908,7 +18906,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
         __pyx_t_1 = (__pyx_v_c_inputs != NULL);
         if (__pyx_t_1) {
 
-          /* "cyfaust/play.pyx":123
+          /* "cyfaust/player.pyx":108
  *         finally:
  *             if c_inputs != NULL:
  *                 free(c_inputs)             # <<<<<<<<<<<<<<
@@ -18917,7 +18915,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
           free(__pyx_v_c_inputs);
 
-          /* "cyfaust/play.pyx":122
+          /* "cyfaust/player.pyx":107
  *             self._player.compute(count, c_inputs, c_outputs)
  *         finally:
  *             if c_inputs != NULL:             # <<<<<<<<<<<<<<
@@ -18926,7 +18924,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
         }
 
-        /* "cyfaust/play.pyx":124
+        /* "cyfaust/player.pyx":109
  *             if c_inputs != NULL:
  *                 free(c_inputs)
  *             if c_outputs != NULL:             # <<<<<<<<<<<<<<
@@ -18936,7 +18934,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
         __pyx_t_1 = (__pyx_v_c_outputs != NULL);
         if (__pyx_t_1) {
 
-          /* "cyfaust/play.pyx":125
+          /* "cyfaust/player.pyx":110
  *                 free(c_inputs)
  *             if c_outputs != NULL:
  *                 free(c_outputs)             # <<<<<<<<<<<<<<
@@ -18945,7 +18943,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
           free(__pyx_v_c_outputs);
 
-          /* "cyfaust/play.pyx":124
+          /* "cyfaust/player.pyx":109
  *             if c_inputs != NULL:
  *                 free(c_inputs)
  *             if c_outputs != NULL:             # <<<<<<<<<<<<<<
@@ -18969,7 +18967,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
     __pyx_L15:;
   }
 
-  /* "cyfaust/play.pyx":85
+  /* "cyfaust/player.pyx":70
  *         return self._filename
  * 
  *     def compute(self, count: int, inputs, outputs):             # <<<<<<<<<<<<<<
@@ -18985,7 +18983,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __PYX_XCLEAR_MEMVIEW(&__pyx_t_10, 1);
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __PYX_XCLEAR_MEMVIEW(&__pyx_v_output_view, 1);
@@ -19001,15 +18999,15 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_20compute(struct __py
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_23__reduce_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_23__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_23__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_23__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_23__reduce_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_23__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_23__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_23__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -19035,14 +19033,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return NULL;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("__reduce_cython__", __pyx_kwds); return NULL;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_22__reduce_cython__(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_22__reduce_cython__(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_22__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_22__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -19067,7 +19065,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_22__reduce_cython__(C
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -19082,15 +19080,15 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_22__reduce_cython__(C
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_25__setstate_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_25__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_7cyfaust_4play_15SoundBasePlayer_25__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_25__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_7cyfaust_4play_15SoundBasePlayer_25__setstate_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_7cyfaust_6player_15SoundBasePlayer_25__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_25__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_7cyfaust_6player_15SoundBasePlayer_25__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -19152,11 +19150,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7cyfaust_4play_15SoundBasePlayer_24__setstate_cython__(((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)__pyx_v_self), __pyx_v___pyx_state);
+  __pyx_r = __pyx_pf_7cyfaust_6player_15SoundBasePlayer_24__setstate_cython__(((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)__pyx_v_self), __pyx_v___pyx_state);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -19166,7 +19164,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_24__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_7cyfaust_6player_15SoundBasePlayer_24__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -19191,14 +19189,14 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_24__setstate_cython__
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundBasePlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundBasePlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":133
+/* "cyfaust/player.pyx":118
  *     cdef fp.sound_memory_player* _memory_player
  * 
  *     def __cinit__(self, filename: str):             # <<<<<<<<<<<<<<
@@ -19207,8 +19205,8 @@ static PyObject *__pyx_pf_7cyfaust_4play_15SoundBasePlayer_24__setstate_cython__
 */
 
 /* Python wrapper */
-static int __pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_filename = 0;
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
@@ -19228,44 +19226,44 @@ static int __pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_1__cinit__(PyObject *__py
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_filename,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_VARARGS(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 133, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 118, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_VARARGS(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 133, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 118, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "__cinit__", 0) < 0) __PYX_ERR(0, 133, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "__cinit__", 0) < 0) __PYX_ERR(0, 118, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, i); __PYX_ERR(0, 133, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, i); __PYX_ERR(0, 118, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_VARARGS(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 133, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 118, __pyx_L3_error)
     }
     __pyx_v_filename = ((PyObject*)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 133, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 118, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundMemoryPlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundMemoryPlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 133, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(((struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *)__pyx_v_self), __pyx_v_filename);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 118, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_17SoundMemoryPlayer___cinit__(((struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *)__pyx_v_self), __pyx_v_filename);
 
   /* function exit code */
   goto __pyx_L0;
@@ -19284,7 +19282,7 @@ static int __pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_1__cinit__(PyObject *__py
   return __pyx_r;
 }
 
-static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_v_self, PyObject *__pyx_v_filename) {
+static int __pyx_pf_7cyfaust_6player_17SoundMemoryPlayer___cinit__(struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_v_self, PyObject *__pyx_v_filename) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -19299,7 +19297,7 @@ static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_ob
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "cyfaust/play.pyx":135
+  /* "cyfaust/player.pyx":120
  *     def __cinit__(self, filename: str):
  *         # Parent __cinit__ already called
  *         del self._player  # Remove base player             # <<<<<<<<<<<<<<
@@ -19308,26 +19306,26 @@ static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_ob
 */
   delete __pyx_v_self->__pyx_base._player;
 
-  /* "cyfaust/play.pyx":136
+  /* "cyfaust/player.pyx":121
  *         # Parent __cinit__ already called
  *         del self._player  # Remove base player
  *         self._memory_player = new fp.sound_memory_player(filename.encode('utf-8'))             # <<<<<<<<<<<<<<
  *         if self._memory_player == NULL:
  *             raise MemoryError("Failed to create sound_memory_player")
 */
-  __pyx_t_1 = PyUnicode_AsUTF8String(__pyx_v_filename); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
+  __pyx_t_1 = PyUnicode_AsUTF8String(__pyx_v_filename); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 136, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 121, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   try {
     __pyx_t_3 = new sound_memory_player(__pyx_t_2);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 136, __pyx_L1_error)
+    __PYX_ERR(0, 121, __pyx_L1_error)
   }
   __pyx_v_self->_memory_player = __pyx_t_3;
 
-  /* "cyfaust/play.pyx":137
+  /* "cyfaust/player.pyx":122
  *         del self._player  # Remove base player
  *         self._memory_player = new fp.sound_memory_player(filename.encode('utf-8'))
  *         if self._memory_player == NULL:             # <<<<<<<<<<<<<<
@@ -19337,7 +19335,7 @@ static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_ob
   __pyx_t_4 = (__pyx_v_self->_memory_player == NULL);
   if (unlikely(__pyx_t_4)) {
 
-    /* "cyfaust/play.pyx":138
+    /* "cyfaust/player.pyx":123
  *         self._memory_player = new fp.sound_memory_player(filename.encode('utf-8'))
  *         if self._memory_player == NULL:
  *             raise MemoryError("Failed to create sound_memory_player")             # <<<<<<<<<<<<<<
@@ -19353,14 +19351,14 @@ static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_ob
       __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_6, __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 123, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 138, __pyx_L1_error)
+    __PYX_ERR(0, 123, __pyx_L1_error)
 
-    /* "cyfaust/play.pyx":137
+    /* "cyfaust/player.pyx":122
  *         del self._player  # Remove base player
  *         self._memory_player = new fp.sound_memory_player(filename.encode('utf-8'))
  *         if self._memory_player == NULL:             # <<<<<<<<<<<<<<
@@ -19369,7 +19367,7 @@ static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_ob
 */
   }
 
-  /* "cyfaust/play.pyx":139
+  /* "cyfaust/player.pyx":124
  *         if self._memory_player == NULL:
  *             raise MemoryError("Failed to create sound_memory_player")
  *         self._player = self._memory_player  # Set base pointer             # <<<<<<<<<<<<<<
@@ -19379,7 +19377,7 @@ static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_ob
   __pyx_t_3 = __pyx_v_self->_memory_player;
   __pyx_v_self->__pyx_base._player = __pyx_t_3;
 
-  /* "cyfaust/play.pyx":133
+  /* "cyfaust/player.pyx":118
  *     cdef fp.sound_memory_player* _memory_player
  * 
  *     def __cinit__(self, filename: str):             # <<<<<<<<<<<<<<
@@ -19394,14 +19392,14 @@ static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_ob
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("cyfaust.play.SoundMemoryPlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundMemoryPlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":141
+/* "cyfaust/player.pyx":126
  *         self._player = self._memory_player  # Set base pointer
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -19410,19 +19408,19 @@ static int __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer___cinit__(struct __pyx_ob
 */
 
 /* Python wrapper */
-static void __pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_3__dealloc__(PyObject *__pyx_v_self) {
+static void __pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
+static void __pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_3__dealloc__(PyObject *__pyx_v_self) {
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
   __pyx_kwvalues = __Pyx_KwValues_VARARGS(__pyx_args, __pyx_nargs);
-  __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_2__dealloc__(((struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *)__pyx_v_self));
+  __pyx_pf_7cyfaust_6player_17SoundMemoryPlayer_2__dealloc__(((struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
 }
 
-static void __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_2__dealloc__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_v_self) {
+static void __pyx_pf_7cyfaust_6player_17SoundMemoryPlayer_2__dealloc__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_v_self) {
 
   /* function exit code */
 }
@@ -19434,15 +19432,15 @@ static void __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_2__dealloc__(CYTHON_UNUS
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_5__reduce_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_5__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_7cyfaust_4play_17SoundMemoryPlayer_5__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_5__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_5__reduce_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_7cyfaust_6player_17SoundMemoryPlayer_5__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_5__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_5__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -19468,14 +19466,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return NULL;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("__reduce_cython__", __pyx_kwds); return NULL;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_4__reduce_cython__(((struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_17SoundMemoryPlayer_4__reduce_cython__(((struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_17SoundMemoryPlayer_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -19500,7 +19498,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_4__reduce_cython__(
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundMemoryPlayer.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundMemoryPlayer.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -19515,15 +19513,15 @@ static PyObject *__pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_4__reduce_cython__(
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_7__setstate_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_7__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_7cyfaust_4play_17SoundMemoryPlayer_7__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_7__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_7__setstate_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_7cyfaust_6player_17SoundMemoryPlayer_7__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_7__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_7__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -19585,11 +19583,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundMemoryPlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundMemoryPlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_6__setstate_cython__(((struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *)__pyx_v_self), __pyx_v___pyx_state);
+  __pyx_r = __pyx_pf_7cyfaust_6player_17SoundMemoryPlayer_6__setstate_cython__(((struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *)__pyx_v_self), __pyx_v___pyx_state);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -19599,7 +19597,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_7cyfaust_6player_17SoundMemoryPlayer_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -19624,14 +19622,14 @@ static PyObject *__pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_6__setstate_cython_
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundMemoryPlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundMemoryPlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":151
+/* "cyfaust/player.pyx":136
  *     cdef fp.sound_dtd_player* _dtd_player
  * 
  *     def __cinit__(self, filename: str):             # <<<<<<<<<<<<<<
@@ -19640,8 +19638,8 @@ static PyObject *__pyx_pf_7cyfaust_4play_17SoundMemoryPlayer_6__setstate_cython_
 */
 
 /* Python wrapper */
-static int __pyx_pw_7cyfaust_4play_14SoundDtdPlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_7cyfaust_4play_14SoundDtdPlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_7cyfaust_6player_14SoundDtdPlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_7cyfaust_6player_14SoundDtdPlayer_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_filename = 0;
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
@@ -19661,44 +19659,44 @@ static int __pyx_pw_7cyfaust_4play_14SoundDtdPlayer_1__cinit__(PyObject *__pyx_v
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_filename,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_VARARGS(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 151, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 136, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_VARARGS(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 151, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 136, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "__cinit__", 0) < 0) __PYX_ERR(0, 151, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "__cinit__", 0) < 0) __PYX_ERR(0, 136, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, i); __PYX_ERR(0, 151, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, i); __PYX_ERR(0, 136, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_VARARGS(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 151, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 136, __pyx_L3_error)
     }
     __pyx_v_filename = ((PyObject*)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 151, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 136, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundDtdPlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundDtdPlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 151, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(((struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *)__pyx_v_self), __pyx_v_filename);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 136, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_14SoundDtdPlayer___cinit__(((struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *)__pyx_v_self), __pyx_v_filename);
 
   /* function exit code */
   goto __pyx_L0;
@@ -19717,7 +19715,7 @@ static int __pyx_pw_7cyfaust_4play_14SoundDtdPlayer_1__cinit__(PyObject *__pyx_v
   return __pyx_r;
 }
 
-static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_v_self, PyObject *__pyx_v_filename) {
+static int __pyx_pf_7cyfaust_6player_14SoundDtdPlayer___cinit__(struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_v_self, PyObject *__pyx_v_filename) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -19732,7 +19730,7 @@ static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "cyfaust/play.pyx":153
+  /* "cyfaust/player.pyx":138
  *     def __cinit__(self, filename: str):
  *         # Parent __cinit__ already called
  *         del self._player  # Remove base player             # <<<<<<<<<<<<<<
@@ -19741,26 +19739,26 @@ static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7
 */
   delete __pyx_v_self->__pyx_base._player;
 
-  /* "cyfaust/play.pyx":154
+  /* "cyfaust/player.pyx":139
  *         # Parent __cinit__ already called
  *         del self._player  # Remove base player
  *         self._dtd_player = new fp.sound_dtd_player(filename.encode('utf-8'))             # <<<<<<<<<<<<<<
  *         if self._dtd_player == NULL:
  *             raise MemoryError("Failed to create sound_dtd_player")
 */
-  __pyx_t_1 = PyUnicode_AsUTF8String(__pyx_v_filename); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L1_error)
+  __pyx_t_1 = PyUnicode_AsUTF8String(__pyx_v_filename); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 154, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_6libcpp_6string_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   try {
     __pyx_t_3 = new sound_dtd_player(__pyx_t_2);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 154, __pyx_L1_error)
+    __PYX_ERR(0, 139, __pyx_L1_error)
   }
   __pyx_v_self->_dtd_player = __pyx_t_3;
 
-  /* "cyfaust/play.pyx":155
+  /* "cyfaust/player.pyx":140
  *         del self._player  # Remove base player
  *         self._dtd_player = new fp.sound_dtd_player(filename.encode('utf-8'))
  *         if self._dtd_player == NULL:             # <<<<<<<<<<<<<<
@@ -19770,7 +19768,7 @@ static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7
   __pyx_t_4 = (__pyx_v_self->_dtd_player == NULL);
   if (unlikely(__pyx_t_4)) {
 
-    /* "cyfaust/play.pyx":156
+    /* "cyfaust/player.pyx":141
  *         self._dtd_player = new fp.sound_dtd_player(filename.encode('utf-8'))
  *         if self._dtd_player == NULL:
  *             raise MemoryError("Failed to create sound_dtd_player")             # <<<<<<<<<<<<<<
@@ -19786,14 +19784,14 @@ static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7
       __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_6, __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 156, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
     }
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 156, __pyx_L1_error)
+    __PYX_ERR(0, 141, __pyx_L1_error)
 
-    /* "cyfaust/play.pyx":155
+    /* "cyfaust/player.pyx":140
  *         del self._player  # Remove base player
  *         self._dtd_player = new fp.sound_dtd_player(filename.encode('utf-8'))
  *         if self._dtd_player == NULL:             # <<<<<<<<<<<<<<
@@ -19802,7 +19800,7 @@ static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7
 */
   }
 
-  /* "cyfaust/play.pyx":157
+  /* "cyfaust/player.pyx":142
  *         if self._dtd_player == NULL:
  *             raise MemoryError("Failed to create sound_dtd_player")
  *         self._player = self._dtd_player  # Set base pointer             # <<<<<<<<<<<<<<
@@ -19812,7 +19810,7 @@ static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7
   __pyx_t_3 = __pyx_v_self->_dtd_player;
   __pyx_v_self->__pyx_base._player = __pyx_t_3;
 
-  /* "cyfaust/play.pyx":151
+  /* "cyfaust/player.pyx":136
  *     cdef fp.sound_dtd_player* _dtd_player
  * 
  *     def __cinit__(self, filename: str):             # <<<<<<<<<<<<<<
@@ -19827,14 +19825,14 @@ static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("cyfaust.play.SoundDtdPlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundDtdPlayer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":159
+/* "cyfaust/player.pyx":144
  *         self._player = self._dtd_player  # Set base pointer
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -19843,19 +19841,19 @@ static int __pyx_pf_7cyfaust_4play_14SoundDtdPlayer___cinit__(struct __pyx_obj_7
 */
 
 /* Python wrapper */
-static void __pyx_pw_7cyfaust_4play_14SoundDtdPlayer_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_7cyfaust_4play_14SoundDtdPlayer_3__dealloc__(PyObject *__pyx_v_self) {
+static void __pyx_pw_7cyfaust_6player_14SoundDtdPlayer_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
+static void __pyx_pw_7cyfaust_6player_14SoundDtdPlayer_3__dealloc__(PyObject *__pyx_v_self) {
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
   __pyx_kwvalues = __Pyx_KwValues_VARARGS(__pyx_args, __pyx_nargs);
-  __pyx_pf_7cyfaust_4play_14SoundDtdPlayer_2__dealloc__(((struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *)__pyx_v_self));
+  __pyx_pf_7cyfaust_6player_14SoundDtdPlayer_2__dealloc__(((struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
 }
 
-static void __pyx_pf_7cyfaust_4play_14SoundDtdPlayer_2__dealloc__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_v_self) {
+static void __pyx_pf_7cyfaust_6player_14SoundDtdPlayer_2__dealloc__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_v_self) {
 
   /* function exit code */
 }
@@ -19867,15 +19865,15 @@ static void __pyx_pf_7cyfaust_4play_14SoundDtdPlayer_2__dealloc__(CYTHON_UNUSED 
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_14SoundDtdPlayer_5__reduce_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_14SoundDtdPlayer_5__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_7cyfaust_4play_14SoundDtdPlayer_5__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_14SoundDtdPlayer_5__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_7cyfaust_4play_14SoundDtdPlayer_5__reduce_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_7cyfaust_6player_14SoundDtdPlayer_5__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_14SoundDtdPlayer_5__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_7cyfaust_6player_14SoundDtdPlayer_5__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -19901,14 +19899,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return NULL;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("__reduce_cython__", __pyx_kwds); return NULL;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_14SoundDtdPlayer_4__reduce_cython__(((struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_14SoundDtdPlayer_4__reduce_cython__(((struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_14SoundDtdPlayer_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_14SoundDtdPlayer_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -19933,7 +19931,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_14SoundDtdPlayer_4__reduce_cython__(CYT
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundDtdPlayer.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundDtdPlayer.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -19948,15 +19946,15 @@ static PyObject *__pyx_pf_7cyfaust_4play_14SoundDtdPlayer_4__reduce_cython__(CYT
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_14SoundDtdPlayer_7__setstate_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_14SoundDtdPlayer_7__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_7cyfaust_4play_14SoundDtdPlayer_7__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_14SoundDtdPlayer_7__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_7cyfaust_4play_14SoundDtdPlayer_7__setstate_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_7cyfaust_6player_14SoundDtdPlayer_7__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_14SoundDtdPlayer_7__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_7cyfaust_6player_14SoundDtdPlayer_7__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -20018,11 +20016,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundDtdPlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundDtdPlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7cyfaust_4play_14SoundDtdPlayer_6__setstate_cython__(((struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *)__pyx_v_self), __pyx_v___pyx_state);
+  __pyx_r = __pyx_pf_7cyfaust_6player_14SoundDtdPlayer_6__setstate_cython__(((struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *)__pyx_v_self), __pyx_v___pyx_state);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -20032,7 +20030,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_14SoundDtdPlayer_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_7cyfaust_6player_14SoundDtdPlayer_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -20057,14 +20055,14 @@ static PyObject *__pyx_pf_7cyfaust_4play_14SoundDtdPlayer_6__setstate_cython__(C
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundDtdPlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundDtdPlayer.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":169
+/* "cyfaust/player.pyx":154
  *     cdef fp.PositionManager* _manager
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -20073,8 +20071,8 @@ static PyObject *__pyx_pf_7cyfaust_4play_14SoundDtdPlayer_6__setstate_cython__(C
 */
 
 /* Python wrapper */
-static int __pyx_pw_7cyfaust_4play_20SoundPositionManager_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_7cyfaust_4play_20SoundPositionManager_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_7cyfaust_6player_20SoundPositionManager_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_7cyfaust_6player_20SoundPositionManager_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
   int __pyx_r;
@@ -20090,14 +20088,14 @@ static int __pyx_pw_7cyfaust_4play_20SoundPositionManager_1__cinit__(PyObject *_
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_VARARGS(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return -1;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("__cinit__", __pyx_kwds); return -1;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(((struct __pyx_obj_7cyfaust_4play_SoundPositionManager *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_20SoundPositionManager___cinit__(((struct __pyx_obj_7cyfaust_6player_SoundPositionManager *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self) {
+static int __pyx_pf_7cyfaust_6player_20SoundPositionManager___cinit__(struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -20110,7 +20108,7 @@ static int __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "cyfaust/play.pyx":170
+  /* "cyfaust/player.pyx":155
  * 
  *     def __cinit__(self):
  *         self._manager = new fp.PositionManager()             # <<<<<<<<<<<<<<
@@ -20119,7 +20117,7 @@ static int __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(struct __pyx
 */
   __pyx_v_self->_manager = new PositionManager();
 
-  /* "cyfaust/play.pyx":171
+  /* "cyfaust/player.pyx":156
  *     def __cinit__(self):
  *         self._manager = new fp.PositionManager()
  *         if self._manager == NULL:             # <<<<<<<<<<<<<<
@@ -20129,7 +20127,7 @@ static int __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(struct __pyx
   __pyx_t_1 = (__pyx_v_self->_manager == NULL);
   if (unlikely(__pyx_t_1)) {
 
-    /* "cyfaust/play.pyx":172
+    /* "cyfaust/player.pyx":157
  *         self._manager = new fp.PositionManager()
  *         if self._manager == NULL:
  *             raise MemoryError("Failed to create PositionManager")             # <<<<<<<<<<<<<<
@@ -20145,14 +20143,14 @@ static int __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(struct __pyx
       __pyx_t_2 = __Pyx_PyObject_FastCall(__pyx_t_4, __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 172, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 157, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
     }
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 172, __pyx_L1_error)
+    __PYX_ERR(0, 157, __pyx_L1_error)
 
-    /* "cyfaust/play.pyx":171
+    /* "cyfaust/player.pyx":156
  *     def __cinit__(self):
  *         self._manager = new fp.PositionManager()
  *         if self._manager == NULL:             # <<<<<<<<<<<<<<
@@ -20161,7 +20159,7 @@ static int __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(struct __pyx
 */
   }
 
-  /* "cyfaust/play.pyx":169
+  /* "cyfaust/player.pyx":154
  *     cdef fp.PositionManager* _manager
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -20176,14 +20174,14 @@ static int __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(struct __pyx
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("cyfaust.play.SoundPositionManager.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundPositionManager.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":174
+/* "cyfaust/player.pyx":159
  *             raise MemoryError("Failed to create PositionManager")
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -20192,22 +20190,22 @@ static int __pyx_pf_7cyfaust_4play_20SoundPositionManager___cinit__(struct __pyx
 */
 
 /* Python wrapper */
-static void __pyx_pw_7cyfaust_4play_20SoundPositionManager_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_7cyfaust_4play_20SoundPositionManager_3__dealloc__(PyObject *__pyx_v_self) {
+static void __pyx_pw_7cyfaust_6player_20SoundPositionManager_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
+static void __pyx_pw_7cyfaust_6player_20SoundPositionManager_3__dealloc__(PyObject *__pyx_v_self) {
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
   __pyx_kwvalues = __Pyx_KwValues_VARARGS(__pyx_args, __pyx_nargs);
-  __pyx_pf_7cyfaust_4play_20SoundPositionManager_2__dealloc__(((struct __pyx_obj_7cyfaust_4play_SoundPositionManager *)__pyx_v_self));
+  __pyx_pf_7cyfaust_6player_20SoundPositionManager_2__dealloc__(((struct __pyx_obj_7cyfaust_6player_SoundPositionManager *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
 }
 
-static void __pyx_pf_7cyfaust_4play_20SoundPositionManager_2__dealloc__(struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self) {
+static void __pyx_pf_7cyfaust_6player_20SoundPositionManager_2__dealloc__(struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self) {
   int __pyx_t_1;
 
-  /* "cyfaust/play.pyx":175
+  /* "cyfaust/player.pyx":160
  * 
  *     def __dealloc__(self):
  *         if self._manager != NULL:             # <<<<<<<<<<<<<<
@@ -20217,7 +20215,7 @@ static void __pyx_pf_7cyfaust_4play_20SoundPositionManager_2__dealloc__(struct _
   __pyx_t_1 = (__pyx_v_self->_manager != NULL);
   if (__pyx_t_1) {
 
-    /* "cyfaust/play.pyx":176
+    /* "cyfaust/player.pyx":161
  *     def __dealloc__(self):
  *         if self._manager != NULL:
  *             del self._manager             # <<<<<<<<<<<<<<
@@ -20226,7 +20224,7 @@ static void __pyx_pf_7cyfaust_4play_20SoundPositionManager_2__dealloc__(struct _
 */
     delete __pyx_v_self->_manager;
 
-    /* "cyfaust/play.pyx":175
+    /* "cyfaust/player.pyx":160
  * 
  *     def __dealloc__(self):
  *         if self._manager != NULL:             # <<<<<<<<<<<<<<
@@ -20235,7 +20233,7 @@ static void __pyx_pf_7cyfaust_4play_20SoundPositionManager_2__dealloc__(struct _
 */
   }
 
-  /* "cyfaust/play.pyx":174
+  /* "cyfaust/player.pyx":159
  *             raise MemoryError("Failed to create PositionManager")
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -20246,7 +20244,7 @@ static void __pyx_pf_7cyfaust_4play_20SoundPositionManager_2__dealloc__(struct _
   /* function exit code */
 }
 
-/* "cyfaust/play.pyx":178
+/* "cyfaust/player.pyx":163
  *             del self._manager
  * 
  *     def add_dsp(self, SoundBasePlayer player):             # <<<<<<<<<<<<<<
@@ -20255,23 +20253,23 @@ static void __pyx_pf_7cyfaust_4play_20SoundPositionManager_2__dealloc__(struct _
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_20SoundPositionManager_5add_dsp(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_20SoundPositionManager_5add_dsp(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_20SoundPositionManager_4add_dsp, "Add a sound player to be managed.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_20SoundPositionManager_5add_dsp = {"add_dsp", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_20SoundPositionManager_5add_dsp, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_20SoundPositionManager_4add_dsp};
-static PyObject *__pyx_pw_7cyfaust_4play_20SoundPositionManager_5add_dsp(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_20SoundPositionManager_4add_dsp, "Add a sound player to be managed.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_20SoundPositionManager_5add_dsp = {"add_dsp", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_20SoundPositionManager_5add_dsp, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_20SoundPositionManager_4add_dsp};
+static PyObject *__pyx_pw_7cyfaust_6player_20SoundPositionManager_5add_dsp(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ) {
-  struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_player = 0;
+  struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_player = 0;
   #if !CYTHON_METH_FASTCALL
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   #endif
@@ -20294,44 +20292,44 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_player,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 178, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 163, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 178, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 163, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "add_dsp", 0) < 0) __PYX_ERR(0, 178, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "add_dsp", 0) < 0) __PYX_ERR(0, 163, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("add_dsp", 1, 1, 1, i); __PYX_ERR(0, 178, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("add_dsp", 1, 1, 1, i); __PYX_ERR(0, 163, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 178, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 163, __pyx_L3_error)
     }
-    __pyx_v_player = ((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)values[0]);
+    __pyx_v_player = ((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("add_dsp", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 178, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("add_dsp", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 163, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundPositionManager.add_dsp", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundPositionManager.add_dsp", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_player), __pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, 1, "player", 0))) __PYX_ERR(0, 178, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_20SoundPositionManager_4add_dsp(((struct __pyx_obj_7cyfaust_4play_SoundPositionManager *)__pyx_v_self), __pyx_v_player);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_player), __pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, 1, "player", 0))) __PYX_ERR(0, 163, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_20SoundPositionManager_4add_dsp(((struct __pyx_obj_7cyfaust_6player_SoundPositionManager *)__pyx_v_self), __pyx_v_player);
 
   /* function exit code */
   goto __pyx_L0;
@@ -20350,13 +20348,13 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_4add_dsp(struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self, struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_player) {
+static PyObject *__pyx_pf_7cyfaust_6player_20SoundPositionManager_4add_dsp(struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self, struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_player) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("add_dsp", 0);
 
-  /* "cyfaust/play.pyx":180
+  /* "cyfaust/player.pyx":165
  *     def add_dsp(self, SoundBasePlayer player):
  *         """Add a sound player to be managed."""
  *         if player._player != NULL:             # <<<<<<<<<<<<<<
@@ -20366,7 +20364,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_4add_dsp(struct 
   __pyx_t_1 = (__pyx_v_player->_player != NULL);
   if (__pyx_t_1) {
 
-    /* "cyfaust/play.pyx":181
+    /* "cyfaust/player.pyx":166
  *         """Add a sound player to be managed."""
  *         if player._player != NULL:
  *             self._manager.addDSP(player._player)             # <<<<<<<<<<<<<<
@@ -20375,7 +20373,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_4add_dsp(struct 
 */
     __pyx_v_self->_manager->addDSP(__pyx_v_player->_player);
 
-    /* "cyfaust/play.pyx":180
+    /* "cyfaust/player.pyx":165
  *     def add_dsp(self, SoundBasePlayer player):
  *         """Add a sound player to be managed."""
  *         if player._player != NULL:             # <<<<<<<<<<<<<<
@@ -20384,7 +20382,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_4add_dsp(struct 
 */
   }
 
-  /* "cyfaust/play.pyx":178
+  /* "cyfaust/player.pyx":163
  *             del self._manager
  * 
  *     def add_dsp(self, SoundBasePlayer player):             # <<<<<<<<<<<<<<
@@ -20399,7 +20397,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_4add_dsp(struct 
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":183
+/* "cyfaust/player.pyx":168
  *             self._manager.addDSP(player._player)
  * 
  *     def remove_dsp(self, SoundBasePlayer player):             # <<<<<<<<<<<<<<
@@ -20408,23 +20406,23 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_4add_dsp(struct 
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_20SoundPositionManager_7remove_dsp(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_20SoundPositionManager_7remove_dsp(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_20SoundPositionManager_6remove_dsp, "Remove a sound player from management.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_20SoundPositionManager_7remove_dsp = {"remove_dsp", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_20SoundPositionManager_7remove_dsp, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_20SoundPositionManager_6remove_dsp};
-static PyObject *__pyx_pw_7cyfaust_4play_20SoundPositionManager_7remove_dsp(PyObject *__pyx_v_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_20SoundPositionManager_6remove_dsp, "Remove a sound player from management.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_20SoundPositionManager_7remove_dsp = {"remove_dsp", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_20SoundPositionManager_7remove_dsp, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_20SoundPositionManager_6remove_dsp};
+static PyObject *__pyx_pw_7cyfaust_6player_20SoundPositionManager_7remove_dsp(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ) {
-  struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_player = 0;
+  struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_player = 0;
   #if !CYTHON_METH_FASTCALL
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   #endif
@@ -20447,44 +20445,44 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_player,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 183, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 168, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 183, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 168, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "remove_dsp", 0) < 0) __PYX_ERR(0, 183, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "remove_dsp", 0) < 0) __PYX_ERR(0, 168, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("remove_dsp", 1, 1, 1, i); __PYX_ERR(0, 183, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("remove_dsp", 1, 1, 1, i); __PYX_ERR(0, 168, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 183, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 168, __pyx_L3_error)
     }
-    __pyx_v_player = ((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)values[0]);
+    __pyx_v_player = ((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("remove_dsp", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 183, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("remove_dsp", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 168, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundPositionManager.remove_dsp", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundPositionManager.remove_dsp", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_player), __pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, 1, "player", 0))) __PYX_ERR(0, 183, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_20SoundPositionManager_6remove_dsp(((struct __pyx_obj_7cyfaust_4play_SoundPositionManager *)__pyx_v_self), __pyx_v_player);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_player), __pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, 1, "player", 0))) __PYX_ERR(0, 168, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_20SoundPositionManager_6remove_dsp(((struct __pyx_obj_7cyfaust_6player_SoundPositionManager *)__pyx_v_self), __pyx_v_player);
 
   /* function exit code */
   goto __pyx_L0;
@@ -20503,13 +20501,13 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_6remove_dsp(struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self, struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *__pyx_v_player) {
+static PyObject *__pyx_pf_7cyfaust_6player_20SoundPositionManager_6remove_dsp(struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self, struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *__pyx_v_player) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("remove_dsp", 0);
 
-  /* "cyfaust/play.pyx":185
+  /* "cyfaust/player.pyx":170
  *     def remove_dsp(self, SoundBasePlayer player):
  *         """Remove a sound player from management."""
  *         if player._player != NULL:             # <<<<<<<<<<<<<<
@@ -20519,7 +20517,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_6remove_dsp(stru
   __pyx_t_1 = (__pyx_v_player->_player != NULL);
   if (__pyx_t_1) {
 
-    /* "cyfaust/play.pyx":186
+    /* "cyfaust/player.pyx":171
  *         """Remove a sound player from management."""
  *         if player._player != NULL:
  *             self._manager.removeDSP(player._player)             # <<<<<<<<<<<<<<
@@ -20528,7 +20526,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_6remove_dsp(stru
 */
     __pyx_v_self->_manager->removeDSP(__pyx_v_player->_player);
 
-    /* "cyfaust/play.pyx":185
+    /* "cyfaust/player.pyx":170
  *     def remove_dsp(self, SoundBasePlayer player):
  *         """Remove a sound player from management."""
  *         if player._player != NULL:             # <<<<<<<<<<<<<<
@@ -20537,7 +20535,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_6remove_dsp(stru
 */
   }
 
-  /* "cyfaust/play.pyx":183
+  /* "cyfaust/player.pyx":168
  *             self._manager.addDSP(player._player)
  * 
  *     def remove_dsp(self, SoundBasePlayer player):             # <<<<<<<<<<<<<<
@@ -20559,15 +20557,15 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_6remove_dsp(stru
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_20SoundPositionManager_9__reduce_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_20SoundPositionManager_9__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_7cyfaust_4play_20SoundPositionManager_9__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_20SoundPositionManager_9__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_7cyfaust_4play_20SoundPositionManager_9__reduce_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_7cyfaust_6player_20SoundPositionManager_9__reduce_cython__ = {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_20SoundPositionManager_9__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_7cyfaust_6player_20SoundPositionManager_9__reduce_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -20593,14 +20591,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   const Py_ssize_t __pyx_kwds_len = unlikely(__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
   if (unlikely(__pyx_kwds_len < 0)) return NULL;
   if (unlikely(__pyx_kwds_len > 0)) {__Pyx_RejectKeywords("__reduce_cython__", __pyx_kwds); return NULL;}
-  __pyx_r = __pyx_pf_7cyfaust_4play_20SoundPositionManager_8__reduce_cython__(((struct __pyx_obj_7cyfaust_4play_SoundPositionManager *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7cyfaust_6player_20SoundPositionManager_8__reduce_cython__(((struct __pyx_obj_7cyfaust_6player_SoundPositionManager *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self) {
+static PyObject *__pyx_pf_7cyfaust_6player_20SoundPositionManager_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -20625,7 +20623,7 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_8__reduce_cython
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundPositionManager.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundPositionManager.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -20640,15 +20638,15 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_8__reduce_cython
 */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7cyfaust_4play_20SoundPositionManager_11__setstate_cython__(PyObject *__pyx_v_self, 
+static PyObject *__pyx_pw_7cyfaust_6player_20SoundPositionManager_11__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_7cyfaust_4play_20SoundPositionManager_11__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_20SoundPositionManager_11__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_7cyfaust_4play_20SoundPositionManager_11__setstate_cython__(PyObject *__pyx_v_self, 
+static PyMethodDef __pyx_mdef_7cyfaust_6player_20SoundPositionManager_11__setstate_cython__ = {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_20SoundPositionManager_11__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_7cyfaust_6player_20SoundPositionManager_11__setstate_cython__(PyObject *__pyx_v_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -20710,11 +20708,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.SoundPositionManager.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundPositionManager.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7cyfaust_4play_20SoundPositionManager_10__setstate_cython__(((struct __pyx_obj_7cyfaust_4play_SoundPositionManager *)__pyx_v_self), __pyx_v___pyx_state);
+  __pyx_r = __pyx_pf_7cyfaust_6player_20SoundPositionManager_10__setstate_cython__(((struct __pyx_obj_7cyfaust_6player_SoundPositionManager *)__pyx_v_self), __pyx_v___pyx_state);
 
   /* function exit code */
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
@@ -20724,7 +20722,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_7cyfaust_6player_20SoundPositionManager_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
@@ -20749,14 +20747,14 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_10__setstate_cyt
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("cyfaust.play.SoundPositionManager.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.SoundPositionManager.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":192
+/* "cyfaust/player.pyx":177
  * ## Convenience functions
  * 
  * def create_memory_player(filename: str) -> SoundMemoryPlayer:             # <<<<<<<<<<<<<<
@@ -20765,16 +20763,16 @@ static PyObject *__pyx_pf_7cyfaust_4play_20SoundPositionManager_10__setstate_cyt
 */
 
 /* Python wrapper */
-static struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_pw_7cyfaust_4play_1create_memory_player(PyObject *__pyx_self, 
+static struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_pw_7cyfaust_6player_1create_memory_player(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_create_memory_player, "Create a memory-based sound player.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_1create_memory_player = {"create_memory_player", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_1create_memory_player, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_create_memory_player};
-static struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_pw_7cyfaust_4play_1create_memory_player(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_create_memory_player, "Create a memory-based sound player.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_1create_memory_player = {"create_memory_player", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_1create_memory_player, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_create_memory_player};
+static struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_pw_7cyfaust_6player_1create_memory_player(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -20790,7 +20788,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_r = 0;
+  struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("create_memory_player (wrapper)", 0);
   #if !CYTHON_METH_FASTCALL
@@ -20804,44 +20802,44 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_filename,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 192, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 177, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 192, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 177, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "create_memory_player", 0) < 0) __PYX_ERR(0, 192, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "create_memory_player", 0) < 0) __PYX_ERR(0, 177, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("create_memory_player", 1, 1, 1, i); __PYX_ERR(0, 192, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("create_memory_player", 1, 1, 1, i); __PYX_ERR(0, 177, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 192, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 177, __pyx_L3_error)
     }
     __pyx_v_filename = ((PyObject*)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("create_memory_player", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 192, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("create_memory_player", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 177, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.create_memory_player", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.create_memory_player", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 192, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_create_memory_player(__pyx_self, __pyx_v_filename);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_create_memory_player(__pyx_self, __pyx_v_filename);
 
   /* function exit code */
   goto __pyx_L0;
@@ -20860,8 +20858,8 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_pf_7cyfaust_4play_create_memory_player(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename) {
-  struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_r = NULL;
+static struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_pf_7cyfaust_6player_create_memory_player(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename) {
+  struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -20872,7 +20870,7 @@ static struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_pf_7cyfaust_4pla
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("create_memory_player", 0);
 
-  /* "cyfaust/play.pyx":194
+  /* "cyfaust/player.pyx":179
  * def create_memory_player(filename: str) -> SoundMemoryPlayer:
  *     """Create a memory-based sound player."""
  *     return SoundMemoryPlayer(filename)             # <<<<<<<<<<<<<<
@@ -20881,22 +20879,22 @@ static struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_pf_7cyfaust_4pla
 */
   __Pyx_XDECREF((PyObject *)__pyx_r);
   __pyx_t_2 = NULL;
-  __Pyx_INCREF((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer);
-  __pyx_t_3 = ((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer); 
+  __Pyx_INCREF((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer);
+  __pyx_t_3 = ((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer); 
   __pyx_t_4 = 1;
   {
     PyObject *__pyx_callargs[2] = {__pyx_t_2, __pyx_v_filename};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 194, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 179, __pyx_L1_error)
     __Pyx_GOTREF((PyObject *)__pyx_t_1);
   }
-  __pyx_r = ((struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *)__pyx_t_1);
+  __pyx_r = ((struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cyfaust/play.pyx":192
+  /* "cyfaust/player.pyx":177
  * ## Convenience functions
  * 
  * def create_memory_player(filename: str) -> SoundMemoryPlayer:             # <<<<<<<<<<<<<<
@@ -20909,7 +20907,7 @@ static struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_pf_7cyfaust_4pla
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("cyfaust.play.create_memory_player", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.create_memory_player", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF((PyObject *)__pyx_r);
@@ -20917,7 +20915,7 @@ static struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_pf_7cyfaust_4pla
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":196
+/* "cyfaust/player.pyx":181
  *     return SoundMemoryPlayer(filename)
  * 
  * def create_dtd_player(filename: str) -> SoundDtdPlayer:             # <<<<<<<<<<<<<<
@@ -20926,16 +20924,16 @@ static struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer *__pyx_pf_7cyfaust_4pla
 */
 
 /* Python wrapper */
-static struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_pw_7cyfaust_4play_3create_dtd_player(PyObject *__pyx_self, 
+static struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_pw_7cyfaust_6player_3create_dtd_player(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_2create_dtd_player, "Create a direct-to-disk sound player.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_3create_dtd_player = {"create_dtd_player", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_3create_dtd_player, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_2create_dtd_player};
-static struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_pw_7cyfaust_4play_3create_dtd_player(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_2create_dtd_player, "Create a direct-to-disk sound player.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_3create_dtd_player = {"create_dtd_player", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_3create_dtd_player, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_2create_dtd_player};
+static struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_pw_7cyfaust_6player_3create_dtd_player(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -20951,7 +20949,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_r = 0;
+  struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("create_dtd_player (wrapper)", 0);
   #if !CYTHON_METH_FASTCALL
@@ -20965,44 +20963,44 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_filename,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 196, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 181, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 196, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 181, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "create_dtd_player", 0) < 0) __PYX_ERR(0, 196, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "create_dtd_player", 0) < 0) __PYX_ERR(0, 181, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("create_dtd_player", 1, 1, 1, i); __PYX_ERR(0, 196, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("create_dtd_player", 1, 1, 1, i); __PYX_ERR(0, 181, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 196, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 181, __pyx_L3_error)
     }
     __pyx_v_filename = ((PyObject*)values[0]);
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("create_dtd_player", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 196, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("create_dtd_player", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 181, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
   for (Py_ssize_t __pyx_temp=0; __pyx_temp < (Py_ssize_t)(sizeof(values)/sizeof(values[0])); ++__pyx_temp) {
     Py_XDECREF(values[__pyx_temp]);
   }
-  __Pyx_AddTraceback("cyfaust.play.create_dtd_player", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.create_dtd_player", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 196, __pyx_L1_error)
-  __pyx_r = __pyx_pf_7cyfaust_4play_2create_dtd_player(__pyx_self, __pyx_v_filename);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 0, "filename", 2))) __PYX_ERR(0, 181, __pyx_L1_error)
+  __pyx_r = __pyx_pf_7cyfaust_6player_2create_dtd_player(__pyx_self, __pyx_v_filename);
 
   /* function exit code */
   goto __pyx_L0;
@@ -21021,8 +21019,8 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_pf_7cyfaust_4play_2create_dtd_player(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename) {
-  struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_r = NULL;
+static struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_pf_7cyfaust_6player_2create_dtd_player(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename) {
+  struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -21033,7 +21031,7 @@ static struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_pf_7cyfaust_4play_2
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("create_dtd_player", 0);
 
-  /* "cyfaust/play.pyx":198
+  /* "cyfaust/player.pyx":183
  * def create_dtd_player(filename: str) -> SoundDtdPlayer:
  *     """Create a direct-to-disk sound player."""
  *     return SoundDtdPlayer(filename)             # <<<<<<<<<<<<<<
@@ -21042,22 +21040,22 @@ static struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_pf_7cyfaust_4play_2
 */
   __Pyx_XDECREF((PyObject *)__pyx_r);
   __pyx_t_2 = NULL;
-  __Pyx_INCREF((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer);
-  __pyx_t_3 = ((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer); 
+  __Pyx_INCREF((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer);
+  __pyx_t_3 = ((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer); 
   __pyx_t_4 = 1;
   {
     PyObject *__pyx_callargs[2] = {__pyx_t_2, __pyx_v_filename};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+__pyx_t_4, (2-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 198, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 183, __pyx_L1_error)
     __Pyx_GOTREF((PyObject *)__pyx_t_1);
   }
-  __pyx_r = ((struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *)__pyx_t_1);
+  __pyx_r = ((struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cyfaust/play.pyx":196
+  /* "cyfaust/player.pyx":181
  *     return SoundMemoryPlayer(filename)
  * 
  * def create_dtd_player(filename: str) -> SoundDtdPlayer:             # <<<<<<<<<<<<<<
@@ -21070,7 +21068,7 @@ static struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_pf_7cyfaust_4play_2
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("cyfaust.play.create_dtd_player", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.create_dtd_player", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF((PyObject *)__pyx_r);
@@ -21078,7 +21076,7 @@ static struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_pf_7cyfaust_4play_2
   return __pyx_r;
 }
 
-/* "cyfaust/play.pyx":200
+/* "cyfaust/player.pyx":185
  *     return SoundDtdPlayer(filename)
  * 
  * def create_position_manager() -> SoundPositionManager:             # <<<<<<<<<<<<<<
@@ -21087,24 +21085,24 @@ static struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer *__pyx_pf_7cyfaust_4play_2
 */
 
 /* Python wrapper */
-static struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_pw_7cyfaust_4play_5create_position_manager(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-PyDoc_STRVAR(__pyx_doc_7cyfaust_4play_4create_position_manager, "Create a position manager for GUI control.");
-static PyMethodDef __pyx_mdef_7cyfaust_4play_5create_position_manager = {"create_position_manager", (PyCFunction)__pyx_pw_7cyfaust_4play_5create_position_manager, METH_NOARGS, __pyx_doc_7cyfaust_4play_4create_position_manager};
-static struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_pw_7cyfaust_4play_5create_position_manager(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
+static struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_pw_7cyfaust_6player_5create_position_manager(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+PyDoc_STRVAR(__pyx_doc_7cyfaust_6player_4create_position_manager, "Create a position manager for GUI control.");
+static PyMethodDef __pyx_mdef_7cyfaust_6player_5create_position_manager = {"create_position_manager", (PyCFunction)__pyx_pw_7cyfaust_6player_5create_position_manager, METH_NOARGS, __pyx_doc_7cyfaust_6player_4create_position_manager};
+static struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_pw_7cyfaust_6player_5create_position_manager(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
-  struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_r = 0;
+  struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("create_position_manager (wrapper)", 0);
   __pyx_kwvalues = __Pyx_KwValues_VARARGS(__pyx_args, __pyx_nargs);
-  __pyx_r = __pyx_pf_7cyfaust_4play_4create_position_manager(__pyx_self);
+  __pyx_r = __pyx_pf_7cyfaust_6player_4create_position_manager(__pyx_self);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_pf_7cyfaust_4play_4create_position_manager(CYTHON_UNUSED PyObject *__pyx_self) {
-  struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_r = NULL;
+static struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_pf_7cyfaust_6player_4create_position_manager(CYTHON_UNUSED PyObject *__pyx_self) {
+  struct __pyx_obj_7cyfaust_6player_SoundPositionManager *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -21115,29 +21113,29 @@ static struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_pf_7cyfaust_4
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("create_position_manager", 0);
 
-  /* "cyfaust/play.pyx":202
+  /* "cyfaust/player.pyx":187
  * def create_position_manager() -> SoundPositionManager:
  *     """Create a position manager for GUI control."""
  *     return SoundPositionManager()             # <<<<<<<<<<<<<<
 */
   __Pyx_XDECREF((PyObject *)__pyx_r);
   __pyx_t_2 = NULL;
-  __Pyx_INCREF((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundPositionManager);
-  __pyx_t_3 = ((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundPositionManager); 
+  __Pyx_INCREF((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundPositionManager);
+  __pyx_t_3 = ((PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundPositionManager); 
   __pyx_t_4 = 1;
   {
     PyObject *__pyx_callargs[2] = {__pyx_t_2, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+__pyx_t_4, (1-__pyx_t_4) | (__pyx_t_4*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 202, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 187, __pyx_L1_error)
     __Pyx_GOTREF((PyObject *)__pyx_t_1);
   }
-  __pyx_r = ((struct __pyx_obj_7cyfaust_4play_SoundPositionManager *)__pyx_t_1);
+  __pyx_r = ((struct __pyx_obj_7cyfaust_6player_SoundPositionManager *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cyfaust/play.pyx":200
+  /* "cyfaust/player.pyx":185
  *     return SoundDtdPlayer(filename)
  * 
  * def create_position_manager() -> SoundPositionManager:             # <<<<<<<<<<<<<<
@@ -21150,7 +21148,7 @@ static struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_pf_7cyfaust_4
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("cyfaust.play.create_position_manager", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cyfaust.player.create_position_manager", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF((PyObject *)__pyx_r);
@@ -21159,8 +21157,8 @@ static struct __pyx_obj_7cyfaust_4play_SoundPositionManager *__pyx_pf_7cyfaust_4
 }
 /* #### Code section: module_exttypes ### */
 
-static PyObject *__pyx_tp_new_7cyfaust_4play_SoundBasePlayer(PyTypeObject *t, PyObject *a, PyObject *k) {
-  struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *p;
+static PyObject *__pyx_tp_new_7cyfaust_6player_SoundBasePlayer(PyTypeObject *t, PyObject *a, PyObject *k) {
+  struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *p;
   PyObject *o;
   #if CYTHON_COMPILING_IN_LIMITED_API
   allocfunc alloc_func = (allocfunc)PyType_GetSlot(t, Py_tp_alloc);
@@ -21173,20 +21171,20 @@ static PyObject *__pyx_tp_new_7cyfaust_4play_SoundBasePlayer(PyTypeObject *t, Py
   }
   if (unlikely(!o)) return 0;
   #endif
-  p = ((struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)o);
+  p = ((struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)o);
   p->_filename = Py_None; Py_INCREF(Py_None);
-  if (unlikely(__pyx_pw_7cyfaust_4play_15SoundBasePlayer_1__cinit__(o, a, k) < 0)) goto bad;
+  if (unlikely(__pyx_pw_7cyfaust_6player_15SoundBasePlayer_1__cinit__(o, a, k) < 0)) goto bad;
   return o;
   bad:
   Py_DECREF(o); o = 0;
   return NULL;
 }
 
-static void __pyx_tp_dealloc_7cyfaust_4play_SoundBasePlayer(PyObject *o) {
-  struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *p = (struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)o;
+static void __pyx_tp_dealloc_7cyfaust_6player_SoundBasePlayer(PyObject *o) {
+  struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *p = (struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)o;
   #if CYTHON_USE_TP_FINALIZE
   if (unlikely((PY_VERSION_HEX >= 0x03080000 || __Pyx_PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE)) && __Pyx_PyObject_GetSlot(o, tp_finalize, destructor)) && !__Pyx_PyObject_GC_IsFinalized(o)) {
-    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_7cyfaust_4play_SoundBasePlayer) {
+    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_7cyfaust_6player_SoundBasePlayer) {
       if (PyObject_CallFinalizerFromDealloc(o)) return;
     }
   }
@@ -21196,7 +21194,7 @@ static void __pyx_tp_dealloc_7cyfaust_4play_SoundBasePlayer(PyObject *o) {
     PyObject *etype, *eval, *etb;
     PyErr_Fetch(&etype, &eval, &etb);
     __Pyx_SET_REFCNT(o, Py_REFCNT(o) + 1);
-    __pyx_pw_7cyfaust_4play_15SoundBasePlayer_3__dealloc__(o);
+    __pyx_pw_7cyfaust_6player_15SoundBasePlayer_3__dealloc__(o);
     __Pyx_SET_REFCNT(o, Py_REFCNT(o) - 1);
     PyErr_Restore(etype, eval, etb);
   }
@@ -21211,9 +21209,9 @@ static void __pyx_tp_dealloc_7cyfaust_4play_SoundBasePlayer(PyObject *o) {
   #endif
 }
 
-static int __pyx_tp_traverse_7cyfaust_4play_SoundBasePlayer(PyObject *o, visitproc v, void *a) {
+static int __pyx_tp_traverse_7cyfaust_6player_SoundBasePlayer(PyObject *o, visitproc v, void *a) {
   int e;
-  struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *p = (struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)o;
+  struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *p = (struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)o;
   {
     e = __Pyx_call_type_traverse(o, 1, v, a);
     if (e) return e;
@@ -21224,64 +21222,64 @@ static int __pyx_tp_traverse_7cyfaust_4play_SoundBasePlayer(PyObject *o, visitpr
   return 0;
 }
 
-static int __pyx_tp_clear_7cyfaust_4play_SoundBasePlayer(PyObject *o) {
+static int __pyx_tp_clear_7cyfaust_6player_SoundBasePlayer(PyObject *o) {
   PyObject* tmp;
-  struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *p = (struct __pyx_obj_7cyfaust_4play_SoundBasePlayer *)o;
+  struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *p = (struct __pyx_obj_7cyfaust_6player_SoundBasePlayer *)o;
   tmp = ((PyObject*)p->_filename);
   p->_filename = Py_None; Py_INCREF(Py_None);
   Py_XDECREF(tmp);
   return 0;
 }
 
-static PyObject *__pyx_getprop_7cyfaust_4play_15SoundBasePlayer_filename(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_7cyfaust_4play_15SoundBasePlayer_8filename_1__get__(o);
+static PyObject *__pyx_getprop_7cyfaust_6player_15SoundBasePlayer_filename(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_7cyfaust_6player_15SoundBasePlayer_8filename_1__get__(o);
 }
 
-static PyMethodDef __pyx_methods_7cyfaust_4play_SoundBasePlayer[] = {
-  {"get_num_inputs", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_5get_num_inputs, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_4get_num_inputs},
-  {"get_num_outputs", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_7get_num_outputs, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_6get_num_outputs},
-  {"get_sample_rate", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_9get_sample_rate, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_8get_sample_rate},
-  {"init", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_11init, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_10init},
-  {"instance_init", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_13instance_init, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_12instance_init},
-  {"instance_constants", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_15instance_constants, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_14instance_constants},
-  {"instance_reset_user_interface", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_17instance_reset_user_interface, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_16instance_reset_user_interface},
-  {"instance_clear", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_19instance_clear, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_18instance_clear},
-  {"compute", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_21compute, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_15SoundBasePlayer_20compute},
-  {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_23__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_15SoundBasePlayer_25__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+static PyMethodDef __pyx_methods_7cyfaust_6player_SoundBasePlayer[] = {
+  {"get_num_inputs", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_5get_num_inputs, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_4get_num_inputs},
+  {"get_num_outputs", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_7get_num_outputs, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_6get_num_outputs},
+  {"get_sample_rate", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_9get_sample_rate, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_8get_sample_rate},
+  {"init", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_11init, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_10init},
+  {"instance_init", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_13instance_init, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_12instance_init},
+  {"instance_constants", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_15instance_constants, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_14instance_constants},
+  {"instance_reset_user_interface", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_17instance_reset_user_interface, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_16instance_reset_user_interface},
+  {"instance_clear", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_19instance_clear, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_18instance_clear},
+  {"compute", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_21compute, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_15SoundBasePlayer_20compute},
+  {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_23__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_15SoundBasePlayer_25__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
   {0, 0, 0, 0}
 };
 
-static struct PyGetSetDef __pyx_getsets_7cyfaust_4play_SoundBasePlayer[] = {
-  {"filename", __pyx_getprop_7cyfaust_4play_15SoundBasePlayer_filename, 0, PyDoc_STR("Get the filename of the sound file."), 0},
+static struct PyGetSetDef __pyx_getsets_7cyfaust_6player_SoundBasePlayer[] = {
+  {"filename", __pyx_getprop_7cyfaust_6player_15SoundBasePlayer_filename, 0, PyDoc_STR("Get the filename of the sound file."), 0},
   {0, 0, 0, 0, 0}
 };
 #if CYTHON_USE_TYPE_SPECS
-static PyType_Slot __pyx_type_7cyfaust_4play_SoundBasePlayer_slots[] = {
-  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_7cyfaust_4play_SoundBasePlayer},
+static PyType_Slot __pyx_type_7cyfaust_6player_SoundBasePlayer_slots[] = {
+  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_7cyfaust_6player_SoundBasePlayer},
   {Py_tp_doc, (void *)PyDoc_STR("Base class for Faust sound players.")},
-  {Py_tp_traverse, (void *)__pyx_tp_traverse_7cyfaust_4play_SoundBasePlayer},
-  {Py_tp_clear, (void *)__pyx_tp_clear_7cyfaust_4play_SoundBasePlayer},
-  {Py_tp_methods, (void *)__pyx_methods_7cyfaust_4play_SoundBasePlayer},
-  {Py_tp_getset, (void *)__pyx_getsets_7cyfaust_4play_SoundBasePlayer},
-  {Py_tp_new, (void *)__pyx_tp_new_7cyfaust_4play_SoundBasePlayer},
+  {Py_tp_traverse, (void *)__pyx_tp_traverse_7cyfaust_6player_SoundBasePlayer},
+  {Py_tp_clear, (void *)__pyx_tp_clear_7cyfaust_6player_SoundBasePlayer},
+  {Py_tp_methods, (void *)__pyx_methods_7cyfaust_6player_SoundBasePlayer},
+  {Py_tp_getset, (void *)__pyx_getsets_7cyfaust_6player_SoundBasePlayer},
+  {Py_tp_new, (void *)__pyx_tp_new_7cyfaust_6player_SoundBasePlayer},
   {0, 0},
 };
-static PyType_Spec __pyx_type_7cyfaust_4play_SoundBasePlayer_spec = {
-  "cyfaust.play.SoundBasePlayer",
-  sizeof(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer),
+static PyType_Spec __pyx_type_7cyfaust_6player_SoundBasePlayer_spec = {
+  "cyfaust.player.SoundBasePlayer",
+  sizeof(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
-  __pyx_type_7cyfaust_4play_SoundBasePlayer_slots,
+  __pyx_type_7cyfaust_6player_SoundBasePlayer_slots,
 };
 #else
 
-static PyTypeObject __pyx_type_7cyfaust_4play_SoundBasePlayer = {
+static PyTypeObject __pyx_type_7cyfaust_6player_SoundBasePlayer = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cyfaust.play.""SoundBasePlayer", /*tp_name*/
-  sizeof(struct __pyx_obj_7cyfaust_4play_SoundBasePlayer), /*tp_basicsize*/
+  "cyfaust.player.""SoundBasePlayer", /*tp_name*/
+  sizeof(struct __pyx_obj_7cyfaust_6player_SoundBasePlayer), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_7cyfaust_4play_SoundBasePlayer, /*tp_dealloc*/
+  __pyx_tp_dealloc_7cyfaust_6player_SoundBasePlayer, /*tp_dealloc*/
   #if PY_VERSION_HEX < 0x030800b4
   0, /*tp_print*/
   #endif
@@ -21303,15 +21301,15 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundBasePlayer = {
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
   PyDoc_STR("Base class for Faust sound players."), /*tp_doc*/
-  __pyx_tp_traverse_7cyfaust_4play_SoundBasePlayer, /*tp_traverse*/
-  __pyx_tp_clear_7cyfaust_4play_SoundBasePlayer, /*tp_clear*/
+  __pyx_tp_traverse_7cyfaust_6player_SoundBasePlayer, /*tp_traverse*/
+  __pyx_tp_clear_7cyfaust_6player_SoundBasePlayer, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_7cyfaust_4play_SoundBasePlayer, /*tp_methods*/
+  __pyx_methods_7cyfaust_6player_SoundBasePlayer, /*tp_methods*/
   0, /*tp_members*/
-  __pyx_getsets_7cyfaust_4play_SoundBasePlayer, /*tp_getset*/
+  __pyx_getsets_7cyfaust_6player_SoundBasePlayer, /*tp_getset*/
   0, /*tp_base*/
   0, /*tp_dict*/
   0, /*tp_descr_get*/
@@ -21321,7 +21319,7 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundBasePlayer = {
   #endif
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_7cyfaust_4play_SoundBasePlayer, /*tp_new*/
+  __pyx_tp_new_7cyfaust_6player_SoundBasePlayer, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -21354,20 +21352,20 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundBasePlayer = {
 };
 #endif
 
-static PyObject *__pyx_tp_new_7cyfaust_4play_SoundMemoryPlayer(PyTypeObject *t, PyObject *a, PyObject *k) {
-  PyObject *o = __pyx_tp_new_7cyfaust_4play_SoundBasePlayer(t, a, k);
+static PyObject *__pyx_tp_new_7cyfaust_6player_SoundMemoryPlayer(PyTypeObject *t, PyObject *a, PyObject *k) {
+  PyObject *o = __pyx_tp_new_7cyfaust_6player_SoundBasePlayer(t, a, k);
   if (unlikely(!o)) return 0;
-  if (unlikely(__pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_1__cinit__(o, a, k) < 0)) goto bad;
+  if (unlikely(__pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_1__cinit__(o, a, k) < 0)) goto bad;
   return o;
   bad:
   Py_DECREF(o); o = 0;
   return NULL;
 }
 
-static void __pyx_tp_dealloc_7cyfaust_4play_SoundMemoryPlayer(PyObject *o) {
+static void __pyx_tp_dealloc_7cyfaust_6player_SoundMemoryPlayer(PyObject *o) {
   #if CYTHON_USE_TP_FINALIZE
   if (unlikely((PY_VERSION_HEX >= 0x03080000 || __Pyx_PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE)) && __Pyx_PyObject_GetSlot(o, tp_finalize, destructor)) && !__Pyx_PyObject_GC_IsFinalized(o)) {
-    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_7cyfaust_4play_SoundMemoryPlayer) {
+    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_7cyfaust_6player_SoundMemoryPlayer) {
       if (PyObject_CallFinalizerFromDealloc(o)) return;
     }
   }
@@ -21377,44 +21375,44 @@ static void __pyx_tp_dealloc_7cyfaust_4play_SoundMemoryPlayer(PyObject *o) {
     PyObject *etype, *eval, *etb;
     PyErr_Fetch(&etype, &eval, &etb);
     __Pyx_SET_REFCNT(o, Py_REFCNT(o) + 1);
-    __pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_3__dealloc__(o);
+    __pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_3__dealloc__(o);
     __Pyx_SET_REFCNT(o, Py_REFCNT(o) - 1);
     PyErr_Restore(etype, eval, etb);
   }
   PyObject_GC_Track(o);
-  __pyx_tp_dealloc_7cyfaust_4play_SoundBasePlayer(o);
+  __pyx_tp_dealloc_7cyfaust_6player_SoundBasePlayer(o);
 }
 
-static PyMethodDef __pyx_methods_7cyfaust_4play_SoundMemoryPlayer[] = {
-  {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_5__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_17SoundMemoryPlayer_7__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+static PyMethodDef __pyx_methods_7cyfaust_6player_SoundMemoryPlayer[] = {
+  {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_5__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_17SoundMemoryPlayer_7__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
   {0, 0, 0, 0}
 };
 #if CYTHON_USE_TYPE_SPECS
-static PyType_Slot __pyx_type_7cyfaust_4play_SoundMemoryPlayer_slots[] = {
-  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_7cyfaust_4play_SoundMemoryPlayer},
+static PyType_Slot __pyx_type_7cyfaust_6player_SoundMemoryPlayer_slots[] = {
+  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_7cyfaust_6player_SoundMemoryPlayer},
   {Py_tp_doc, (void *)PyDoc_STR("Memory-based sound player that loads entire file into memory.")},
-  {Py_tp_traverse, (void *)__pyx_tp_traverse_7cyfaust_4play_SoundBasePlayer},
-  {Py_tp_clear, (void *)__pyx_tp_clear_7cyfaust_4play_SoundBasePlayer},
-  {Py_tp_methods, (void *)__pyx_methods_7cyfaust_4play_SoundMemoryPlayer},
-  {Py_tp_new, (void *)__pyx_tp_new_7cyfaust_4play_SoundMemoryPlayer},
+  {Py_tp_traverse, (void *)__pyx_tp_traverse_7cyfaust_6player_SoundBasePlayer},
+  {Py_tp_clear, (void *)__pyx_tp_clear_7cyfaust_6player_SoundBasePlayer},
+  {Py_tp_methods, (void *)__pyx_methods_7cyfaust_6player_SoundMemoryPlayer},
+  {Py_tp_new, (void *)__pyx_tp_new_7cyfaust_6player_SoundMemoryPlayer},
   {0, 0},
 };
-static PyType_Spec __pyx_type_7cyfaust_4play_SoundMemoryPlayer_spec = {
-  "cyfaust.play.SoundMemoryPlayer",
-  sizeof(struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer),
+static PyType_Spec __pyx_type_7cyfaust_6player_SoundMemoryPlayer_spec = {
+  "cyfaust.player.SoundMemoryPlayer",
+  sizeof(struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
-  __pyx_type_7cyfaust_4play_SoundMemoryPlayer_slots,
+  __pyx_type_7cyfaust_6player_SoundMemoryPlayer_slots,
 };
 #else
 
-static PyTypeObject __pyx_type_7cyfaust_4play_SoundMemoryPlayer = {
+static PyTypeObject __pyx_type_7cyfaust_6player_SoundMemoryPlayer = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cyfaust.play.""SoundMemoryPlayer", /*tp_name*/
-  sizeof(struct __pyx_obj_7cyfaust_4play_SoundMemoryPlayer), /*tp_basicsize*/
+  "cyfaust.player.""SoundMemoryPlayer", /*tp_name*/
+  sizeof(struct __pyx_obj_7cyfaust_6player_SoundMemoryPlayer), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_7cyfaust_4play_SoundMemoryPlayer, /*tp_dealloc*/
+  __pyx_tp_dealloc_7cyfaust_6player_SoundMemoryPlayer, /*tp_dealloc*/
   #if PY_VERSION_HEX < 0x030800b4
   0, /*tp_print*/
   #endif
@@ -21436,13 +21434,13 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundMemoryPlayer = {
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
   PyDoc_STR("Memory-based sound player that loads entire file into memory."), /*tp_doc*/
-  __pyx_tp_traverse_7cyfaust_4play_SoundBasePlayer, /*tp_traverse*/
-  __pyx_tp_clear_7cyfaust_4play_SoundBasePlayer, /*tp_clear*/
+  __pyx_tp_traverse_7cyfaust_6player_SoundBasePlayer, /*tp_traverse*/
+  __pyx_tp_clear_7cyfaust_6player_SoundBasePlayer, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_7cyfaust_4play_SoundMemoryPlayer, /*tp_methods*/
+  __pyx_methods_7cyfaust_6player_SoundMemoryPlayer, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
   0, /*tp_base*/
@@ -21454,7 +21452,7 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundMemoryPlayer = {
   #endif
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_7cyfaust_4play_SoundMemoryPlayer, /*tp_new*/
+  __pyx_tp_new_7cyfaust_6player_SoundMemoryPlayer, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -21487,20 +21485,20 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundMemoryPlayer = {
 };
 #endif
 
-static PyObject *__pyx_tp_new_7cyfaust_4play_SoundDtdPlayer(PyTypeObject *t, PyObject *a, PyObject *k) {
-  PyObject *o = __pyx_tp_new_7cyfaust_4play_SoundBasePlayer(t, a, k);
+static PyObject *__pyx_tp_new_7cyfaust_6player_SoundDtdPlayer(PyTypeObject *t, PyObject *a, PyObject *k) {
+  PyObject *o = __pyx_tp_new_7cyfaust_6player_SoundBasePlayer(t, a, k);
   if (unlikely(!o)) return 0;
-  if (unlikely(__pyx_pw_7cyfaust_4play_14SoundDtdPlayer_1__cinit__(o, a, k) < 0)) goto bad;
+  if (unlikely(__pyx_pw_7cyfaust_6player_14SoundDtdPlayer_1__cinit__(o, a, k) < 0)) goto bad;
   return o;
   bad:
   Py_DECREF(o); o = 0;
   return NULL;
 }
 
-static void __pyx_tp_dealloc_7cyfaust_4play_SoundDtdPlayer(PyObject *o) {
+static void __pyx_tp_dealloc_7cyfaust_6player_SoundDtdPlayer(PyObject *o) {
   #if CYTHON_USE_TP_FINALIZE
   if (unlikely((PY_VERSION_HEX >= 0x03080000 || __Pyx_PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE)) && __Pyx_PyObject_GetSlot(o, tp_finalize, destructor)) && !__Pyx_PyObject_GC_IsFinalized(o)) {
-    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_7cyfaust_4play_SoundDtdPlayer) {
+    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_7cyfaust_6player_SoundDtdPlayer) {
       if (PyObject_CallFinalizerFromDealloc(o)) return;
     }
   }
@@ -21510,44 +21508,44 @@ static void __pyx_tp_dealloc_7cyfaust_4play_SoundDtdPlayer(PyObject *o) {
     PyObject *etype, *eval, *etb;
     PyErr_Fetch(&etype, &eval, &etb);
     __Pyx_SET_REFCNT(o, Py_REFCNT(o) + 1);
-    __pyx_pw_7cyfaust_4play_14SoundDtdPlayer_3__dealloc__(o);
+    __pyx_pw_7cyfaust_6player_14SoundDtdPlayer_3__dealloc__(o);
     __Pyx_SET_REFCNT(o, Py_REFCNT(o) - 1);
     PyErr_Restore(etype, eval, etb);
   }
   PyObject_GC_Track(o);
-  __pyx_tp_dealloc_7cyfaust_4play_SoundBasePlayer(o);
+  __pyx_tp_dealloc_7cyfaust_6player_SoundBasePlayer(o);
 }
 
-static PyMethodDef __pyx_methods_7cyfaust_4play_SoundDtdPlayer[] = {
-  {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_14SoundDtdPlayer_5__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_14SoundDtdPlayer_7__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+static PyMethodDef __pyx_methods_7cyfaust_6player_SoundDtdPlayer[] = {
+  {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_14SoundDtdPlayer_5__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_14SoundDtdPlayer_7__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
   {0, 0, 0, 0}
 };
 #if CYTHON_USE_TYPE_SPECS
-static PyType_Slot __pyx_type_7cyfaust_4play_SoundDtdPlayer_slots[] = {
-  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_7cyfaust_4play_SoundDtdPlayer},
+static PyType_Slot __pyx_type_7cyfaust_6player_SoundDtdPlayer_slots[] = {
+  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_7cyfaust_6player_SoundDtdPlayer},
   {Py_tp_doc, (void *)PyDoc_STR("Direct-to-disk sound player that streams from file.")},
-  {Py_tp_traverse, (void *)__pyx_tp_traverse_7cyfaust_4play_SoundBasePlayer},
-  {Py_tp_clear, (void *)__pyx_tp_clear_7cyfaust_4play_SoundBasePlayer},
-  {Py_tp_methods, (void *)__pyx_methods_7cyfaust_4play_SoundDtdPlayer},
-  {Py_tp_new, (void *)__pyx_tp_new_7cyfaust_4play_SoundDtdPlayer},
+  {Py_tp_traverse, (void *)__pyx_tp_traverse_7cyfaust_6player_SoundBasePlayer},
+  {Py_tp_clear, (void *)__pyx_tp_clear_7cyfaust_6player_SoundBasePlayer},
+  {Py_tp_methods, (void *)__pyx_methods_7cyfaust_6player_SoundDtdPlayer},
+  {Py_tp_new, (void *)__pyx_tp_new_7cyfaust_6player_SoundDtdPlayer},
   {0, 0},
 };
-static PyType_Spec __pyx_type_7cyfaust_4play_SoundDtdPlayer_spec = {
-  "cyfaust.play.SoundDtdPlayer",
-  sizeof(struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer),
+static PyType_Spec __pyx_type_7cyfaust_6player_SoundDtdPlayer_spec = {
+  "cyfaust.player.SoundDtdPlayer",
+  sizeof(struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
-  __pyx_type_7cyfaust_4play_SoundDtdPlayer_slots,
+  __pyx_type_7cyfaust_6player_SoundDtdPlayer_slots,
 };
 #else
 
-static PyTypeObject __pyx_type_7cyfaust_4play_SoundDtdPlayer = {
+static PyTypeObject __pyx_type_7cyfaust_6player_SoundDtdPlayer = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cyfaust.play.""SoundDtdPlayer", /*tp_name*/
-  sizeof(struct __pyx_obj_7cyfaust_4play_SoundDtdPlayer), /*tp_basicsize*/
+  "cyfaust.player.""SoundDtdPlayer", /*tp_name*/
+  sizeof(struct __pyx_obj_7cyfaust_6player_SoundDtdPlayer), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_7cyfaust_4play_SoundDtdPlayer, /*tp_dealloc*/
+  __pyx_tp_dealloc_7cyfaust_6player_SoundDtdPlayer, /*tp_dealloc*/
   #if PY_VERSION_HEX < 0x030800b4
   0, /*tp_print*/
   #endif
@@ -21569,13 +21567,13 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundDtdPlayer = {
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
   PyDoc_STR("Direct-to-disk sound player that streams from file."), /*tp_doc*/
-  __pyx_tp_traverse_7cyfaust_4play_SoundBasePlayer, /*tp_traverse*/
-  __pyx_tp_clear_7cyfaust_4play_SoundBasePlayer, /*tp_clear*/
+  __pyx_tp_traverse_7cyfaust_6player_SoundBasePlayer, /*tp_traverse*/
+  __pyx_tp_clear_7cyfaust_6player_SoundBasePlayer, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_7cyfaust_4play_SoundDtdPlayer, /*tp_methods*/
+  __pyx_methods_7cyfaust_6player_SoundDtdPlayer, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
   0, /*tp_base*/
@@ -21587,7 +21585,7 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundDtdPlayer = {
   #endif
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_7cyfaust_4play_SoundDtdPlayer, /*tp_new*/
+  __pyx_tp_new_7cyfaust_6player_SoundDtdPlayer, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -21620,7 +21618,7 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundDtdPlayer = {
 };
 #endif
 
-static PyObject *__pyx_tp_new_7cyfaust_4play_SoundPositionManager(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
+static PyObject *__pyx_tp_new_7cyfaust_6player_SoundPositionManager(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
   PyObject *o;
   #if CYTHON_COMPILING_IN_LIMITED_API
   allocfunc alloc_func = (allocfunc)PyType_GetSlot(t, Py_tp_alloc);
@@ -21633,17 +21631,17 @@ static PyObject *__pyx_tp_new_7cyfaust_4play_SoundPositionManager(PyTypeObject *
   }
   if (unlikely(!o)) return 0;
   #endif
-  if (unlikely(__pyx_pw_7cyfaust_4play_20SoundPositionManager_1__cinit__(o, __pyx_mstate_global->__pyx_empty_tuple, NULL) < 0)) goto bad;
+  if (unlikely(__pyx_pw_7cyfaust_6player_20SoundPositionManager_1__cinit__(o, __pyx_mstate_global->__pyx_empty_tuple, NULL) < 0)) goto bad;
   return o;
   bad:
   Py_DECREF(o); o = 0;
   return NULL;
 }
 
-static void __pyx_tp_dealloc_7cyfaust_4play_SoundPositionManager(PyObject *o) {
+static void __pyx_tp_dealloc_7cyfaust_6player_SoundPositionManager(PyObject *o) {
   #if CYTHON_USE_TP_FINALIZE
   if (unlikely((PY_VERSION_HEX >= 0x03080000 || __Pyx_PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE)) && __Pyx_PyObject_GetSlot(o, tp_finalize, destructor)) && (!PyType_IS_GC(Py_TYPE(o)) || !__Pyx_PyObject_GC_IsFinalized(o))) {
-    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_7cyfaust_4play_SoundPositionManager) {
+    if (__Pyx_PyObject_GetSlot(o, tp_dealloc, destructor) == __pyx_tp_dealloc_7cyfaust_6player_SoundPositionManager) {
       if (PyObject_CallFinalizerFromDealloc(o)) return;
     }
   }
@@ -21652,7 +21650,7 @@ static void __pyx_tp_dealloc_7cyfaust_4play_SoundPositionManager(PyObject *o) {
     PyObject *etype, *eval, *etb;
     PyErr_Fetch(&etype, &eval, &etb);
     __Pyx_SET_REFCNT(o, Py_REFCNT(o) + 1);
-    __pyx_pw_7cyfaust_4play_20SoundPositionManager_3__dealloc__(o);
+    __pyx_pw_7cyfaust_6player_20SoundPositionManager_3__dealloc__(o);
     __Pyx_SET_REFCNT(o, Py_REFCNT(o) - 1);
     PyErr_Restore(etype, eval, etb);
   }
@@ -21666,36 +21664,36 @@ static void __pyx_tp_dealloc_7cyfaust_4play_SoundPositionManager(PyObject *o) {
   #endif
 }
 
-static PyMethodDef __pyx_methods_7cyfaust_4play_SoundPositionManager[] = {
-  {"add_dsp", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_20SoundPositionManager_5add_dsp, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_20SoundPositionManager_4add_dsp},
-  {"remove_dsp", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_20SoundPositionManager_7remove_dsp, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_4play_20SoundPositionManager_6remove_dsp},
-  {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_20SoundPositionManager_9__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
-  {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_4play_20SoundPositionManager_11__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+static PyMethodDef __pyx_methods_7cyfaust_6player_SoundPositionManager[] = {
+  {"add_dsp", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_20SoundPositionManager_5add_dsp, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_20SoundPositionManager_4add_dsp},
+  {"remove_dsp", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_20SoundPositionManager_7remove_dsp, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7cyfaust_6player_20SoundPositionManager_6remove_dsp},
+  {"__reduce_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_20SoundPositionManager_9__reduce_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
+  {"__setstate_cython__", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7cyfaust_6player_20SoundPositionManager_11__setstate_cython__, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0},
   {0, 0, 0, 0}
 };
 #if CYTHON_USE_TYPE_SPECS
-static PyType_Slot __pyx_type_7cyfaust_4play_SoundPositionManager_slots[] = {
-  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_7cyfaust_4play_SoundPositionManager},
+static PyType_Slot __pyx_type_7cyfaust_6player_SoundPositionManager_slots[] = {
+  {Py_tp_dealloc, (void *)__pyx_tp_dealloc_7cyfaust_6player_SoundPositionManager},
   {Py_tp_doc, (void *)PyDoc_STR("Manager for sound player position control via GUI.")},
-  {Py_tp_methods, (void *)__pyx_methods_7cyfaust_4play_SoundPositionManager},
-  {Py_tp_new, (void *)__pyx_tp_new_7cyfaust_4play_SoundPositionManager},
+  {Py_tp_methods, (void *)__pyx_methods_7cyfaust_6player_SoundPositionManager},
+  {Py_tp_new, (void *)__pyx_tp_new_7cyfaust_6player_SoundPositionManager},
   {0, 0},
 };
-static PyType_Spec __pyx_type_7cyfaust_4play_SoundPositionManager_spec = {
-  "cyfaust.play.SoundPositionManager",
-  sizeof(struct __pyx_obj_7cyfaust_4play_SoundPositionManager),
+static PyType_Spec __pyx_type_7cyfaust_6player_SoundPositionManager_spec = {
+  "cyfaust.player.SoundPositionManager",
+  sizeof(struct __pyx_obj_7cyfaust_6player_SoundPositionManager),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE,
-  __pyx_type_7cyfaust_4play_SoundPositionManager_slots,
+  __pyx_type_7cyfaust_6player_SoundPositionManager_slots,
 };
 #else
 
-static PyTypeObject __pyx_type_7cyfaust_4play_SoundPositionManager = {
+static PyTypeObject __pyx_type_7cyfaust_6player_SoundPositionManager = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cyfaust.play.""SoundPositionManager", /*tp_name*/
-  sizeof(struct __pyx_obj_7cyfaust_4play_SoundPositionManager), /*tp_basicsize*/
+  "cyfaust.player.""SoundPositionManager", /*tp_name*/
+  sizeof(struct __pyx_obj_7cyfaust_6player_SoundPositionManager), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_7cyfaust_4play_SoundPositionManager, /*tp_dealloc*/
+  __pyx_tp_dealloc_7cyfaust_6player_SoundPositionManager, /*tp_dealloc*/
   #if PY_VERSION_HEX < 0x030800b4
   0, /*tp_print*/
   #endif
@@ -21723,7 +21721,7 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundPositionManager = {
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_7cyfaust_4play_SoundPositionManager, /*tp_methods*/
+  __pyx_methods_7cyfaust_6player_SoundPositionManager, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
   0, /*tp_base*/
@@ -21735,7 +21733,7 @@ static PyTypeObject __pyx_type_7cyfaust_4play_SoundPositionManager = {
   #endif
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_7cyfaust_4play_SoundPositionManager, /*tp_new*/
+  __pyx_tp_new_7cyfaust_6player_SoundPositionManager, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -21898,7 +21896,7 @@ static PyType_Slot __pyx_type___pyx_array_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_array_spec = {
-  "cyfaust.play.array",
+  "cyfaust.player.array",
   sizeof(struct __pyx_array_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_SEQUENCE,
@@ -21932,7 +21930,7 @@ static PyBufferProcs __pyx_tp_as_buffer_array = {
 
 static PyTypeObject __pyx_type___pyx_array = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cyfaust.play.""array", /*tp_name*/
+  "cyfaust.player.""array", /*tp_name*/
   sizeof(struct __pyx_array_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_array, /*tp_dealloc*/
@@ -22087,7 +22085,7 @@ static PyType_Slot __pyx_type___pyx_MemviewEnum_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_MemviewEnum_spec = {
-  "cyfaust.play.Enum",
+  "cyfaust.player.Enum",
   sizeof(struct __pyx_MemviewEnum_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
@@ -22097,7 +22095,7 @@ static PyType_Spec __pyx_type___pyx_MemviewEnum_spec = {
 
 static PyTypeObject __pyx_type___pyx_MemviewEnum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cyfaust.play.""Enum", /*tp_name*/
+  "cyfaust.player.""Enum", /*tp_name*/
   sizeof(struct __pyx_MemviewEnum_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_Enum, /*tp_dealloc*/
@@ -22382,7 +22380,7 @@ static PyType_Slot __pyx_type___pyx_memoryview_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_memoryview_spec = {
-  "cyfaust.play.memoryview",
+  "cyfaust.player.memoryview",
   sizeof(struct __pyx_memoryview_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
@@ -22416,7 +22414,7 @@ static PyBufferProcs __pyx_tp_as_buffer_memoryview = {
 
 static PyTypeObject __pyx_type___pyx_memoryview = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cyfaust.play.""memoryview", /*tp_name*/
+  "cyfaust.player.""memoryview", /*tp_name*/
   sizeof(struct __pyx_memoryview_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_memoryview, /*tp_dealloc*/
@@ -22566,7 +22564,7 @@ static PyType_Slot __pyx_type___pyx_memoryviewslice_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_memoryviewslice_spec = {
-  "cyfaust.play._memoryviewslice",
+  "cyfaust.player._memoryviewslice",
   sizeof(struct __pyx_memoryviewslice_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC|Py_TPFLAGS_SEQUENCE,
@@ -22576,7 +22574,7 @@ static PyType_Spec __pyx_type___pyx_memoryviewslice_spec = {
 
 static PyTypeObject __pyx_type___pyx_memoryviewslice = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cyfaust.play.""_memoryviewslice", /*tp_name*/
+  "cyfaust.player.""_memoryviewslice", /*tp_name*/
   sizeof(struct __pyx_memoryviewslice_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc__memoryviewslice, /*tp_dealloc*/
@@ -22721,87 +22719,87 @@ static int __Pyx_modinit_type_init_code(__pyx_mstatetype *__pyx_mstate) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   #if CYTHON_USE_TYPE_SPECS
-  __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7cyfaust_4play_SoundBasePlayer_spec, NULL); if (unlikely(!__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer)) __PYX_ERR(0, 32, __pyx_L1_error)
-  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7cyfaust_4play_SoundBasePlayer_spec, __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer) < 0) __PYX_ERR(0, 32, __pyx_L1_error)
+  __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7cyfaust_6player_SoundBasePlayer_spec, NULL); if (unlikely(!__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer)) __PYX_ERR(0, 17, __pyx_L1_error)
+  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7cyfaust_6player_SoundBasePlayer_spec, __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
   #else
-  __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer = &__pyx_type_7cyfaust_4play_SoundBasePlayer;
+  __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer = &__pyx_type_7cyfaust_6player_SoundBasePlayer;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
   #endif
   #if !CYTHON_USE_TYPE_SPECS
-  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer) < 0) __PYX_ERR(0, 32, __pyx_L1_error)
+  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
-  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer->tp_dictoffset && __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer->tp_getattro == PyObject_GenericGetAttr)) {
-    __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer->tp_getattro = PyObject_GenericGetAttr;
+  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer->tp_dictoffset && __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer->tp_getattro == PyObject_GenericGetAttr)) {
+    __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer->tp_getattro = PyObject_GenericGetAttr;
   }
   #endif
-  if (PyObject_SetAttr(__pyx_m, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer, (PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer) < 0) __PYX_ERR(0, 32, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundBasePlayer) < 0) __PYX_ERR(0, 32, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer, (PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundBasePlayer) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
   #if CYTHON_USE_TYPE_SPECS
-  __pyx_t_1 = PyTuple_Pack(1, (PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_Pack(1, (PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7cyfaust_4play_SoundMemoryPlayer_spec, __pyx_t_1);
+  __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7cyfaust_6player_SoundMemoryPlayer_spec, __pyx_t_1);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer)) __PYX_ERR(0, 128, __pyx_L1_error)
-  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7cyfaust_4play_SoundMemoryPlayer_spec, __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer) < 0) __PYX_ERR(0, 128, __pyx_L1_error)
+  if (unlikely(!__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer)) __PYX_ERR(0, 113, __pyx_L1_error)
+  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7cyfaust_6player_SoundMemoryPlayer_spec, __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer) < 0) __PYX_ERR(0, 113, __pyx_L1_error)
   #else
-  __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer = &__pyx_type_7cyfaust_4play_SoundMemoryPlayer;
+  __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer = &__pyx_type_7cyfaust_6player_SoundMemoryPlayer;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
-  __pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer->tp_base = __pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer;
+  __pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer->tp_base = __pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer;
   #endif
   #if !CYTHON_USE_TYPE_SPECS
-  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer) < 0) __PYX_ERR(0, 128, __pyx_L1_error)
+  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer) < 0) __PYX_ERR(0, 113, __pyx_L1_error)
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
-  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer->tp_dictoffset && __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer->tp_getattro == PyObject_GenericGetAttr)) {
-    __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer->tp_getattro = PyObject_GenericGetAttr;
+  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer->tp_dictoffset && __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer->tp_getattro == PyObject_GenericGetAttr)) {
+    __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer->tp_getattro = PyObject_GenericGetAttr;
   }
   #endif
-  if (PyObject_SetAttr(__pyx_m, __pyx_mstate_global->__pyx_n_u_SoundMemoryPlayer, (PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer) < 0) __PYX_ERR(0, 128, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundMemoryPlayer) < 0) __PYX_ERR(0, 128, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_mstate_global->__pyx_n_u_SoundMemoryPlayer, (PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer) < 0) __PYX_ERR(0, 113, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundMemoryPlayer) < 0) __PYX_ERR(0, 113, __pyx_L1_error)
   #if CYTHON_USE_TYPE_SPECS
-  __pyx_t_1 = PyTuple_Pack(1, (PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_Pack(1, (PyObject *)__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7cyfaust_4play_SoundDtdPlayer_spec, __pyx_t_1);
+  __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7cyfaust_6player_SoundDtdPlayer_spec, __pyx_t_1);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer)) __PYX_ERR(0, 146, __pyx_L1_error)
-  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7cyfaust_4play_SoundDtdPlayer_spec, __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer) < 0) __PYX_ERR(0, 146, __pyx_L1_error)
+  if (unlikely(!__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer)) __PYX_ERR(0, 131, __pyx_L1_error)
+  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7cyfaust_6player_SoundDtdPlayer_spec, __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer) < 0) __PYX_ERR(0, 131, __pyx_L1_error)
   #else
-  __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer = &__pyx_type_7cyfaust_4play_SoundDtdPlayer;
+  __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer = &__pyx_type_7cyfaust_6player_SoundDtdPlayer;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
-  __pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer->tp_base = __pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer;
+  __pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer->tp_base = __pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer;
   #endif
   #if !CYTHON_USE_TYPE_SPECS
-  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer) < 0) __PYX_ERR(0, 146, __pyx_L1_error)
+  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer) < 0) __PYX_ERR(0, 131, __pyx_L1_error)
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
-  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer->tp_dictoffset && __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer->tp_getattro == PyObject_GenericGetAttr)) {
-    __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer->tp_getattro = PyObject_GenericGetAttr;
+  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer->tp_dictoffset && __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer->tp_getattro == PyObject_GenericGetAttr)) {
+    __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer->tp_getattro = PyObject_GenericGetAttr;
   }
   #endif
-  if (PyObject_SetAttr(__pyx_m, __pyx_mstate_global->__pyx_n_u_SoundDtdPlayer, (PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer) < 0) __PYX_ERR(0, 146, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundDtdPlayer) < 0) __PYX_ERR(0, 146, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_mstate_global->__pyx_n_u_SoundDtdPlayer, (PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer) < 0) __PYX_ERR(0, 131, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundDtdPlayer) < 0) __PYX_ERR(0, 131, __pyx_L1_error)
   #if CYTHON_USE_TYPE_SPECS
-  __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7cyfaust_4play_SoundPositionManager_spec, NULL); if (unlikely(!__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager)) __PYX_ERR(0, 164, __pyx_L1_error)
-  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7cyfaust_4play_SoundPositionManager_spec, __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager) < 0) __PYX_ERR(0, 164, __pyx_L1_error)
+  __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager = (PyTypeObject *) __Pyx_PyType_FromModuleAndSpec(__pyx_m, &__pyx_type_7cyfaust_6player_SoundPositionManager_spec, NULL); if (unlikely(!__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager)) __PYX_ERR(0, 149, __pyx_L1_error)
+  if (__Pyx_fix_up_extension_type_from_spec(&__pyx_type_7cyfaust_6player_SoundPositionManager_spec, __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager) < 0) __PYX_ERR(0, 149, __pyx_L1_error)
   #else
-  __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager = &__pyx_type_7cyfaust_4play_SoundPositionManager;
+  __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager = &__pyx_type_7cyfaust_6player_SoundPositionManager;
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
   #endif
   #if !CYTHON_USE_TYPE_SPECS
-  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager) < 0) __PYX_ERR(0, 164, __pyx_L1_error)
+  if (__Pyx_PyType_Ready(__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager) < 0) __PYX_ERR(0, 149, __pyx_L1_error)
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
-  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager->tp_dictoffset && __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager->tp_getattro == PyObject_GenericGetAttr)) {
-    __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager->tp_getattro = PyObject_GenericGetAttr;
+  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager->tp_dictoffset && __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager->tp_getattro == PyObject_GenericGetAttr)) {
+    __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager->tp_getattro = PyObject_GenericGetAttr;
   }
   #endif
-  if (PyObject_SetAttr(__pyx_m, __pyx_mstate_global->__pyx_n_u_SoundPositionManager, (PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager) < 0) __PYX_ERR(0, 164, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_4play_SoundPositionManager) < 0) __PYX_ERR(0, 164, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_mstate_global->__pyx_n_u_SoundPositionManager, (PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager) < 0) __PYX_ERR(0, 149, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject *) __pyx_mstate->__pyx_ptype_7cyfaust_6player_SoundPositionManager) < 0) __PYX_ERR(0, 149, __pyx_L1_error)
   __pyx_vtabptr_array = &__pyx_vtable_array;
   __pyx_vtable_array.get_memview = (PyObject *(*)(struct __pyx_array_obj *))__pyx_array_get_memview;
   #if CYTHON_USE_TYPE_SPECS
@@ -22973,10 +22971,10 @@ static int __Pyx_modinit_function_import_code(__pyx_mstatetype *__pyx_mstate) {
 
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 static PyObject* __pyx_pymod_create(PyObject *spec, PyModuleDef *def); /*proto*/
-static int __pyx_pymod_exec_play(PyObject* module); /*proto*/
+static int __pyx_pymod_exec_player(PyObject* module); /*proto*/
 static PyModuleDef_Slot __pyx_moduledef_slots[] = {
   {Py_mod_create, (void*)__pyx_pymod_create},
-  {Py_mod_exec, (void*)__pyx_pymod_exec_play},
+  {Py_mod_exec, (void*)__pyx_pymod_exec_player},
   #if CYTHON_COMPILING_IN_CPYTHON_FREETHREADING
   {Py_mod_gil, Py_MOD_GIL_USED},
   #endif
@@ -22995,7 +22993,7 @@ namespace {
   #endif
   {
       PyModuleDef_HEAD_INIT,
-      "play",
+      "player",
       0, /* m_doc */
     #if CYTHON_USE_MODULE_STATE
       sizeof(__pyx_mstatetype), /* m_size */
@@ -23033,8 +23031,8 @@ namespace {
   #endif
 #endif
 
-__Pyx_PyMODINIT_FUNC PyInit_play(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC PyInit_play(void)
+__Pyx_PyMODINIT_FUNC PyInit_player(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC PyInit_player(void)
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 {
   return PyModuleDef_Init(&__pyx_moduledef);
@@ -23137,7 +23135,7 @@ bad:
 }
 
 
-static CYTHON_SMALL_CODE int __pyx_pymod_exec_play(PyObject *__pyx_pyinit_module)
+static CYTHON_SMALL_CODE int __pyx_pymod_exec_player(PyObject *__pyx_pyinit_module)
 #endif
 {
   int stringtab_initialized = 0;
@@ -23161,7 +23159,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_play(PyObject *__pyx_pyinit_module
   #if CYTHON_PEP489_MULTI_PHASE_INIT
   if (__pyx_m) {
     if (__pyx_m == __pyx_pyinit_module) return 0;
-    PyErr_SetString(PyExc_RuntimeError, "Module 'play' has already been imported. Re-initialisation is not supported.");
+    PyErr_SetString(PyExc_RuntimeError, "Module 'player' has already been imported. Re-initialisation is not supported.");
     return -1;
   }
   #else
@@ -23177,7 +23175,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_play(PyObject *__pyx_pyinit_module
   #if CYTHON_USE_MODULE_STATE
   {
     int add_module_result = __Pyx_State_AddModule(__pyx_t_1, &__pyx_moduledef);
-    __pyx_t_1 = 0; /* transfer ownership from __pyx_t_1 to "play" pseudovariable */
+    __pyx_t_1 = 0; /* transfer ownership from __pyx_t_1 to "player" pseudovariable */
     if (unlikely((add_module_result < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
     pystate_addmodule_run = 1;
   }
@@ -23205,7 +23203,7 @@ if (!__Pyx_RefNanny) {
 }
 #endif
 
-__Pyx_RefNannySetupContext("PyInit_play", 0);
+__Pyx_RefNannySetupContext("PyInit_player", 0);
   if (__Pyx_check_binary_version(__PYX_LIMITED_VERSION_HEX, __Pyx_get_runtime_version(), CYTHON_COMPILING_IN_LIMITED_API) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
@@ -23236,13 +23234,13 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
   if (__pyx_AsyncGen_init(__pyx_m) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
   /*--- Library function declarations ---*/
-  if (__pyx_module_is_main_cyfaust__play) {
+  if (__pyx_module_is_main_cyfaust__player) {
     if (PyObject_SetAttr(__pyx_m, __pyx_mstate_global->__pyx_n_u_name_2, __pyx_mstate_global->__pyx_n_u_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "cyfaust.play")) {
-      if (unlikely((PyDict_SetItemString(modules, "cyfaust.play", __pyx_m) < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "cyfaust.player")) {
+      if (unlikely((PyDict_SetItemString(modules, "cyfaust.player", __pyx_m) < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   /*--- Builtin init code ---*/
@@ -23792,161 +23790,161 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_pyx_unpickle_Enum, __pyx_t_5) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "cyfaust/play.pyx":26
+  /* "cyfaust/player.pyx":12
  * 
  * from .common cimport ParamArray
  * from .common import ParamArray             # <<<<<<<<<<<<<<
  * 
- * 
+ * ## ---------------------------------------------------------------------------
 */
-  __pyx_t_5 = __Pyx_PyList_Pack(1, __pyx_mstate_global->__pyx_n_u_ParamArray); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyList_Pack(1, __pyx_mstate_global->__pyx_n_u_ParamArray); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = __Pyx_Import(__pyx_mstate_global->__pyx_n_u_common, __pyx_t_5, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_Import(__pyx_mstate_global->__pyx_n_u_common, __pyx_t_5, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cyfaust/play.pyx":48
+  /* "cyfaust/player.pyx":33
  *             del self._player
  * 
  *     def get_num_inputs(self) -> int:             # <<<<<<<<<<<<<<
  *         """Get number of input channels."""
  *         return self._player.getNumInputs()
 */
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_5get_num_inputs, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_get_num_inputs, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[0])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 48, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_5get_num_inputs, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_get_num_inputs, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[0])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_5, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_get_num_inputs, __pyx_t_5) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_get_num_inputs, __pyx_t_5) < 0) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "cyfaust/play.pyx":52
+  /* "cyfaust/player.pyx":37
  *         return self._player.getNumInputs()
  * 
  *     def get_num_outputs(self) -> int:             # <<<<<<<<<<<<<<
  *         """Get number of output channels."""
  *         return self._player.getNumOutputs()
 */
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 37, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 52, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_7get_num_outputs, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_get_num_outputs, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[1])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 52, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_7get_num_outputs, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_get_num_outputs, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[1])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 37, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_4, __pyx_t_5);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_get_num_outputs, __pyx_t_4) < 0) __PYX_ERR(0, 52, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_get_num_outputs, __pyx_t_4) < 0) __PYX_ERR(0, 37, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cyfaust/play.pyx":56
+  /* "cyfaust/player.pyx":41
  *         return self._player.getNumOutputs()
  * 
  *     def get_sample_rate(self) -> int:             # <<<<<<<<<<<<<<
  *         """Get sample rate."""
  *         return self._player.getSampleRate()
 */
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_9get_sample_rate, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_get_sample_rate, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[2])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 56, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_9get_sample_rate, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_get_sample_rate, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[2])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_5, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_get_sample_rate, __pyx_t_5) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_get_sample_rate, __pyx_t_5) < 0) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "cyfaust/play.pyx":60
+  /* "cyfaust/player.pyx":45
  *         return self._player.getSampleRate()
  * 
  *     def init(self, sample_rate: int):             # <<<<<<<<<<<<<<
  *         """Initialize the player with given sample rate."""
  *         self._player.init(sample_rate)
 */
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 60, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_sample_rate, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 60, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_11init, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_init, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[3])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 60, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_sample_rate, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_11init, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_init, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[3])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_4, __pyx_t_5);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_init, __pyx_t_4) < 0) __PYX_ERR(0, 60, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_init, __pyx_t_4) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cyfaust/play.pyx":64
+  /* "cyfaust/player.pyx":49
  *         self._player.init(sample_rate)
  * 
  *     def instance_init(self, sample_rate: int):             # <<<<<<<<<<<<<<
  *         """Initialize the player instance with given sample rate."""
  *         self._player.instanceInit(sample_rate)
 */
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 49, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_sample_rate, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_13instance_init, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_instance_init, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[4])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 64, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_sample_rate, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_13instance_init, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_instance_init, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[4])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 49, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_5, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_instance_init, __pyx_t_5) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_instance_init, __pyx_t_5) < 0) __PYX_ERR(0, 49, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "cyfaust/play.pyx":68
+  /* "cyfaust/player.pyx":53
  *         self._player.instanceInit(sample_rate)
  * 
  *     def instance_constants(self, sample_rate: int):             # <<<<<<<<<<<<<<
  *         """Set instance constants for given sample rate."""
  *         self._player.instanceConstants(sample_rate)
 */
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 68, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_sample_rate, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 68, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_15instance_constants, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_instance_constan, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[5])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 68, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_sample_rate, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 53, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_15instance_constants, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_instance_constan, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[5])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_4, __pyx_t_5);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_instance_constants, __pyx_t_4) < 0) __PYX_ERR(0, 68, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_instance_constants, __pyx_t_4) < 0) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cyfaust/play.pyx":72
+  /* "cyfaust/player.pyx":57
  *         self._player.instanceConstants(sample_rate)
  * 
  *     def instance_reset_user_interface(self):             # <<<<<<<<<<<<<<
  *         """Reset user interface to default values."""
  *         self._player.instanceResetUserInterface()
 */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_17instance_reset_user_interface, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_instance_reset_u, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[6])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 72, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_17instance_reset_user_interface, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_instance_reset_u, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[6])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_instance_reset_user_interface, __pyx_t_4) < 0) __PYX_ERR(0, 72, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_instance_reset_user_interface, __pyx_t_4) < 0) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cyfaust/play.pyx":76
+  /* "cyfaust/player.pyx":61
  *         self._player.instanceResetUserInterface()
  * 
  *     def instance_clear(self):             # <<<<<<<<<<<<<<
  *         """Clear instance state."""
  *         self._player.instanceClear()
 */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_19instance_clear, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_instance_clear, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[7])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_19instance_clear, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_instance_clear, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[7])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_instance_clear, __pyx_t_4) < 0) __PYX_ERR(0, 76, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_instance_clear, __pyx_t_4) < 0) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cyfaust/play.pyx":85
+  /* "cyfaust/player.pyx":70
  *         return self._filename
  * 
  *     def compute(self, count: int, inputs, outputs):             # <<<<<<<<<<<<<<
  *         """Compute audio output for given number of frames."""
  *         cdef int num_inputs = self._player.getNumInputs()
 */
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_count, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 85, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_21compute, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_compute, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[8])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 85, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_count, __pyx_mstate_global->__pyx_n_u_int) < 0) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_21compute, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer_compute, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[8])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_5, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_compute, __pyx_t_5) < 0) __PYX_ERR(0, 85, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundBasePlayer, __pyx_mstate_global->__pyx_n_u_compute, __pyx_t_5) < 0) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
   /* "(tree fragment)":1
@@ -23954,7 +23952,7 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
  * def __setstate_cython__(self, __pyx_state):
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_23__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer___reduce_cython, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[9])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_23__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer___reduce_cython, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[9])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_reduce_cython, __pyx_t_5) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -23965,7 +23963,7 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_15SoundBasePlayer_25__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer___setstate_cytho, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[10])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_15SoundBasePlayer_25__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundBasePlayer___setstate_cytho, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[10])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_setstate_cython, __pyx_t_5) < 0) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -23975,7 +23973,7 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
  * def __setstate_cython__(self, __pyx_state):
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_17SoundMemoryPlayer_5__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundMemoryPlayer___reduce_cytho, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[11])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_17SoundMemoryPlayer_5__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundMemoryPlayer___reduce_cytho, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[11])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_reduce_cython, __pyx_t_5) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -23986,7 +23984,7 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_17SoundMemoryPlayer_7__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundMemoryPlayer___setstate_cyt, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[12])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_17SoundMemoryPlayer_7__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundMemoryPlayer___setstate_cyt, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[12])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_setstate_cython, __pyx_t_5) < 0) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -23996,7 +23994,7 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
  * def __setstate_cython__(self, __pyx_state):
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_14SoundDtdPlayer_5__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundDtdPlayer___reduce_cython, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[13])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_14SoundDtdPlayer_5__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundDtdPlayer___reduce_cython, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[13])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_reduce_cython, __pyx_t_5) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -24007,33 +24005,33 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_14SoundDtdPlayer_7__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundDtdPlayer___setstate_cython, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[14])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_14SoundDtdPlayer_7__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundDtdPlayer___setstate_cython, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[14])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_setstate_cython, __pyx_t_5) < 0) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "cyfaust/play.pyx":178
+  /* "cyfaust/player.pyx":163
  *             del self._manager
  * 
  *     def add_dsp(self, SoundBasePlayer player):             # <<<<<<<<<<<<<<
  *         """Add a sound player to be managed."""
  *         if player._player != NULL:
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_20SoundPositionManager_5add_dsp, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundPositionManager_add_dsp, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[15])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 178, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_20SoundPositionManager_5add_dsp, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundPositionManager_add_dsp, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[15])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundPositionManager, __pyx_mstate_global->__pyx_n_u_add_dsp, __pyx_t_5) < 0) __PYX_ERR(0, 178, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundPositionManager, __pyx_mstate_global->__pyx_n_u_add_dsp, __pyx_t_5) < 0) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "cyfaust/play.pyx":183
+  /* "cyfaust/player.pyx":168
  *             self._manager.addDSP(player._player)
  * 
  *     def remove_dsp(self, SoundBasePlayer player):             # <<<<<<<<<<<<<<
  *         """Remove a sound player from management."""
  *         if player._player != NULL:
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_20SoundPositionManager_7remove_dsp, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundPositionManager_remove_dsp, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[16])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 183, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_20SoundPositionManager_7remove_dsp, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundPositionManager_remove_dsp, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[16])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 168, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_4play_SoundPositionManager, __pyx_mstate_global->__pyx_n_u_remove_dsp, __pyx_t_5) < 0) __PYX_ERR(0, 183, __pyx_L1_error)
+  if (__Pyx_SetItemOnTypeDict(__pyx_mstate_global->__pyx_ptype_7cyfaust_6player_SoundPositionManager, __pyx_mstate_global->__pyx_n_u_remove_dsp, __pyx_t_5) < 0) __PYX_ERR(0, 168, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
   /* "(tree fragment)":1
@@ -24041,7 +24039,7 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
  * def __setstate_cython__(self, __pyx_state):
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_20SoundPositionManager_9__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundPositionManager___reduce_cy, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[17])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_20SoundPositionManager_9__reduce_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundPositionManager___reduce_cy, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[17])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_reduce_cython, __pyx_t_5) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -24052,65 +24050,65 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     raise TypeError, "no default __reduce__ due to non-trivial __cinit__"
 */
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_20SoundPositionManager_11__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundPositionManager___setstate, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[18])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_20SoundPositionManager_11__setstate_cython__, __Pyx_CYFUNCTION_CCLASS, __pyx_mstate_global->__pyx_n_u_SoundPositionManager___setstate, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[18])); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_setstate_cython, __pyx_t_5) < 0) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "cyfaust/play.pyx":192
+  /* "cyfaust/player.pyx":177
  * ## Convenience functions
  * 
  * def create_memory_player(filename: str) -> SoundMemoryPlayer:             # <<<<<<<<<<<<<<
  *     """Create a memory-based sound player."""
  *     return SoundMemoryPlayer(filename)
 */
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 192, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 177, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_filename, __pyx_mstate_global->__pyx_n_u_str) < 0) __PYX_ERR(0, 192, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_SoundMemoryPlayer) < 0) __PYX_ERR(0, 192, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_1create_memory_player, 0, __pyx_mstate_global->__pyx_n_u_create_memory_player, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[19])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 192, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_filename, __pyx_mstate_global->__pyx_n_u_str) < 0) __PYX_ERR(0, 177, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_SoundMemoryPlayer) < 0) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_1create_memory_player, 0, __pyx_mstate_global->__pyx_n_u_create_memory_player, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[19])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 177, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_4, __pyx_t_5);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_create_memory_player, __pyx_t_4) < 0) __PYX_ERR(0, 192, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_create_memory_player, __pyx_t_4) < 0) __PYX_ERR(0, 177, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cyfaust/play.pyx":196
+  /* "cyfaust/player.pyx":181
  *     return SoundMemoryPlayer(filename)
  * 
  * def create_dtd_player(filename: str) -> SoundDtdPlayer:             # <<<<<<<<<<<<<<
  *     """Create a direct-to-disk sound player."""
  *     return SoundDtdPlayer(filename)
 */
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 196, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 181, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_filename, __pyx_mstate_global->__pyx_n_u_str) < 0) __PYX_ERR(0, 196, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_SoundDtdPlayer) < 0) __PYX_ERR(0, 196, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_3create_dtd_player, 0, __pyx_mstate_global->__pyx_n_u_create_dtd_player, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[20])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 196, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_filename, __pyx_mstate_global->__pyx_n_u_str) < 0) __PYX_ERR(0, 181, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_SoundDtdPlayer) < 0) __PYX_ERR(0, 181, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_3create_dtd_player, 0, __pyx_mstate_global->__pyx_n_u_create_dtd_player, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[20])); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 181, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_5, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_create_dtd_player, __pyx_t_5) < 0) __PYX_ERR(0, 196, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_create_dtd_player, __pyx_t_5) < 0) __PYX_ERR(0, 181, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "cyfaust/play.pyx":200
+  /* "cyfaust/player.pyx":185
  *     return SoundDtdPlayer(filename)
  * 
  * def create_position_manager() -> SoundPositionManager:             # <<<<<<<<<<<<<<
  *     """Create a position manager for GUI control."""
  *     return SoundPositionManager()
 */
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 185, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_SoundPositionManager) < 0) __PYX_ERR(0, 200, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_4play_5create_position_manager, 0, __pyx_mstate_global->__pyx_n_u_create_position_manager, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_play, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[21])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_mstate_global->__pyx_n_u_return, __pyx_mstate_global->__pyx_n_u_SoundPositionManager) < 0) __PYX_ERR(0, 185, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_7cyfaust_6player_5create_position_manager, 0, __pyx_mstate_global->__pyx_n_u_create_position_manager, NULL, __pyx_mstate_global->__pyx_n_u_cyfaust_player, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[21])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 185, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_4, __pyx_t_5);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_create_position_manager, __pyx_t_4) < 0) __PYX_ERR(0, 200, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_create_position_manager, __pyx_t_4) < 0) __PYX_ERR(0, 185, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "cyfaust/play.pyx":1
+  /* "cyfaust/player.pyx":1
  * # distutils: language = c++             # <<<<<<<<<<<<<<
  * 
  * from libcpp.string cimport string
@@ -24129,7 +24127,7 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
   __Pyx_XDECREF(__pyx_t_6);
   if (__pyx_m) {
     if (__pyx_mstate->__pyx_d && stringtab_initialized) {
-      __Pyx_AddTraceback("init cyfaust.play", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init cyfaust.player", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     #if !CYTHON_USE_MODULE_STATE
     Py_CLEAR(__pyx_m);
@@ -24143,7 +24141,7 @@ __Pyx_RefNannySetupContext("PyInit_play", 0);
     }
     #endif
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init cyfaust.play");
+    PyErr_SetString(PyExc_ImportError, "init cyfaust.player");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -24269,7 +24267,7 @@ static const __Pyx_StringTabEntry __pyx_string_tab[] = {
   {__pyx_k_create_dtd_player, sizeof(__pyx_k_create_dtd_player), 0, 1, 1}, /* PyObject cname: __pyx_n_u_create_dtd_player */
   {__pyx_k_create_memory_player, sizeof(__pyx_k_create_memory_player), 0, 1, 1}, /* PyObject cname: __pyx_n_u_create_memory_player */
   {__pyx_k_create_position_manager, sizeof(__pyx_k_create_position_manager), 0, 1, 1}, /* PyObject cname: __pyx_n_u_create_position_manager */
-  {__pyx_k_cyfaust_play, sizeof(__pyx_k_cyfaust_play), 0, 1, 1}, /* PyObject cname: __pyx_n_u_cyfaust_play */
+  {__pyx_k_cyfaust_player, sizeof(__pyx_k_cyfaust_player), 0, 1, 1}, /* PyObject cname: __pyx_n_u_cyfaust_player */
   {__pyx_k_dict, sizeof(__pyx_k_dict), 0, 1, 1}, /* PyObject cname: __pyx_n_u_dict */
   {__pyx_k_disable, sizeof(__pyx_k_disable), 0, 1, 0}, /* PyObject cname: __pyx_kp_u_disable */
   {__pyx_k_dtype_is_object, sizeof(__pyx_k_dtype_is_object), 0, 1, 1}, /* PyObject cname: __pyx_n_u_dtype_is_object */
@@ -24345,7 +24343,7 @@ static const __Pyx_StringTabEntry __pyx_string_tab[] = {
   {__pyx_k_shape, sizeof(__pyx_k_shape), 0, 1, 1}, /* PyObject cname: __pyx_n_u_shape */
   {__pyx_k_size, sizeof(__pyx_k_size), 0, 1, 1}, /* PyObject cname: __pyx_n_u_size */
   {__pyx_k_spec, sizeof(__pyx_k_spec), 0, 1, 1}, /* PyObject cname: __pyx_n_u_spec */
-  {__pyx_k_src_cyfaust_play_pyx, sizeof(__pyx_k_src_cyfaust_play_pyx), 0, 1, 0}, /* PyObject cname: __pyx_kp_u_src_cyfaust_play_pyx */
+  {__pyx_k_src_cyfaust_player_pyx, sizeof(__pyx_k_src_cyfaust_player_pyx), 0, 1, 0}, /* PyObject cname: __pyx_kp_u_src_cyfaust_player_pyx */
   {__pyx_k_start, sizeof(__pyx_k_start), 0, 1, 1}, /* PyObject cname: __pyx_n_u_start */
   {__pyx_k_step, sizeof(__pyx_k_step), 0, 1, 1}, /* PyObject cname: __pyx_n_u_step */
   {__pyx_k_stop, sizeof(__pyx_k_stop), 0, 1, 1}, /* PyObject cname: __pyx_n_u_stop */
@@ -24370,8 +24368,8 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry const *t, PyObject **target, c
 
 static int __Pyx_InitCachedBuiltins(__pyx_mstatetype *__pyx_mstate) {
   CYTHON_UNUSED_VAR(__pyx_mstate);
-  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 42, __pyx_L1_error)
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_range); if (!__pyx_builtin_range) __PYX_ERR(0, 101, __pyx_L1_error)
+  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_range); if (!__pyx_builtin_range) __PYX_ERR(0, 86, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 101, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_mstate->__pyx_n_u_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 139, __pyx_L1_error)
@@ -24475,49 +24473,49 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
   PyObject* tuple_dedup_map = PyDict_New();
   if (unlikely(!tuple_dedup_map)) return -1;
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 48, 16};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 33, 16};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
-    __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_get_num_inputs, __pyx_k_t8, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_get_num_inputs, __pyx_k_t8, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 52, 16};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 37, 16};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
-    __pyx_mstate_global->__pyx_codeobj_tab[1] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_get_num_outputs, __pyx_k_t8_2, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[1])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[1] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_get_num_outputs, __pyx_k_t8_2, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[1])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 56, 16};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 41, 16};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
-    __pyx_mstate_global->__pyx_codeobj_tab[2] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_get_sample_rate, __pyx_k_t8_2, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[2])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[2] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_get_sample_rate, __pyx_k_t8_2, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[2])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 60, 16};
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 45, 16};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_sample_rate};
-    __pyx_mstate_global->__pyx_codeobj_tab[3] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_init, __pyx_k_HE, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[3])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[3] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_init, __pyx_k_HE, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[3])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 64, 16};
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 49, 16};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_sample_rate};
-    __pyx_mstate_global->__pyx_codeobj_tab[4] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_instance_init, __pyx_k_HM, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[4])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[4] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_instance_init, __pyx_k_HM, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[4])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 68, 17};
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 53, 17};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_sample_rate};
-    __pyx_mstate_global->__pyx_codeobj_tab[5] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_instance_constants, __pyx_k_a_H_aq, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[5])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[5] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_instance_constants, __pyx_k_a_H_aq, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[5])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 72, 12};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 57, 12};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
-    __pyx_mstate_global->__pyx_codeobj_tab[6] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_instance_reset_user_interface, __pyx_k_A_H_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[6])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[6] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_instance_reset_user_interface, __pyx_k_A_H_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[6])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 76, 11};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 61, 11};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self};
-    __pyx_mstate_global->__pyx_codeobj_tab[7] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_instance_clear, __pyx_k_A_HN, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[7])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[7] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_instance_clear, __pyx_k_A_HN, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[7])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {4, 0, 0, 10, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 85, 274};
+    const __Pyx_PyCode_New_function_description descr = {4, 0, 0, 10, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 70, 274};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_count, __pyx_mstate->__pyx_n_u_inputs, __pyx_mstate->__pyx_n_u_outputs, __pyx_mstate->__pyx_n_u_num_inputs, __pyx_mstate->__pyx_n_u_num_outputs, __pyx_mstate->__pyx_n_u_c_inputs, __pyx_mstate->__pyx_n_u_c_outputs, __pyx_mstate->__pyx_n_u_output_view, __pyx_mstate->__pyx_n_u_i};
-    __pyx_mstate_global->__pyx_codeobj_tab[8] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_compute, __pyx_k_Q_d_q_t8_b_a_A_y_1_k_U_1_a_r_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[8])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[8] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_compute, __pyx_k_Q_d_q_t8_b_a_A_y_1_k_U_1_a_r_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[8])) goto bad;
   }
   {
     const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 1, 9};
@@ -24550,14 +24548,14 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
     __pyx_mstate_global->__pyx_codeobj_tab[14] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_stringsource, __pyx_mstate->__pyx_n_u_setstate_cython, __pyx_k_Q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[14])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 178, 26};
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 163, 26};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_player};
-    __pyx_mstate_global->__pyx_codeobj_tab[15] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_add_dsp, __pyx_k_A_6_Q_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[15])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[15] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_add_dsp, __pyx_k_A_6_Q_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[15])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 183, 26};
+    const __Pyx_PyCode_New_function_description descr = {2, 0, 0, 2, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 168, 26};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_self, __pyx_mstate->__pyx_n_u_player};
-    __pyx_mstate_global->__pyx_codeobj_tab[16] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_remove_dsp, __pyx_k_A_6_Q_1F, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[16])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[16] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_remove_dsp, __pyx_k_A_6_Q_1F, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[16])) goto bad;
   }
   {
     const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 1, 9};
@@ -24570,19 +24568,19 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
     __pyx_mstate_global->__pyx_codeobj_tab[18] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_stringsource, __pyx_mstate->__pyx_n_u_setstate_cython, __pyx_k_Q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[18])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 192, 17};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 177, 17};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_filename};
-    __pyx_mstate_global->__pyx_codeobj_tab[19] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_create_memory_player, __pyx_k_81_AQ, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[19])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[19] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_create_memory_player, __pyx_k_81_AQ, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[19])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 196, 16};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 181, 16};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_filename};
-    __pyx_mstate_global->__pyx_codeobj_tab[20] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_create_dtd_player, __pyx_k__7, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[20])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[20] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_create_dtd_player, __pyx_k__7, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[20])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {0, 0, 0, 0, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 200, 13};
+    const __Pyx_PyCode_New_function_description descr = {0, 0, 0, 0, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 185, 13};
     PyObject* const varnames[] = {0};
-    __pyx_mstate_global->__pyx_codeobj_tab[21] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_play_pyx, __pyx_mstate->__pyx_n_u_create_position_manager, __pyx_k_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[21])) goto bad;
+    __pyx_mstate_global->__pyx_codeobj_tab[21] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_cyfaust_player_pyx, __pyx_mstate->__pyx_n_u_create_position_manager, __pyx_k_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[21])) goto bad;
   }
   Py_DECREF(tuple_dedup_map);
   return 0;

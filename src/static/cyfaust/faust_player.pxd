@@ -8,16 +8,27 @@ from libcpp.pair cimport pair
 from .faust_interp cimport dsp, UI, Meta
 from .faust_gui cimport FAUSTFLOAT
 
-# Forward declarations for types we need
+# Import GUI from faust_gui module which should have the complete definition
+from .faust_gui cimport GUI
+
+cdef extern from *:
+    """
+    #include "faust/gui/GUI.h"
+    #include "faust/gui/ring-buffer.h"
+    // Define the static member variables that are declared in GUI.h
+    std::list<GUI*> GUI::fGuiList;
+    std::map<FAUSTFLOAT*, ringbuffer_t*> GUI::gTimedZoneMap;
+    """
+
+# Forward declarations for additional types we need
 cdef extern from "faust/gui/GUI.h":
-    cdef cppclass GUI
     cdef cppclass uiCallbackItem
     
 cdef extern from "faust/gui/ring-buffer.h":
     cdef cppclass ringbuffer_t
 
 cdef extern from "faust/dsp/sound-player.h":
-    
+
     # Constants
     cdef int BUFFER_SIZE
     cdef int RING_BUFFER_SIZE
@@ -47,23 +58,23 @@ cdef extern from "faust/dsp/sound-player.h":
         
         @staticmethod
         void setFrame(FAUSTFLOAT val, void* arg)
-        
+
         # Zone access methods
         FAUSTFLOAT* getCurFramesZone()
         FAUSTFLOAT* getSetFramesZone()
-    
+
     # Memory-based sound player
     cdef cppclass sound_memory_player(sound_base_player):
         sound_memory_player(const string& filename) except +
         sound_memory_player* clone()
-    
+
     # Direct-to-disk sound player  
     cdef cppclass sound_dtd_player(sound_base_player):
         sound_dtd_player(const string& filename) except +
         sound_dtd_player* clone()
-    
+
     # Position manager for GUI control
-    cdef cppclass PositionManager:
+    cdef cppclass PositionManager(GUI):
         PositionManager()
         void addDSP(sound_base_player* dsp)
         void removeDSP(sound_base_player* dsp)

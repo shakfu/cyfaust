@@ -4,27 +4,12 @@ from libcpp.string cimport string
 from libc.stdlib cimport malloc, free
 from cython.operator cimport dereference as deref
 
-# Define the static member variable that GUI.h declares but doesn't define
-cdef extern from "faust/gui/GUI.h":
-    cdef cppclass GUI:
-        pass
-
-cdef extern from *:
-    """
-    #include "faust/gui/GUI.h"
-    #include "faust/gui/ring-buffer.h"
-    // Define the static member variables that are declared in GUI.h
-    std::list<GUI*> GUI::fGuiList;
-    std::map<FAUSTFLOAT*, ringbuffer_t*> GUI::gTimedZoneMap;
-    """
-
 from . cimport faust_interp as fi
 from . cimport faust_gui as fg
-from . cimport faust_play as fp
+from . cimport faust_player as fp
 
 from .common cimport ParamArray
 from .common import ParamArray
-
 
 ## ---------------------------------------------------------------------------
 ## Sound Player Classes

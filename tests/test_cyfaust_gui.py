@@ -9,12 +9,17 @@ import pytest
 from pathlib import Path
 
 
-
 try:
     from cyfaust.interp import InterpreterDspFactory, create_dsp_factory_from_string
     from cyfaust.common import PACKAGE_RESOURCES
+    from cyfaust.signal import SignalVector, sig_rint, sig_real, signal_context
+
 except (ModuleNotFoundError, ImportError):
-    from cyfaust.cyfaust import InterpreterDspFactory, create_dsp_factory_from_string, PACKAGE_RESOURCES
+    from cyfaust.cyfaust import (
+        InterpreterDspFactory, create_dsp_factory_from_string, PACKAGE_RESOURCES
+    )
+    from cyfaust.cyfaust import SignalVector, sig_rint, sig_real, signal_context
+
 
 from testutils import print_section, print_entry
 
@@ -209,12 +214,6 @@ class TestSignalRintFunction:
     
     def test_sig_rint_function(self):
         """Test sigRint function"""
-        print_entry("test_sig_rint_function")
-        
-        try:
-            from cyfaust.signal import sig_rint, sig_real, signal_context
-        except (ModuleNotFoundError, ImportError):
-            from cyfaust.cyfaust import sig_rint, sig_real, signal_context
         
         with signal_context():
             # Test sigRint with a real signal
@@ -228,7 +227,6 @@ class TestSignalRintFunction:
             assert rounded_method is not None, "Failed to create rint signal via method"
             
             # Test that we can use it in a signal vector
-            from cyfaust.signal import SignalVector
             sv = SignalVector()
             sv.add(rounded_signal)
             

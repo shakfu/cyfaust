@@ -87,6 +87,7 @@ class Project:
         self.lib_static = self.lib / "static"
         self.share = self.cwd / "share"
         self.scripts = self.cwd / "scripts"
+        self.src = self.cwd / "src"
         self.patch = self.scripts / "patch"
         self.tests = self.cwd / "tests"
         self.dist = self.cwd / "dist"
@@ -1303,7 +1304,8 @@ class Application(ShellCmd, metaclass=MetaCommander):
     @opt("--static", "-s", "build static variant")
     def do_build(self, args):
         """build packages"""
-        _cmd = f'"{PYTHON}" setup.py build --build-lib build'
+        # _cmd = f'"{PYTHON}" setup.py build --build-lib build'
+        _cmd = f'"{PYTHON}" setup.py build_ext --inplace'
         if args.static:
             os.environ["STATIC"] = "1"
         self.cmd(_cmd)
@@ -1371,9 +1373,9 @@ class Application(ShellCmd, metaclass=MetaCommander):
     def do_clean(self, args):
         """clean detritus"""
         cwd = self.project.cwd
-        _targets = ["build", "dist", "venv", "MANIFEST.in", ".task"]
+        _targets = ["build", "dist", "MANIFEST.in", ".task"]
         if args.reset:
-            _targets += ["python", "bin", "lib", "share", "wheels"]
+            _targets += ["python", "bin", "lib", "share", "wheels", "venv", ".venv"]
         _pats = [".*_cache", "*.egg-info", "__pycache__", ".DS_Store"]
         for t in _targets:
             self.remove(cwd / t, silent=not args.verbose)
@@ -1382,6 +1384,12 @@ class Application(ShellCmd, metaclass=MetaCommander):
                 self.remove(m, silent=not args.verbose)
             for m in cwd.glob("**/" + p):
                 self.remove(m, silent=not args.verbose)
+        # clean built artifacts
+        pat = "*.so" # default for MacOs or Linux            
+        if PLATFORM == "Windows":
+            pat = "*.dll"
+        for m in self.project.src.glob(f"**/{pat}"):
+            self.remove(m, silent=not args.verbose)
 
 
 if __name__ == "__main__":
