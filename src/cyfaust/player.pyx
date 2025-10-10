@@ -116,8 +116,10 @@ cdef class SoundMemoryPlayer(SoundBasePlayer):
     cdef fp.sound_memory_player* _memory_player
     
     def __cinit__(self, filename: str):
-        # Parent __cinit__ already called
-        del self._player  # Remove base player
+        # Parent __cinit__ already called, creating base player
+        # Delete the base player and replace with memory player
+        if self._player != NULL:
+            del self._player
         self._memory_player = new fp.sound_memory_player(filename.encode('utf-8'))
         if self._memory_player == NULL:
             raise MemoryError("Failed to create sound_memory_player")
@@ -134,8 +136,10 @@ cdef class SoundDtdPlayer(SoundBasePlayer):
     cdef fp.sound_dtd_player* _dtd_player
     
     def __cinit__(self, filename: str):
-        # Parent __cinit__ already called
-        del self._player  # Remove base player
+        # Parent __cinit__ already called, creating base player
+        # Delete the base player and replace with DTD player
+        if self._player != NULL:
+            del self._player
         self._dtd_player = new fp.sound_dtd_player(filename.encode('utf-8'))
         if self._dtd_player == NULL:
             raise MemoryError("Failed to create sound_dtd_player")

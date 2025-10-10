@@ -5,7 +5,7 @@ Provides cython header interface to some faust/gui/*.h files
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-DEF INCLUDE_SNDFILE = True
+# DEF INCLUDE_SNDFILE = True
 
 # Forward declaration - will be fully defined in faust_interp.pxd
 cdef extern from "faust/dsp/dsp.h":
@@ -103,7 +103,8 @@ cdef extern from "faust/gui/UI.h":
         # passive widgets
         void addHorizontalBargraph(const char* label, REAL* zone, REAL min, REAL max)
         void addVerticalBargraph(const char* label, REAL* zone, REAL min, REAL max)
-        # soundfiles
+        # soundfiles - excluded because UIReal is a template base class not directly exposed
+        # Use SoundUI class instead (see below) for soundfile functionality
         # void addSoundfile(const char* label, const char* filename, Soundfile** sf_zone)
         # metadata declarations
         void declare(REAL* zone, const char* key, const char* value)
@@ -137,8 +138,10 @@ cdef extern from "faust/gui/PrintUI.h":
         void addVerticalSlider(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step)
         void addHorizontalSlider(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step)
         void addNumEntry(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT init, FAUSTFLOAT min, FAUSTFLOAT max, FAUSTFLOAT step)
-        void addHorizontalBargraph(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT min, FAUSTFLOAT max) 
+        void addHorizontalBargraph(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT min, FAUSTFLOAT max)
         void addVerticalBargraph(const char* label, FAUSTFLOAT* zone, FAUSTFLOAT min, FAUSTFLOAT max)
+        # soundfiles - excluded because PrintUI is for debugging/inspection only
+        # Use SoundUI class instead (see below) for actual soundfile functionality
         # void addSoundfile(const char* label, const char* filename,  Soundfile** sf_zone)
         void declare(FAUSTFLOAT* zone, const char* key, const char* val)
 

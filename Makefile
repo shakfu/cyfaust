@@ -62,7 +62,10 @@ wheel: faust
 release: faust
 	@STATIC=$(STATIC) $(PYTHON) scripts/manage.py wheel --release
 
-test: build
+verify-sync:
+	@./scripts/verify_build_sync.sh
+
+test: build verify-sync
 	@$(PYTHON) scripts/manage.py test
 	@echo "DONE"
 

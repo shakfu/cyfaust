@@ -78,6 +78,7 @@ EXTRA_COMPILE_ARGS = []
 RTAUDIO_SRC = [
     "include/rtaudio/RtAudio.cpp",
     "include/rtaudio/rtaudio_c.cpp",
+    "src/cyfaust/gui_statics.cpp",  # GUI static member definitions
 ]
 
 # ----------------------------------------------------------------------------
@@ -99,6 +100,7 @@ else:
 
 if INCLUDE_SNDFILE:
     DEFINE_MACROS.append(("INCLUDE_SNDFILE", 1))
+    DEFINE_MACROS.append(("_SAMPLERATE", 1))  # Enable sample rate conversion
 
 # platform specific configuration
 if PLATFORM in ["Darwin", "Linux"]:

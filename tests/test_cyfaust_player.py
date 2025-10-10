@@ -88,62 +88,76 @@ class TestSoundPlayer:
     def test_memory_player_compute(self):
         """Test memory player audio computation."""
         player = create_memory_player(self.test_wav_file)
-        
+
         # Initialize
         sample_rate = 44100
         player.init(sample_rate)
-        
+
         num_outputs = player.get_num_outputs()
         buffer_size = 512
-        
+
         # Create output buffers
         outputs = [np.zeros(buffer_size, dtype=np.float32) for _ in range(num_outputs)]
-        
+
         # Compute audio
         try:
             player.compute(buffer_size, [], outputs)
-            
+
             # Check that we got some audio output (not all zeros)
             for i, output in enumerate(outputs):
                 output_sum = np.sum(np.abs(output))
                 # Note: depending on the file content, this might be zero if we're at silence
                 # So we just check that the computation didn't crash
                 assert isinstance(output_sum, (float, np.floating))
-                
+
         except Exception as e:
-            # If compute fails, it might be due to missing dependencies
-            # Just ensure the player was created successfully
-            assert player is not None
+            # Log detailed error information for debugging
+            import sys
+            print(f"\nERROR in test_memory_player_compute:", file=sys.stderr)
+            print(f"  Exception type: {type(e).__name__}", file=sys.stderr)
+            print(f"  Exception message: {str(e)}", file=sys.stderr)
+            print(f"  Player created: {player is not None}", file=sys.stderr)
+            print(f"  Num outputs: {num_outputs}", file=sys.stderr)
+            print(f"  Buffer size: {buffer_size}", file=sys.stderr)
+            # Re-raise to fail the test with full information
+            raise
             
     def test_dtd_player_compute(self):
         """Test direct-to-disk player audio computation."""
         player = create_dtd_player(self.test_wav_file)
-        
+
         # Initialize
         sample_rate = 44100
         player.init(sample_rate)
-        
+
         num_outputs = player.get_num_outputs()
         buffer_size = 512
-        
+
         # Create output buffers
         outputs = [np.zeros(buffer_size, dtype=np.float32) for _ in range(num_outputs)]
-        
+
         # Compute audio
         try:
             player.compute(buffer_size, [], outputs)
-            
+
             # Check that we got some audio output (not all zeros)
             for i, output in enumerate(outputs):
                 output_sum = np.sum(np.abs(output))
                 # Note: depending on the file content, this might be zero if we're at silence
                 # So we just check that the computation didn't crash
                 assert isinstance(output_sum, (float, np.floating))
-                
+
         except Exception as e:
-            # If compute fails, it might be due to missing dependencies
-            # Just ensure the player was created successfully
-            assert player is not None
+            # Log detailed error information for debugging
+            import sys
+            print(f"\nERROR in test_dtd_player_compute:", file=sys.stderr)
+            print(f"  Exception type: {type(e).__name__}", file=sys.stderr)
+            print(f"  Exception message: {str(e)}", file=sys.stderr)
+            print(f"  Player created: {player is not None}", file=sys.stderr)
+            print(f"  Num outputs: {num_outputs}", file=sys.stderr)
+            print(f"  Buffer size: {buffer_size}", file=sys.stderr)
+            # Re-raise to fail the test with full information
+            raise
             
     def test_position_manager(self):
         """Test position manager functionality."""
