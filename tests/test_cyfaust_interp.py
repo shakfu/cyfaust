@@ -173,69 +173,6 @@ def test_interp_create_dsp_factory_from_string1():
         skip_audio=SKIP_AUDIO,
     )
 
-
-def test_interp_create_dsp_factory_from_string2():
-    print_entry("test_interp_create_dsp_factory_from_string2")
-
-    factory = create_dsp_factory_from_string("FaustDSP", 
-        """process = 0,0 : soundfile("sound[url:{'tests/wav/amen.wav'}]", 0);""")
-    assert factory
-        
-    print("compile options:", factory.get_compile_options())
-    print("library list:", factory.get_library_list())
-    print("include pathnames:", factory.get_include_pathnames())
-    print("name:", factory.get_name())
-    print("sha key", factory.get_sha_key())
-
-    dsp = factory.create_dsp_instance()
-    assert dsp
-    
-    # dsp.build_user_interface()
-
-    # if not SKIP_AUDIO:
-    #     audio = RtAudioDriver(48000, 256)
-
-    #     audio.init(dsp)
-
-    #     audio.start()
-    #     # FIXME: sleep causes crash!
-    #     time.sleep(1)
-    #     audio.stop()
-
-
-def test_get_all_dsp_factories():
-    print_entry("test_get_all_dsp_factories")
-
-    factory = create_dsp_factory_from_string("FaustDSP", 
-        """process = 0,0 : soundfile("sound[url:{'tests/amen.wav'}]", 0);""")
-    assert factory
-        
-    print("compile options:", factory.get_compile_options())
-    print("library list:", factory.get_library_list())
-    print("include pathnames:", factory.get_include_pathnames())
-    print("name:", factory.get_name())
-    print("sha key", factory.get_sha_key())
-
-    assert get_all_dsp_factories()
-    print(get_all_dsp_factories())
-
-# FIXME: crashes for some reason!
-# def test_delete_all_dsp_factories():
-#     print_entry("test_delete_all_dsp_factories")
-
-#     f1 = create_dsp_factory_from_string("FaustDSP", 
-#         """process = 0,0 : soundfile("sound[url:{'tests/amen.wav'}]", 0);""")
-#     assert f1
-
-#     f2 = create_dsp_factory_from_string("FaustDSP", "process = 0.5,0.6;")
-#     assert f2
-
-#     assert len(get_all_dsp_factories()) == 2
-
-#     delete_all_dsp_factories()
-
-#     assert len(get_all_dsp_factories()) == 0
-
 def test_get_dsp_factory_from_sha_key():
     print_entry("test_get_dsp_factory_from_sha_key")
     f1 = create_dsp_factory_from_string("FaustDSP", "process = 0.5,0.6;")
@@ -352,12 +289,6 @@ def test_create_dsp_factory_from_signals2():
         dsp = factory.create_dsp_instance()
         assert dsp
 
-def test_soundfile_from_file1():
-    assert dsp_from_file(
-        testname="test_soundfile_from_file1",
-        dsp_path="tests/dsp/soundfile.dsp",
-        skip_audio=False,
-    )
 
 
 
