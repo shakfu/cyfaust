@@ -68,8 +68,9 @@ wheel.exclude = ["build", "dist", ".venv", "*.egg-info"]
 
 [tool.scikit-build.cmake.define]
 # These can be overridden via CMAKE_ARGS environment variable
-# e.g., CMAKE_ARGS="-DSTATIC=ON -DJACK=ON" uv build
-STATIC = "OFF"
+# e.g., CMAKE_ARGS="-DSTATIC=OFF" uv sync  (for development)
+# Default to STATIC=ON for PyPI distribution (sdist/wheel builds)
+STATIC = "ON"
 INCLUDE_SNDFILE = "ON"
 # Linux audio backends
 ALSA = "ON"

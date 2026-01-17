@@ -495,8 +495,12 @@ cdef class InterpreterDsp:
 
     cdef fi.interpreter_dsp* ptr
     cdef bint ptr_owner
+    cdef fg.SoundUI* sound_ui
 
     def __dealloc__(self):
+        if self.sound_ui:
+            del self.sound_ui
+            self.sound_ui = NULL
         if self.ptr and self.ptr_owner:
             del self.ptr
             self.ptr = NULL
@@ -504,6 +508,7 @@ cdef class InterpreterDsp:
     def __cinit__(self):
         self.ptr = NULL
         self.ptr_owner = False
+        self.sound_ui = NULL
 
     def delete(self):
         del self.ptr
@@ -553,16 +558,32 @@ cdef class InterpreterDsp:
         cdef fi.interpreter_dsp* dsp = self.ptr.clone()
         return InterpreterDsp.from_ptr(dsp)
 
-    def build_user_interface(self):
+    def build_user_interface(self, str sound_directory="", int sample_rate=-1):
         """Trigger the ui_interface parameter with instance specific calls
 
         Calls are made to 'openTabBox', 'addButton',
         'addVerticalSlider'... in order to build the UI.
-        
-        ui_interface - the user interface builder
+
+        This method also loads any soundfiles referenced in the DSP code.
+
+        Args:
+            sound_directory: Base directory for soundfile paths (default: current directory)
+            sample_rate: Sample rate for resampling soundfiles (-1 for no resampling)
         """
-        cdef fg.PrintUI ui_interface
-        self.ptr.buildUserInterface(<fi.UI*>&ui_interface)
+        # Clean up previous SoundUI if it exists
+        if self.sound_ui:
+            del self.sound_ui
+            self.sound_ui = NULL
+
+        # Create SoundUI to handle soundfile loading
+        # Parameters: sound_directory, sample_rate, reader (NULL for default), is_double
+        self.sound_ui = new fg.SoundUI(
+            sound_directory.encode('utf8'),
+            sample_rate,
+            <fg.SoundfileReader*>NULL,
+            False  # is_double=False for float audio
+        )
+        self.ptr.buildUserInterface(<fg.UI*>self.sound_ui)
 
     def control(self):
         """Read all controllers (buttons, sliders, etc.), and update the DSP state.
@@ -604,16 +625,14 @@ cdef class InterpreterDsp:
         finally:
             free(input_ptrs)
             free(output_ptrs)
-            
 
     # cdef build_user_interface(self, fi.UI* ui_interface):
     #     """Trigger the ui_interface parameter with instance specific calls."""
     #     self.ptr.buildUserInterface(ui_interface)
 
-    cdef metadata(self, fi.Meta* m):
+    cdef metadata(self, fg.Meta* m):
         """Trigger the meta parameter with instance specific calls."""
         self.ptr.metadata(m)
-
 
 def get_dsp_factory_from_sha_key(str sha_key) -> InterpreterDspFactory:
     """Get the Faust DSP factory associated with a given SHA key."""

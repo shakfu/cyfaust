@@ -5,9 +5,26 @@ from .faust_box cimport Box, Signal, tvec
 from .faust_gui cimport UI, Meta
 
 cdef extern from "faust/dsp/dsp.h":
+    # Memory type enum for dsp_memory_manager
+    cpdef enum MemType:
+        kInt32
+        kInt32_ptr
+        kFloat
+        kFloat_ptr
+        kDouble
+        kDouble_ptr
+        kQuad
+        kQuad_ptr
+        kFixedPoint
+        kFixedPoint_ptr
+        kObj
+        kObj_ptr
+        kSound
+        kSound_ptr
+
     cdef cppclass dsp_memory_manager:
         void begin(size_t count) except +
-        void info(size_t size, size_t reads, size_t writes) except +
+        void info(const char* name, MemType type, size_t size, size_t size_bytes, size_t reads, size_t writes) except +
         void end() except +
         void* allocate(size_t size) except +
         void destroy(void* ptr) except +
@@ -69,7 +86,9 @@ cdef extern from "faust/dsp/libfaust.h":
     string expandDSPFromFile(const string& filename, int argc, const char* argv[], string& sha_key, string& error_msg)
     string expandDSPFromString(const string& name_app, const string& dsp_content, int argc, const char* argv[], string& sha_key, string& error_msg)
     bint generateAuxFilesFromFile(const string& filename, int argc, const char* argv[], string& error_msg)
+    string generateAuxFilesFromFile2(const string& filename, int argc, const char* argv[], string& error_msg)
     bint generateAuxFilesFromString(const string& name_app, const string& dsp_content, int argc, const char* argv[], string& error_msg)
+    string generateAuxFilesFromString2(const string& name_app, const string& dsp_content, int argc, const char* argv[], string& error_msg)
 
 
 cdef extern from "faust/dsp/interpreter-dsp.h":
@@ -123,20 +142,20 @@ cdef extern from "faust/dsp/interpreter-dsp.h":
     vector[string] getAllInterpreterDSPFactories()
     bint startMTDSPFactories()
     void stopMTDSPFactories()
-    interpreter_dsp_factory* readInterpreterDSPFactoryFromBitcode(const string& bitcode, string& error_msg)
+    interpreter_dsp_factory* readInterpreterDSPFactoryFromBitcode(const string& bit_code, string& error_msg)
     string writeInterpreterDSPFactoryToBitcode(interpreter_dsp_factory* factory)
     interpreter_dsp_factory* readInterpreterDSPFactoryFromBitcodeFile(const string& bit_code_path, string& error_msg)
     bint writeInterpreterDSPFactoryToBitcodeFile(interpreter_dsp_factory* factory, const string& bit_code_path)
 
 cdef extern from "faust/audio/rtaudio-dsp.h":
-    cdef cppclass rtaudio:    
+    cdef cppclass rtaudio:
         rtaudio(int srate, int bsize) except +
-        # bint init(const char* name, dsp* DSP)
+        bint init(const char* name, dsp* DSP)
         bint init(const char* name, int numInputs, int numOutputs)
         void setDsp(dsp* DSP)
-        bint start() 
-        void stop() 
-        int getBufferSize() 
+        bint start()
+        void stop()
+        int getBufferSize()
         int getSampleRate()
         int getNumInputs()
         int getNumOutputs()

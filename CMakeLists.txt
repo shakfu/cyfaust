@@ -56,11 +56,16 @@ endif()
 set(PLATFORM_LIBRARIES)
 set(PLATFORM_LINK_FLAGS)
 set(EXTRA_OBJECTS)
+
+# RtAudio sources - gui_statics.cpp only needed for dynamic builds
+# (static builds define GUI statics in faust_player.pxd)
 set(RTAUDIO_SOURCES
     "${INCLUDE_DIR}/rtaudio/RtAudio.cpp"
     "${INCLUDE_DIR}/rtaudio/rtaudio_c.cpp"
-    "${CYFAUST_SRC_DIR}/gui_statics.cpp"
 )
+if(NOT STATIC)
+    list(APPEND RTAUDIO_SOURCES "${CYFAUST_SRC_DIR}/gui_statics.cpp")
+endif()
 
 if(APPLE)
     # macOS configuration

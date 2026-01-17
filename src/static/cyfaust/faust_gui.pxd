@@ -154,6 +154,9 @@ cdef extern from "faust/gui/Soundfile.h":
     int MAX_SOUNDFILE_PARTS
     
     cdef cppclass Soundfile:
+        # Type alias for sound directories
+        ctypedef vector[string] Directories
+
         void* fBuffers # will correspond to a double** or float** pointer chosen at runtime
         int* fLength   # length of each part (so fLength[P] contains the length in frames of part P)
         int* fSR       # sample rate of each part (so fSR[P] contains the SR of part P)
@@ -184,7 +187,10 @@ cdef extern from "faust/gui/Soundfile.h":
         
 cdef extern from "faust/gui/SoundUI.h":
     cdef cppclass SoundUI:
+        # Constructor with single directory
         SoundUI(const string& sound_directory, int sample_rate, SoundfileReader* reader, bint is_double) except +
+        # Constructor with multiple directories
+        SoundUI(const vector[string]& sound_directories, int sample_rate, SoundfileReader* reader, bint is_double) except +
         void addSoundfile(const char* label, const char* url, Soundfile** sf_zone)
         @staticmethod
         string getBinaryPath()
@@ -196,3 +202,31 @@ cdef extern from "faust/gui/SoundUI.h":
     # SoundUI interface for DSP classes
     cdef cppclass SoundUIInterface:
         void addSoundfile(const char* label, const char* filename, Soundfile** sf_zone)
+
+cdef extern from "faust/gui/PathBuilder.h":
+    cdef cppclass PathBuilder:
+        PathBuilder() except +
+        string buildPath(const string& label)
+        string buildLabel(const string& label)
+        void pushLabel(const string& label)
+        bint popLabel()
+        void computeShortNames()
+
+cdef extern from "faust/gui/MapUI.h":
+    cdef cppclass MapUI(UI, PathBuilder):
+        MapUI() except +
+        # Parameter access by path/label/shortname
+        void setParamValue(const string& str, FAUSTFLOAT value)
+        FAUSTFLOAT getParamValue(const string& str)
+        int getParamsCount()
+        string getParamAddress(int index)
+        const char* getParamAddress1(int index)
+        string getParamShortname(int index)
+        const char* getParamShortname1(int index)
+        string getParamLabel(int index)
+        const char* getParamLabel1(int index)
+        string getParamAddress(FAUSTFLOAT* zone)
+        FAUSTFLOAT* getParamZone(const string& str)
+        FAUSTFLOAT* getParamZone(int index)
+        @staticmethod
+        bint endsWith(const string& str, const string& end)

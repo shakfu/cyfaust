@@ -52,6 +52,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Fixed test assertions in `test_cyfaust_box.py` to use minimum bounds (`>=`) instead of exact length checks, accommodating Faust version variability in generated code output
 
+- Fixed static build duplicate symbol error by excluding `gui_statics.cpp` from static builds (static builds define GUI statics in `faust_player.pxd`)
+
 ### Added
 
 - Synced Cython `.pxd` declarations with Faust 2.83.1 C++ headers:
