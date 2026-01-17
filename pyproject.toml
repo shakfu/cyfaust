@@ -61,6 +61,9 @@ dev = [
     "pytest>=8.0",
     "numpy",
     "twine>=6.2.0",
+    "delvewheel>=1.11.2; os_name == 'nt'",
+    "delocate>=0.13.0; os_name == 'darwin'",
+    "auditwheel>=6.6.0; os_name == 'linux'",
 ]
 
 [build-system]
