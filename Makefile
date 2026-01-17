@@ -38,7 +38,8 @@ CMAKE_OPTS += -DDSOUND=$(if $(filter 1,$(DSOUND)),ON,OFF)
 export CMAKE_ARGS := $(CMAKE_OPTS)
 
 .PHONY: all sync faust samplerate sndfile build rebuild test wheel sdist \
-        generate-static release verify-sync pytest clean distclean reset help
+        generate-static release verify-sync pytest clean distclean reset help \
+        wheel-static wheel-check publish publish-test
 
 # Default target
 all: build
@@ -97,8 +98,33 @@ generate-static:
 	$(PYTHON) scripts/generate_static.py
 
 # Build release wheel (static build)
-release: faust generate-static
+wheel-static: faust generate-static
 	uv build --wheel
+
+# Build a whole bunch of wheels
+release: faust generate-static
+	uv build --wheel --python 3.10
+	uv build --wheel --python 3.11
+	uv build --wheel --python 3.12
+	uv build --wheel --python 3.13
+	uv build --wheel --python 3.14
+	uv run twine check dist/*
+
+# ----------------------------------------------------------------------------
+# Publishing (via twine)
+# ----------------------------------------------------------------------------
+
+# Check wheel/sdist with twine
+wheel-check:
+	uv run twine check dist/*
+
+# Publish to TestPyPI
+publish-test: wheel-check
+	uv run twine upload --repository testpypi dist/*
+
+# Publish to PyPI
+publish: wheel-check
+	uv run twine upload dist/*
 
 # Verify static/dynamic build sync
 verify-sync:
@@ -153,6 +179,11 @@ help:
 	@echo "Test targets:"
 	@echo "  test        - Run tests"
 	@echo "  pytest      - Run pytest directly"
+	@echo ""
+	@echo "Publishing targets:"
+	@echo "  wheel-check - Check wheel/sdist with twine"
+	@echo "  publish-test - Publish to TestPyPI"
+	@echo "  publish     - Publish to PyPI"
 	@echo ""
 	@echo "Cleanup targets:"
 	@echo "  clean       - Remove build artifacts"

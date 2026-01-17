@@ -1,6 +1,6 @@
 [project]
 name = "cyfaust"
-version = "0.0.6"
+version = "0.1.0"
 description = "A Cython wrapper of the Faust interpreter and signal processing library with RtAudio support."
 readme = "README.md"
 license = "MIT"
@@ -57,7 +57,11 @@ Issues = "https://github.com/shakfu/cyfaust/issues"
 Changelog = "https://github.com/shakfu/cyfaust/blob/main/CHANGELOG.md"
 
 [dependency-groups]
-dev = ["pytest>=8.0", "numpy"]
+dev = [
+    "pytest>=8.0",
+    "numpy",
+    "twine>=6.2.0",
+]
 
 [build-system]
 requires = ["scikit-build-core", "cython"]
@@ -65,9 +69,9 @@ build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
 wheel.packages = ["src/cyfaust"]
+wheel.exclude = ["build", "dist", ".venv", "*.egg-info"]
 cmake.build-type = "Release"
 sdist.exclude = ["build", "dist", ".venv", "*.egg-info"]
-wheel.exclude = ["build", "dist", ".venv", "*.egg-info"]
 
 [tool.scikit-build.cmake.define]
 # These can be overridden via CMAKE_ARGS environment variable
