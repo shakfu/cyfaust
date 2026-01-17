@@ -82,6 +82,7 @@ rebuild: build
 # Run tests
 test: build verify-sync
 	uv run pytest tests/ -v
+	@rm -f DumpCode-*.txt DumpMem-*.txt
 
 # Build wheel
 wheel: faust
@@ -102,6 +103,7 @@ verify-sync:
 # Run pytest directly
 pytest: faust
 	uv run pytest tests/ -vv
+	@rm -f DumpCode-*.txt DumpMem-*.txt
 
 # ----------------------------------------------------------------------------
 # Cleanup
@@ -112,6 +114,7 @@ clean:
 	@$(PYTHON) scripts/manage.py clean
 	@rm -rf build/ dist/ *.egg-info/ src/*.egg-info/
 	@rm -rf .pytest_cache/ CMakeCache.txt CMakeFiles/
+	@rm -f DumpCode-*.txt DumpMem-*.txt
 	@find . -name "*.so" -delete 2>/dev/null || true
 	@find . -name "*.pyd" -delete 2>/dev/null || true
 	@find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true

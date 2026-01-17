@@ -19,9 +19,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
-- Updated cyfaust to faust `22.83.1` (all tests pass)
+- Updated cyfaust to faust `2.83.1` (all tests pass)
 
-- Dropped setuptools in favor of `scikit-build-core` and `uv`
+- Dropped setuptools in favor of `scikit-build-core` and `uv`:
+  - Added `CMakeLists.txt` for CMake-based build with Cython
+  - Updated `pyproject.toml` for scikit-build-core configuration
+  - Updated `Makefile` to use `uv` commands while keeping `manage.py` for dependencies
+  - Removed `setup.py` and `MANIFEST.in` (no longer needed)
+
+### Fixed
+
+- Fixed soundfile playback by using `SoundUI` instead of `PrintUI` in `build_user_interface()`:
+  - The Faust `soundfile` primitive now correctly loads and plays audio files
+  - Added `SoundUI` lifetime management to `InterpreterDsp` class
+  - Method now accepts optional `sound_directory` and `sample_rate` parameters
+  - This also eliminates the `DumpMem-*.txt` and `DumpCode-*.txt` debug files that were being generated due to assertion failures
 
 
 ## [0.0.5]
