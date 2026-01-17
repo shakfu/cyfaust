@@ -10,11 +10,11 @@ on:
         default: '3.11'
         required: true
         options:
-          - '3.8'
-          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
+          - '3.13'
+          - '3.14'
 
 run-name: cyfaust-test-all-${{ github.event.inputs.py_version }}
 
@@ -27,6 +27,9 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
         variant: [dynamic, static]
 
+    env:
+      MACOSX_DEPLOYMENT_TARGET: '10.13'
+
     steps:
 
     - uses: actions/checkout@v4
@@ -34,7 +37,7 @@ jobs:
         submodules: true
         fetch-depth: '1'
 
-    - name: Cache libfaust 
+    - name: Cache libfaust
       id: cache-libfaust
       uses: actions/cache@v4
       with:
@@ -48,13 +51,14 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ github.event.inputs.py_version }}
-        cache: 'pip' # caching pip dependencies
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
 
     - name: Display python version
       run: python3 --version
-
-    - name: Install prerequisites
-      run: python3 scripts/manage.py setup --deps
 
     - name: Setup faust
       if: steps.cache-libfaust.outputs.cache-hit != 'true'
@@ -64,13 +68,15 @@ jobs:
       if: matrix.variant == 'dynamic'
       run: |
         echo "building dynamic cyfaust variant"
-        python3 scripts/manage.py build
+        uv sync
 
     - name: Build static cyfaust variant
       if: matrix.variant == 'static'
+      env:
+        CMAKE_ARGS: "-DSTATIC=ON"
       run: |
         echo "building static cyfaust variant"
-        python3 scripts/manage.py build --static
+        uv sync
 
-    - name: Test dynamic cyfaust variant
-      run: pytest -vv tests
+    - name: Test cyfaust
+      run: uv run pytest -vv tests

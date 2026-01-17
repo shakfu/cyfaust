@@ -1,8 +1,57 @@
 [project]
 name = "cyfaust"
 version = "0.0.6"
-description = "A cython wrapper of the faust interpreter with rtaudio."
-requires-python = ">=3.8"
+description = "A Cython wrapper of the Faust interpreter and signal processing library with RtAudio support."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Shakeeb Alireza", email = "shakeeb.alireza@gmail.com" }
+]
+maintainers = [
+    { name = "Shakeeb Alireza", email = "shakeeb.alireza@gmail.com" }
+]
+keywords = [
+    "faust",
+    "dsp",
+    "audio",
+    "signal-processing",
+    "music",
+    "sound",
+    "synthesis",
+    "cython",
+    "rtaudio",
+    "real-time"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Cython",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Multimedia :: Sound/Audio :: Sound Synthesis",
+    "Topic :: Multimedia :: Sound/Audio :: Analysis",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed"
+]
+
+[project.urls]
+Homepage = "https://github.com/shakfu/cyfaust"
+Repository = "https://github.com/shakfu/cyfaust"
+Documentation = "https://github.com/shakfu/cyfaust#readme"
+Issues = "https://github.com/shakfu/cyfaust/issues"
+Changelog = "https://github.com/shakfu/cyfaust/blob/main/CHANGELOG.md"
 
 [dependency-groups]
 dev = ["pytest>=8.0", "numpy"]

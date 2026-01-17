@@ -58,7 +58,7 @@ struct MidiMeta : public Meta {
         fData[key] = value;
     }
     
-    const std::string get(const char* key, const char* def)
+    const std::string get(const char* key, const char* def) const noexcept
     {
         auto it = fData.find(key);
         return (it != fData.end()) ? it->second : def;
@@ -76,6 +76,7 @@ struct MidiMeta : public Meta {
                       (json.find("timestamp") != std::string::npos)));
     
     #if defined(NVOICES) && NVOICES!=NUM_VOICES
+        // Compile-time override
         nvoices = NVOICES;
     #else
         MidiMeta meta;

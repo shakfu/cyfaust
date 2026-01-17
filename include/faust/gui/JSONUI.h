@@ -32,6 +32,7 @@
 #include <sstream>
 #include <algorithm>
 #include <limits>
+#include <iterator>
 
 #include "faust/gui/UI.h"
 #include "faust/gui/PathBuilder.h"
@@ -85,7 +86,10 @@ struct MemoryLayoutItem {
     int size_bytes;
     int read;
     int write;
+    
+    static std::map<std::string, std::string> gStringType;
 };
+
 typedef std::vector<MemoryLayoutItem> MemoryLayoutType;
 typedef std::map<std::string, int> PathTableType;
 
@@ -122,7 +126,7 @@ class FAUST_API JSONUIReal : public PathBuilder, public Meta, public UIReal<REAL
     
         int fInputs, fOutputs, fSRIndex;
          
-        void tab(int n, std::ostream& fout)
+        void tab(int n, std::ostream& fout) noexcept
         {
             fout << '\n';
             while (n-- > 0) {
@@ -130,7 +134,7 @@ class FAUST_API JSONUIReal : public PathBuilder, public Meta, public UIReal<REAL
             }
         }
     
-        std::string flatten(const std::string& src)
+        std::string flatten(const std::string& src) const
         {
             std::string dst;
             for (size_t i = 0; i < src.size(); i++) {
@@ -479,6 +483,7 @@ class FAUST_API JSONUIReal : public PathBuilder, public Meta, public UIReal<REAL
         virtual void addGenericSoundfile(const char* label, const char* varname, const char* url, Soundfile** zone)
         {
             std::string path = buildPath(label);
+            fFullPaths.push_back(path);
             
             fUI << fCloseUIPar;
             tab(fTab, fUI); fUI << "{";
@@ -486,6 +491,14 @@ class FAUST_API JSONUIReal : public PathBuilder, public Meta, public UIReal<REAL
             tab(fTab, fUI); fUI << "\"type\": \"" << "soundfile" << "\",";
             tab(fTab, fUI); fUI << "\"label\": \"" << label << "\"" << ",";
             if (varname) { tab(fTab, fUI); fUI << "\"varname\": \"" << varname << "\","; }
+        
+            // Generate 'shortname' entry
+            tab(fTab, fUI); fUI << "\"shortname\": \"";
+        
+            // Add fUI section
+            fAllUI.push_back(fUI.str());
+            fUI.str("");
+        
             tab(fTab, fUI); fUI << "\"url\": \"" << url << "\"" << ",";
             tab(fTab, fUI); fUI << "\"address\": \"" << path << "\"" << ((fPathTable.size() > 0) ? "," : "");
             if (fPathTable.size() > 0) {
@@ -524,7 +537,7 @@ class FAUST_API JSONUIReal : public PathBuilder, public Meta, public UIReal<REAL
             tab(fTab, fMeta); fMeta << "{ " << "\"" << key << "\"" << ": " << "\"" << value << "\" }";
             fCloseMetaPar = ',';
         }
-    
+
         std::string JSON(bool flat = false)
         {
             if (fJSON.empty()) {
@@ -657,6 +670,13 @@ class FAUST_API JSONUIReal : public PathBuilder, public Meta, public UIReal<REAL
                 fJSON = JSON.str();
             }
             return (flat) ? flatten(fJSON) : fJSON;
+        }
+
+        // Stream JSON to a caller-provided output to avoid extra copies.
+        void writeJSON(std::ostream& out, bool flat = false)
+        {
+            const std::string& json = JSON(flat);
+            out << json;
         }
     
 };

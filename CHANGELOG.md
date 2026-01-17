@@ -27,6 +27,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
   - Updated `Makefile` to use `uv` commands while keeping `manage.py` for dependencies
   - Removed `setup.py` and `MANIFEST.in` (no longer needed)
 
+- Updated all GitHub workflows to use the new build system:
+  - Replaced `pip` with `uv` via `astral-sh/setup-uv@v4` action
+  - Updated build commands: `uv sync`, `uv build --wheel`, `uv run pytest`
+  - Static builds now use `CMAKE_ARGS="-DSTATIC=ON"` environment variable
+  - Updated Python version options: dropped 3.8/3.9, added 3.13/3.14
+  - Updated macOS runners: dropped deprecated macos-11/12, added macos-13/14
+  - Updated Ubuntu runners: added ubuntu-24.04
+  - Set `MACOSX_DEPLOYMENT_TARGET` to 10.13 for better compatibility
+
+- Updated `pyproject.toml` for PyPI publication readiness:
+  - Added full project metadata (authors, maintainers, keywords, classifiers)
+  - Added project URLs (homepage, repository, documentation, issues, changelog)
+  - Updated `requires-python` to `>=3.10`
+  - Added SPDX license identifier (MIT)
+
 ### Fixed
 
 - Fixed soundfile playback by using `SoundUI` instead of `PrintUI` in `build_user_interface()`:
@@ -35,6 +50,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
   - Method now accepts optional `sound_directory` and `sample_rate` parameters
   - This also eliminates the `DumpMem-*.txt` and `DumpCode-*.txt` debug files that were being generated due to assertion failures
 
+- Fixed test assertions in `test_cyfaust_box.py` to use minimum bounds (`>=`) instead of exact length checks, accommodating Faust version variability in generated code output
+
+### Added
+
+- Synced Cython `.pxd` declarations with Faust 2.83.1 C++ headers:
+  - Added `MemType` enum to `faust_interp.pxd`
+  - Added `generateAuxFilesFromFile2()` and `generateAuxFilesFromString2()` functions
+  - Added `MapUI` and `PathBuilder` classes to `faust_gui.pxd`
+  - Added `getSigNature()` and `sigBranches()` to `faust_signal.pxd`
+  - Added second `SoundUI` constructor accepting vector of directories
+  - Added `rtaudio.init(const char*, dsp*)` overload
+  - Added `Soundfile.Directories` typedef
 
 ## [0.0.5]
 

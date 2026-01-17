@@ -77,6 +77,10 @@ cdef extern from "faust/dsp/libfaust-signal.h":
 
     void setSigInterval(Signal s, Interval& inter)
 
+    SType getSigNature(Signal s)
+
+    tvec sigBranches(Signal s)
+
     bint isNil(Signal s)
 
     const char* tree2str(Signal s)

@@ -10,11 +10,11 @@ on:
         default: '3.11'
         required: true
         options:
-          - '3.8'
-          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
+          - '3.13'
+          - '3.14'
 
 run-name: cyfaust-wheel-all-${{ github.event.inputs.py_version }}
 
@@ -26,6 +26,9 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
+    env:
+      MACOSX_DEPLOYMENT_TARGET: '10.13'
+
     steps:
 
     - uses: actions/checkout@v4
@@ -33,7 +36,7 @@ jobs:
         submodules: true
         fetch-depth: '1'
 
-    - name: Cache libfaust 
+    - name: Cache libfaust
       id: cache-libfaust
       uses: actions/cache@v4
       with:
@@ -47,26 +50,35 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ github.event.inputs.py_version }}
-        cache: 'pip' # caching pip dependencies
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
 
     - name: Display python version
       run: python3 --version
-
-    - name: Install prerequisites
-      run: python3 scripts/manage.py setup --deps
 
     - name: Setup faust
       if: steps.cache-libfaust.outputs.cache-hit != 'true'
       run: python3 scripts/manage.py setup --faust
 
-    - name: Build wheels
-      run: python3 scripts/manage.py wheel --release
+    - name: Build and test (dynamic)
+      run: |
+        uv sync
+        uv run pytest -vv tests
 
-    - name: Test wheels
-      run: python3 scripts/manage.py wheel --test
+    - name: Build wheel (static for release)
+      env:
+        CMAKE_ARGS: "-DSTATIC=ON"
+      run: uv build --wheel
+
+    - name: Test wheel
+      run: |
+        pip install dist/*.whl
+        python -c "import cyfaust; print('cyfaust imported successfully')"
 
     - uses: actions/upload-artifact@v4
       with:
         name: dist-${{ matrix.os }}-py${{ github.event.inputs.py_version }}
-        path: ./wheels/*.whl
-
+        path: ./dist/*.whl
