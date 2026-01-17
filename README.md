@@ -112,6 +112,36 @@ cyfaust expand filter.dsp --sha-only  # output only SHA1 key
 cyfaust diagram synth.dsp -o output_dir
 ```
 
+**play** - Play a DSP file with RtAudio:
+```bash
+cyfaust play osc.dsp              # play until Ctrl+C
+cyfaust play osc.dsp -d 5         # play for 5 seconds
+cyfaust play osc.dsp -r 48000     # use 48kHz sample rate
+```
+
+**params** - List all DSP parameters (sliders, buttons, etc.):
+```bash
+cyfaust params synth.dsp
+```
+
+**validate** - Check a DSP file for errors:
+```bash
+cyfaust validate filter.dsp
+cyfaust validate filter.dsp --strict  # treat warnings as errors
+```
+
+**bitcode** - Save/load compiled DSP as bitcode for faster loading:
+```bash
+cyfaust bitcode save synth.dsp -o synth.fbc
+cyfaust bitcode load synth.fbc
+```
+
+**json** - Export DSP metadata as JSON:
+```bash
+cyfaust json instrument.dsp --pretty
+cyfaust json instrument.dsp -o metadata.json
+```
+
 For detailed help on any command:
 ```bash
 cyfaust <command> --help

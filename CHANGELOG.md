@@ -27,12 +27,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Added `MetaCollector` class to `faust_gui.pxd` for collecting DSP metadata into a C++ map
 
-- Added command-line interface (`python -m cyfaust`) with commands:
+- Added command-line interface (`cyfaust` or `python -m cyfaust`) with commands:
   - `version`: Show cyfaust and libfaust version
   - `compile`: Compile Faust DSP to cpp, c, rust, or codebox backends
   - `diagram`: Generate SVG block diagrams
   - `expand`: Expand Faust DSP to self-contained code
   - `info`: Show DSP metadata, inputs, outputs, and library dependencies
+  - `play`: Play a DSP file with RtAudio (supports duration, sample rate options)
+  - `params`: List all DSP parameters (sliders, buttons, bargraphs)
+  - `validate`: Check DSP files for errors (with optional strict mode)
+  - `bitcode`: Save/load compiled DSP as bitcode for faster loading
+  - `json`: Export DSP metadata and parameters as JSON
 
 ## [0.0.6]
 
