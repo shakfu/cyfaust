@@ -2,7 +2,7 @@
 
 The aim of the cyfaust project is develop a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
-To this end, a decent amount of progress has been made, with current code running successfully on faust version `2.81.2`, and with some key work left to do (see [Project Status](https://github.com/shakfu/cyfaust?tab=readme-ov-file#project-status) below). 
+The project is now running on Faust version `2.83.1` with the full interpreter API wrapped, including the box and signal APIs (see [Project Status](#project-status) below). 
 
 It has two build variants:
 
@@ -74,17 +74,16 @@ While this project was initially developed and tested primarily on macOS (`x86_6
 
 ## Project Status
 
-The project is still relatively early stage and a work-in-progress, with key remaining parts not yet implemented (see the project's [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md) file.
+The project provides a complete wrapping of the Faust interpreter API:
 
-Nonetheless,
+- **Interpreter API**: Fully wrapped with RtAudio cross-platform audio driver integration
+- **Box API**: Fully wrapped with both functional and object-oriented interfaces
+- **Signal API**: Fully wrapped with both functional and object-oriented interfaces
+- **Platform Support**: macOS, Linux, and Windows
+- **Build Variants**: Dynamic (`libfaust.so|dylib`) and static (`libfaust.a|lib`)
+- **Faust Version**: `2.83.1`
 
-- A good chunk of the faust interpreter (in Faust version `2.81.2`), and also the box and signal apis have been wrapped with tntegration of the rtaudio cross-platform audio driver.
-
-- Works on macOS, Linux and Windows.
-
-- Provides two build variants: one dynamically-linked to `libfaust.(so|dylib)` and the other statically-linked to `libfaust.(a|lib)`
-
-Current priorities are to work through remaining items in the `TODO` list.
+See the project's [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md) for remaining enhancements.
 
 ## Setup and Requirements
 
@@ -128,13 +127,13 @@ The general requirements are:
 
 1. `libfaust` configured to be built with the c, c++, codebox, interp_comp, and rust backends and the executable, static and dynamic targets.
 
-2. `libsndile` and `libsamplerate` for faust `soundfile` primitive support (not yet implemented)
+2. `libsndfile` and `libsamplerate` for faust `soundfile` primitive support
 
 Platform specific requirements are covered in the next sections.
 
 ## Windows
 
-To build cyfaust you will need python to be installed (3.9+), a c++ compiler such as [visual studio community edition](https://visualstudio.microsoft.com/vs/community/) and make sure to install c++ and Windows SDK development support, as well as `git`, and `cmake`.
+To build cyfaust you will need python to be installed (3.10+), a c++ compiler such as [visual studio community edition](https://visualstudio.microsoft.com/vs/community/) and make sure to install c++ and Windows SDK development support, as well as `git`, and `cmake`.
 
 Then do something like the following in a terminal:
 
@@ -184,7 +183,7 @@ make # or python3 scripts/manage.py setup --faust
   - `lib`, the dynamic and static versions of `libfaust` and
   - `share`, the faust standard libs and examples.
 
-- Faust version `2.81.2` will be used as it is a stable reference to work with and is used by the setup scripts.
+- Faust version `2.83.1` will be used as it is a stable reference to work with and is used by the setup scripts.
 
 - The script can be run again and will create (and overwrite) the corresponding files in the `bin`, `include`, `lib` and `share` folders.
 
@@ -194,27 +193,29 @@ To build the default dynamically-linked package and/or wheel:
 make
 ```
 
-or
+or using `uv` (the project now uses `scikit-build-core`):
 
 ```bash
-python3 setup.py build
+uv build --wheel
 ```
 
-and for a wheel:
+For a wheel:
 
 ```bash
 make wheel
 ```
 
-For the static variant just set the environment variable `STATIC=1` at the end of the above make commands or at the beginning of the python3 commands.
-
-For example:
+For the static variant, set the `STATIC=1` environment variable with make, or use `CMAKE_ARGS` for direct builds:
 
 ```bash
 make STATIC=1
 ```
 
-etc.
+or
+
+```bash
+CMAKE_ARGS="-DSTATIC=ON" uv build --wheel
+```
 
 To run the tests
 

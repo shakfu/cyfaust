@@ -1,55 +1,65 @@
 # TODO
 
-## general
+## General
 
-- [x] Stay in sync with major faust releases (so far `2.81.2` is tracked)
+- [x] Stay in sync with major faust releases (currently tracking `2.83.1`)
 
-## cyfaust
+## cyfaust - Core API
 
-- [ ] Complete unimplemented Python interface methods:
-  	
-  	- [ ] `control()`, `frame()` - C++ compilation-dependent methods not exposed
-  	
-  	- [ ] `get_memory_manager()`, `set_memory_manager()` - Lower-level C++ features
-  not in Python interface
-  	
-  	- [ ] `class_init()` - Factory-level method not exposed
-  	
-  	- [ ] Timestamped `compute()` - Advanced feature not in Python layer
+### Completed
 
+- [x] Fix Soundfile support so that it works out of the box without compilation
+- [x] Implement `get_memory_manager()` and `set_memory_manager()` factory methods
+- [x] Implement `class_init()` factory method
+- [x] Implement `build_user_interface()` with optional `sound_directory` and `sample_rate` parameters
+- [x] Add static build generation script (`scripts/generate_static.py`)
 
-- [ ] Fix Soundfile support so that it works out of the box without compilation.
+### High Priority
 
-- [ ] Add `cython/__main__.py` commandline interface.
+- [ ] Implement `control()` method for control-rate processing
+- [ ] Implement `frame()` method for single-frame processing
+- [ ] Implement timestamped `compute()` variant for sample-accurate timing
+- [ ] Implement `metadata()` method with proper `Meta` interface support
 
-- [ ] Add additional python debug checks
+### Medium Priority
+
+- [ ] Add `cyfaust/__main__.py` command-line interface
+- [ ] Add additional Python debug/validation checks
 
 ## cyfaust.interp
 
-- [ ] Complete `InterpreterDsp.build_user_interface` to properly accept `fi.UI* instances`
+- [x] `InterpreterDsp.build_user_interface` now accepts optional parameters for sound directory and sample rate
 
-- [ ] Complete `InterpreterDsp.metadata` and `fi.Meta* m` parameter
+- [ ] Complete `InterpreterDsp.metadata` to properly accept `fi.Meta*` parameter
 
 ## cyfaust.box
 
-- [ ] Try to find a use for `getUserData`: Return the xtended type of a box
+### High Priority
 
-- [ ] Add classes (thin wrappers around `Box`)
+- [ ] Add more box API tests to improve coverage
 
-- [ ] `box.getparams` and `signal.is_sig_xxx` are inconsistent apis
+### Medium Priority
 
-- [ ] Add more box api tests
+- [ ] Harmonize `box.getparams` and `signal.is_sig_xxx` APIs for consistency
+- [ ] Add thin wrapper classes around `Box` for specific box types
+
+### Low Priority
+
+- [ ] Investigate use case for `getUserData` (returns xtended type of a box)
 
 ## cyfaust.signal
 
-- [ ] Fix `Interval` wrapper and `get_interval`, `set_interval` methods
+### High Priority
 
-- [ ] Try to find a use for `getUserData`: Return the xtended type of a box
+- [ ] Fix `Interval` wrapper and implement `get_interval`, `set_interval` methods
+- [ ] Add more signal API tests to improve coverage
 
-- [ ] Add classes (thin wrappers around `Signal`)
+### Medium Priority
 
-- [ ] Improve docstrings
+- [ ] Harmonize `signal.is_sig_xxx` and `box.getparams` APIs for consistency
+- [ ] Add thin wrapper classes around `Signal` for specific signal types
+- [ ] Improve docstrings throughout the signal module
 
-- [ ] Add more signal api tests
+### Low Priority
 
-- [ ] `signal.is_sig_xxx` and `Box.getparams` are inconsistent apis
+- [ ] Investigate use case for `getUserData` (returns xtended type of a signal)

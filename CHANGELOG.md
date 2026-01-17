@@ -56,6 +56,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Added
 
+- Added `scripts/generate_static.py` to consolidate dynamic module sources into a single monolithic `cyfaust.pyx` for static builds:
+  - Processes `common`, `interp`, `box`, `signal`, and `player` modules in dependency order
+  - Removes relative imports and collects standard imports
+  - Syncs `.pxd` declaration files from dynamic to static directory
+  - Generates auto-generated header with proper Cython directives
+
 - Synced Cython `.pxd` declarations with Faust 2.83.1 C++ headers:
   - Added `MemType` enum to `faust_interp.pxd`
   - Added `generateAuxFilesFromFile2()` and `generateAuxFilesFromString2()` functions
