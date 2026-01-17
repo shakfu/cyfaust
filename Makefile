@@ -38,7 +38,7 @@ CMAKE_OPTS += -DDSOUND=$(if $(filter 1,$(DSOUND)),ON,OFF)
 export CMAKE_ARGS := $(CMAKE_OPTS)
 
 .PHONY: all sync faust samplerate sndfile build rebuild test wheel sdist \
-        release verify-sync pytest clean distclean reset help
+        generate-static release verify-sync pytest clean distclean reset help
 
 # Default target
 all: build
@@ -92,9 +92,13 @@ wheel: faust
 sdist: faust
 	uv build --sdist
 
+# Generate static source from dynamic modules
+generate-static:
+	$(PYTHON) scripts/generate_static.py
+
 # Build release wheel (static build)
-release: faust
-	CMAKE_ARGS="-DSTATIC=ON $(CMAKE_OPTS)" uv build --wheel
+release: faust generate-static
+	uv build --wheel
 
 # Verify static/dynamic build sync
 verify-sync:
