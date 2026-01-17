@@ -39,7 +39,7 @@ export CMAKE_ARGS := $(CMAKE_OPTS)
 
 .PHONY: all sync faust samplerate sndfile build rebuild test wheel sdist \
         generate-static release verify-sync pytest clean distclean reset help \
-        wheel-static wheel-check publish publish-test
+        wheel-static wheel-dynamic wheel-repair wheel-check publish publish-test
 
 # Default target
 all: build
@@ -69,13 +69,13 @@ sndfile: $(LIBSAMPLERATE) $(LIBSNDFILE)
 # Build commands (via uv + scikit-build-core)
 # ----------------------------------------------------------------------------
 
-# Sync environment (initial setup)
+# Sync environment (initial setup, uses dynamic build for development)
 sync: faust
-	uv sync
+	CMAKE_ARGS="-DSTATIC=OFF" uv sync
 
-# Build/rebuild the extension after code changes
+# Build/rebuild the extension after code changes (dynamic for development)
 build: faust
-	uv sync --reinstall-package cyfaust
+	CMAKE_ARGS="-DSTATIC=OFF" uv sync --reinstall-package cyfaust
 
 # Alias for build
 rebuild: build
@@ -85,7 +85,7 @@ test: build verify-sync
 	uv run pytest tests/ -v
 	@rm -f DumpCode-*.txt DumpMem-*.txt
 
-# Build wheel
+# Build wheel (uses Makefile's STATIC setting, default dynamic)
 wheel: faust
 	uv build --wheel
 
@@ -97,17 +97,35 @@ sdist: faust
 generate-static:
 	$(PYTHON) scripts/generate_static.py
 
-# Build release wheel (static build)
+# Build static wheel (statically linked, no external dylib needed)
 wheel-static: faust generate-static
-	uv build --wheel
+	CMAKE_ARGS="-DSTATIC=ON" uv build --wheel
 
-# Build a whole bunch of wheels
+# Build dynamic wheel (links to libfaust dylib, then bundles via delocate/auditwheel)
+wheel-dynamic: faust
+	CMAKE_ARGS="-DSTATIC=OFF" uv build --wheel
+	$(MAKE) wheel-repair
+
+# Repair wheel by bundling dynamic libraries (platform-specific)
+wheel-repair:
+ifeq ($(shell uname),Darwin)
+	@echo "Running delocate to bundle libfaust.dylib..."
+	DYLD_LIBRARY_PATH=lib uv run delocate-wheel -v dist/*.whl
+else ifeq ($(shell uname),Linux)
+	@echo "Running auditwheel to bundle libfaust.so..."
+	LD_LIBRARY_PATH=lib uv run auditwheel repair dist/*.whl -w dist/
+else
+	@echo "Running delvewheel to bundle faust.dll..."
+	uv run delvewheel repair dist/*.whl -w dist/
+endif
+
+# Build release wheels (static, for PyPI distribution)
 release: faust generate-static
-	uv build --wheel --python 3.10
-	uv build --wheel --python 3.11
-	uv build --wheel --python 3.12
-	uv build --wheel --python 3.13
-	uv build --wheel --python 3.14
+	CMAKE_ARGS="-DSTATIC=ON" uv build --wheel --python 3.10
+	CMAKE_ARGS="-DSTATIC=ON" uv build --wheel --python 3.11
+	CMAKE_ARGS="-DSTATIC=ON" uv build --wheel --python 3.12
+	CMAKE_ARGS="-DSTATIC=ON" uv build --wheel --python 3.13
+	CMAKE_ARGS="-DSTATIC=ON" uv build --wheel --python 3.14
 	uv run twine check dist/*
 
 # ----------------------------------------------------------------------------
@@ -168,13 +186,16 @@ help:
 	@echo "  sndfile     - Build libsndfile"
 	@echo ""
 	@echo "Build targets:"
-	@echo "  all         - Build/rebuild the extension (default)"
-	@echo "  sync        - Sync environment (initial setup)"
-	@echo "  build       - Rebuild extension after code changes"
-	@echo "  rebuild     - Alias for build"
-	@echo "  wheel       - Build wheel distribution"
-	@echo "  sdist       - Build source distribution"
-	@echo "  release     - Build static wheel (for distribution)"
+	@echo "  all          - Build/rebuild the extension (default)"
+	@echo "  sync         - Sync environment (initial setup)"
+	@echo "  build        - Rebuild extension after code changes"
+	@echo "  rebuild      - Alias for build"
+	@echo "  wheel        - Build wheel (uses STATIC setting)"
+	@echo "  wheel-static - Build static wheel (libfaust embedded)"
+	@echo "  wheel-dynamic- Build dynamic wheel (libfaust bundled via delocate)"
+	@echo "  wheel-repair - Bundle dynamic libs into wheel (delocate/auditwheel)"
+	@echo "  sdist        - Build source distribution"
+	@echo "  release      - Build static wheels for all Python versions"
 	@echo ""
 	@echo "Test targets:"
 	@echo "  test        - Run tests"
