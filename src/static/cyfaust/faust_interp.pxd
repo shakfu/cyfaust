@@ -114,7 +114,6 @@ cdef extern from "faust/dsp/interpreter-dsp.h":
         void control()
         void frame(float* inputs, float* outputs)
         void compute(int count, float** inputs, float** outputs)
-        void compute(double date_usec, int count, float** inputs, float** outputs)
 
     cdef cppclass interpreter_dsp_factory:
         # ~interpreter_dsp_factory()

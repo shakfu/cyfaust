@@ -15,6 +15,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
+## [0.1.0]
+
+### Added
+
+- Added new DSP instance methods to `InterpreterDsp`:
+  - `control()`: Read all controllers and update DSP state (for use with `-ec` option)
+  - `frame()`: Single-frame processing (for use with `-os` option)
+  - `compute_timestamped()`: Audio processing with timestamp for sample-accurate timing (API compatible, delegates to standard compute in interpreter)
+  - `metadata()`: Returns DSP metadata as a Python dictionary (name, author, version, license, etc.)
+
+- Added `MetaCollector` class to `faust_gui.pxd` for collecting DSP metadata into a C++ map
+
+- Added command-line interface (`python -m cyfaust`) with commands:
+  - `version`: Show cyfaust and libfaust version
+  - `compile`: Compile Faust DSP to cpp, c, rust, or codebox backends
+  - `diagram`: Generate SVG block diagrams
+  - `expand`: Expand Faust DSP to self-contained code
+  - `info`: Show DSP metadata, inputs, outputs, and library dependencies
+
 ## [0.0.6]
 
 ### Changed

@@ -118,47 +118,148 @@ class TestNewDSPMethods:
     def test_compute_method(self):
         """Test compute() method for multi-frame processing"""
         print_entry("test_compute_method")
-        
+
         # Simple gain DSP
         dsp_code = "process = _ * 0.5;"
-        
+
         factory = create_dsp_factory_from_string("test_compute", dsp_code)
         assert factory is not None, "Failed to create factory"
-        
+
         dsp = factory.create_dsp_instance()
         assert dsp is not None, "Failed to create DSP instance"
-        
+
         # Initialize DSP
         sample_rate = 44100
         dsp.init(sample_rate)
-        
+
         num_inputs = dsp.get_numinputs()
         num_outputs = dsp.get_numoutputs()
-        
+
         if num_inputs > 0 and num_outputs > 0:
             try:
                 buffer_size = 64
-                
+
                 # Create 2D arrays [channels, samples]
                 inputs = np.ones((num_inputs, buffer_size), dtype=np.float32) * 0.8
                 outputs = np.zeros((num_outputs, buffer_size), dtype=np.float32)
-                
+
                 dsp.compute(buffer_size, inputs, outputs)
-                
+
                 print(f"✓ compute() method processed {buffer_size} frames")
-                print(f"  {num_inputs} inputs → {num_outputs} outputs")
+                print(f"  {num_inputs} inputs -> {num_outputs} outputs")
                 if num_outputs > 0:
                     print(f"  Output level: {np.mean(outputs[0]):.3f}")
-                
+
             except AttributeError:
-                print("× compute() method not available")
+                print("x compute() method not available")
                 raise
             except Exception as e:
-                print(f"× compute() method error: {e}")
+                print(f"x compute() method error: {e}")
                 raise
         else:
-            print("⚠ Skipping compute test - no inputs or outputs")
-        
+            print("! Skipping compute test - no inputs or outputs")
+
+        # Clean up
+        del dsp
+        del factory
+
+    def test_compute_timestamped_method(self):
+        """Test compute_timestamped() method for sample-accurate timing"""
+        print_entry("test_compute_timestamped_method")
+
+        # Simple gain DSP
+        dsp_code = "process = _ * 0.5;"
+
+        factory = create_dsp_factory_from_string("test_compute_ts", dsp_code)
+        assert factory is not None, "Failed to create factory"
+
+        dsp = factory.create_dsp_instance()
+        assert dsp is not None, "Failed to create DSP instance"
+
+        # Initialize DSP
+        sample_rate = 44100
+        dsp.init(sample_rate)
+
+        num_inputs = dsp.get_numinputs()
+        num_outputs = dsp.get_numoutputs()
+
+        if num_inputs > 0 and num_outputs > 0:
+            try:
+                buffer_size = 64
+
+                # Create 2D arrays [channels, samples]
+                inputs = np.ones((num_inputs, buffer_size), dtype=np.float32) * 0.8
+                outputs = np.zeros((num_outputs, buffer_size), dtype=np.float32)
+
+                # Use a timestamp in microseconds
+                timestamp_usec = 1000000.0  # 1 second
+                dsp.compute_timestamped(timestamp_usec, buffer_size, inputs, outputs)
+
+                print(f"✓ compute_timestamped() method processed {buffer_size} frames")
+                print(f"  Timestamp: {timestamp_usec} usec")
+                print(f"  {num_inputs} inputs -> {num_outputs} outputs")
+                if num_outputs > 0:
+                    print(f"  Output level: {np.mean(outputs[0]):.3f}")
+
+            except AttributeError:
+                print("x compute_timestamped() method not available")
+                raise
+            except Exception as e:
+                print(f"x compute_timestamped() method error: {e}")
+                raise
+        else:
+            print("! Skipping compute_timestamped test - no inputs or outputs")
+
+        # Clean up
+        del dsp
+        del factory
+
+    def test_metadata_method(self):
+        """Test metadata() method for retrieving DSP metadata"""
+        print_entry("test_metadata_method")
+
+        # DSP with metadata declarations
+        dsp_code = '''
+        declare name "TestSynth";
+        declare author "Test Author";
+        declare version "1.0";
+        declare license "MIT";
+        import("stdfaust.lib");
+        process = os.osc(440) * 0.1;
+        '''
+
+        factory = create_dsp_factory_from_string("test_metadata", dsp_code)
+        assert factory is not None, "Failed to create factory"
+
+        dsp = factory.create_dsp_instance()
+        assert dsp is not None, "Failed to create DSP instance"
+
+        # Initialize DSP
+        sample_rate = 44100
+        dsp.init(sample_rate)
+
+        try:
+            meta = dsp.metadata()
+            assert isinstance(meta, dict), "metadata() should return a dictionary"
+
+            print(f"✓ metadata() method returned {len(meta)} entries")
+            for key, value in meta.items():
+                print(f"  {key}: {value}")
+
+            # Verify expected metadata is present
+            assert "name" in meta, "Expected 'name' in metadata"
+            assert meta["name"] == "TestSynth", f"Expected name='TestSynth', got '{meta['name']}'"
+
+            assert "author" in meta, "Expected 'author' in metadata"
+            assert meta["author"] == "Test Author", f"Expected author='Test Author', got '{meta['author']}'"
+
+        except AttributeError:
+            print("x metadata() method not available")
+            raise
+        except Exception as e:
+            print(f"x metadata() method error: {e}")
+            raise
+
         # Clean up
         del dsp
         del factory
@@ -292,20 +393,22 @@ class TestIntegrationWithNewMethods:
 
 if __name__ == '__main__':
     print_section(f"Testing New Methods Implementation ({'dynamic' if DYNAMIC_BUILD else 'static'} build)")
-    
+
     # Test DSP methods
     test_dsp = TestNewDSPMethods()
     test_dsp.test_control_method()
     test_dsp.test_frame_method()
     test_dsp.test_compute_method()
-    
+    test_dsp.test_compute_timestamped_method()
+    test_dsp.test_metadata_method()
+
     # Test factory methods
     test_factory = TestNewFactoryMethods()
     test_factory.test_memory_manager_methods()
     test_factory.test_class_init_method()
-    
+
     # Integration test
     test_integration = TestIntegrationWithNewMethods()
     test_integration.test_complete_dsp_workflow()
-    
+
     print_entry("All new method tests completed successfully!")

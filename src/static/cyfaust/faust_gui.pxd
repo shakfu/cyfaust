@@ -4,6 +4,7 @@ Provides cython header interface to some faust/gui/*.h files
 """
 from libcpp.string cimport string
 from libcpp.vector cimport vector
+from libcpp.map cimport map
 
 # DEF INCLUDE_SNDFILE = True
 
@@ -85,6 +86,34 @@ cdef extern from "faust/gui/CInterface.h":
 cdef extern from "faust/gui/meta.h":
     cdef cppclass Meta:
         void declare(const char* key, const char* value)
+
+cdef extern from *:
+    """
+    #include <map>
+    #include <string>
+    #include "faust/gui/meta.h"
+
+    // MetaCollector: A Meta implementation that collects metadata into a map
+    class MetaCollector : public Meta {
+    private:
+        std::map<std::string, std::string> fMeta;
+    public:
+        MetaCollector() {}
+        virtual ~MetaCollector() {}
+
+        void declare(const char* key, const char* value) override {
+            fMeta[key] = value;
+        }
+
+        const std::map<std::string, std::string>& getMeta() const {
+            return fMeta;
+        }
+    };
+    """
+    cdef cppclass MetaCollector(Meta):
+        MetaCollector() except +
+        void declare(const char* key, const char* value)
+        const map[string, string]& getMeta()
 
 cdef extern from "faust/gui/UI.h":
     cdef cppclass UIReal[REAL]:

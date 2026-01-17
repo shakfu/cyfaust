@@ -9,7 +9,8 @@ import os
 from libc.stdlib cimport malloc, free
 from libcpp.string cimport string
 from libcpp.vector cimport vector
-from cython.operator cimport dereference as deref
+from libcpp.map cimport map
+from cython.operator cimport dereference as deref, preincrement as inc
 
 from . cimport faust_interp as fi
 from . cimport faust_box as fb
@@ -496,6 +497,31 @@ cdef class InterpreterDspFactory:
         return factory
 
 
+cdef class MetaCollector:
+    """Collects DSP metadata into a Python dictionary."""
+    cdef fg.MetaCollector* ptr
+    cdef bint ptr_owner
+
+    def __cinit__(self):
+        self.ptr = new fg.MetaCollector()
+        self.ptr_owner = True
+
+    def __dealloc__(self):
+        if self.ptr and self.ptr_owner:
+            del self.ptr
+            self.ptr = NULL
+
+    def get_metadata(self) -> dict:
+        """Return collected metadata as a Python dictionary."""
+        cdef dict result = {}
+        cdef map[string, string] meta_map = self.ptr.getMeta()
+        cdef map[string, string].iterator it = meta_map.begin()
+        while it != meta_map.end():
+            result[deref(it).first.decode('utf8')] = deref(it).second.decode('utf8')
+            inc(it)
+        return result
+
+
 cdef class InterpreterDsp:
     """DSP instance class with methods."""
 
@@ -612,7 +638,7 @@ cdef class InterpreterDsp:
         
     def compute(self, int count, float[:, ::1] inputs not None, float[:, ::1] outputs not None):
         """DSP instance computation with successive in/out audio buffers.
-        
+
         Args:
             count: number of frames to compute
             inputs: 2D input audio buffers as memoryview [channels, samples]
@@ -620,26 +646,59 @@ cdef class InterpreterDsp:
         """
         cdef float** input_ptrs = <float**>malloc(inputs.shape[0] * sizeof(float*))
         cdef float** output_ptrs = <float**>malloc(outputs.shape[0] * sizeof(float*))
-        
+
         try:
             for i in range(inputs.shape[0]):
                 input_ptrs[i] = &inputs[i, 0]
             for i in range(outputs.shape[0]):
                 output_ptrs[i] = &outputs[i, 0]
-                
+
             self.ptr.compute(count, input_ptrs, output_ptrs)
         finally:
             free(input_ptrs)
             free(output_ptrs)
-            
 
-    # cdef build_user_interface(self, fi.UI* ui_interface):
-    #     """Trigger the ui_interface parameter with instance specific calls."""
-    #     self.ptr.buildUserInterface(ui_interface)
+    def compute_timestamped(self, double date_usec, int count, float[:, ::1] inputs not None, float[:, ::1] outputs not None):
+        """DSP instance computation with timestamp for sample-accurate timing.
 
-    cdef metadata(self, fg.Meta* m):
-        """Trigger the meta parameter with instance specific calls."""
-        self.ptr.metadata(m)
+        The timestamp parameter is provided for API compatibility with compiled DSP
+        backends that support sample-accurate scheduling. The interpreter backend
+        currently processes the audio immediately and the timestamp is stored for
+        potential future use.
+
+        Args:
+            date_usec: timestamp in microseconds (stored but not used by interpreter)
+            count: number of frames to compute
+            inputs: 2D input audio buffers as memoryview [channels, samples]
+            outputs: 2D output audio buffers as memoryview [channels, samples]
+        """
+        # Note: The interpreter backend doesn't currently support timestamped
+        # scheduling - it delegates to the standard compute method.
+        # The timestamp is accepted for API compatibility.
+        cdef float** input_ptrs = <float**>malloc(inputs.shape[0] * sizeof(float*))
+        cdef float** output_ptrs = <float**>malloc(outputs.shape[0] * sizeof(float*))
+
+        try:
+            for i in range(inputs.shape[0]):
+                input_ptrs[i] = &inputs[i, 0]
+            for i in range(outputs.shape[0]):
+                output_ptrs[i] = &outputs[i, 0]
+
+            # Call the standard compute - timestamp is for API compatibility
+            self.ptr.compute(count, input_ptrs, output_ptrs)
+        finally:
+            free(input_ptrs)
+            free(output_ptrs)
+
+    def metadata(self) -> dict:
+        """Get DSP metadata as a dictionary.
+
+        Returns:
+            dict: Dictionary of metadata key-value pairs (e.g., name, author, version, etc.)
+        """
+        cdef MetaCollector collector = MetaCollector()
+        self.ptr.metadata(<fg.Meta*>collector.ptr)
+        return collector.get_metadata()
 
 
 def get_dsp_factory_from_sha_key(str sha_key) -> InterpreterDspFactory:

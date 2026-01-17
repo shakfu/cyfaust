@@ -120,7 +120,8 @@ import os
 from libc.stdlib cimport malloc, free
 from libcpp.string cimport string
 from libcpp.vector cimport vector
-from cython.operator cimport dereference as deref
+from libcpp.map cimport map
+from cython.operator cimport dereference as deref, preincrement as inc
 
 from . cimport faust_interp as fi
 from . cimport faust_box as fb

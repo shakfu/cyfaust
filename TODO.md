@@ -13,24 +13,20 @@
 - [x] Implement `class_init()` factory method
 - [x] Implement `build_user_interface()` with optional `sound_directory` and `sample_rate` parameters
 - [x] Add static build generation script (`scripts/generate_static.py`)
-
-### High Priority
-
-- [ ] Implement `control()` method for control-rate processing
-- [ ] Implement `frame()` method for single-frame processing
-- [ ] Implement timestamped `compute()` variant for sample-accurate timing
-- [ ] Implement `metadata()` method with proper `Meta` interface support
+- [x] Implement `control()` method for control-rate processing
+- [x] Implement `frame()` method for single-frame processing
+- [x] Implement `compute_timestamped()` method for sample-accurate timing (API compatible, interpreter delegates to standard compute)
+- [x] Implement `metadata()` method returning DSP metadata as a Python dictionary
 
 ### Medium Priority
 
-- [ ] Add `cyfaust/__main__.py` command-line interface
+- [x] Add `cyfaust/__main__.py` command-line interface
 - [ ] Add additional Python debug/validation checks
 
 ## cyfaust.interp
 
 - [x] `InterpreterDsp.build_user_interface` now accepts optional parameters for sound directory and sample rate
-
-- [ ] Complete `InterpreterDsp.metadata` to properly accept `fi.Meta*` parameter
+- [x] `InterpreterDsp.metadata()` now returns a Python dictionary of metadata key-value pairs
 
 ## cyfaust.box
 
