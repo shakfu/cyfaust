@@ -1,41 +1,19 @@
 # cyfaust
 
-The aim of the cyfaust project is develop a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
+The cyfaust project provides as a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
-The project is now running on Faust version `2.83.1` with the full interpreter API wrapped, including the box and signal APIs (see [Project Status](#project-status) below). 
+- **Interpreter API**: Fully wrapped with RtAudio cross-platform audio driver integration
+- **Box API**: Fully wrapped with both functional and object-oriented interfaces
+- **Signal API**: Fully wrapped with both functional and object-oriented interfaces
+- **Platform Support**: macOS, Linux, and Windows
+- **Build Variants**: Dynamic (`libfaust.so|dylib`) and static (`libfaust.a|lib`)
+- **Faust Version**: `2.83.1`
 
-It has two build variants:
+## Installation
 
-1. The default build is dynamically linked to `libfaust.dylib`, `libfaust.so` or `faust.dll` depending on your platform and consists of a python package with multiple compiled submodules and embedded resources (faust libraries and architecture files):
-
-    ```bash
-    % tree -L 3
-    .
-    └── cyfaust
-        ├── __init__.py
-        ├── box.cpython-311-darwin.so
-        ├── common.cpython-311-darwin.so
-        ├── interp.cpython-311-darwin.so
-        ├── signal.cpython-311-darwin.so
-        └── resources
-            ├── architecture
-            └── libraries
-    ```
-
-2. The static build is statically linked (with `libfaust.a` or `libfaust.lib`) and consists of a python package with a single compiled submodule and embedded resources (faust libraries and architecture files):
-
-    ```bash
-    % tree -L 3
-    .
-    └── cyfaust
-        ├── __init__.py
-        ├── cyfaust.cpython-311-darwin.so
-        └── resources
-            ├── architecture
-            └── libraries
-    ```
-
-While this project was initially developed and tested primarily on macOS (`x86_64`, `arm64`), Linux (`amd64`, `aarch64`) and Windows (`amd64`) are now supported in recent releases.
+```sh
+pip install cyfaust
+```
 
 ## Features
 
@@ -147,20 +125,44 @@ For detailed help on any command:
 cyfaust <command> --help
 ```
 
-## Project Status
+## Building
 
-The project provides a complete wrapping of the Faust interpreter API:
+It has two build variants:
 
-- **Interpreter API**: Fully wrapped with RtAudio cross-platform audio driver integration
-- **Box API**: Fully wrapped with both functional and object-oriented interfaces
-- **Signal API**: Fully wrapped with both functional and object-oriented interfaces
-- **Platform Support**: macOS, Linux, and Windows
-- **Build Variants**: Dynamic (`libfaust.so|dylib`) and static (`libfaust.a|lib`)
-- **Faust Version**: `2.83.1`
+1. The default build is dynamically linked to `libfaust.dylib`, `libfaust.so` or `faust.dll` depending on your platform and consists of a python package with multiple compiled submodules and embedded resources (faust libraries and architecture files):
+
+    ```bash
+    % tree -L 3
+    .
+    └── cyfaust
+        ├── __init__.py
+        ├── box.cpython-311-darwin.so
+        ├── common.cpython-311-darwin.so
+        ├── interp.cpython-311-darwin.so
+        ├── signal.cpython-311-darwin.so
+        └── resources
+            ├── architecture
+            └── libraries
+    ```
+
+2. The static build is statically linked (with `libfaust.a` or `libfaust.lib`) and consists of a python package with a single compiled submodule and embedded resources (faust libraries and architecture files):
+
+    ```bash
+    % tree -L 3
+    .
+    └── cyfaust
+        ├── __init__.py
+        ├── cyfaust.cpython-311-darwin.so
+        └── resources
+            ├── architecture
+            └── libraries
+    ```
+
+While this project was initially developed and tested primarily on macOS (`x86_64`, `arm64`), Linux (`amd64`, `aarch64`) and Windows (`amd64`) are now supported in recent releases.
 
 See the project's [TODO](https://github.com/shakfu/cyfaust/blob/main/TODO.md) for remaining enhancements.
 
-## Setup and Requirements
+### Setup and Requirements
 
 cyfaust has a build management script, `scripts/manage.py`, which simplifies cross-platform project setup and builds and also build automation in the case of github workflows.
 
@@ -206,7 +208,7 @@ The general requirements are:
 
 Platform specific requirements are covered in the next sections.
 
-## Windows
+### Windows
 
 To build cyfaust you will need python to be installed (3.10+), a c++ compiler such as [visual studio community edition](https://visualstudio.microsoft.com/vs/community/) and make sure to install c++ and Windows SDK development support, as well as `git`, and `cmake`.
 
@@ -223,7 +225,7 @@ pytest
 # etc..
 ```
 
-## macOS & Linux
+### macOS & Linux
 
 On macOS and Linux, a `Makefile` is available as a frontend to the above `manage.py` script to make it a little quicker to use.
 
