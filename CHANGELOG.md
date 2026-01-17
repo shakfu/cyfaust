@@ -15,6 +15,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
+## [0.0.6]
+
+### Changed
+
+- Updated cyfaust to faust `22.83.1` (all tests pass)
+
+- Dropped setuptools in favor of `scikit-build-core` and `uv`
+
+
 ## [0.0.5]
 
 - Updated cyfaust to faust `2.81.2` (all tests pass)

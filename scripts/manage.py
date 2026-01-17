@@ -65,7 +65,8 @@ PY_VER_MINOR = sys.version_info.minor
 
 DEBUG = True
 
-FAUST_VERSION = "2.81.2"
+# FAUST_VERSION = "2.81.2"
+FAUST_VERSION = "2.83.1"
 
 # ----------------------------------------------------------------------------
 # type aliases

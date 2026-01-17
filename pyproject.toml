@@ -1,8 +1,36 @@
+[project]
+name = "cyfaust"
+version = "0.0.6"
+description = "A cython wrapper of the faust interpreter with rtaudio."
+requires-python = ">=3.8"
+
+[dependency-groups]
+dev = ["pytest>=8.0", "numpy"]
+
 [build-system]
-requires = ["setuptools >= 61.0", "cython"]
-build-backend = "setuptools.build_meta"
+requires = ["scikit-build-core", "cython"]
+build-backend = "scikit_build_core.build"
 
-# [tool.pytest.ini_options]
-# testpaths = [ "tests" ]
-# pythonpath = [ "src", "src/static" ]
+[tool.scikit-build]
+wheel.packages = ["src/cyfaust"]
+cmake.build-type = "Release"
+sdist.exclude = ["build", "dist", ".venv", "*.egg-info"]
+wheel.exclude = ["build", "dist", ".venv", "*.egg-info"]
 
+[tool.scikit-build.cmake.define]
+# These can be overridden via CMAKE_ARGS environment variable
+# e.g., CMAKE_ARGS="-DSTATIC=ON -DJACK=ON" uv build
+STATIC = "OFF"
+INCLUDE_SNDFILE = "ON"
+# Linux audio backends
+ALSA = "ON"
+PULSE = "OFF"
+JACK = "OFF"
+# Windows audio backends
+ASIO = "OFF"
+WASAPI = "ON"
+DSOUND = "OFF"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "src/static"]
