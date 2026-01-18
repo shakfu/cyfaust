@@ -72,9 +72,19 @@ build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
 wheel.packages = ["src/cyfaust"]
-wheel.exclude = ["build", "dist", ".venv", "*.egg-info"]
+wheel.exclude = [
+    "*.pxd",
+    "*.pyx",
+    "player.cpp",
+    "gui_statics.cpp",
+]
 cmake.build-type = "Release"
-sdist.exclude = ["build", "dist", ".venv", "*.egg-info"]
+sdist.exclude = [
+    "build",
+    "dist",
+    ".venv",
+    "*.egg-info",
+]
 
 [tool.scikit-build.cmake.define]
 # These can be overridden via CMAKE_ARGS environment variable
