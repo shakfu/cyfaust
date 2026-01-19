@@ -644,17 +644,6 @@ class FaustBuilder(Builder):
             if not self.staticlib.exists():
                 self.fail("copy_staticlib failed")
 
-    def copy_share_files(self):
-        share_faust = self.project.share / "faust"
-        src_share = self.prefix / "share" / "faust"
-        try:
-            self.log.info("copy share files")
-            self.makedirs(self.project.share)
-            self.copy(src_share, share_faust)
-        finally:
-            if not share_faust.exists():
-                self.fail("copy share files failed")
-
     def copy_stdlib(self):
         share_faust = self.project.share / "faust"
         try:
@@ -699,7 +688,6 @@ class FaustBuilder(Builder):
             self.copy_headers()
             self.patch_audio_driver()
         # skip since `resources` already contains these
-        self.copy_share_files()
         # self.copy_stdlib()
         # self.copy_examples()
         self.log.info("faust build DONE")
