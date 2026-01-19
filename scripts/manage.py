@@ -81,12 +81,11 @@ class Project:
 
     def __init__(self):
         self.cwd = Path.cwd()
-        self.thirdparty = self.cwd / "thirdparty"
-        self.bin = self.thirdparty / "bin"
-        self.include = self.thirdparty / "include"
-        self.lib = self.thirdparty / "lib"
+        self.bin = self.cwd / "bin"
+        self.include = self.cwd / "include"
+        self.lib = self.cwd / "lib"
         self.lib_static = self.lib / "static"
-        self.share = self.thirdparty / "share"
+        self.share = self.cwd / "share"
         self.scripts = self.cwd / "scripts"
         self.src = self.cwd / "src"
         self.patch = self.scripts / "patch"
