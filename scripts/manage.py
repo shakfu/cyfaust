@@ -475,6 +475,31 @@ class FaustBuilder(Builder):
         finally:
             if not self.src.exists():
                 self.fail("git clone faust failed.")
+        # Fix invalid gitignore patterns that break scikit-build-core on Linux
+        self.fix_gitignore_patterns()
+
+    def fix_gitignore_patterns(self):
+        """Fix invalid gitignore syntax in Faust source tree.
+
+        The pathspec library (used by scikit-build-core) rejects trailing
+        backslashes with nothing to escape. This fixes patterns like
+        'SharpSoundDevice\\' to 'SharpSoundDevice/' (correct directory syntax).
+        """
+        gitignore_path = (
+            self.src / "tests" / "impulse-tests" / "archs" / "csharp" / "IRTest" / ".gitignore"
+        )
+        if not gitignore_path.exists():
+            self.log.warning("gitignore not found: %s", gitignore_path)
+            return
+
+        content = gitignore_path.read_text()
+        # Fix trailing backslashes (invalid escape) to forward slashes (directory marker)
+        fixed_content = content.replace("SharpSoundDevice\\", "SharpSoundDevice/")
+        fixed_content = fixed_content.replace("tinyalsa\\", "tinyalsa/")
+
+        if content != fixed_content:
+            gitignore_path.write_text(fixed_content)
+            self.log.info("fixed invalid gitignore patterns in %s", gitignore_path)
 
     def build_faust(self):
         self.makedirs(self.faustdir)
