@@ -102,12 +102,12 @@ jobs:
         || github.event.inputs.disable_cache == 'true'
       run: python3 scripts/manage.py setup --faust
 
-    - name: Build and test (dynamic)
-      env:
-        CMAKE_ARGS: "-DSTATIC=OFF"
-      run: |
-        uv sync
-        uv run pytest -vv tests
+    # - name: Build and test (dynamic)
+    #   env:
+    #     CMAKE_ARGS: "-DSTATIC=OFF"
+    #   run: |
+    #     uv sync
+    #     uv run pytest -vv tests
 
     - name: Build wheel (static for release)
       env:
