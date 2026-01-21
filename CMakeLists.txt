@@ -141,6 +141,10 @@ elseif(UNIX AND NOT APPLE)
         list(APPEND PLATFORM_LIBRARIES jack)
     endif()
 
+    if(INCLUDE_SNDFILE)
+        list(APPEND PLATFORM_LIBRARIES sndfile samplerate)
+    endif()
+
 elseif(WIN32)
     # Windows configuration
     list(APPEND PLATFORM_LIBRARIES winmm ole32)
