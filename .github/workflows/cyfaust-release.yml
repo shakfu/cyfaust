@@ -86,3 +86,24 @@ jobs:
       with:
         name: dist-${{ matrix.os }}-py${{ matrix.py_version }}
         path: ./dist/*.whl
+
+  collect-artifacts:
+    name: Collect all artifacts
+    runs-on: ubuntu-latest
+    needs: build_wheels
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: all-wheels
+        pattern: dist-*
+        merge-multiple: true
+
+    - name: List collected wheels
+      run: ls -la all-wheels/
+
+    - name: Upload combined artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: cyfaust-wheels-all
+        path: all-wheels/*.whl
