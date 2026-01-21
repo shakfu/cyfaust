@@ -77,6 +77,21 @@ jobs:
         CMAKE_ARGS: "-DSTATIC=ON"
       run: uv build --wheel
 
+    - name: Repair wheel (Linux - manylinux compliance)
+      if: runner.os == 'Linux'
+      run: |
+        pip install auditwheel patchelf
+        for whl in dist/*.whl; do
+          auditwheel repair "$whl" -w dist/
+          rm "$whl"
+        done
+
+    - name: Repair wheel (macOS - delocate)
+      if: runner.os == 'macOS'
+      run: |
+        pip install delocate
+        delocate-wheel -v dist/*.whl
+
     - name: Test wheel
       run: |
         pip install dist/*.whl
