@@ -35,9 +35,10 @@ on:
           - ubuntu-latest
           - ubuntu-24.04
           - ubuntu-22.04
-          - windows-latest
-          - windows-2022
-          - windows-2019
+          # Windows disabled until sndfile support added
+          # - windows-latest
+          # - windows-2022
+          # - windows-2019
       disable_cache:
         type: boolean
         description: Disable use of cached libfaust in this run
