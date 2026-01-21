@@ -14,9 +14,6 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
         py_version: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
-    env:
-      MACOSX_DEPLOYMENT_TARGET: '10.13'
-
     steps:
 
     - uses: actions/checkout@v4
@@ -47,6 +44,15 @@ jobs:
     - name: Display python version
       run: python3 --version
 
+    - name: Set macOS deployment target
+      if: runner.os == 'macOS'
+      run: |
+        if [[ "$(uname -m)" == "arm64" ]]; then
+          echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
+        else
+          echo "MACOSX_DEPLOYMENT_TARGET=10.13" >> $GITHUB_ENV
+        fi
+
     - name: Install audio libraries (macOS)
       if: runner.os == 'macOS'
       run: brew install libsndfile libsamplerate
@@ -60,6 +66,8 @@ jobs:
       run: python3 scripts/manage.py setup --faust
 
     - name: Build and test (dynamic)
+      env:
+        CMAKE_ARGS: "-DSTATIC=OFF"
       run: |
         uv sync
         uv run pytest -vv tests

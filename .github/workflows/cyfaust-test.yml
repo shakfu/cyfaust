@@ -48,9 +48,6 @@ run-name: cyfaust-test-${{ github.event.inputs.os }}-${{ github.event.inputs.py_
 
 jobs:
   build:
-    env:
-      MACOSX_DEPLOYMENT_TARGET: '10.13'
-
     runs-on: ${{ github.event.inputs.os }}
 
     steps:
@@ -91,6 +88,15 @@ jobs:
     - name: Display python version
       run: python3 --version
 
+    - name: Set macOS deployment target
+      if: runner.os == 'macOS'
+      run: |
+        if [[ "$(uname -m)" == "arm64" ]]; then
+          echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
+        else
+          echo "MACOSX_DEPLOYMENT_TARGET=10.13" >> $GITHUB_ENV
+        fi
+
     - name: Install audio libraries (macOS)
       if: runner.os == 'macOS'
       run: brew install libsndfile libsamplerate
@@ -107,6 +113,8 @@ jobs:
 
     - name: Build dynamic cyfaust variant
       if: github.event.inputs.variant == 'dynamic'
+      env:
+        CMAKE_ARGS: "-DSTATIC=OFF"
       run: |
         echo "building dynamic cyfaust variant"
         uv sync
