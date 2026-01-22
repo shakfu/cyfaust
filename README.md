@@ -242,7 +242,8 @@ For Linux, if you are on a Debian-derived system, you will need something like t
 ```bash
 sudo apt update
 sudo apt install build-essential git cmake python3-dev # you probably have these already
-sudo apt install libasound2-dev patchelf
+sudo apt install libasound2-dev patchelf # for alsa sound driver and fixing dynamic libs
+sudo apt install libsndfile1-dev libsamplerate0-dev # specifically for faust
 ```
 
 Then
@@ -250,7 +251,6 @@ Then
 ```bash
 git clone https://github.com/shakfu/cyfaust.git
 cd cyfaust
-pip3 install -r requirements
 make # or python3 scripts/manage.py setup --faust
 ```
 
