@@ -29,7 +29,6 @@ architecture section is not modified.
 #include <string>
 #include <iostream>
 #include <mutex>
-#include <vector>
 
 #include "faust/dsp/dsp.h"
 #include "faust/gui/ring-buffer.h"
@@ -244,12 +243,12 @@ class sound_memory_player : public sound_base_player {
                 fBuffer[chan] = new FAUSTFLOAT[fInfo.frames];
             }
             
-            std::vector<FAUSTFLOAT> buffer(BUFFER_SIZE * fInfo.channels);
+            FAUSTFLOAT buffer[BUFFER_SIZE * fInfo.channels];
             sf_count_t nbf, index = 0;
-
+            
             do {
                 // Read buffer
-                nbf = fReaderFun(fFile, buffer.data(), BUFFER_SIZE);
+                nbf = fReaderFun(fFile, buffer, BUFFER_SIZE);
                 // Deinterleave it
                 for (int chan = 0; chan < fInfo.channels; chan++) {
                     for (int frame = 0; frame < nbf; frame++) {
@@ -289,10 +288,10 @@ class sound_dtd_player : public sound_base_player {
             size_t read_space_frames = convertToFrames(ringbuffer_read_space(fBuffer));
             
             if (read_space_frames >= count) {
-
+                
                 // Read from ringbuffer
-                std::vector<FAUSTFLOAT> buffer(count * fInfo.channels);
-                ringbuffer_read(fBuffer, (char*)buffer.data(), convertFromFrames(count));
+                FAUSTFLOAT buffer[count * fInfo.channels];
+                ringbuffer_read(fBuffer, (char*)buffer, convertFromFrames(count));
                 
                 // Deinterleave and write to output
                 for (int chan = 0; chan < fInfo.channels; chan++) {
@@ -333,14 +332,14 @@ class sound_dtd_player : public sound_base_player {
             
             // If ringbuffer has to be filled
             if (write_space_frames > HALF_RING_BUFFER_SIZE) {
-                std::vector<FAUSTFLOAT> buffer(HALF_RING_BUFFER_SIZE * fInfo.channels);
+                FAUSTFLOAT buffer[HALF_RING_BUFFER_SIZE * fInfo.channels];
                 // Tries to read and write HALF_RING_BUFFER_SIZE frames
-                size_t nbf = readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE);
+                size_t nbf = readAndWrite(buffer, HALF_RING_BUFFER_SIZE);
                 // End of file is reached
                 if (nbf < HALF_RING_BUFFER_SIZE) {
                     // Read RING_BUFFER_SIZE/2 - nbf frame from the beginning of file
                     sf_seek(fFile, 0, SEEK_SET);
-                    readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE - nbf);
+                    readAndWrite(buffer, HALF_RING_BUFFER_SIZE - nbf);
                 }
             }
         }
