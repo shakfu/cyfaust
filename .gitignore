@@ -21,6 +21,9 @@ src/cyfaust/box.cpp
 src/cyfaust/signal.cpp
 src/static/cyfaust/cyfaust.cpp
 
+# CMake-generated backend config (changes based on -DLLVM=ON/OFF)
+src/static/cyfaust/backend_config.pxi
+
 # general macos detritus
 .DS_Store
 
