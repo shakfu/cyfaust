@@ -441,7 +441,19 @@ class Builder(ShellCmd):
 
 
 class FaustBuilder(Builder):
-    """Manages all aspects of the interpreter-centric faust build for cyfaust,"""
+    """Builds Faust from source with the interpreter backend.
+
+    This builds libfaust.a with interpreter support - a bytecode interpreter
+    that executes Faust DSP code without requiring LLVM.
+
+    Interpreter vs LLVM Backend:
+        - Interpreter: Portable, no LLVM dependency, but slower execution.
+                       Suitable for development and platforms without LLVM.
+        - LLVM: Fast native code via JIT compilation, but requires LLVM libraries.
+                Use FaustLLVMBuilder for the LLVM backend.
+
+    The two backends are mutually exclusive for the Cython wrapper.
+    """
 
     NAME = "faust"
     LIBNAME = f"lib{NAME}"
@@ -716,6 +728,205 @@ class FaustBuilder(Builder):
         # self.copy_stdlib()
         # self.copy_examples()
         self.log.info("faust build DONE")
+
+
+class FaustLLVMBuilder(Builder):
+    """Downloads prebuilt Faust static library with LLVM backend.
+
+    This downloads the official Faust release binaries which include
+    libfaustwithllvm.a - the static library needed for LLVM-based DSP compilation.
+
+    LLVM vs Interpreter Backend:
+        - LLVM: Compiles Faust DSP code to native machine code via LLVM JIT.
+                Much faster execution, supports optimization levels, can export
+                to IR/machine code/object files. Requires LLVM libraries.
+        - Interpreter: Executes Faust bytecode in an interpreter. Slower but
+                       more portable, no LLVM dependency.
+
+    The two backends are mutually exclusive - use either FaustBuilder (interpreter)
+    or FaustLLVMBuilder (LLVM), not both. This builder also installs LLVM-compatible
+    headers which include llvm-dsp.h and related files.
+
+    Supports:
+        - macOS arm64 and x86_64 (via DMG download)
+        - Linux x86_64 (via tar.gz download)
+    """
+
+    NAME = "faustwithllvm"
+    LIBNAME = f"lib{NAME}"
+
+    def __init__(self, version: str = FAUST_VERSION):
+        super().__init__(version)
+        self.project = Project()
+        self.libfaust_dir = self.project.downloads / "libfaust"
+        self.log = logging.getLogger(self.__class__.__name__)
+
+    @property
+    def staticlib_name(self):
+        suffix = ".a"
+        if PLATFORM == "Windows":
+            suffix = ".lib"
+        return f"{self.LIBNAME}{suffix}"
+
+    @property
+    def dmg_name(self) -> str:
+        """Get the DMG filename based on architecture."""
+        if ARCH == "arm64":
+            return f"Faust-{self.version}-arm64.dmg"
+        return f"Faust-{self.version}-x64.dmg"
+
+    @property
+    def dmg_url(self) -> str:
+        """Get the download URL for macOS DMG."""
+        return f"https://github.com/grame-cncm/faust/releases/download/{self.version}/{self.dmg_name}"
+
+    @property
+    def tarball_name(self) -> str:
+        """Get the tarball filename for Linux."""
+        return f"faust-{self.version}.tar.gz"
+
+    @property
+    def tarball_url(self) -> str:
+        """Get the download URL for Linux tarball."""
+        return f"https://github.com/grame-cncm/faust/releases/download/{self.version}/libfaust-{self.version}-ubuntu-x86_64.tar.gz"
+
+    @property
+    def volume_path(self) -> Path:
+        """Get the mounted volume path for macOS."""
+        return Path(f"/Volumes/Faust-{self.version}")
+
+    @property
+    def volume_content_path(self) -> Path:
+        """Get the content path within the mounted volume."""
+        return self.volume_path / f"Faust-{self.version}"
+
+    def download_darwin(self):
+        """Download and extract Faust from DMG on macOS."""
+        if self.libfaust_dir.exists() and (self.libfaust_dir / "lib" / self.staticlib_name).exists():
+            self.log.info("libfaustwithllvm.a already exists, skipping download")
+            return
+
+        self.remove(self.libfaust_dir, silent=True)
+        self.makedirs(self.libfaust_dir)
+
+        dmg_path = self.project.downloads / self.dmg_name
+
+        # Download DMG if not present
+        if not dmg_path.exists():
+            self.log.info("downloading %s", self.dmg_url)
+            self.download(self.dmg_url, tofolder=self.project.downloads)
+
+        # Mount DMG
+        self.log.info("mounting %s", dmg_path)
+        self.cmd(f"hdiutil attach {dmg_path}")
+
+        try:
+            # Copy contents from mounted volume
+            if not self.volume_content_path.exists():
+                self.fail("mounted volume content not found: %s", self.volume_content_path)
+
+            self.log.info("copying from %s to %s", self.volume_content_path, self.libfaust_dir)
+            for item in self.volume_content_path.iterdir():
+                dst = self.libfaust_dir / item.name
+                self.copy(item, dst)
+        finally:
+            # Unmount DMG
+            self.log.info("unmounting %s", self.volume_path)
+            self.cmd(f"hdiutil detach {self.volume_path}")
+
+            # Remove DMG
+            if dmg_path.exists():
+                self.remove(dmg_path)
+
+    def download_linux(self):
+        """Download and extract Faust tarball on Linux."""
+        if self.libfaust_dir.exists() and (self.libfaust_dir / "lib" / self.staticlib_name).exists():
+            self.log.info("libfaustwithllvm.a already exists, skipping download")
+            return
+
+        self.remove(self.libfaust_dir, silent=True)
+        self.makedirs(self.libfaust_dir)
+
+        tarball_path = self.project.downloads / f"libfaust-{self.version}-ubuntu-x86_64.tar.gz"
+
+        # Download tarball if not present
+        if not tarball_path.exists():
+            self.log.info("downloading %s", self.tarball_url)
+            self.download(self.tarball_url, tofolder=self.project.downloads)
+
+        # Extract tarball
+        self.log.info("extracting %s", tarball_path)
+        self.extract(tarball_path, tofolder=self.project.downloads)
+
+        # The extracted folder is typically named libfaust-{version}
+        extracted_dir = self.project.downloads / f"libfaust-{self.version}-ubuntu-x86_64"
+        if extracted_dir.exists():
+            for item in extracted_dir.iterdir():
+                dst = self.libfaust_dir / item.name
+                self.copy(item, dst)
+            self.remove(extracted_dir)
+
+        # Clean up tarball
+        if tarball_path.exists():
+            self.remove(tarball_path)
+
+    def install_staticlib(self):
+        """Install the static library to the project lib directory."""
+        src_lib = self.libfaust_dir / "lib" / self.staticlib_name
+        if not src_lib.exists():
+            self.fail("source static library not found: %s", src_lib)
+
+        self.log.info("installing %s to %s", self.staticlib_name, self.staticlib)
+        self.copy(src_lib, self.staticlib)
+
+        if not self.staticlib.exists():
+            self.fail("install_staticlib failed")
+
+    def install_headers(self, force: bool = True):
+        """Install Faust headers to the project include directory.
+
+        The LLVM backend requires headers that match the downloaded library version.
+        By default, this replaces existing headers to ensure compatibility with
+        libfaustwithllvm.a. The LLVM headers (llvm-dsp.h, etc.) are only fully
+        functional when paired with the LLVM-enabled library.
+
+        Args:
+            force: If True (default), replace existing headers. If False, skip
+                   if headers already exist.
+        """
+        src_headers = self.libfaust_dir / "include" / "faust"
+        dst_headers = self.project.include / "faust"
+
+        if not src_headers.exists():
+            self.log.warning("source headers not found: %s", src_headers)
+            return
+
+        if dst_headers.exists():
+            if force:
+                self.log.info("replacing existing headers at %s", dst_headers)
+                self.remove(dst_headers)
+            else:
+                self.log.info("headers already exist at %s, skipping", dst_headers)
+                return
+
+        self.log.info("installing LLVM-compatible headers to %s", dst_headers)
+        self.copy(src_headers, dst_headers)
+
+    def process(self):
+        """Run the full download and install process."""
+        self.setup_project()
+        self.makedirs(self.project.downloads)
+
+        if PLATFORM == "Darwin":
+            self.download_darwin()
+        elif PLATFORM == "Linux":
+            self.download_linux()
+        else:
+            self.fail("platform %s not supported for FaustLLVMBuilder", PLATFORM)
+
+        self.install_staticlib()
+        self.install_headers()
+        self.log.info("FaustLLVMBuilder DONE: %s installed", self.staticlib_name)
 
 
 class SndfileBuilder(Builder):
@@ -1274,7 +1485,8 @@ class Application(ShellCmd, metaclass=MetaCommander):
     # setup
 
     @opt("--deps", "-d", "install platform dependencies")
-    @opt("--faust", "-f", "build libfaust")
+    @opt("--faust", "-f", "build libfaust (interpreter)")
+    @opt("--llvm", "-l", "download prebuilt libfaust with LLVM")
     @opt("--sndfile", "-s", "build libsndfile")
     @opt("--samplerate", "-r", "build libsamplerate")
     @opt("--all", "-a", "build all")
@@ -1301,6 +1513,10 @@ class Application(ShellCmd, metaclass=MetaCommander):
         if args.faust:
             fb = FaustBuilder()
             fb.process()
+
+        if args.llvm:
+            llvm_builder = FaustLLVMBuilder()
+            llvm_builder.process()
 
         if args.sndfile:
             sfb = SndfileBuilder()

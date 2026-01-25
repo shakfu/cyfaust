@@ -1,6 +1,6 @@
 [project]
 name = "cyfaust"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Cython wrapper of the Faust interpreter and signal processing library with RtAudio support."
 readme = "README.md"
 license = "MIT"
@@ -89,8 +89,12 @@ sdist.exclude = [
 [tool.scikit-build.cmake.define]
 # These can be overridden via CMAKE_ARGS environment variable
 # e.g., CMAKE_ARGS="-DSTATIC=OFF" uv sync  (for development)
+# e.g., CMAKE_ARGS="-DLLVM=ON" uv sync     (for LLVM backend)
 # Default to STATIC=ON for PyPI distribution (sdist/wheel builds)
 STATIC = "ON"
+# Backend selection: OFF=interpreter (default), ON=LLVM (JIT compilation)
+# LLVM backend requires libfaustwithllvm.a (use: python scripts/manage.py setup --llvm)
+LLVM = "OFF"
 INCLUDE_SNDFILE = "ON"
 # Linux audio backends
 ALSA = "ON"

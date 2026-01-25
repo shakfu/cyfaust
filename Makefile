@@ -5,6 +5,7 @@
 
 # Build options (set to 1 to enable)
 STATIC := 0
+LLVM := 0
 INCLUDE_SNDFILE := 1
 
 # Audio backend options (Linux)
@@ -22,11 +23,13 @@ PYTHON := python3
 
 # Static library paths
 LIBFAUST := ./lib/static/libfaust.a
+LIBFAUSTWITHLLVM := ./lib/static/libfaustwithllvm.a
 LIBSAMPLERATE := ./lib/static/libsamplerate.a
 LIBSNDFILE := ./lib/static/libsndfile.a
 
 # Build CMAKE_ARGS from options
 CMAKE_OPTS := -DSTATIC=$(if $(filter 1,$(STATIC)),ON,OFF)
+CMAKE_OPTS += -DLLVM=$(if $(filter 1,$(LLVM)),ON,OFF)
 CMAKE_OPTS += -DINCLUDE_SNDFILE=$(if $(filter 1,$(INCLUDE_SNDFILE)),ON,OFF)
 CMAKE_OPTS += -DALSA=$(if $(filter 1,$(ALSA)),ON,OFF)
 CMAKE_OPTS += -DPULSE=$(if $(filter 1,$(PULSE)),ON,OFF)
@@ -37,9 +40,10 @@ CMAKE_OPTS += -DDSOUND=$(if $(filter 1,$(DSOUND)),ON,OFF)
 
 export CMAKE_ARGS := $(CMAKE_OPTS)
 
-.PHONY: all sync faust samplerate sndfile build rebuild test wheel sdist \
+.PHONY: all sync faust faustwithllvm samplerate sndfile build rebuild test wheel sdist \
         generate-static release verify-sync pytest clean distclean reset help \
-        wheel-static wheel-dynamic wheel-repair wheel-check publish publish-test
+        wheel-static wheel-dynamic wheel-llvm wheel-repair wheel-check publish publish-test \
+        build-llvm test-llvm
 
 # Default target
 all: build
@@ -58,6 +62,12 @@ $(LIBSNDFILE):
 
 faust: $(LIBFAUST)
 	@echo "libfaust DONE"
+
+$(LIBFAUSTWITHLLVM):
+	$(PYTHON) scripts/manage.py setup --faustwithllvm
+
+faustwithllvm: $(LIBFAUSTWITHLLVM)
+	@echo "libfaustwithllvm DONE"
 
 samplerate: $(LIBSAMPLERATE)
 	@echo "libsamplerate DONE"
@@ -105,6 +115,19 @@ wheel-static: faust generate-static
 wheel-dynamic: faust
 	CMAKE_ARGS="-DSTATIC=OFF" uv build --wheel
 	$(MAKE) wheel-repair
+
+# Build LLVM static wheel (LLVM JIT backend, ~71MB binary)
+wheel-llvm: faustwithllvm generate-static
+	CMAKE_ARGS="-DSTATIC=ON -DLLVM=ON" uv build --wheel
+
+# Build with LLVM backend (for development)
+build-llvm: faustwithllvm generate-static
+	CMAKE_ARGS="-DSTATIC=ON -DLLVM=ON" uv sync --reinstall-package cyfaust
+
+# Test LLVM build
+test-llvm: build-llvm
+	uv run pytest tests/ -v
+	@rm -f DumpCode-*.txt DumpMem-*.txt
 
 # Repair wheel by bundling dynamic libraries (platform-specific)
 wheel-repair:
@@ -181,24 +204,28 @@ help:
 	@echo "cyfaust build system (scikit-build-core + uv)"
 	@echo ""
 	@echo "Dependency targets:"
-	@echo "  faust       - Download and build libfaust"
-	@echo "  samplerate  - Build libsamplerate"
-	@echo "  sndfile     - Build libsndfile"
+	@echo "  faust         - Download libfaust (interpreter backend)"
+	@echo "  faustwithllvm - Download libfaustwithllvm (LLVM JIT backend)"
+	@echo "  samplerate    - Build libsamplerate"
+	@echo "  sndfile       - Build libsndfile"
 	@echo ""
 	@echo "Build targets:"
 	@echo "  all          - Build/rebuild the extension (default)"
 	@echo "  sync         - Sync environment (initial setup)"
 	@echo "  build        - Rebuild extension after code changes"
 	@echo "  rebuild      - Alias for build"
+	@echo "  build-llvm   - Build with LLVM backend (static, ~71MB)"
 	@echo "  wheel        - Build wheel (uses STATIC setting)"
 	@echo "  wheel-static - Build static wheel (libfaust embedded)"
 	@echo "  wheel-dynamic- Build dynamic wheel (libfaust bundled via delocate)"
+	@echo "  wheel-llvm   - Build LLVM wheel (libfaustwithllvm embedded)"
 	@echo "  wheel-repair - Bundle dynamic libs into wheel (delocate/auditwheel)"
 	@echo "  sdist        - Build source distribution"
 	@echo "  release      - Build static wheels for all Python versions"
 	@echo ""
 	@echo "Test targets:"
-	@echo "  test        - Run tests"
+	@echo "  test        - Run tests (interpreter build)"
+	@echo "  test-llvm   - Run tests (LLVM build)"
 	@echo "  pytest      - Run pytest directly"
 	@echo ""
 	@echo "Publishing targets:"
@@ -213,6 +240,7 @@ help:
 	@echo ""
 	@echo "Build options (set via make VAR=1):"
 	@echo "  STATIC=1          - Build with static libfaust"
+	@echo "  LLVM=1            - Build with LLVM backend (requires STATIC=1)"
 	@echo "  INCLUDE_SNDFILE=1 - Include sndfile support (default)"
 	@echo "  ALSA=1            - Enable ALSA (Linux, default)"
 	@echo "  PULSE=1           - Enable PulseAudio (Linux)"
@@ -222,5 +250,7 @@ help:
 	@echo "  DSOUND=1          - Enable DirectSound (Windows)"
 	@echo ""
 	@echo "Example:"
-	@echo "  make STATIC=1 build    # Static build"
-	@echo "  make JACK=1 build      # Enable JACK support"
+	@echo "  make build              # Dynamic interpreter build (default)"
+	@echo "  make STATIC=1 build     # Static interpreter build"
+	@echo "  make build-llvm         # Static LLVM build"
+	@echo "  make JACK=1 build       # Enable JACK support"

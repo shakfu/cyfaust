@@ -15,6 +15,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
+## [0.1.1]
+
+### Added
+
+- Added LLVM backend support as an alternative to the interpreter backend:
+  - LLVM backend compiles Faust DSP to native machine code via LLVM JIT for faster execution
+  - New classes: `LlvmDspFactory`, `LlvmDsp`, `LlvmRtAudioDriver`
+  - New factory functions: `llvm_create_dsp_factory_from_file()`, `llvm_create_dsp_factory_from_string()`, etc.
+  - Additional serialization formats: LLVM IR (`write_to_ir()`), machine code, object code
+  - `get_dsp_machine_target()` function to query current machine's LLVM target triple
+  - `register_foreign_function()` for custom C function integration in DSP code
+  - Runtime detection via `cyfaust.LLVM_BACKEND` flag
+  - Build with `make build-llvm` or `CMAKE_ARGS="-DSTATIC=ON -DLLVM=ON"`
+  - Note: LLVM build produces ~71MB binary vs ~8MB for interpreter (includes full LLVM)
+  - Note: Currently only tested on macOS; Linux and Windows support planned for future releases
+
+- Added `FaustLLVMBuilder` to `scripts/manage.py` for downloading prebuilt `libfaustwithllvm.a`
+
+- Added Makefile targets for LLVM builds:
+  - `faustwithllvm` - Download libfaustwithllvm static library
+  - `build-llvm` - Build with LLVM backend
+  - `test-llvm` - Run tests with LLVM build
+  - `wheel-llvm` - Build LLVM wheel
+
 ## [0.1.0]
 
 ### Added

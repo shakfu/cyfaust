@@ -1,8 +1,8 @@
 # cyfaust
 
-The cyfaust project provides as a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) *interpreter* and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
+The cyfaust project provides a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) DSP language and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
-- **Interpreter API**: Fully wrapped with RtAudio cross-platform audio driver integration
+- **Dual Backends**: Interpreter (default, ~8MB) or LLVM JIT (~71MB, faster execution)
 - **Box API**: Fully wrapped with both functional and object-oriented interfaces
 - **Signal API**: Fully wrapped with both functional and object-oriented interfaces
 - **Platform Support**: macOS, Linux, and Windows
@@ -17,7 +17,11 @@ pip install cyfaust
 
 ## Features
 
-- Python-oriented cross-platform implementation of the [faust interpreter](https://faustdoc.grame.fr/manual/embedding/#using-libfaust-with-the-interpreter-backend)
+- Python-oriented cross-platform implementation of the [Faust](https://faustdoc.grame.fr/manual/embedding/) DSP language
+
+- **Two backend options**:
+  - **Interpreter** (default): Compact ~8MB binary, good for development and most use cases
+  - **LLVM JIT**: ~71MB binary with native code compilation for maximum performance
 
 - Provides the following submodules (in the default build):
 
@@ -31,7 +35,7 @@ pip install cyfaust
 
 - Self-contained, minimal, and modular design
 
-- Deliberately does not use LLVM to remove dependency on `libLLVM.[dylib|so]` and keep size of python extension low (libLLVM14 is 94MB).
+- Default build uses interpreter backend to keep binary size low (~8MB vs ~71MB with LLVM)
 
 - Can generate code using the following backends:
 
@@ -292,6 +296,37 @@ or
 
 ```bash
 CMAKE_ARGS="-DSTATIC=ON" uv build --wheel
+```
+
+### LLVM Backend
+
+For maximum DSP performance, build with the LLVM backend which compiles Faust code to native machine code via LLVM JIT:
+
+```bash
+make build-llvm      # Build for development
+make test-llvm       # Run tests with LLVM build
+make wheel-llvm      # Build wheel with LLVM backend
+```
+
+or directly:
+
+```bash
+CMAKE_ARGS="-DSTATIC=ON -DLLVM=ON" uv build --wheel
+```
+
+The LLVM build produces a larger binary (~71MB vs ~8MB) but offers significantly faster DSP execution.
+
+**Note:** LLVM backend support is currently only tested on macOS. Linux and Windows support is planned for future releases.
+
+Check if LLVM is available at runtime:
+
+```python
+import cyfaust
+print(cyfaust.LLVM_BACKEND)  # True if LLVM backend is available
+
+if cyfaust.LLVM_BACKEND:
+    factory = cyfaust.llvm_create_dsp_factory_from_string("test", "process = +;")
+    print(cyfaust.get_dsp_machine_target())  # e.g., 'arm64-apple-darwin24.6.0:apple-m1'
 ```
 
 To run the tests
