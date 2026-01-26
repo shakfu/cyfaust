@@ -1,0 +1,115 @@
+
+name: cyfaust-llvm-release
+
+on: workflow_dispatch
+
+run-name: cyfaust-llvm-release-${{ github.ref_name }}-${{ github.run_number }}
+
+jobs:
+  build_wheels:
+    name: Build ${{ matrix.py_version }} wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        py_version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+
+    steps:
+
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+        fetch-depth: '1'
+
+    - name: Cache libfaustwithllvm
+      id: cache-libfaustwithllvm
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ github.workspace }}/lib/libfaustwithllvm.*
+          ${{ github.workspace }}/lib/faustwithllvm.*
+          ${{ github.workspace }}/lib/static/libfaustwithllvm.*
+        key: ${{ runner.os }}-libfaustwithllvm
+
+    - name: Setup python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.py_version }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
+
+    - name: Display python version
+      run: python3 --version
+
+    - name: Set macOS deployment target
+      if: runner.os == 'macOS'
+      run: |
+        if [[ "$(uname -m)" == "arm64" ]]; then
+          echo "MACOSX_DEPLOYMENT_TARGET=11.0" >> $GITHUB_ENV
+        else
+          echo "MACOSX_DEPLOYMENT_TARGET=10.13" >> $GITHUB_ENV
+        fi
+
+    - name: Install audio libraries (macOS)
+      if: runner.os == 'macOS'
+      run: brew install libsndfile libsamplerate
+
+    - name: Install audio libraries (Linux)
+      if: runner.os == 'Linux'
+      run: sudo apt-get update && sudo apt-get install -y libsndfile1-dev libsamplerate0-dev libasound2-dev
+
+    - name: Setup faustwithllvm
+      if: steps.cache-libfaustwithllvm.outputs.cache-hit != 'true'
+      run: python3 scripts/manage.py setup --faustwithllvm
+
+    - name: Build wheel (LLVM static for release)
+      run: make wheel-llvm
+
+    - name: Repair wheel (Linux - manylinux compliance)
+      if: runner.os == 'Linux'
+      run: |
+        pip install auditwheel patchelf
+        for whl in dist/*.whl; do
+          auditwheel repair "$whl" -w dist/
+          rm "$whl"
+        done
+
+    - name: Repair wheel (macOS - delocate)
+      if: runner.os == 'macOS'
+      run: |
+        pip install delocate
+        delocate-wheel -v dist/*.whl
+
+    - name: Test wheel
+      run: |
+        pip install dist/*.whl
+        python -c "import cyfaust; print('cyfaust-llvm imported successfully')"
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: dist-llvm-${{ matrix.os }}-py${{ matrix.py_version }}
+        path: ./dist/*.whl
+
+  collect-artifacts:
+    name: Collect all artifacts
+    runs-on: ubuntu-latest
+    needs: build_wheels
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: all-wheels
+        pattern: dist-llvm-*
+        merge-multiple: true
+
+    - name: List collected wheels
+      run: ls -la all-wheels/
+
+    - name: Upload combined artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: cyfaust-llvm-wheels-all
+        path: all-wheels/*.whl

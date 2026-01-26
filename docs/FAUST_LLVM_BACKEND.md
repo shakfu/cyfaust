@@ -16,13 +16,13 @@ Adding LLVM backend support to cyfaust would enable:
 - **Cross-compilation** support (target different architectures)
 
 **Code Reusability:** ~75-80% of existing `cyfaust.interp` code can be reused:
-- ✅ Common utilities (100% reusable)
-- ✅ RtAudio driver (100% reusable)
-- ✅ DSP base class interface (100% reusable)
-- ✅ Factory base class interface (95% reusable)
-- ✅ Box/Signal compilation (100% reusable)
-- ⚠️ Backend-specific factory creation (~50% similar, new parameters)
-- ⚠️ Serialization methods (new formats: machine code, LLVM IR)
+- [x] Common utilities (100% reusable)
+- [x] RtAudio driver (100% reusable)
+- [x] DSP base class interface (100% reusable)
+- [x] Factory base class interface (95% reusable)
+- [x] Box/Signal compilation (100% reusable)
+- [!] Backend-specific factory creation (~50% similar, new parameters)
+- [!] Serialization methods (new formats: machine code, LLVM IR)
 
 **Effort Estimate:** 2-4 days for experienced Cython developer
 - 1 day: API bindings and module structure
@@ -85,7 +85,7 @@ class dsp_factory {
 | **DSP Type** | `interpreter_dsp*` | `llvm_dsp*` |
 | **Version Function** | `getCLibFaustVersion()` | `getCLibFaustVersion()` (same) |
 | **Machine Target** | Not available | `getDSPMachineTarget()` |
-| **Factory Method** | `getTarget()` | ✅ Only in LLVM |
+| **Factory Method** | `getTarget()` | [x] Only in LLVM |
 
 ### LLVM-Specific Features
 
@@ -651,14 +651,14 @@ def check_llvm_support(lib_path="lib/libfaust.dylib"):
         found = sum(1 for sym in llvm_symbols if sym in result.stdout)
 
         if found >= 2:
-            print(f"✅ LLVM backend detected ({found}/3 symbols found)")
+            print(f"[x] LLVM backend detected ({found}/3 symbols found)")
             return True
         else:
-            print(f"❌ LLVM backend not found ({found}/3 symbols found)")
+            print(f"[X] LLVM backend not found ({found}/3 symbols found)")
             return False
 
     except Exception as e:
-        print(f"❌ Error checking LLVM support: {e}")
+        print(f"[X] Error checking LLVM support: {e}")
         return False
 
 if __name__ == "__main__":
@@ -1002,7 +1002,7 @@ if INCLUDE_LLVM:
         print("Disabling LLVM backend")
         INCLUDE_LLVM = False
     else:
-        print("✅ LLVM backend enabled")
+        print("[x] LLVM backend enabled")
         DEFINE_MACROS.append(("INCLUDE_LLVM", 1))
 ```
 
@@ -1095,7 +1095,7 @@ dsp = factory.create_dsp_instance()
 | Simple oscillator | 100 µs | 5 µs | 20x |
 | Moog filter | 500 µs | 25 µs | 20x |
 | Reverb | 2000 µs | 80 µs | 25x |
-| Soundfile playback | ❌ Crashes | ✅ Works | ∞ |
+| Soundfile playback | [X] Crashes | [x] Works | ∞ |
 
 *Typical speedups range from 10-50x depending on DSP complexity*
 
@@ -1103,14 +1103,14 @@ dsp = factory.create_dsp_instance()
 
 | Feature | Interpreter | LLVM |
 |---------|-------------|------|
-| Compilation speed | ✅ Fast | ⚠️ Slower |
-| Runtime performance | ⚠️ Slow | ✅ Very fast |
-| Code size | ✅ Small | ⚠️ Larger |
-| Soundfile support | ❌ Broken | ✅ Works |
-| Cross-compilation | ❌ No | ✅ Yes |
-| Optimization control | ❌ No | ✅ 5 levels |
-| Machine code export | ❌ No | ✅ Yes |
-| Dynamic recompilation | ✅ Easy | ⚠️ Slower |
+| Compilation speed | [x] Fast | [!] Slower |
+| Runtime performance | [!] Slow | [x] Very fast |
+| Code size | [x] Small | [!] Larger |
+| Soundfile support | [X] Broken | [x] Works |
+| Cross-compilation | [X] No | [x] Yes |
+| Optimization control | [X] No | [x] 5 levels |
+| Machine code export | [X] No | [x] Yes |
+| Dynamic recompilation | [x] Easy | [!] Slower |
 
 ### Use Case Recommendations
 
