@@ -40,7 +40,6 @@ cyfaust build manager
 
 """
 import argparse
-import filecmp
 import logging
 import os
 import platform
@@ -706,15 +705,6 @@ class FaustBuilder(Builder):
             if not (self.project.share / "faust" / "examples").exists():
                 self.fail("copy_examples failed")
 
-    def patch_audio_driver(self):
-        src = self.project.patch / "rtaudio-dsp.h"
-        dst = self.project.include / "faust" / "audio" / "rtaudio-dsp.h"
-        try:
-            self.copy(src, dst)
-        finally:
-            if not filecmp.cmp(src, dst):
-                self.fail("patch_audio_driver failed")
-
     def process(self):
         self.get_faust()
         self.build_faust()
@@ -724,7 +714,6 @@ class FaustBuilder(Builder):
         self.copy_sharedlib()
         if PLATFORM in ["Linux", "Darwin"]:
             self.copy_headers()
-            self.patch_audio_driver()
         # skip since `resources` already contains these
         # self.copy_stdlib()
         # self.copy_examples()

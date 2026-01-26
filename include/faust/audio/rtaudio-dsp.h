@@ -47,33 +47,35 @@ class rtaudio : public audio {
     
     protected:
         
-        dsp* fDsp;
+        ::dsp* fDSP;
         RtAudio fAudioDAC;
         unsigned int fSampleRate;
         unsigned int fBufferSize;
          
         //----------------------------------------------------------------------------
-        //  number of physical input and output channels of the PA device
+        // 	number of physical input and output channels of the PA device
         //----------------------------------------------------------------------------
-        int fDevNumInChans;
-        int fDevNumOutChans;
+        int	fDevNumInChans;
+        int	fDevNumOutChans;
         
         virtual int processAudio(double streamTime, void* inbuf, void* outbuf, unsigned long frames) 
         {
             AVOIDDENORMALS;
             
-            float** inputs = (float**)alloca(fDsp->getNumInputs() * sizeof(float*));
-            float** outputs = (float**)alloca(fDsp->getNumOutputs() * sizeof(float*));
+            std::vector<float*> inputs_vec(fDSP->getNumInputs());
+            std::vector<float*> outputs_vec(fDSP->getNumOutputs());
+            float** inputs = inputs_vec.data();
+            float** outputs = outputs_vec.data();
             
-            for (int i = 0; i < fDsp->getNumInputs(); i++) {
+            for (int i = 0; i < fDSP->getNumInputs(); i++) {
                 inputs[i] = &(static_cast<float*>(inbuf))[i * frames];
             }
-            for (int i = 0; i < fDsp->getNumOutputs(); i++) {
+            for (int i = 0; i < fDSP->getNumOutputs(); i++) {
                 outputs[i] = &(static_cast<float*>(outbuf))[i * frames];
             }
 
             // process samples
-            fDsp->compute(streamTime * 1000000., frames, inputs, outputs);
+            fDSP->compute(streamTime * 1000000., frames, inputs, outputs);
             return 0;
         }
     
@@ -87,7 +89,7 @@ class rtaudio : public audio {
       
     public:
         
-        rtaudio(int srate, int bsize) : fDsp(0),
+        rtaudio(int srate, int bsize) : fDSP(nullptr),
                 fSampleRate(srate), fBufferSize(bsize), 
                 fDevNumInChans(0), fDevNumOutChans(0) {}
             
@@ -95,21 +97,38 @@ class rtaudio : public audio {
         {
 #if RTAUDIO_VERSION_MAJOR < 6
             try {
+                if (fAudioDAC.isStreamRunning()) {
+                    fAudioDAC.stopStream();
+                }
+                if (fAudioDAC.isStreamOpen()) {
+                    fAudioDAC.closeStream();
+                }
+            } catch (RtAudioError& e) {
+                std::cout << '\n' << e.getMessage() << '\n' << std::endl;
+            }
+#else
+        #if RTAUDIO_VERSION_MAJOR >= 6
+            if (fAudioDAC.isStreamRunning()) {
+                RtAudioErrorType err = fAudioDAC.stopStream();
+                if (err != RTAUDIO_NO_ERROR) {
+                    std::cout << '\n' << fAudioDAC.getErrorText() << '\n' << std::endl;
+                }
+            }
+            if (fAudioDAC.isStreamOpen()) {
+                fAudioDAC.closeStream();
+            }
+        #else
+            try {
                 fAudioDAC.stopStream();
                 fAudioDAC.closeStream();
             } catch (RtAudioError& e) {
                 std::cout << '\n' << e.getMessage() << '\n' << std::endl;
             }
-#else
-            RtAudioErrorType err = fAudioDAC.stopStream();
-            if (err != RTAUDIO_NO_ERROR) {
-                std::cout << '\n' << fAudioDAC.getErrorText() << '\n' << std::endl;
-            }
-            fAudioDAC.closeStream();
+        #endif
 #endif
         }
         
-        virtual bool init(const char* name, dsp* DSP)
+        virtual bool init(const char* name, ::dsp* DSP)
         {
             if (init(name, DSP->getNumInputs(), DSP->getNumOutputs())) {
                 setDsp(DSP);
@@ -166,18 +185,18 @@ class rtaudio : public audio {
 #endif
         }
         
-        void setDsp(dsp* DSP)
+        void setDsp(::dsp* DSP)
         {
-            fDsp = DSP;
+            fDSP = DSP;
             
-            if (fDsp->getNumInputs() > fDevNumInChans || fDsp->getNumOutputs() > fDevNumOutChans) {
+            if (fDSP->getNumInputs() > fDevNumInChans || fDSP->getNumOutputs() > fDevNumOutChans) {
                 printf("DSP has %d inputs and %d outputs, physical inputs = %d physical outputs = %d \n", 
-                       fDsp->getNumInputs(), fDsp->getNumOutputs(), 
+                       fDSP->getNumInputs(), fDSP->getNumOutputs(),
                        fDevNumInChans, fDevNumOutChans);
-                fDsp = new dsp_adapter(fDsp, fDevNumInChans, fDevNumOutChans, fBufferSize);
+                fDSP = new dsp_adapter(fDSP, fDevNumInChans, fDevNumOutChans, fBufferSize);
             }
             
-            fDsp->init(fSampleRate);
+            fDSP->init(fSampleRate);
         }
         
         virtual bool start() 
