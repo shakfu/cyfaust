@@ -11,8 +11,16 @@ The cyfaust project provides a minimal, modular, self-contained, cross-platform 
 
 ## Installation
 
+To install cyfaust with the faust interpreter backend (default):
+
 ```sh
 pip install cyfaust
+```
+
+To install with the LLVM JIT backend:
+
+```sh
+pip install cyfaust-llvm
 ```
 
 ## Features
@@ -437,11 +445,11 @@ if cyfaust.LLVM_BACKEND:
 
 | Platform | Architecture | Status |
 |----------|-------------|--------|
-| macOS | arm64 (Apple Silicon) | ✅ Supported |
-| macOS | x86_64 (Intel) | ✅ Supported |
-| Linux | x86_64 | ✅ Supported |
-| Linux | aarch64 | ✅ Supported |
-| Windows | x86_64 | 🚧 Planned |
+| macOS | arm64 (Apple Silicon) | Supported |
+| macOS | x86_64 (Intel) | Supported |
+| Linux | x86_64 | Supported |
+| Linux | aarch64 | Supported |
+| Windows | x86_64 | Planned |
 
 To run the tests
 
