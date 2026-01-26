@@ -298,36 +298,150 @@ or
 CMAKE_ARGS="-DSTATIC=ON" uv build --wheel
 ```
 
-### LLVM Backend
+### LLVM Backend (cyfaust-llvm)
 
-For maximum DSP performance, build with the LLVM backend which compiles Faust code to native machine code via LLVM JIT:
+The LLVM backend compiles Faust DSP code to native machine code via LLVM JIT, offering significantly faster execution compared to the interpreter backend. It is distributed as a separate package: `cyfaust-llvm`.
+
+#### Interpreter vs LLVM
+
+| Feature | cyfaust (interpreter) | cyfaust-llvm |
+|---------|----------------------|--------------|
+| Binary size | ~8MB | ~33MB |
+| DSP execution | Bytecode interpreter | Native machine code |
+| Compilation speed | Fast | Slower (JIT compilation) |
+| Runtime performance | Good | Best |
+| Use case | Development, lightweight deployment | Production, performance-critical |
+
+#### Installation
+
+Install from PyPI:
 
 ```bash
-make build-llvm      # Build for development
-make test-llvm       # Run tests with LLVM build
-make wheel-llvm      # Build wheel with LLVM backend
+pip install cyfaust-llvm
 ```
 
-or directly:
+Both packages provide the same API via `from cyfaust import cyfaust` - only the backend differs.
+
+#### Building from Source
+
+##### Prerequisites
+
+**macOS:**
+```bash
+# Install Xcode CommandLine tools if not already installed
+xcode-select --install
+
+# Install dependencies via Homebrew
+brew install python cmake
+```
+
+**Linux (Debian/Ubuntu):**
+```bash
+sudo apt update
+sudo apt install build-essential git cmake python3-dev
+sudo apt install libasound2-dev patchelf
+sudo apt install libsndfile1-dev libsamplerate0-dev
+sudo apt install libtinfo-dev  # Required for LLVM
+```
+
+##### Build Steps (macOS & Linux)
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/shakfu/cyfaust.git
+   cd cyfaust
+   ```
+
+2. **Download the prebuilt LLVM-enabled libfaust:**
+   ```bash
+   # Using make
+   make faustwithllvm
+
+   # Or using manage.py directly
+   python3 scripts/manage.py setup --llvm
+   ```
+
+   This downloads `libfaustwithllvm.a` (~300MB) from the official Faust releases:
+   - macOS: Downloads DMG for your architecture (arm64 or x86_64)
+   - Linux: Downloads zip for your architecture (x86_64 or aarch64)
+
+3. **Build for development:**
+   ```bash
+   make build-llvm
+   ```
+
+4. **Run tests:**
+   ```bash
+   make test-llvm
+   ```
+
+##### Building Wheels
+
+To build a distributable wheel:
 
 ```bash
+make wheel-llvm
+```
+
+This creates `dist/cyfaust_llvm-<version>-<platform>.whl`.
+
+Or build directly with uv/cmake:
+
+```bash
+# First ensure libfaustwithllvm.a is downloaded
+make faustwithllvm
+
+# Generate static sources
+python3 scripts/generate_static.py
+
+# Build wheel
 CMAKE_ARGS="-DSTATIC=ON -DLLVM=ON" uv build --wheel
+
+# Rename to cyfaust-llvm (required for PyPI)
+python3 scripts/rename_wheel.py dist/cyfaust-*.whl cyfaust-llvm --delete
 ```
 
-The LLVM build produces a larger binary (~71MB vs ~8MB) but offers significantly faster DSP execution.
+#### Usage
 
-**Note:** LLVM backend support is currently only tested on macOS. Linux and Windows support is planned for future releases.
+The API is identical regardless of backend:
 
-Check if LLVM is available at runtime:
+```python
+from cyfaust import cyfaust
+
+# Create a DSP factory from Faust code
+factory = cyfaust.create_dsp_factory_from_string(
+    "volume",
+    "process = *(hslider(\"gain\", 0.5, 0, 1, 0.01));"
+)
+
+# Create DSP instance
+dsp = factory.create_dsp_instance()
+print(f"Inputs: {dsp.get_num_inputs()}, Outputs: {dsp.get_num_outputs()}")
+```
+
+#### Detecting Backend at Runtime
 
 ```python
 import cyfaust
-print(cyfaust.LLVM_BACKEND)  # True if LLVM backend is available
+
+# Check which backend is available
+print(f"LLVM Backend: {cyfaust.LLVM_BACKEND}")
 
 if cyfaust.LLVM_BACKEND:
-    factory = cyfaust.llvm_create_dsp_factory_from_string("test", "process = +;")
-    print(cyfaust.get_dsp_machine_target())  # e.g., 'arm64-apple-darwin24.6.0:apple-m1'
+    # LLVM-specific: get target machine info
+    print(cyfaust.get_dsp_machine_target())
+    # e.g., 'x86_64-pc-linux-gnu' or 'arm64-apple-darwin24.6.0'
 ```
+
+#### Platform Support
+
+| Platform | Architecture | Status |
+|----------|-------------|--------|
+| macOS | arm64 (Apple Silicon) | ✅ Supported |
+| macOS | x86_64 (Intel) | ✅ Supported |
+| Linux | x86_64 | ✅ Supported |
+| Linux | aarch64 | ✅ Supported |
+| Windows | x86_64 | 🚧 Planned |
 
 To run the tests
 

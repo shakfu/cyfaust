@@ -1319,7 +1319,7 @@ class WheelBuilder(ShellCmd):
         if not self.project.wheels.exists():
             self.project.wheels.mkdir()
 
-    def build_wheel(self, static: bool = False, override: bool = True):
+    def build_wheel(self, static: bool = False, llvm: bool = False, override: bool = True):
         assert PY_VER_MINOR >= 8, "only supporting python >= 3.8"
 
         _cmd = f'"{PYTHON}" setup.py bdist_wheel'
@@ -1341,6 +1341,8 @@ class WheelBuilder(ShellCmd):
 
         if static:
             os.environ["STATIC"] = "1"
+        if llvm:
+            os.environ["LLVM"] = "1"
         self.cmd(_cmd)
 
     def test_wheels(self):
@@ -1360,7 +1362,11 @@ class WheelBuilder(ShellCmd):
                 self.fail("platform not supported")
 
             self.cmd(f"{vpip} install {wheel}")
-            if "static" in str(wheel):
+            if "llvm" in str(wheel):
+                target = "llvm"
+                imported = "cyfaust"
+                self.log.info("llvm variant test")
+            elif "static" in str(wheel):
                 target = "static"
                 imported = "cyfaust"
                 self.log.info("static variant test")
@@ -1407,6 +1413,21 @@ class WheelBuilder(ShellCmd):
         for wheel in self.project.dist.glob("*.whl"):
             w = WheelFilename.from_path(wheel)
             w.project = "cyfaust-static"
+            renamed_wheel = str(w)
+            os.rename(wheel, renamed_wheel)
+            dest_wheel = self.project.wheels / renamed_wheel
+            if dest_wheel.exists():
+                dest_wheel.unlink()
+            shutil.move(renamed_wheel, self.project.wheels)
+
+    def build_llvm_wheel(self):
+        self.log.info("building LLVM build wheel")
+        self.clean()
+        self.makedirs()
+        self.build_wheel(static=True, llvm=True)
+        for wheel in self.project.dist.glob("*.whl"):
+            w = WheelFilename.from_path(wheel)
+            w.project = "cyfaust-llvm"
             renamed_wheel = str(w)
             os.rename(wheel, renamed_wheel)
             dest_wheel = self.project.wheels / renamed_wheel
@@ -1615,6 +1636,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
     @opt("--build", "-b", "build single wheel based on STATIC env var")
     @opt("--dynamic", "-d", "build dynamic variant")
     @opt("--static", "-s", "build static variant")
+    @opt("--llvm", "-l", "build LLVM variant (cyfaust-llvm)")
     @opt("--universal", "-u", "build universal wheel")
     @opt("--test", "-t", "test built wheels")
     def do_wheel(self, args):
@@ -1637,6 +1659,12 @@ class Application(ShellCmd, metaclass=MetaCommander):
         elif args.static:
             b = WheelBuilder(universal=args.universal)
             b.build_static_wheel()
+            b.check()
+            b.clean()
+
+        elif args.llvm:
+            b = WheelBuilder(universal=args.universal)
+            b.build_llvm_wheel()
             b.check()
             b.clean()
 

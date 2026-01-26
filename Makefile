@@ -117,8 +117,10 @@ wheel-dynamic: faust
 	$(MAKE) wheel-repair
 
 # Build LLVM static wheel (LLVM JIT backend, ~71MB binary)
+# Renames to cyfaust-llvm for PyPI distribution
 wheel-llvm: faustwithllvm generate-static
 	CMAKE_ARGS="-DSTATIC=ON -DLLVM=ON" uv build --wheel
+	$(PYTHON) scripts/rename_wheel.py dist/cyfaust-*.whl cyfaust-llvm --delete
 
 # Build with LLVM backend (for development)
 build-llvm: faustwithllvm generate-static
