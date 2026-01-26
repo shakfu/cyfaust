@@ -202,14 +202,15 @@ if(STATIC)
         endif()
 
         # LLVM backend requires additional libraries on some platforms
+        # These must be added AFTER libfaustwithllvm.a in EXTRA_OBJECTS for proper link order
         if(APPLE)
             # On macOS, libfaustwithllvm.a bundles LLVM statically
             # Additional system libraries needed for LLVM
-            list(APPEND PLATFORM_LIBRARIES z curses)
+            list(APPEND EXTRA_OBJECTS "-lz" "-lcurses")
         elseif(UNIX AND NOT APPLE)
-            # On Linux, may need to link against system LLVM
-            # The prebuilt libfaustwithllvm.a typically bundles LLVM statically
-            list(APPEND PLATFORM_LIBRARIES z tinfo)
+            # On Linux, the prebuilt libfaustwithllvm.a bundles LLVM statically
+            # but requires system tinfo/ncurses for terminal functions
+            list(APPEND EXTRA_OBJECTS "-lz" "-ltinfo")
         endif()
     else()
         # Interpreter backend - use libfaust.a

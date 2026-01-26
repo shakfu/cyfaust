@@ -50,6 +50,7 @@ import stat
 import subprocess
 import sys
 import tarfile
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Union
@@ -148,13 +149,13 @@ class ShellCmd:
         return Path(filename)
 
     def extract(self, archive: Pathlike, tofolder: Pathlike = '.'):
-        """extract a tar archive"""
+        """extract a tar or zip archive"""
         if tarfile.is_tarfile(archive):
             with tarfile.open(archive) as f:
                 f.extractall(tofolder)
-        # elif zipfile.is_zipfile(archive):
-        #     with zipfile.open(archive) as f:
-        #         f.extractall(tofolder)
+        elif zipfile.is_zipfile(archive):
+            with zipfile.ZipFile(archive) as f:
+                f.extractall(tofolder)
         else:
             raise TypeError("cannot extract from this file.")
 
@@ -749,7 +750,7 @@ class FaustLLVMBuilder(Builder):
 
     Supports:
         - macOS arm64 and x86_64 (via DMG download)
-        - Linux x86_64 (via tar.gz download)
+        - Linux x86_64 and aarch64 (via zip download)
     """
 
     NAME = "faustwithllvm"
@@ -781,14 +782,26 @@ class FaustLLVMBuilder(Builder):
         return f"https://github.com/grame-cncm/faust/releases/download/{self.version}/{self.dmg_name}"
 
     @property
-    def tarball_name(self) -> str:
-        """Get the tarball filename for Linux."""
+    def zip_name(self) -> str:
+        """Get the zip filename for Linux based on architecture."""
+        if ARCH == "aarch64":
+            return "libfaust-ubuntu-aarch64.zip"
+        return "libfaust-ubuntu-x86_64.zip"
+
+    @property
+    def zip_url(self) -> str:
+        """Get the download URL for Linux zip."""
+        return f"https://github.com/grame-cncm/faust/releases/download/{self.version}/{self.zip_name}"
+
+    @property
+    def source_tarball_name(self) -> str:
+        """Get the source tarball filename."""
         return f"faust-{self.version}.tar.gz"
 
     @property
-    def tarball_url(self) -> str:
-        """Get the download URL for Linux tarball."""
-        return f"https://github.com/grame-cncm/faust/releases/download/{self.version}/libfaust-{self.version}-ubuntu-x86_64.tar.gz"
+    def source_tarball_url(self) -> str:
+        """Get the download URL for the source tarball (contains headers)."""
+        return f"https://github.com/grame-cncm/faust/releases/download/{self.version}/{self.source_tarball_name}"
 
     @property
     def volume_path(self) -> Path:
@@ -839,7 +852,11 @@ class FaustLLVMBuilder(Builder):
                 self.remove(dmg_path)
 
     def download_linux(self):
-        """Download and extract Faust tarball on Linux."""
+        """Download and extract Faust zip on Linux.
+
+        The Linux zip contains only the lib/ folder with static and shared libraries.
+        Headers are downloaded separately from the source tarball.
+        """
         if self.libfaust_dir.exists() and (self.libfaust_dir / "lib" / self.staticlib_name).exists():
             self.log.info("libfaustwithllvm.a already exists, skipping download")
             return
@@ -847,28 +864,71 @@ class FaustLLVMBuilder(Builder):
         self.remove(self.libfaust_dir, silent=True)
         self.makedirs(self.libfaust_dir)
 
-        tarball_path = self.project.downloads / f"libfaust-{self.version}-ubuntu-x86_64.tar.gz"
+        zip_path = self.project.downloads / self.zip_name
+
+        # Download zip if not present
+        if not zip_path.exists():
+            self.log.info("downloading %s", self.zip_url)
+            self.download(self.zip_url, tofolder=self.project.downloads)
+
+        # Extract zip directly to libfaust_dir (zip contains lib/ folder directly)
+        self.log.info("extracting %s", zip_path)
+        self.extract(zip_path, tofolder=self.libfaust_dir)
+
+        # Clean up zip
+        if zip_path.exists():
+            self.remove(zip_path)
+
+        # Download headers from source tarball
+        self.download_headers_from_source()
+
+    def download_headers_from_source(self):
+        """Download and extract headers from the Faust source tarball.
+
+        The Linux prebuilt zip doesn't include headers, so we extract them
+        from the official source tarball. Headers are located in:
+        - architecture/faust/ - main DSP and audio headers
+        - compiler/generator/libfaust.h - libfaust API header (needed for LLVM build)
+        """
+        include_dir = self.libfaust_dir / "include" / "faust"
+        if include_dir.exists():
+            self.log.info("headers already exist at %s, skipping", include_dir)
+            return
+
+        tarball_path = self.project.downloads / self.source_tarball_name
 
         # Download tarball if not present
         if not tarball_path.exists():
-            self.log.info("downloading %s", self.tarball_url)
-            self.download(self.tarball_url, tofolder=self.project.downloads)
+            self.log.info("downloading %s for headers", self.source_tarball_url)
+            self.download(self.source_tarball_url, tofolder=self.project.downloads)
 
-        # Extract tarball
-        self.log.info("extracting %s", tarball_path)
+        # Extract the source tarball
+        self.log.info("extracting headers from %s", tarball_path)
+        extracted_dir = self.project.downloads / f"faust-{self.version}"
         self.extract(tarball_path, tofolder=self.project.downloads)
 
-        # The extracted folder is typically named libfaust-{version}
-        extracted_dir = self.project.downloads / f"libfaust-{self.version}-ubuntu-x86_64"
-        if extracted_dir.exists():
-            for item in extracted_dir.iterdir():
-                dst = self.libfaust_dir / item.name
-                self.copy(item, dst)
-            self.remove(extracted_dir)
+        # Copy architecture headers to libfaust_dir
+        src_headers = extracted_dir / "architecture" / "faust"
+        if src_headers.exists():
+            self.makedirs(self.libfaust_dir / "include")
+            self.copy(src_headers, include_dir)
+            self.log.info("headers installed to %s", include_dir)
+        else:
+            self.log.warning("headers not found in source tarball at %s", src_headers)
 
-        # Clean up tarball
-        if tarball_path.exists():
-            self.remove(tarball_path)
+        # Copy libfaust.h from compiler/generator to include/faust/dsp/
+        # This header is needed for the LLVM build
+        libfaust_h = extracted_dir / "compiler" / "generator" / "libfaust.h"
+        if libfaust_h.exists():
+            dst_libfaust_h = include_dir / "dsp" / "libfaust.h"
+            self.copy(libfaust_h, dst_libfaust_h)
+            self.log.info("libfaust.h installed to %s", dst_libfaust_h)
+        else:
+            self.log.warning("libfaust.h not found at %s", libfaust_h)
+
+        # Clean up extracted source (but keep tarball for potential reuse)
+        if extracted_dir.exists():
+            self.remove(extracted_dir)
 
     def install_staticlib(self):
         """Install the static library to the project lib directory."""
@@ -1487,6 +1547,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
     @opt("--deps", "-d", "install platform dependencies")
     @opt("--faust", "-f", "build libfaust (interpreter)")
     @opt("--llvm", "-l", "download prebuilt libfaust with LLVM")
+    @opt("--faustwithllvm", "-L", "alias for --llvm")
     @opt("--sndfile", "-s", "build libsndfile")
     @opt("--samplerate", "-r", "build libsamplerate")
     @opt("--all", "-a", "build all")
@@ -1514,7 +1575,7 @@ class Application(ShellCmd, metaclass=MetaCommander):
             fb = FaustBuilder()
             fb.process()
 
-        if args.llvm:
+        if args.llvm or args.faustwithllvm:
             llvm_builder = FaustLLVMBuilder()
             llvm_builder.process()
 
