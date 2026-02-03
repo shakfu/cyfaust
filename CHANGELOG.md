@@ -24,6 +24,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
   - Automatic `faust.dll` bundling via delvewheel for distributable wheels
   - DLL search path handling in `__init__.py` for development builds
 
+- Added Windows support to `FaustLLVMBuilder` for downloading LLVM libraries:
+  - Automatically uses existing Faust installation at `C:\Program Files\Faust`
+  - Falls back to downloading and extracting the installer with 7-zip
+  - Note: LLVM backend not supported on Windows - the prebuilt `libfaustwithllvm.lib` has MSVC ABI incompatibilities (built with different MSVC version and runtime library settings). Use interpreter backend on Windows.
+
+- Added CMake build-time check that prevents LLVM builds on Windows with helpful error message
+
 ### Changed
 
 - Updated Makefile for Windows compatibility:

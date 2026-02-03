@@ -724,7 +724,7 @@ class FaustLLVMBuilder(Builder):
     """Downloads prebuilt Faust static library with LLVM backend.
 
     This downloads the official Faust release binaries which include
-    libfaustwithllvm.a - the static library needed for LLVM-based DSP compilation.
+    libfaustwithllvm.a/.lib - the static library needed for LLVM-based DSP compilation.
 
     LLVM vs Interpreter Backend:
         - LLVM: Compiles Faust DSP code to native machine code via LLVM JIT.
@@ -740,6 +740,7 @@ class FaustLLVMBuilder(Builder):
     Supports:
         - macOS arm64 and x86_64 (via DMG download)
         - Linux x86_64 and aarch64 (via zip download)
+        - Windows x86_64 (via installer extraction with 7-zip, or existing installation)
     """
 
     NAME = "faustwithllvm"
@@ -781,6 +782,38 @@ class FaustLLVMBuilder(Builder):
     def zip_url(self) -> str:
         """Get the download URL for Linux zip."""
         return f"https://github.com/grame-cncm/faust/releases/download/{self.version}/{self.zip_name}"
+
+    @property
+    def exe_name(self) -> str:
+        """Get the Windows installer filename."""
+        return f"Faust-{self.version}-win64.exe"
+
+    @property
+    def exe_url(self) -> str:
+        """Get the download URL for Windows installer."""
+        return f"https://github.com/grame-cncm/faust/releases/download/{self.version}/{self.exe_name}"
+
+    @property
+    def windows_install_path(self) -> Path:
+        """Get the default Windows Faust installation path."""
+        return Path(r"C:\Program Files\Faust")
+
+    def find_7zip(self) -> Optional[str]:
+        """Find 7-zip executable on Windows."""
+        # Check common locations
+        candidates = [
+            r"C:\Program Files\7-Zip\7z.exe",
+            r"C:\Program Files (x86)\7-Zip\7z.exe",
+        ]
+        # Also check PATH
+        import shutil
+        path_7z = shutil.which("7z")
+        if path_7z:
+            return path_7z
+        for candidate in candidates:
+            if Path(candidate).exists():
+                return candidate
+        return None
 
     @property
     def source_tarball_name(self) -> str:
@@ -870,6 +903,89 @@ class FaustLLVMBuilder(Builder):
 
         # Download headers from source tarball
         self.download_headers_from_source()
+
+    def download_windows(self):
+        """Download and extract Faust from Windows installer or use existing installation.
+
+        On Windows, we either:
+        1. Use an existing Faust installation at C:\\Program Files\\Faust
+        2. Download the installer and extract it with 7-zip
+
+        The Windows installer is an NSIS package that can be extracted without
+        running the installer using 7-zip.
+        """
+        if self.libfaust_dir.exists() and (self.libfaust_dir / "lib" / self.staticlib_name).exists():
+            self.log.info("libfaustwithllvm.lib already exists, skipping download")
+            return
+
+        # Check if Faust is already installed
+        if self.windows_install_path.exists():
+            install_lib = self.windows_install_path / "lib" / self.staticlib_name
+            if install_lib.exists():
+                self.log.info("found existing Faust installation at %s", self.windows_install_path)
+                self.remove(self.libfaust_dir, silent=True)
+                self.makedirs(self.libfaust_dir)
+                # Copy lib and include directories
+                self.copy(self.windows_install_path / "lib", self.libfaust_dir / "lib")
+                self.copy(self.windows_install_path / "include", self.libfaust_dir / "include")
+                return
+
+        # No existing installation, download and extract with 7-zip
+        seven_zip = self.find_7zip()
+        if not seven_zip:
+            self.fail(
+                "7-zip not found. Please either:\n"
+                "  1. Install Faust from %s to C:\\Program Files\\Faust\n"
+                "  2. Install 7-zip from https://www.7-zip.org/",
+                self.exe_url
+            )
+
+        self.remove(self.libfaust_dir, silent=True)
+        self.makedirs(self.libfaust_dir)
+
+        exe_path = self.project.downloads / self.exe_name
+
+        # Download installer if not present
+        if not exe_path.exists():
+            self.log.info("downloading %s (this may take a while, ~109MB)", self.exe_url)
+            self.download(self.exe_url, tofolder=self.project.downloads)
+
+        # Extract with 7-zip
+        # NSIS installers extract to $INSTDIR which contains the files
+        extract_dir = self.project.downloads / "faust_extract"
+        self.remove(extract_dir, silent=True)
+        self.makedirs(extract_dir)
+
+        self.log.info("extracting installer with 7-zip...")
+        self.cmd(f'"{seven_zip}" x "{exe_path}" -o"{extract_dir}" -y')
+
+        # Find the extracted content (should be in $INSTDIR or directly in extract_dir)
+        instdir = extract_dir / "$INSTDIR"
+        if not instdir.exists():
+            # Files might be directly in extract_dir
+            instdir = extract_dir
+
+        # Copy lib and include directories
+        src_lib = instdir / "lib"
+        src_include = instdir / "include"
+
+        if src_lib.exists():
+            self.copy(src_lib, self.libfaust_dir / "lib")
+        else:
+            self.fail("lib directory not found in extracted installer")
+
+        if src_include.exists():
+            self.copy(src_include, self.libfaust_dir / "include")
+        else:
+            self.log.warning("include directory not found, will download headers separately")
+            self.download_headers_from_source()
+
+        # Clean up
+        self.remove(extract_dir)
+        if exe_path.exists():
+            self.remove(exe_path)
+
+        self.log.info("Windows Faust LLVM library extracted successfully")
 
     def download_headers_from_source(self):
         """Download and extract headers from the Faust source tarball.
@@ -961,6 +1077,69 @@ class FaustLLVMBuilder(Builder):
         self.log.info("installing LLVM-compatible headers to %s", dst_headers)
         self.copy(src_headers, dst_headers)
 
+    def patch_headers_for_msvc(self):
+        """Patch headers for MSVC compatibility.
+
+        MSVC does not support Variable Length Arrays (VLAs), which are used in
+        sound-player.h. This method patches those usages to use std::vector instead.
+        """
+        sound_player_h = self.project.include / "faust" / "dsp" / "sound-player.h"
+        if not sound_player_h.exists():
+            self.log.warning("sound-player.h not found, skipping MSVC patch")
+            return
+
+        content = sound_player_h.read_text()
+
+        # Check if already patched (look for std::vector include)
+        if "#include <vector>" in content:
+            self.log.info("sound-player.h already patched for MSVC")
+            return
+
+        self.log.info("patching sound-player.h for MSVC compatibility (VLA -> std::vector)")
+
+        # Add vector include after mutex
+        content = content.replace(
+            "#include <mutex>\n",
+            "#include <mutex>\n#include <vector>\n"
+        )
+
+        # Fix VLA in sound_memory_player constructor
+        content = content.replace(
+            "FAUSTFLOAT buffer[BUFFER_SIZE * fInfo.channels];",
+            "std::vector<FAUSTFLOAT> buffer(BUFFER_SIZE * fInfo.channels);"
+        )
+        content = content.replace(
+            "nbf = fReaderFun(fFile, buffer, BUFFER_SIZE);",
+            "nbf = fReaderFun(fFile, buffer.data(), BUFFER_SIZE);"
+        )
+
+        # Fix VLA in sound_dtd_player::playSlice
+        content = content.replace(
+            "FAUSTFLOAT buffer[count * fInfo.channels];",
+            "std::vector<FAUSTFLOAT> buffer(count * fInfo.channels);"
+        )
+        content = content.replace(
+            "ringbuffer_read(fBuffer, (char*)buffer, convertFromFrames(count));",
+            "ringbuffer_read(fBuffer, (char*)buffer.data(), convertFromFrames(count));"
+        )
+
+        # Fix VLA in sound_dtd_player::setFrame
+        content = content.replace(
+            "FAUSTFLOAT buffer[HALF_RING_BUFFER_SIZE * fInfo.channels];",
+            "std::vector<FAUSTFLOAT> buffer(HALF_RING_BUFFER_SIZE * fInfo.channels);"
+        )
+        content = content.replace(
+            "size_t nbf = readAndWrite(buffer, HALF_RING_BUFFER_SIZE);",
+            "size_t nbf = readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE);"
+        )
+        content = content.replace(
+            "readAndWrite(buffer, HALF_RING_BUFFER_SIZE - nbf);",
+            "readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE - nbf);"
+        )
+
+        sound_player_h.write_text(content)
+        self.log.info("sound-player.h patched successfully")
+
     def process(self):
         """Run the full download and install process."""
         self.setup_project()
@@ -970,11 +1149,18 @@ class FaustLLVMBuilder(Builder):
             self.download_darwin()
         elif PLATFORM == "Linux":
             self.download_linux()
+        elif PLATFORM == "Windows":
+            self.download_windows()
         else:
             self.fail("platform %s not supported for FaustLLVMBuilder", PLATFORM)
 
         self.install_staticlib()
         self.install_headers()
+
+        # Apply MSVC-specific patches on Windows
+        if PLATFORM == "Windows":
+            self.patch_headers_for_msvc()
+
         self.log.info("FaustLLVMBuilder DONE: %s installed", self.staticlib_name)
 
 
