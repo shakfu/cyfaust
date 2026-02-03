@@ -187,6 +187,14 @@ elseif(WIN32)
         list(APPEND COMMON_DEFINITIONS __WINDOWS_DS__)
         list(APPEND PLATFORM_LIBRARIES dsound)
     endif()
+
+    if(INCLUDE_SNDFILE)
+        # Link to static sndfile and samplerate libraries on Windows
+        list(APPEND EXTRA_OBJECTS
+            "${LIB_DIR}/static/sndfile.lib"
+            "${LIB_DIR}/static/samplerate.lib"
+        )
+    endif()
 endif()
 
 # ----------------------------------------------------------------------------

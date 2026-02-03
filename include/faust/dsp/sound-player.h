@@ -29,6 +29,7 @@ architecture section is not modified.
 #include <string>
 #include <iostream>
 #include <mutex>
+#include <vector>
 
 #include "faust/dsp/dsp.h"
 #include "faust/gui/ring-buffer.h"
@@ -243,12 +244,12 @@ class sound_memory_player : public sound_base_player {
                 fBuffer[chan] = new FAUSTFLOAT[fInfo.frames];
             }
             
-            FAUSTFLOAT buffer[BUFFER_SIZE * fInfo.channels];
+            std::vector<FAUSTFLOAT> buffer(BUFFER_SIZE * fInfo.channels);
             sf_count_t nbf, index = 0;
-            
+
             do {
                 // Read buffer
-                nbf = fReaderFun(fFile, buffer, BUFFER_SIZE);
+                nbf = fReaderFun(fFile, buffer.data(), BUFFER_SIZE);
                 // Deinterleave it
                 for (int chan = 0; chan < fInfo.channels; chan++) {
                     for (int frame = 0; frame < nbf; frame++) {
@@ -286,20 +287,20 @@ class sound_dtd_player : public sound_base_player {
         void playSlice(int count, int src, int dst, FAUSTFLOAT** outputs)
         {
             size_t read_space_frames = convertToFrames(ringbuffer_read_space(fBuffer));
-            
+
             if (read_space_frames >= count) {
-                
+
                 // Read from ringbuffer
-                FAUSTFLOAT buffer[count * fInfo.channels];
-                ringbuffer_read(fBuffer, (char*)buffer, convertFromFrames(count));
-                
+                std::vector<FAUSTFLOAT> buffer(count * fInfo.channels);
+                ringbuffer_read(fBuffer, (char*)buffer.data(), convertFromFrames(count));
+
                 // Deinterleave and write to output
                 for (int chan = 0; chan < fInfo.channels; chan++) {
                     for (int frame = 0; frame < count; frame++) {
                         outputs[chan][dst + frame] = buffer[frame * fInfo.channels + chan];
                     }
                 }
-                
+
             } else {
                 std::cerr << "PlaySlice : missing " << (count - read_space_frames) << " frames\n";
             }
@@ -329,17 +330,17 @@ class sound_dtd_player : public sound_base_player {
             }
             
             size_t write_space_frames = convertToFrames(ringbuffer_write_space(fBuffer));
-            
+
             // If ringbuffer has to be filled
             if (write_space_frames > HALF_RING_BUFFER_SIZE) {
-                FAUSTFLOAT buffer[HALF_RING_BUFFER_SIZE * fInfo.channels];
+                std::vector<FAUSTFLOAT> buffer(HALF_RING_BUFFER_SIZE * fInfo.channels);
                 // Tries to read and write HALF_RING_BUFFER_SIZE frames
-                size_t nbf = readAndWrite(buffer, HALF_RING_BUFFER_SIZE);
+                size_t nbf = readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE);
                 // End of file is reached
                 if (nbf < HALF_RING_BUFFER_SIZE) {
                     // Read RING_BUFFER_SIZE/2 - nbf frame from the beginning of file
                     sf_seek(fFile, 0, SEEK_SET);
-                    readAndWrite(buffer, HALF_RING_BUFFER_SIZE - nbf);
+                    readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE - nbf);
                 }
             }
         }

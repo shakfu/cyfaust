@@ -222,24 +222,67 @@ Platform specific requirements are covered in the next sections.
 
 ### Windows
 
-To build cyfaust you will need python to be installed (3.10+), a c++ compiler such as [visual studio community edition](https://visualstudio.microsoft.com/vs/community/) and make sure to install c++ and Windows SDK development support, as well as `git`, and `cmake`.
+To build cyfaust you will need:
+- Python 3.10+ installed
+- [Visual Studio Community Edition](https://visualstudio.microsoft.com/vs/community/) with C++ and Windows SDK development support
+- `git` and `cmake`
+- [uv](https://docs.astral.sh/uv/) package manager (recommended)
+- GNU Make (via [Git for Windows](https://gitforwindows.org/) or [w64devkit](https://github.com/skeeto/w64devkit))
 
-Then do something like the following in a terminal:
+#### Quick Start (One-Shot Wheel Build)
+
+The easiest way to build a distributable Windows wheel:
 
 ```bash
 git clone https://github.com/shakfu/cyfaust.git
 cd cyfaust
-pip install -r requirements.txt # or python3 scripts/manage.py setup --deps
-python scripts/manage.py setup --faust
-# then pick from 3, 4 or 6. For example
-python scripts/manage.py build
-pytest
-# etc..
+make wheel-windows
 ```
 
-### macOS & Linux
+This single command:
+1. Downloads and builds libfaust (interpreter backend)
+2. Builds libsamplerate and libsndfile
+3. Builds the Python wheel
+4. Bundles `faust.dll` into the wheel via delvewheel
 
-On macOS and Linux, a `Makefile` is available as a frontend to the above `manage.py` script to make it a little quicker to use.
+The resulting wheel in `dist/` is fully self-contained and can be installed anywhere.
+
+#### Development Build
+
+For development (editable install):
+
+```bash
+git clone https://github.com/shakfu/cyfaust.git
+cd cyfaust
+make          # builds dependencies and installs for development
+make test     # run tests
+```
+
+#### Manual Build Steps
+
+If you prefer manual control or don't have `make`:
+
+```bash
+git clone https://github.com/shakfu/cyfaust.git
+cd cyfaust
+pip install uv
+python scripts/manage.py setup --faust      # build libfaust
+python scripts/manage.py setup --samplerate # build libsamplerate
+python scripts/manage.py setup --sndfile    # build libsndfile
+CMAKE_ARGS="-DSTATIC=OFF" uv sync           # development install
+uv run pytest tests/                        # run tests
+```
+
+To build a wheel manually:
+
+```bash
+CMAKE_ARGS="-DSTATIC=OFF" uv build --wheel
+uv run delvewheel repair --add-path lib dist/*.whl -w dist/
+```
+
+### macOS, Linux & Windows (with Make)
+
+A `Makefile` is available as a frontend to the `manage.py` script on all platforms. On Windows, you can use GNU Make from [Git for Windows](https://gitforwindows.org/) (Git Bash) or [w64devkit](https://github.com/skeeto/w64devkit).
 
 The following setup sequence is illustrative of this and is also useful if you want to setup cyfaust manually.
 
@@ -292,6 +335,12 @@ For a wheel:
 
 ```bash
 make wheel
+```
+
+For a Windows wheel with bundled DLL (one-shot build):
+
+```bash
+make wheel-windows
 ```
 
 For the static variant, set the `STATIC=1` environment variable with make, or use `CMAKE_ARGS` for direct builds:
@@ -442,6 +491,18 @@ if cyfaust.LLVM_BACKEND:
 ```
 
 #### Platform Support
+
+**Interpreter Backend (cyfaust):**
+
+| Platform | Architecture | Status |
+|----------|-------------|--------|
+| macOS | arm64 (Apple Silicon) | Supported |
+| macOS | x86_64 (Intel) | Supported |
+| Linux | x86_64 | Supported |
+| Linux | aarch64 | Supported |
+| Windows | x86_64 | Supported |
+
+**LLVM Backend (cyfaust-llvm):**
 
 | Platform | Architecture | Status |
 |----------|-------------|--------|

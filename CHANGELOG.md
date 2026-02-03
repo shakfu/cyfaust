@@ -15,6 +15,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.0.x]
 
+## [0.1.2]
+
+### Added
+
+- Added full Windows support for dynamic builds with `delvewheel` integration:
+  - New `wheel-windows` Makefile target builds a complete Windows wheel in one shot
+  - Automatic `faust.dll` bundling via delvewheel for distributable wheels
+  - DLL search path handling in `__init__.py` for development builds
+
+### Changed
+
+- Updated Makefile for Windows compatibility:
+  - Auto-detect platform and use `python` instead of `python3` on Windows
+  - Use `.lib` extension for static libraries on Windows
+  - Added `--add-path lib` to delvewheel command for finding `faust.dll`
+
+- Updated CMakeLists.txt for Windows:
+  - Added libsndfile and libsamplerate static library linking on Windows
+
+### Fixed
+
+- Fixed Variable Length Array (VLA) usage in `include/faust/dsp/sound-player.h`:
+  - MSVC does not support VLAs; replaced with `std::vector` for cross-platform compatibility
+
+- Fixed `src/cyfaust/__init__.py` to automatically locate `faust.dll` on Windows:
+  - Searches project lib directory for development builds
+  - Works with delvewheel-bundled wheels for distribution
+
+- Removed `src/cyfaust/resources` symlink placeholder that caused wheel build conflicts on Windows
+
 ## [0.1.1]
 
 ### Added

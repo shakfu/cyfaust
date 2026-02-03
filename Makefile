@@ -18,14 +18,25 @@ ASIO := 0
 WASAPI := 1
 DSOUND := 0
 
-# Python command (for manage.py)
-PYTHON := python3
+# Python command (for manage.py) - use 'python' on Windows, 'python3' elsewhere
+ifeq ($(OS),Windows_NT)
+    PYTHON := python
+else
+    PYTHON := python3
+endif
 
-# Static library paths
-LIBFAUST := ./lib/static/libfaust.a
-LIBFAUSTWITHLLVM := ./lib/static/libfaustwithllvm.a
-LIBSAMPLERATE := ./lib/static/libsamplerate.a
-LIBSNDFILE := ./lib/static/libsndfile.a
+# Static library paths (Windows uses .lib, Unix uses .a)
+ifeq ($(OS),Windows_NT)
+    LIBFAUST := ./lib/static/libfaust.lib
+    LIBFAUSTWITHLLVM := ./lib/static/libfaustwithllvm.lib
+    LIBSAMPLERATE := ./lib/static/samplerate.lib
+    LIBSNDFILE := ./lib/static/sndfile.lib
+else
+    LIBFAUST := ./lib/static/libfaust.a
+    LIBFAUSTWITHLLVM := ./lib/static/libfaustwithllvm.a
+    LIBSAMPLERATE := ./lib/static/libsamplerate.a
+    LIBSNDFILE := ./lib/static/libsndfile.a
+endif
 
 # Build CMAKE_ARGS from options
 CMAKE_OPTS := -DSTATIC=$(if $(filter 1,$(STATIC)),ON,OFF)
@@ -42,8 +53,8 @@ export CMAKE_ARGS := $(CMAKE_OPTS)
 
 .PHONY: all sync faust faustwithllvm samplerate sndfile build rebuild test wheel sdist \
         generate-static release verify-sync pytest clean distclean reset help \
-        wheel-static wheel-dynamic wheel-llvm wheel-repair wheel-check publish publish-test \
-        build-llvm test-llvm
+        wheel-static wheel-dynamic wheel-windows wheel-llvm wheel-repair wheel-check \
+        publish publish-test build-llvm test-llvm
 
 # Default target
 all: build
@@ -141,8 +152,16 @@ else ifeq ($(shell uname),Linux)
 	LD_LIBRARY_PATH=lib uv run auditwheel repair dist/*.whl -w dist/
 else
 	@echo "Running delvewheel to bundle faust.dll..."
-	uv run delvewheel repair dist/*.whl -w dist/
+	uv run delvewheel repair --add-path lib dist/*.whl -w dist/
 endif
+
+# Build Windows wheel in one shot (builds all dependencies, wheel, and bundles DLL)
+# Usage: make wheel-windows
+wheel-windows: faust samplerate sndfile
+	@echo "Building Windows wheel with bundled faust.dll..."
+	CMAKE_ARGS="-DSTATIC=OFF" uv build --wheel
+	uv run delvewheel repair --add-path lib dist/*.whl -w dist/
+	@echo "Windows wheel built successfully in dist/"
 
 # Build release wheels (static, for PyPI distribution)
 release: faust generate-static
@@ -220,6 +239,7 @@ help:
 	@echo "  wheel        - Build wheel (uses STATIC setting)"
 	@echo "  wheel-static - Build static wheel (libfaust embedded)"
 	@echo "  wheel-dynamic- Build dynamic wheel (libfaust bundled via delocate)"
+	@echo "  wheel-windows- Build Windows wheel (one-shot: deps + wheel + delvewheel)"
 	@echo "  wheel-llvm   - Build LLVM wheel (libfaustwithllvm embedded)"
 	@echo "  wheel-repair - Bundle dynamic libs into wheel (delocate/auditwheel)"
 	@echo "  sdist        - Build source distribution"
