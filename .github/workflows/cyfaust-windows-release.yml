@@ -1,0 +1,113 @@
+
+name: cyfaust-windows-release
+
+on: workflow_dispatch
+
+run-name: cyfaust-windows-release-${{ github.ref_name }}-${{ github.run_number }}
+
+jobs:
+  build_wheels:
+    name: Build ${{ matrix.py_version }} wheel on Windows
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        py_version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+
+    steps:
+
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+        fetch-depth: '1'
+
+    - name: Cache libfaust
+      id: cache-libfaust
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ github.workspace }}/lib/libfaust.*
+          ${{ github.workspace }}/lib/faust.*
+          ${{ github.workspace }}/lib/static/libfaust.*
+          ${{ github.workspace }}/lib/static/faust.*
+        key: windows-libfaust
+
+    - name: Cache sndfile libs
+      id: cache-sndfile
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ github.workspace }}/lib/static/sndfile.lib
+          ${{ github.workspace }}/lib/static/samplerate.lib
+        key: windows-sndfile
+
+    - name: Setup python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.py_version }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
+
+    - name: Display python version
+      run: python --version
+
+    - name: Setup faust
+      if: steps.cache-libfaust.outputs.cache-hit != 'true'
+      run: python scripts/manage.py setup --faust
+
+    - name: Build libsamplerate
+      if: steps.cache-sndfile.outputs.cache-hit != 'true'
+      run: python scripts/manage.py setup --samplerate
+
+    - name: Build libsndfile
+      if: steps.cache-sndfile.outputs.cache-hit != 'true'
+      run: python scripts/manage.py setup --sndfile
+
+    - name: Generate static sources
+      run: python scripts/generate_static.py
+
+    - name: Build wheel (static for release)
+      env:
+        CMAKE_ARGS: "-DSTATIC=ON"
+      run: uv build --wheel
+
+    - name: Test wheel (import check)
+      run: |
+        pip install (Get-ChildItem dist/*.whl).FullName
+        python -c "import cyfaust; print('cyfaust imported successfully')"
+        python -c "from cyfaust.interp import get_version; print('libfaust version:', get_version())"
+      shell: pwsh
+
+    - name: Run tests (non-audio)
+      run: |
+        pip install pytest numpy
+        pytest tests/test_cyfaust_common.py tests/test_box_coverage.py tests/test_signal_coverage.py tests/test_new_methods.py -v
+      shell: pwsh
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: dist-windows-py${{ matrix.py_version }}
+        path: ./dist/*.whl
+
+  collect-artifacts:
+    name: Collect all artifacts
+    runs-on: ubuntu-latest
+    needs: build_wheels
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: all-wheels
+        pattern: dist-*
+        merge-multiple: true
+
+    - name: List collected wheels
+      run: ls -la all-wheels/
+
+    - name: Upload combined artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: cyfaust-windows-wheels-all
+        path: all-wheels/*.whl
