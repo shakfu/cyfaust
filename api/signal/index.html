@@ -1,0 +1,2580 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Cython wrapper for the Faust DSP language and RtAudio">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/shakfu/cyfaust/api/signal/">
+      
+      
+        <link rel="prev" href="../box/">
+      
+      
+        <link rel="next" href="../common/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>cyfaust.signal - cyfaust</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cyfaustsignal" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="cyfaust" class="md-header__button md-logo" aria-label="cyfaust" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            cyfaust
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              cyfaust.signal
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/shakfu/cyfaust" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    shakfu/cyfaust
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="cyfaust" class="md-nav__button md-logo" aria-label="cyfaust" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    cyfaust
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/shakfu/cyfaust" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    shakfu/cyfaust
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cyfaust.interp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../box/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cyfaust.box
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cyfaust.signal
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cyfaust.signal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context Manager
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Context Manager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signal_context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signal_context
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Signal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-factory-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Factory Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signalvector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SignalVector
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SignalVector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interval
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interval">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-level-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module-Level Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module-Level Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Casting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Soundfiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selectors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arithmetic Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bitwise-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bitwise Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparison-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#math-functions-unary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Math Functions (Unary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI Elements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recursion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recursion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#foreign-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Foreign Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#misc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Misc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introspection-type-checking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introspection / Type Checking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helper-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Helper Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cyfaust.common
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../player/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cyfaust.player
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../building/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building from Source
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Notes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Developer Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/cleaning-up/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resource Cleanup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/cyfaust_block_api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Box API Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/soundfile/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Soundfile API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Useful Links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context Manager
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Context Manager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signal_context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signal_context
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Signal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-factory-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Factory Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signalvector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SignalVector
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SignalVector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interval
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interval">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-level-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module-Level Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module-Level Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Primitives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Casting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soundfiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Soundfiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selectors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arithmetic Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bitwise-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bitwise Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparison-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#math-functions-unary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Math Functions (Unary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI Elements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recursion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recursion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#foreign-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Foreign Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#misc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Misc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introspection-type-checking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introspection / Type Checking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Utility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helper-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Helper Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="cyfaustsignal">cyfaust.signal<a class="headerlink" href="#cyfaustsignal" title="Permanent link">&para;</a></h1>
+<p>The Signal API provides lower-level DSP composition using Faust's signal algebra. All signal operations must be performed within a <code>signal_context</code>.</p>
+<h2 id="context-manager">Context Manager<a class="headerlink" href="#context-manager" title="Permanent link">&para;</a></h2>
+<h3 id="signal_context">signal_context<a class="headerlink" href="#signal_context" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal_context</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">with</span> <span class="n">signal_context</span><span class="p">():</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="c1"># all signal operations here</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="o">...</span>
+</code></pre></div>
+<p>Creates and destroys the Faust library context required for signal operations.</p>
+<hr />
+<h2 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h2>
+<h3 id="signal">Signal<a class="headerlink" href="#signal" title="Permanent link">&para;</a></h3>
+<p>Faust Signal expression wrapper.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Signal</span>
+</code></pre></div>
+<h4 id="static-factory-methods">Static Factory Methods<a class="headerlink" href="#static-factory-methods" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>from_input(idx)</code></td>
+<td><code>Signal</code></td>
+<td>Signal from input channel index</td>
+</tr>
+<tr>
+<td><code>from_int(value)</code></td>
+<td><code>Signal</code></td>
+<td>Integer constant signal</td>
+</tr>
+<tr>
+<td><code>from_float(value)</code></td>
+<td><code>Signal</code></td>
+<td>Float constant signal</td>
+</tr>
+<tr>
+<td><code>from_real(value)</code></td>
+<td><code>Signal</code></td>
+<td>Alias for <code>from_float</code></td>
+</tr>
+<tr>
+<td><code>from_soundfile(label)</code></td>
+<td><code>Signal</code></td>
+<td>Soundfile signal</td>
+</tr>
+<tr>
+<td><code>from_button(label)</code></td>
+<td><code>Signal</code></td>
+<td>Button UI signal</td>
+</tr>
+<tr>
+<td><code>from_checkbox(label)</code></td>
+<td><code>Signal</code></td>
+<td>Checkbox UI signal</td>
+</tr>
+<tr>
+<td><code>from_vslider(label, init, min, max, step)</code></td>
+<td><code>Signal</code></td>
+<td>Vertical slider signal</td>
+</tr>
+<tr>
+<td><code>from_hslider(label, init, min, max, step)</code></td>
+<td><code>Signal</code></td>
+<td>Horizontal slider signal</td>
+</tr>
+<tr>
+<td><code>from_numentry(label, init, min, max, step)</code></td>
+<td><code>Signal</code></td>
+<td>Number entry signal</td>
+</tr>
+<tr>
+<td><code>from_read_only_table(n, init, ridx)</code></td>
+<td><code>Signal</code></td>
+<td>Read-only table</td>
+</tr>
+<tr>
+<td><code>from_write_read_table(n, init, widx, wsig, ridx)</code></td>
+<td><code>Signal</code></td>
+<td>Read/write table</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="signalvector">SignalVector<a class="headerlink" href="#signalvector" title="Permanent link">&para;</a></h3>
+<p>A vector of Signal expressions (wraps <code>std::vector&lt;CTree*&gt;</code>).</p>
+<h4 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add(sig)</code></td>
+<td></td>
+<td>Add a Signal to the vector</td>
+</tr>
+<tr>
+<td><code>create_source(name_app, lang, *args)</code></td>
+<td><code>str</code></td>
+<td>Generate source code from signals</td>
+</tr>
+<tr>
+<td><code>simplify_to_normal_form()</code></td>
+<td><code>SignalVector</code></td>
+<td>Simplify signals to normal form</td>
+</tr>
+</tbody>
+</table>
+<p>Supports iteration via <code>for sig in signal_vector</code>.</p>
+<hr />
+<h3 id="interval">Interval<a class="headerlink" href="#interval" title="Permanent link">&para;</a></h3>
+<p>Signal interval wrapper with low, high, and LSB bounds.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Interval</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">ival</span> <span class="o">=</span> <span class="n">Interval</span><span class="p">(</span><span class="n">lo</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lsb</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>low</code></td>
+<td><code>float</code></td>
+<td>Lower bound</td>
+</tr>
+<tr>
+<td><code>high</code></td>
+<td><code>float</code></td>
+<td>Upper bound</td>
+</tr>
+<tr>
+<td><code>lsb</code></td>
+<td><code>float</code></td>
+<td>Least significant bit</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="module-level-functions">Module-Level Functions<a class="headerlink" href="#module-level-functions" title="Permanent link">&para;</a></h2>
+<h3 id="primitives">Primitives<a class="headerlink" href="#primitives" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_int(n)</code></td>
+<td><code>Signal</code></td>
+<td>Integer constant</td>
+</tr>
+<tr>
+<td><code>sig_real(n)</code></td>
+<td><code>Signal</code></td>
+<td>Float constant</td>
+</tr>
+<tr>
+<td><code>sig_input(idx)</code></td>
+<td><code>Signal</code></td>
+<td>Input channel signal</td>
+</tr>
+</tbody>
+</table>
+<h3 id="delay">Delay<a class="headerlink" href="#delay" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_delay(s, d)</code></td>
+<td><code>Signal</code></td>
+<td>Delay signal <code>s</code> by <code>d</code> samples</td>
+</tr>
+<tr>
+<td><code>sig_delay1(s)</code></td>
+<td><code>Signal</code></td>
+<td>One-sample delay</td>
+</tr>
+</tbody>
+</table>
+<h3 id="casting">Casting<a class="headerlink" href="#casting" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_int_cast(s)</code></td>
+<td><code>Signal</code></td>
+<td>Cast to integer</td>
+</tr>
+<tr>
+<td><code>sig_float_cast(s)</code></td>
+<td><code>Signal</code></td>
+<td>Cast to float</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tables">Tables<a class="headerlink" href="#tables" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_readonly_table(n, init, ridx)</code></td>
+<td><code>Signal</code></td>
+<td>Read-only table</td>
+</tr>
+<tr>
+<td><code>sig_write_read_table(n, init, widx, wsig, ridx)</code></td>
+<td><code>Signal</code></td>
+<td>Read/write table</td>
+</tr>
+<tr>
+<td><code>sig_waveform_int(view)</code></td>
+<td><code>Signal</code></td>
+<td>Waveform from int memoryview</td>
+</tr>
+<tr>
+<td><code>sig_waveform_float(view)</code></td>
+<td><code>Signal</code></td>
+<td>Waveform from float memoryview</td>
+</tr>
+</tbody>
+</table>
+<h3 id="soundfiles">Soundfiles<a class="headerlink" href="#soundfiles" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_soundfile(*paths)</code></td>
+<td><code>Signal</code></td>
+<td>Soundfile from paths</td>
+</tr>
+<tr>
+<td><code>sig_soundfile_length(sf, part)</code></td>
+<td><code>Signal</code></td>
+<td>Soundfile length</td>
+</tr>
+<tr>
+<td><code>sig_soundfile_rate(sf, part)</code></td>
+<td><code>Signal</code></td>
+<td>Soundfile sample rate</td>
+</tr>
+<tr>
+<td><code>sig_soundfile_buffer(sf, chan, part, ridx)</code></td>
+<td><code>Signal</code></td>
+<td>Soundfile buffer access</td>
+</tr>
+</tbody>
+</table>
+<h3 id="selectors">Selectors<a class="headerlink" href="#selectors" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_select2(selector, s1, s2)</code></td>
+<td><code>Signal</code></td>
+<td>2-way selector</td>
+</tr>
+<tr>
+<td><code>sig_select3(selector, s1, s2, s3)</code></td>
+<td><code>Signal</code></td>
+<td>3-way selector</td>
+</tr>
+</tbody>
+</table>
+<h3 id="arithmetic-operators">Arithmetic Operators<a class="headerlink" href="#arithmetic-operators" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_add(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Addition</td>
+</tr>
+<tr>
+<td><code>sig_sub(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Subtraction</td>
+</tr>
+<tr>
+<td><code>sig_mul(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Multiplication</td>
+</tr>
+<tr>
+<td><code>sig_div(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Division</td>
+</tr>
+<tr>
+<td><code>sig_rem(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Remainder</td>
+</tr>
+<tr>
+<td><code>sig_pow(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Power</td>
+</tr>
+<tr>
+<td><code>sig_fmod(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Floating-point modulo</td>
+</tr>
+<tr>
+<td><code>sig_remainder(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>IEEE remainder</td>
+</tr>
+<tr>
+<td><code>sig_min(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Minimum</td>
+</tr>
+<tr>
+<td><code>sig_max(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Maximum</td>
+</tr>
+<tr>
+<td><code>sig_atan2(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Arc tangent (2-arg)</td>
+</tr>
+<tr>
+<td><code>sig_bin_op(op, x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Generic binary operator</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bitwise-operators">Bitwise Operators<a class="headerlink" href="#bitwise-operators" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_leftshift(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Left shift</td>
+</tr>
+<tr>
+<td><code>sig_lrightshift(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Logical right shift</td>
+</tr>
+<tr>
+<td><code>sig_arightshift(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Arithmetic right shift</td>
+</tr>
+<tr>
+<td><code>sig_and(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Bitwise AND</td>
+</tr>
+<tr>
+<td><code>sig_or(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Bitwise OR</td>
+</tr>
+<tr>
+<td><code>sig_xor(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Bitwise XOR</td>
+</tr>
+</tbody>
+</table>
+<h3 id="comparison-operators">Comparison Operators<a class="headerlink" href="#comparison-operators" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_gt(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Greater than</td>
+</tr>
+<tr>
+<td><code>sig_lt(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Less than</td>
+</tr>
+<tr>
+<td><code>sig_ge(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Greater or equal</td>
+</tr>
+<tr>
+<td><code>sig_le(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Less or equal</td>
+</tr>
+<tr>
+<td><code>sig_eq(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Equal</td>
+</tr>
+<tr>
+<td><code>sig_ne(x, y)</code></td>
+<td><code>Signal</code></td>
+<td>Not equal</td>
+</tr>
+</tbody>
+</table>
+<h3 id="math-functions-unary">Math Functions (Unary)<a class="headerlink" href="#math-functions-unary" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_abs(x)</code></td>
+<td><code>Signal</code></td>
+<td>Absolute value</td>
+</tr>
+<tr>
+<td><code>sig_acos(x)</code></td>
+<td><code>Signal</code></td>
+<td>Arc cosine</td>
+</tr>
+<tr>
+<td><code>sig_asin(x)</code></td>
+<td><code>Signal</code></td>
+<td>Arc sine</td>
+</tr>
+<tr>
+<td><code>sig_atan(x)</code></td>
+<td><code>Signal</code></td>
+<td>Arc tangent</td>
+</tr>
+<tr>
+<td><code>sig_ceil(x)</code></td>
+<td><code>Signal</code></td>
+<td>Ceiling</td>
+</tr>
+<tr>
+<td><code>sig_cos(x)</code></td>
+<td><code>Signal</code></td>
+<td>Cosine</td>
+</tr>
+<tr>
+<td><code>sig_exp(x)</code></td>
+<td><code>Signal</code></td>
+<td>Exponential</td>
+</tr>
+<tr>
+<td><code>sig_exp10(x)</code></td>
+<td><code>Signal</code></td>
+<td>Base-10 exponential</td>
+</tr>
+<tr>
+<td><code>sig_floor(x)</code></td>
+<td><code>Signal</code></td>
+<td>Floor</td>
+</tr>
+<tr>
+<td><code>sig_log(x)</code></td>
+<td><code>Signal</code></td>
+<td>Natural logarithm</td>
+</tr>
+<tr>
+<td><code>sig_log10(x)</code></td>
+<td><code>Signal</code></td>
+<td>Base-10 logarithm</td>
+</tr>
+<tr>
+<td><code>sig_rint(x)</code></td>
+<td><code>Signal</code></td>
+<td>Round to nearest int</td>
+</tr>
+<tr>
+<td><code>sig_sin(x)</code></td>
+<td><code>Signal</code></td>
+<td>Sine</td>
+</tr>
+<tr>
+<td><code>sig_sqrt(x)</code></td>
+<td><code>Signal</code></td>
+<td>Square root</td>
+</tr>
+<tr>
+<td><code>sig_tan(x)</code></td>
+<td><code>Signal</code></td>
+<td>Tangent</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ui-elements">UI Elements<a class="headerlink" href="#ui-elements" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_button(label)</code></td>
+<td><code>Signal</code></td>
+<td>Button</td>
+</tr>
+<tr>
+<td><code>sig_checkbox(label)</code></td>
+<td><code>Signal</code></td>
+<td>Checkbox</td>
+</tr>
+<tr>
+<td><code>sig_vslider(label, init, min, max, step)</code></td>
+<td><code>Signal</code></td>
+<td>Vertical slider</td>
+</tr>
+<tr>
+<td><code>sig_hslider(label, init, min, max, step)</code></td>
+<td><code>Signal</code></td>
+<td>Horizontal slider</td>
+</tr>
+<tr>
+<td><code>sig_numentry(label, init, min, max, step)</code></td>
+<td><code>Signal</code></td>
+<td>Number entry</td>
+</tr>
+<tr>
+<td><code>sig_vbargraph(label, min, max, s)</code></td>
+<td><code>Signal</code></td>
+<td>Vertical bargraph</td>
+</tr>
+<tr>
+<td><code>sig_hbargraph(label, min, max, s)</code></td>
+<td><code>Signal</code></td>
+<td>Horizontal bargraph</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recursion">Recursion<a class="headerlink" href="#recursion" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_self()</code></td>
+<td><code>Signal</code></td>
+<td>Self-reference for recursion</td>
+</tr>
+<tr>
+<td><code>sig_recursion(s)</code></td>
+<td><code>Signal</code></td>
+<td>Create recursive signal</td>
+</tr>
+<tr>
+<td><code>sig_self_n(id)</code></td>
+<td><code>Signal</code></td>
+<td>Multi-output self-reference</td>
+</tr>
+<tr>
+<td><code>sig_recursion_n(rf)</code></td>
+<td><code>SignalVector</code></td>
+<td>Multi-output recursive signal</td>
+</tr>
+</tbody>
+</table>
+<h3 id="foreign-functions">Foreign Functions<a class="headerlink" href="#foreign-functions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_fconst(type, name, file)</code></td>
+<td><code>Signal</code></td>
+<td>Foreign constant</td>
+</tr>
+<tr>
+<td><code>sig_fvar(type, name, file)</code></td>
+<td><code>Signal</code></td>
+<td>Foreign variable</td>
+</tr>
+</tbody>
+</table>
+<h3 id="misc">Misc<a class="headerlink" href="#misc" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_attach(s1, s2)</code></td>
+<td><code>Signal</code></td>
+<td>Attach signal (s2 depends on s1)</td>
+</tr>
+<tr>
+<td><code>simplify_to_normal_form(s)</code></td>
+<td><code>Signal</code></td>
+<td>Simplify single signal</td>
+</tr>
+<tr>
+<td><code>simplify_to_normal_form2(vec)</code></td>
+<td><code>SignalVector</code></td>
+<td>Simplify signal vector</td>
+</tr>
+<tr>
+<td><code>create_source_from_signals(name_app, osigs, lang, *args)</code></td>
+<td><code>str</code></td>
+<td>Generate source code</td>
+</tr>
+</tbody>
+</table>
+<h3 id="introspection-type-checking">Introspection / Type Checking<a class="headerlink" href="#introspection-type-checking" title="Permanent link">&para;</a></h3>
+<p>Functions prefixed with <code>is_sig_*</code> test the type of a signal and return a <code>dict</code> with extracted parameters (or empty dict if type doesn't match):</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_sig_int(t)</code></td>
+<td><code>dict</code></td>
+<td>Is integer constant?</td>
+</tr>
+<tr>
+<td><code>is_sig_float(t)</code></td>
+<td><code>dict</code></td>
+<td>Is float constant?</td>
+</tr>
+<tr>
+<td><code>is_sig_input(t)</code></td>
+<td><code>dict</code></td>
+<td>Is input?</td>
+</tr>
+<tr>
+<td><code>is_sig_output(t)</code></td>
+<td><code>dict</code></td>
+<td>Is output?</td>
+</tr>
+<tr>
+<td><code>is_sig_delay1(t)</code></td>
+<td><code>dict</code></td>
+<td>Is one-sample delay?</td>
+</tr>
+<tr>
+<td><code>is_sig_delay(t)</code></td>
+<td><code>dict</code></td>
+<td>Is delay?</td>
+</tr>
+<tr>
+<td><code>is_sig_prefix(t)</code></td>
+<td><code>dict</code></td>
+<td>Is prefix?</td>
+</tr>
+<tr>
+<td><code>is_sig_readonly_table(s)</code></td>
+<td><code>dict</code></td>
+<td>Is read-only table?</td>
+</tr>
+<tr>
+<td><code>is_sig_read_write_table(u)</code></td>
+<td><code>dict</code></td>
+<td>Is read/write table?</td>
+</tr>
+<tr>
+<td><code>is_sig_gen(t)</code></td>
+<td><code>dict</code></td>
+<td>Is generator?</td>
+</tr>
+<tr>
+<td><code>is_sig_select2(t)</code></td>
+<td><code>dict</code></td>
+<td>Is 2-way selector?</td>
+</tr>
+<tr>
+<td><code>is_sig_assert_bounds(t)</code></td>
+<td><code>dict</code></td>
+<td>Is assert bounds?</td>
+</tr>
+<tr>
+<td><code>is_sig_highest(t)</code></td>
+<td><code>dict</code></td>
+<td>Is highest?</td>
+</tr>
+<tr>
+<td><code>is_sig_lowest(t)</code></td>
+<td><code>dict</code></td>
+<td>Is lowest?</td>
+</tr>
+<tr>
+<td><code>is_sig_bin_op(s)</code></td>
+<td><code>dict</code></td>
+<td>Is binary operator?</td>
+</tr>
+<tr>
+<td><code>is_sig_ffun(s)</code></td>
+<td><code>dict</code></td>
+<td>Is foreign function?</td>
+</tr>
+<tr>
+<td><code>is_sig_fconst(s)</code></td>
+<td><code>dict</code></td>
+<td>Is foreign constant?</td>
+</tr>
+<tr>
+<td><code>is_sig_fvar(s)</code></td>
+<td><code>dict</code></td>
+<td>Is foreign variable?</td>
+</tr>
+<tr>
+<td><code>is_proj(s)</code></td>
+<td><code>dict</code></td>
+<td>Is projection?</td>
+</tr>
+<tr>
+<td><code>is_rec(s)</code></td>
+<td><code>dict</code></td>
+<td>Is recursion?</td>
+</tr>
+<tr>
+<td><code>is_sig_int_cast(s)</code></td>
+<td><code>dict</code></td>
+<td>Is int cast?</td>
+</tr>
+<tr>
+<td><code>is_sig_float_cast(s)</code></td>
+<td><code>dict</code></td>
+<td>Is float cast?</td>
+</tr>
+<tr>
+<td><code>is_sig_button(s)</code></td>
+<td><code>dict</code></td>
+<td>Is button?</td>
+</tr>
+<tr>
+<td><code>is_sig_checkbox(s)</code></td>
+<td><code>dict</code></td>
+<td>Is checkbox?</td>
+</tr>
+<tr>
+<td><code>is_sig_waveform(s)</code></td>
+<td><code>bool</code></td>
+<td>Is waveform?</td>
+</tr>
+<tr>
+<td><code>is_sig_hslider(u)</code></td>
+<td><code>dict</code></td>
+<td>Is horizontal slider?</td>
+</tr>
+<tr>
+<td><code>is_sig_vslider(u)</code></td>
+<td><code>dict</code></td>
+<td>Is vertical slider?</td>
+</tr>
+<tr>
+<td><code>is_sig_numentry(u)</code></td>
+<td><code>dict</code></td>
+<td>Is number entry?</td>
+</tr>
+<tr>
+<td><code>is_sig_hbargraph(s)</code></td>
+<td><code>dict</code></td>
+<td>Is horizontal bargraph?</td>
+</tr>
+<tr>
+<td><code>is_sig_vbargraph(s)</code></td>
+<td><code>dict</code></td>
+<td>Is vertical bargraph?</td>
+</tr>
+<tr>
+<td><code>is_sig_attach(s)</code></td>
+<td><code>dict</code></td>
+<td>Is attach?</td>
+</tr>
+<tr>
+<td><code>is_sig_enable(s)</code></td>
+<td><code>dict</code></td>
+<td>Is enable?</td>
+</tr>
+<tr>
+<td><code>is_sig_control(s)</code></td>
+<td><code>dict</code></td>
+<td>Is control?</td>
+</tr>
+<tr>
+<td><code>is_sig_soundfile(s)</code></td>
+<td><code>dict</code></td>
+<td>Is soundfile?</td>
+</tr>
+<tr>
+<td><code>is_sig_soundfile_length(s)</code></td>
+<td><code>dict</code></td>
+<td>Is soundfile length?</td>
+</tr>
+<tr>
+<td><code>is_sig_soundfile_rate(s)</code></td>
+<td><code>dict</code></td>
+<td>Is soundfile rate?</td>
+</tr>
+<tr>
+<td><code>is_sig_soundfile_buffer(s)</code></td>
+<td><code>dict</code></td>
+<td>Is soundfile buffer?</td>
+</tr>
+</tbody>
+</table>
+<h3 id="utility">Utility<a class="headerlink" href="#utility" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>print_signal(sig, shared, max_size)</code></td>
+<td><code>str</code></td>
+<td>Print signal expression</td>
+</tr>
+<tr>
+<td><code>ffname(s)</code></td>
+<td><code>str</code></td>
+<td>Foreign function name</td>
+</tr>
+<tr>
+<td><code>ffarity(s)</code></td>
+<td><code>int</code></td>
+<td>Foreign function arity</td>
+</tr>
+<tr>
+<td><code>tree2str(s)</code></td>
+<td><code>str</code></td>
+<td>Convert tree to string</td>
+</tr>
+<tr>
+<td><code>xtended_arity(s)</code></td>
+<td><code>int</code></td>
+<td>Extended arity</td>
+</tr>
+<tr>
+<td><code>xtended_name(s)</code></td>
+<td><code>str</code></td>
+<td>Extended name</td>
+</tr>
+<tr>
+<td><code>is_nil(s)</code></td>
+<td><code>bool</code></td>
+<td>Is nil signal?</td>
+</tr>
+<tr>
+<td><code>create_lib_context()</code></td>
+<td></td>
+<td>Create library context (use <code>signal_context</code> instead)</td>
+</tr>
+<tr>
+<td><code>destroy_lib_context()</code></td>
+<td></td>
+<td>Destroy library context</td>
+</tr>
+</tbody>
+</table>
+<h3 id="helper-functions">Helper Functions<a class="headerlink" href="#helper-functions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sig_or_float(var)</code></td>
+<td><code>Signal</code></td>
+<td>Convert <code>float \| Signal</code> to Signal</td>
+</tr>
+<tr>
+<td><code>sig_or_int(var)</code></td>
+<td><code>Signal</code></td>
+<td>Convert <code>int \| Signal</code> to Signal</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
