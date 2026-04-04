@@ -1635,6 +1635,11 @@
 <td>Compute audio frames</td>
 </tr>
 <tr>
+<td><code>compute_timestamped(date_usec, count, inputs, outputs)</code></td>
+<td></td>
+<td>Compute with microsecond timestamp</td>
+</tr>
+<tr>
 <td><code>frame(inputs, outputs)</code></td>
 <td></td>
 <td>Compute a single frame (requires <code>-os</code> option)</td>
@@ -1648,6 +1653,11 @@
 <td><code>metadata()</code></td>
 <td><code>dict</code></td>
 <td>Get DSP metadata (name, author, etc.)</td>
+</tr>
+<tr>
+<td><code>delete()</code></td>
+<td></td>
+<td>Explicitly delete the underlying DSP instance</td>
 </tr>
 </tbody>
 </table>

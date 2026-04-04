@@ -601,6 +601,61 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#instance-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composition-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composition Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#math-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Math Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-checking-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Checking Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -659,6 +714,45 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enums" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enums
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Enums">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SType
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soperator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOperator
+      
+    </span>
+  </a>
   
 </li>
         
@@ -1259,6 +1353,61 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#instance-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instance Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composition-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composition Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#math-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Math Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-checking-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Checking Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1317,6 +1466,45 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enums" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enums
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Enums">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SType
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#soperator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOperator
+      
+    </span>
+  </a>
   
 </li>
         
@@ -1638,6 +1826,204 @@
 </tr>
 </tbody>
 </table>
+<h4 id="instance-methods">Instance Methods<a class="headerlink" href="#instance-methods" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>to_string(shared, max_size)</code></td>
+<td><code>str</code></td>
+<td>Convert to string representation</td>
+</tr>
+<tr>
+<td><code>print(shared, max_size)</code></td>
+<td></td>
+<td>Print signal expression</td>
+</tr>
+<tr>
+<td><code>create_source(name_app, lang, *args)</code></td>
+<td><code>str</code></td>
+<td>Generate source code</td>
+</tr>
+<tr>
+<td><code>simplify_to_normal_form()</code></td>
+<td><code>Signal</code></td>
+<td>Simplify to normal form</td>
+</tr>
+<tr>
+<td><code>ffname()</code></td>
+<td><code>str</code></td>
+<td>Foreign function name</td>
+</tr>
+<tr>
+<td><code>ffarity()</code></td>
+<td><code>int</code></td>
+<td>Foreign function arity</td>
+</tr>
+</tbody>
+</table>
+<h4 id="composition-methods">Composition Methods<a class="headerlink" href="#composition-methods" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>attach(other)</code></td>
+<td><code>Signal</code></td>
+<td>Attach signal</td>
+</tr>
+<tr>
+<td><code>delay(d)</code></td>
+<td><code>Signal</code></td>
+<td>Delay by <code>d</code> samples</td>
+</tr>
+<tr>
+<td><code>select2(s1, s2)</code></td>
+<td><code>Signal</code></td>
+<td>2-way selector</td>
+</tr>
+<tr>
+<td><code>select3(s1, s2, s3)</code></td>
+<td><code>Signal</code></td>
+<td>3-way selector</td>
+</tr>
+<tr>
+<td><code>int_cast()</code></td>
+<td><code>Signal</code></td>
+<td>Cast to integer</td>
+</tr>
+<tr>
+<td><code>float_cast()</code></td>
+<td><code>Signal</code></td>
+<td>Cast to float</td>
+</tr>
+<tr>
+<td><code>recursion()</code></td>
+<td><code>Signal</code></td>
+<td>Create recursive signal</td>
+</tr>
+<tr>
+<td><code>self_rec()</code></td>
+<td><code>Signal</code></td>
+<td>Self-reference for recursion</td>
+</tr>
+<tr>
+<td><code>self_n(id)</code></td>
+<td><code>Signal</code></td>
+<td>Multi-output self-reference</td>
+</tr>
+<tr>
+<td><code>recursion_n(rf)</code></td>
+<td><code>SignalVector</code></td>
+<td>Multi-output recursive signal</td>
+</tr>
+<tr>
+<td><code>vbargraph(label, min, max)</code></td>
+<td><code>Signal</code></td>
+<td>Vertical bargraph</td>
+</tr>
+<tr>
+<td><code>hbargraph(label, min, max)</code></td>
+<td><code>Signal</code></td>
+<td>Horizontal bargraph</td>
+</tr>
+</tbody>
+</table>
+<h4 id="operators">Operators<a class="headerlink" href="#operators" title="Permanent link">&para;</a></h4>
+<p><code>Signal</code> supports Python operators that map to Faust operations:</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Faust equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a + b</code></td>
+<td><code>sig_add(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a - b</code></td>
+<td><code>sig_sub(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a * b</code></td>
+<td><code>sig_mul(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a / b</code></td>
+<td><code>sig_div(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a % b</code></td>
+<td><code>sig_rem(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a == b</code></td>
+<td><code>sig_eq(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a != b</code></td>
+<td><code>sig_ne(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a &gt; b</code></td>
+<td><code>sig_gt(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a &gt;= b</code></td>
+<td><code>sig_ge(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a &lt; b</code></td>
+<td><code>sig_lt(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a &lt;= b</code></td>
+<td><code>sig_le(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a &amp; b</code></td>
+<td><code>sig_and(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a \| b</code></td>
+<td><code>sig_or(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a ^ b</code></td>
+<td><code>sig_xor(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a &lt;&lt; b</code></td>
+<td><code>sig_leftshift(a, b)</code></td>
+</tr>
+<tr>
+<td><code>a &gt;&gt; b</code></td>
+<td><code>sig_lrightshift(a, b)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Reverse operators (<code>__radd__</code>, etc.) are supported for <code>int</code> and <code>float</code> left operands.</p>
+<h4 id="math-methods">Math Methods<a class="headerlink" href="#math-methods" title="Permanent link">&para;</a></h4>
+<p>Unary: <code>abs()</code>, <code>acos()</code>, <code>asin()</code>, <code>atan()</code>, <code>ceil()</code>, <code>cos()</code>, <code>exp()</code>, <code>exp10()</code>, <code>floor()</code>, <code>log()</code>, <code>log10()</code>, <code>rint()</code>, <code>sin()</code>, <code>sqrt()</code>, <code>tan()</code></p>
+<p>Binary: <code>delay()</code>, <code>remainder()</code>, <code>pow()</code>, <code>min()</code>, <code>max()</code>, <code>fmod()</code></p>
+<p>All return <code>Signal</code>.</p>
+<h4 id="type-checking-methods">Type Checking Methods<a class="headerlink" href="#type-checking-methods" title="Permanent link">&para;</a></h4>
+<p><code>is_int()</code>, <code>is_float()</code>, <code>is_input()</code>, <code>is_output()</code>, <code>is_delay1()</code>, <code>is_delay()</code>, <code>is_prefix()</code>, <code>is_read_table()</code>, <code>is_write_table()</code>, <code>is_gen()</code>, <code>is_doc_constant_tbl()</code>, <code>is_doc_write_tbl()</code>, <code>is_doc_access_tbl()</code>, <code>is_select2()</code>, <code>is_assert_bounds()</code>, <code>is_highest()</code>, <code>is_lowest()</code>, <code>is_bin_op()</code>, <code>is_ffun()</code>, <code>is_fconst()</code>, <code>is_fvar()</code>, <code>is_proj()</code>, <code>is_rec()</code>, <code>is_int_cast()</code>, <code>is_float_cast()</code>, <code>is_button()</code>, <code>is_checkbox()</code>, <code>is_waveform()</code>, <code>is_hslider()</code>, <code>is_vslider()</code>, <code>is_num_entry()</code>, <code>is_hbargraph()</code>, <code>is_vbargraph()</code>, <code>is_attach()</code>, <code>is_enable()</code>, <code>is_control()</code>, <code>is_soundfile()</code>, <code>is_soundfile_length()</code>, <code>is_soundfile_rate()</code>, <code>is_soundfile_buffer()</code></p>
+<p>All return <code>dict</code> with extracted parameters (or empty <code>dict</code> if type doesn't match), except <code>is_waveform()</code> which returns <code>bool</code>.</p>
 <hr />
 <h3 id="signalvector">SignalVector<a class="headerlink" href="#signalvector" title="Permanent link">&para;</a></h3>
 <p>A vector of Signal expressions (wraps <code>std::vector&lt;CTree*&gt;</code>).</p>
@@ -1704,6 +2090,12 @@
 </tbody>
 </table>
 <hr />
+<h2 id="enums">Enums<a class="headerlink" href="#enums" title="Permanent link">&para;</a></h2>
+<h3 id="stype">SType<a class="headerlink" href="#stype" title="Permanent link">&para;</a></h3>
+<p>Signal type: <code>kSInt</code> (integer), <code>kSReal</code> (float). Used with <code>sig_fconst</code>, <code>sig_fvar</code>.</p>
+<h3 id="soperator">SOperator<a class="headerlink" href="#soperator" title="Permanent link">&para;</a></h3>
+<p>Binary operator type: <code>kAdd</code>, <code>kSub</code>, <code>kMul</code>, <code>kDiv</code>, <code>kRem</code>, <code>kLsh</code>, <code>kARsh</code>, <code>kLRsh</code>, <code>kGT</code>, <code>kLT</code>, <code>kGE</code>, <code>kLE</code>, <code>kEQ</code>, <code>kNE</code>, <code>kAND</code>, <code>kOR</code>, <code>kXOR</code>. Used with <code>sig_bin_op</code>.</p>
+<hr />
 <h2 id="module-level-functions">Module-Level Functions<a class="headerlink" href="#module-level-functions" title="Permanent link">&para;</a></h2>
 <h3 id="primitives">Primitives<a class="headerlink" href="#primitives" title="Permanent link">&para;</a></h3>
 <table>
@@ -1724,6 +2116,11 @@
 <td><code>sig_real(n)</code></td>
 <td><code>Signal</code></td>
 <td>Float constant</td>
+</tr>
+<tr>
+<td><code>sig_float(n)</code></td>
+<td><code>Signal</code></td>
+<td>Alias for <code>sig_real</code></td>
 </tr>
 <tr>
 <td><code>sig_input(idx)</code></td>
