@@ -366,6 +366,71 @@ class DependencyMgr(ShellCmd):
         self.install_sys_pkgs()
 
 
+def patch_headers_for_msvc(include_dir: Path):
+    """Patch Faust headers for MSVC compatibility.
+
+    MSVC does not support Variable Length Arrays (VLAs), which are used in
+    sound-player.h. This replaces VLAs with std::vector. The function is
+    idempotent -- it checks whether the patch has already been applied.
+    """
+    log = logging.getLogger("patch_headers_for_msvc")
+    sound_player_h = include_dir / "faust" / "dsp" / "sound-player.h"
+    if not sound_player_h.exists():
+        log.warning("sound-player.h not found at %s, skipping", sound_player_h)
+        return
+
+    content = sound_player_h.read_text()
+
+    if "#include <vector>" in content:
+        log.info("sound-player.h already patched for MSVC")
+        return
+
+    log.info("patching sound-player.h for MSVC compatibility (VLA -> std::vector)")
+
+    # Add vector include after mutex
+    content = content.replace(
+        "#include <mutex>\n",
+        "#include <mutex>\n#include <vector>\n"
+    )
+
+    # Fix VLA in sound_memory_player constructor
+    content = content.replace(
+        "FAUSTFLOAT buffer[BUFFER_SIZE * fInfo.channels];",
+        "std::vector<FAUSTFLOAT> buffer(BUFFER_SIZE * fInfo.channels);"
+    )
+    content = content.replace(
+        "nbf = fReaderFun(fFile, buffer, BUFFER_SIZE);",
+        "nbf = fReaderFun(fFile, buffer.data(), BUFFER_SIZE);"
+    )
+
+    # Fix VLA in sound_dtd_player::playSlice
+    content = content.replace(
+        "FAUSTFLOAT buffer[count * fInfo.channels];",
+        "std::vector<FAUSTFLOAT> buffer(count * fInfo.channels);"
+    )
+    content = content.replace(
+        "ringbuffer_read(fBuffer, (char*)buffer, convertFromFrames(count));",
+        "ringbuffer_read(fBuffer, (char*)buffer.data(), convertFromFrames(count));"
+    )
+
+    # Fix VLA in sound_dtd_player::setFrame
+    content = content.replace(
+        "FAUSTFLOAT buffer[HALF_RING_BUFFER_SIZE * fInfo.channels];",
+        "std::vector<FAUSTFLOAT> buffer(HALF_RING_BUFFER_SIZE * fInfo.channels);"
+    )
+    content = content.replace(
+        "size_t nbf = readAndWrite(buffer, HALF_RING_BUFFER_SIZE);",
+        "size_t nbf = readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE);"
+    )
+    content = content.replace(
+        "readAndWrite(buffer, HALF_RING_BUFFER_SIZE - nbf);",
+        "readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE - nbf);"
+    )
+
+    sound_player_h.write_text(content)
+    log.info("sound-player.h patched successfully")
+
+
 class Builder(ShellCmd):
     """Abstract builder class with additional methods common to subclasses."""
 
@@ -714,6 +779,8 @@ class FaustBuilder(Builder):
         self.copy_sharedlib()
         if PLATFORM in ["Linux", "Darwin"]:
             self.copy_headers()
+        if PLATFORM == "Windows":
+            patch_headers_for_msvc(self.project.include)
         # skip since `resources` already contains these
         # self.copy_stdlib()
         # self.copy_examples()
@@ -1077,68 +1144,6 @@ class FaustLLVMBuilder(Builder):
         self.log.info("installing LLVM-compatible headers to %s", dst_headers)
         self.copy(src_headers, dst_headers)
 
-    def patch_headers_for_msvc(self):
-        """Patch headers for MSVC compatibility.
-
-        MSVC does not support Variable Length Arrays (VLAs), which are used in
-        sound-player.h. This method patches those usages to use std::vector instead.
-        """
-        sound_player_h = self.project.include / "faust" / "dsp" / "sound-player.h"
-        if not sound_player_h.exists():
-            self.log.warning("sound-player.h not found, skipping MSVC patch")
-            return
-
-        content = sound_player_h.read_text()
-
-        # Check if already patched (look for std::vector include)
-        if "#include <vector>" in content:
-            self.log.info("sound-player.h already patched for MSVC")
-            return
-
-        self.log.info("patching sound-player.h for MSVC compatibility (VLA -> std::vector)")
-
-        # Add vector include after mutex
-        content = content.replace(
-            "#include <mutex>\n",
-            "#include <mutex>\n#include <vector>\n"
-        )
-
-        # Fix VLA in sound_memory_player constructor
-        content = content.replace(
-            "FAUSTFLOAT buffer[BUFFER_SIZE * fInfo.channels];",
-            "std::vector<FAUSTFLOAT> buffer(BUFFER_SIZE * fInfo.channels);"
-        )
-        content = content.replace(
-            "nbf = fReaderFun(fFile, buffer, BUFFER_SIZE);",
-            "nbf = fReaderFun(fFile, buffer.data(), BUFFER_SIZE);"
-        )
-
-        # Fix VLA in sound_dtd_player::playSlice
-        content = content.replace(
-            "FAUSTFLOAT buffer[count * fInfo.channels];",
-            "std::vector<FAUSTFLOAT> buffer(count * fInfo.channels);"
-        )
-        content = content.replace(
-            "ringbuffer_read(fBuffer, (char*)buffer, convertFromFrames(count));",
-            "ringbuffer_read(fBuffer, (char*)buffer.data(), convertFromFrames(count));"
-        )
-
-        # Fix VLA in sound_dtd_player::setFrame
-        content = content.replace(
-            "FAUSTFLOAT buffer[HALF_RING_BUFFER_SIZE * fInfo.channels];",
-            "std::vector<FAUSTFLOAT> buffer(HALF_RING_BUFFER_SIZE * fInfo.channels);"
-        )
-        content = content.replace(
-            "size_t nbf = readAndWrite(buffer, HALF_RING_BUFFER_SIZE);",
-            "size_t nbf = readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE);"
-        )
-        content = content.replace(
-            "readAndWrite(buffer, HALF_RING_BUFFER_SIZE - nbf);",
-            "readAndWrite(buffer.data(), HALF_RING_BUFFER_SIZE - nbf);"
-        )
-
-        sound_player_h.write_text(content)
-        self.log.info("sound-player.h patched successfully")
 
     def process(self):
         """Run the full download and install process."""
@@ -1159,7 +1164,7 @@ class FaustLLVMBuilder(Builder):
 
         # Apply MSVC-specific patches on Windows
         if PLATFORM == "Windows":
-            self.patch_headers_for_msvc()
+            patch_headers_for_msvc(self.project.include)
 
         self.log.info("FaustLLVMBuilder DONE: %s installed", self.staticlib_name)
 

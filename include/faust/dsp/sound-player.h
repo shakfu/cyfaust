@@ -29,6 +29,7 @@ architecture section is not modified.
 #include <string>
 #include <iostream>
 #include <mutex>
+#include <vector>
 
 #include "faust/dsp/dsp.h"
 #include "faust/gui/ring-buffer.h"
@@ -243,7 +244,8 @@ class sound_memory_player : public sound_base_player {
                 fBuffer[chan] = new FAUSTFLOAT[fInfo.frames];
             }
             
-            FAUSTFLOAT buffer[BUFFER_SIZE * fInfo.channels];
+            std::vector<FAUSTFLOAT> buffer_vec(BUFFER_SIZE * fInfo.channels);
+            FAUSTFLOAT* buffer = buffer_vec.data();
             sf_count_t nbf, index = 0;
             
             do {
@@ -290,7 +292,8 @@ class sound_dtd_player : public sound_base_player {
             if (read_space_frames >= count) {
                 
                 // Read from ringbuffer
-                FAUSTFLOAT buffer[count * fInfo.channels];
+                std::vector<FAUSTFLOAT> buffer_vec(count * fInfo.channels);
+                FAUSTFLOAT* buffer = buffer_vec.data();
                 ringbuffer_read(fBuffer, (char*)buffer, convertFromFrames(count));
                 
                 // Deinterleave and write to output
@@ -332,7 +335,8 @@ class sound_dtd_player : public sound_base_player {
             
             // If ringbuffer has to be filled
             if (write_space_frames > HALF_RING_BUFFER_SIZE) {
-                FAUSTFLOAT buffer[HALF_RING_BUFFER_SIZE * fInfo.channels];
+                std::vector<FAUSTFLOAT> buffer_vec(HALF_RING_BUFFER_SIZE * fInfo.channels);
+                FAUSTFLOAT* buffer = buffer_vec.data();
                 // Tries to read and write HALF_RING_BUFFER_SIZE frames
                 size_t nbf = readAndWrite(buffer, HALF_RING_BUFFER_SIZE);
                 // End of file is reached

@@ -33,8 +33,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - Added `make docs-diagram` target to regenerate architecture diagram
 - Added `make qa` pipeline: ruff lint, mypy typecheck, ruff format
 - Added ruff and mypy configuration in `pyproject.toml`
+- Added `cyfaust-windows-release.yml` workflow for experimental Windows wheel builds (static, interpreter backend, Python 3.10-3.14)
 
 ### Changed
+
+- Extracted `patch_headers_for_msvc()` from `FaustLLVMBuilder` into a standalone idempotent function in `manage.py`, now called from both `FaustBuilder` and `FaustLLVMBuilder` on Windows
 
 - Reorganized `docs/devnotes/` to `docs/dev/` and cleaned up stale files
 - Streamlined README.md to link to docs site for detailed build/CLI/API information
@@ -70,8 +73,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Fixed `is_sig_doc_access_tbl` using wrong dict keys (`n`/`widx` instead of `tbl`/`ridx`) -- copy-paste error from `is_sig_doc_write_tbl`
 
-- Fixed Variable Length Array (VLA) usage in `include/faust/dsp/sound-player.h`:
-  - MSVC does not support VLAs; replaced with `std::vector` for cross-platform compatibility
+- Fixed remaining VLAs in `include/faust/dsp/sound-player.h` (3 locations) that caused MSVC C2131 errors on Windows CI
 
 - Fixed `src/cyfaust/__init__.py` to automatically locate `faust.dll` on Windows:
   - Searches project lib directory for development builds
