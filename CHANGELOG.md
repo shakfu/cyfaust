@@ -15,6 +15,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- Re-enabled Windows in `cyfaust-release.yml` workflow (static interpreter wheels for Python 3.10-3.14, with sndfile/samplerate built from source and non-audio test suite)
+
+### Changed
+
+- Extracted `patch_headers_for_msvc()` from `FaustLLVMBuilder` into a standalone idempotent function in `manage.py`, now called from both `FaustBuilder` and `FaustLLVMBuilder` on Windows
+- Added static build (`cyfaust.cyfaust`) import fallbacks to `test_box_coverage.py` and `test_signal_coverage.py` so they work on Windows CI
+
+### Fixed
+
+- Fixed remaining VLAs in `include/faust/dsp/sound-player.h` (3 locations) that caused MSVC C2131 errors on Windows CI
+
 ## [0.1.2]
 
 ### Added
@@ -33,12 +46,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - Added `make docs-diagram` target to regenerate architecture diagram
 - Added `make qa` pipeline: ruff lint, mypy typecheck, ruff format
 - Added ruff and mypy configuration in `pyproject.toml`
-- Added `cyfaust-windows-release.yml` workflow for experimental Windows wheel builds (static, interpreter backend, Python 3.10-3.14)
 
 ### Changed
-
-- Extracted `patch_headers_for_msvc()` from `FaustLLVMBuilder` into a standalone idempotent function in `manage.py`, now called from both `FaustBuilder` and `FaustLLVMBuilder` on Windows
-- Added static build (`cyfaust.cyfaust`) import fallbacks to `test_box_coverage.py` and `test_signal_coverage.py` so they work on Windows CI
 
 - Reorganized `docs/devnotes/` to `docs/dev/` and cleaned up stale files
 - Streamlined README.md to link to docs site for detailed build/CLI/API information
@@ -74,13 +83,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Fixed `is_sig_doc_access_tbl` using wrong dict keys (`n`/`widx` instead of `tbl`/`ridx`) -- copy-paste error from `is_sig_doc_write_tbl`
 
-- Fixed remaining VLAs in `include/faust/dsp/sound-player.h` (3 locations) that caused MSVC C2131 errors on Windows CI
+- Fixed Variable Length Array (VLA) usage in `include/faust/dsp/sound-player.h`:
+  - MSVC does not support VLAs; replaced with `std::vector` for cross-platform compatibility
 
 - Fixed `src/cyfaust/__init__.py` to automatically locate `faust.dll` on Windows:
   - Searches project lib directory for development builds
   - Works with delvewheel-bundled wheels for distribution
 
 - Removed `src/cyfaust/resources` symlink placeholder that caused wheel build conflicts on Windows
+
+
 
 ## [0.1.1]
 

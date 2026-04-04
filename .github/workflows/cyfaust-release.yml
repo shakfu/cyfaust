@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]  # windows-latest disabled until sndfile support added
+        os: [macos-latest, ubuntu-latest, windows-latest]
         py_version: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
@@ -29,7 +29,18 @@ jobs:
           ${{ github.workspace }}/lib/libfaust.*
           ${{ github.workspace }}/lib/faust.*
           ${{ github.workspace }}/lib/static/libfaust.*
+          ${{ github.workspace }}/lib/static/faust.*
         key: ${{ runner.os }}-libfaust
+
+    - name: Cache sndfile libs (Windows)
+      if: runner.os == 'Windows'
+      id: cache-sndfile
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ github.workspace }}/lib/static/sndfile.lib
+          ${{ github.workspace }}/lib/static/samplerate.lib
+        key: windows-sndfile
 
     - name: Setup python
       uses: actions/setup-python@v5
@@ -43,6 +54,11 @@ jobs:
 
     - name: Display python version
       run: python3 --version
+      if: runner.os != 'Windows'
+
+    - name: Display python version (Windows)
+      if: runner.os == 'Windows'
+      run: python --version
 
     - name: Set macOS deployment target
       if: runner.os == 'macOS'
@@ -62,15 +78,24 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y libsndfile1-dev libsamplerate0-dev libasound2-dev
 
     - name: Setup faust
-      if: steps.cache-libfaust.outputs.cache-hit != 'true'
+      if: steps.cache-libfaust.outputs.cache-hit != 'true' && runner.os != 'Windows'
       run: python3 scripts/manage.py setup --faust
 
-    # - name: Build and test (dynamic)
-    #   env:
-    #     CMAKE_ARGS: "-DSTATIC=OFF"
-    #   run: |
-    #     uv sync
-    #     uv run pytest -vv tests
+    - name: Setup faust (Windows)
+      if: steps.cache-libfaust.outputs.cache-hit != 'true' && runner.os == 'Windows'
+      run: python scripts/manage.py setup --faust
+
+    - name: Build libsamplerate (Windows)
+      if: runner.os == 'Windows' && steps.cache-sndfile.outputs.cache-hit != 'true'
+      run: python scripts/manage.py setup --samplerate
+
+    - name: Build libsndfile (Windows)
+      if: runner.os == 'Windows' && steps.cache-sndfile.outputs.cache-hit != 'true'
+      run: python scripts/manage.py setup --sndfile
+
+    - name: Generate static sources (Windows)
+      if: runner.os == 'Windows'
+      run: python scripts/generate_static.py
 
     - name: Build wheel (static for release)
       env:
@@ -92,10 +117,26 @@ jobs:
         pip install delocate
         delocate-wheel -v dist/*.whl
 
-    - name: Test wheel
+    - name: Test wheel (macOS/Linux)
+      if: runner.os != 'Windows'
       run: |
         pip install dist/*.whl
         python -c "import cyfaust; print('cyfaust imported successfully')"
+
+    - name: Test wheel (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        pip install (Get-ChildItem dist/*.whl).FullName
+        python -c "import cyfaust; print('cyfaust imported successfully')"
+        python -c "from cyfaust import get_version; print('libfaust version:', get_version())"
+      shell: pwsh
+
+    - name: Run tests (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        pip install pytest numpy
+        pytest tests/test_cyfaust_common.py tests/test_box_coverage.py tests/test_signal_coverage.py tests/test_new_methods.py -v -o "pythonpath="
+      shell: pwsh
 
     - uses: actions/upload-artifact@v4
       with:
