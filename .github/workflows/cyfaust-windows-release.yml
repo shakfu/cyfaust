@@ -83,7 +83,7 @@ jobs:
     - name: Run tests (non-audio)
       run: |
         pip install pytest numpy
-        pytest tests/test_cyfaust_common.py tests/test_box_coverage.py tests/test_signal_coverage.py tests/test_new_methods.py -v
+        pytest tests/test_cyfaust_common.py tests/test_box_coverage.py tests/test_signal_coverage.py tests/test_new_methods.py -v -o "pythonpath="
       shell: pwsh
 
     - uses: actions/upload-artifact@v4
