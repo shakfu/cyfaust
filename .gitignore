@@ -1,11 +1,12 @@
 # editor config
 .vscode
 
-# don't include project 'prefix' folders 
+# don't include project 'prefix' folders
 bin/
 lib/
 share/
 python/
+site/
 
 # don't include test output
 tests/output/
@@ -121,4 +122,3 @@ Dump*.txt
 # claude
 .claude
 CLAUDE.md
-

@@ -64,6 +64,8 @@ dev = [
     "delvewheel>=1.11.2; os_name == 'nt'",
     "delocate>=0.13.0; os_name == 'darwin'",
     "auditwheel>=6.6.0; os_name == 'linux'",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.6",
 ]
 
 [build-system]

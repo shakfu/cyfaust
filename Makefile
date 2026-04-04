@@ -54,7 +54,8 @@ export CMAKE_ARGS := $(CMAKE_OPTS)
 .PHONY: all sync faust faustwithllvm samplerate sndfile build rebuild test wheel sdist \
         generate-static release verify-sync pytest clean distclean reset help \
         wheel-static wheel-dynamic wheel-windows wheel-llvm wheel-repair wheel-check \
-        publish publish-test build-llvm test-llvm
+        publish publish-test build-llvm test-llvm \
+        docs docs-serve docs-deploy docs-clean
 
 # Default target
 all: build
@@ -198,6 +199,26 @@ pytest: faust
 	@rm -f DumpCode-*.txt DumpMem-*.txt
 
 # ----------------------------------------------------------------------------
+# Documentation (via mkdocs)
+# ----------------------------------------------------------------------------
+
+# Build documentation site
+docs:
+	uv run mkdocs build
+
+# Serve documentation locally with live reload
+docs-serve:
+	uv run mkdocs serve
+
+# Deploy documentation to GitHub Pages
+docs-deploy:
+	uv run mkdocs gh-deploy --force
+
+# Clean built documentation
+docs-clean:
+	@rm -rf site/
+
+# ----------------------------------------------------------------------------
 # Cleanup
 # ----------------------------------------------------------------------------
 
@@ -206,6 +227,7 @@ clean:
 	@$(PYTHON) scripts/manage.py clean
 	@rm -rf build/ dist/ *.egg-info/ src/*.egg-info/
 	@rm -rf .pytest_cache/ CMakeCache.txt CMakeFiles/
+	@rm -rf site/
 	@rm -f DumpCode-*.txt DumpMem-*.txt
 	@find . -name "*.so" -delete 2>/dev/null || true
 	@find . -name "*.pyd" -delete 2>/dev/null || true
@@ -254,6 +276,12 @@ help:
 	@echo "  wheel-check - Check wheel/sdist with twine"
 	@echo "  publish-test - Publish to TestPyPI"
 	@echo "  publish     - Publish to PyPI"
+	@echo ""
+	@echo "Documentation targets:"
+	@echo "  docs        - Build documentation site"
+	@echo "  docs-serve  - Serve docs locally with live reload"
+	@echo "  docs-deploy - Deploy docs to GitHub Pages"
+	@echo "  docs-clean  - Remove built documentation"
 	@echo ""
 	@echo "Cleanup targets:"
 	@echo "  clean       - Remove build artifacts"

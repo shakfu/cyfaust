@@ -1,0 +1,53 @@
+site_name: cyfaust
+site_description: Cython wrapper for the Faust DSP language and RtAudio
+site_url: https://github.com/shakfu/cyfaust
+repo_url: https://github.com/shakfu/cyfaust
+repo_name: shakfu/cyfaust
+
+docs_dir: docs/mkdocs
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - API Reference:
+    - Overview: api/index.md
+    - cyfaust.interp: api/interp.md
+    - cyfaust.box: api/box.md
+    - cyfaust.signal: api/signal.md
+    - cyfaust.common: api/common.md
+    - cyfaust.player: api/player.md
+  - CLI: cli.md
