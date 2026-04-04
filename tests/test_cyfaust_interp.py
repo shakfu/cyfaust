@@ -9,7 +9,7 @@ try:
     from cyfaust.interp import (
         RtAudioDriver,
         InterpreterDspFactory,
-        get_version, 
+        get_version,
         create_dsp_factory_from_file,
         create_dsp_factory_from_string,
         create_dsp_factory_from_boxes,
@@ -18,24 +18,29 @@ try:
         get_all_dsp_factories,
         get_dsp_factory_from_sha_key,
         delete_all_dsp_factories,
-
         generate_sha1,
         expand_dsp_from_file,
         expand_dsp_from_string,
         generate_auxfiles_from_file,
     )
     from cyfaust.signal import (
-        signal_context, SignalVector, 
-        sig_input, sig_int, sig_delay, sig_real,
+        signal_context,
+        SignalVector,
+        sig_input,
+        sig_int,
+        sig_delay,
+        sig_real,
     )
     from cyfaust.box import (
-        box_context, box_float, box_int,
+        box_context,
+        box_float,
+        box_int,
     )
-except (ModuleNotFoundError, ImportError) as err:
+except (ModuleNotFoundError, ImportError):
     from cyfaust.cyfaust import (
         RtAudioDriver,
         InterpreterDspFactory,
-        get_version, 
+        get_version,
         create_dsp_factory_from_file,
         create_dsp_factory_from_string,
         create_dsp_factory_from_boxes,
@@ -43,17 +48,19 @@ except (ModuleNotFoundError, ImportError) as err:
         generate_auxfiles_from_string,
         get_all_dsp_factories,
         get_dsp_factory_from_sha_key,
-        delete_all_dsp_factories,
-
         generate_sha1,
         expand_dsp_from_file,
         expand_dsp_from_string,
         generate_auxfiles_from_file,
-
-        signal_context, SignalVector, 
-        sig_input, sig_int, sig_delay, sig_real,
-
-        box_context, box_float, box_int,
+        signal_context,
+        SignalVector,
+        sig_input,
+        sig_int,
+        sig_delay,
+        sig_real,
+        box_context,
+        box_float,
+        box_int,
     )
 
 from testutils import print_section, print_entry
@@ -71,13 +78,14 @@ SKIP_AUDIO = False
 ## ---------------------------------------------------------------------------
 ## utility testing functions
 
+
 def dsp_from_file(testname, dsp_path, skip_audio=False, *args):
 
     print_entry(testname)
 
     factory = create_dsp_factory_from_file(dsp_path, *args)
     assert factory
-    
+
     print("compile options:", factory.get_compile_options())
     print("library list:", factory.get_library_list())
     print("sha key", factory.get_sha_key())
@@ -88,7 +96,7 @@ def dsp_from_file(testname, dsp_path, skip_audio=False, *args):
     # FIXME: doesn't work!!
     # ui = PrintUI()
     # dsp.build_user_interface(ui)
-    
+
     # bypass
     dsp.build_user_interface()
 
@@ -103,7 +111,8 @@ def dsp_from_file(testname, dsp_path, skip_audio=False, *args):
 
     return True
 
-def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=False, *args):
+
+def dsp_from_string(testname, dsp_string, dump_to_bitcode=False, skip_audio=False, *args):
     print_entry(testname)
 
     factory = create_dsp_factory_from_string("FaustDSP", dsp_string, *args)
@@ -111,7 +120,7 @@ def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=Fal
 
     if dump_to_bitcode:
         factory.write_to_bitcode_file(TEMP_PATH)
-        
+
     print("compile options:", factory.get_compile_options())
     print("library list:", factory.get_library_list())
     print("include pathnames:", factory.get_include_pathnames())
@@ -120,7 +129,7 @@ def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=Fal
 
     dsp = factory.create_dsp_instance()
     assert dsp
-    
+
     dsp.build_user_interface()
 
     if not skip_audio:
@@ -143,6 +152,7 @@ def test_interp_version():
 
     assert get_version()
 
+
 def test_interp_create_dsp_factory_from_file1():
     assert dsp_from_file(
         testname="test_interp_create_dsp_factory_from_file1",
@@ -158,12 +168,14 @@ def test_interp_create_dsp_factory_from_file2():
         skip_audio=SKIP_AUDIO,
     )
 
+
 def test_interp_create_dsp_factory_from_file3():
     assert dsp_from_file(
         testname="test_interp_create_dsp_factory_from_file3",
         dsp_path="tests/dsp/vco.dsp",
         skip_audio=SKIP_AUDIO,
     )
+
 
 def test_interp_create_dsp_factory_from_string1():
     assert dsp_from_string(
@@ -172,6 +184,7 @@ def test_interp_create_dsp_factory_from_string1():
         dump_to_bitcode=True,
         skip_audio=SKIP_AUDIO,
     )
+
 
 def test_get_dsp_factory_from_sha_key():
     print_entry("test_get_dsp_factory_from_sha_key")
@@ -196,6 +209,7 @@ def test_interp_warning_message():
     print("compile options:", factory.get_compile_options())
     print("warning msgs:", factory.get_warning_messages())
 
+
 def test_interp_read_dsp_factory_from_bitcode_file():
     print_entry("test_interp_read_dsp_factory_from_bitcode_file")
 
@@ -208,7 +222,7 @@ def test_interp_read_dsp_factory_from_bitcode_file():
 
     print("factory name:", factory.get_name())
     print("factory key:", factory.get_sha_key())
-        
+
     dsp = factory.create_dsp_instance()
     assert dsp
 
@@ -225,7 +239,7 @@ def test_interp_read_dsp_factory_from_bitcode_file():
         audio.stop()
 
 
-# FIXME: control output location of svg file "-o out.svg" doesn't work  
+# FIXME: control output location of svg file "-o out.svg" doesn't work
 def test_interp_generate_auxfiles_from_string():
     print_entry("test_interp_generate_auxfiles_from_string")
     eg = "process = _,3.14 : +;"
@@ -253,7 +267,7 @@ def test_create_dsp_factory_from_boxes():
 
         print("factory name:", factory.get_name())
         print("factory key:", factory.get_sha_key())
-    
+
         dsp = factory.create_dsp_instance()
         assert dsp
 
@@ -279,8 +293,8 @@ def test_create_dsp_factory_from_signals2():
     with signal_context():
         sv = SignalVector()
         s1 = sig_delay(sig_input(0), sig_int(500)) + sig_real(0.5)
-        sv.add(s1);
-        sv.add(s1);
+        sv.add(s1)
+        sv.add(s1)
         factory = create_dsp_factory_from_signals("test4", sv)
         assert factory
         print("compile options:", factory.get_compile_options())
@@ -290,15 +304,15 @@ def test_create_dsp_factory_from_signals2():
         assert dsp
 
 
-
-
 ## ---------------------------------------------------------------------------
 ## faust/dsp/libfaust.h
 ##
 
+
 def test_generate_sha1():
     print_entry("test_generate_sha1")
-    assert generate_sha1("hello") == 'AAF4C61DDCC5E8A2DABEDE0F3B482CD9AEA9434D'
+    assert generate_sha1("hello") == "AAF4C61DDCC5E8A2DABEDE0F3B482CD9AEA9434D"
+
 
 def test_expand_dsp_from_file():
     print_entry("test_expand_dsp_from_file")
@@ -307,6 +321,7 @@ def test_expand_dsp_from_file():
     assert sha
     assert expanded
     # print(expanded)
+
 
 def test_expand_dsp_from_string():
     print_entry("test_expand_dsp_from_string")
@@ -317,6 +332,7 @@ def test_expand_dsp_from_string():
     assert sha
     assert expanded
 
+
 def test_generate_auxfiles_from_file():
     print_entry("test_generate_auxfiles_from_file")
     out_cpp = os.path.join(TEMP_DIR, "out.cpp")
@@ -326,11 +342,11 @@ def test_generate_auxfiles_from_file():
     assert svg_folder.exists()
     assert process_svg.exists()
     shutil.rmtree(svg_folder)
-    
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print_section("testing cyfaust.interp")
-    if 'TRACE' in os.environ:
+    if "TRACE" in os.environ:
         import tracemalloc
     test_interp_version()
     test_interp_create_dsp_factory_from_file1()
@@ -352,13 +368,10 @@ if __name__ == '__main__':
     test_expand_dsp_from_file()
     test_expand_dsp_from_string()
     test_generate_auxfiles_from_file()
-    if 'TRACE' in os.environ:
+    if "TRACE" in os.environ:
         print_entry("TRACEMALLOC ANALYSIS")
         snapshot = tracemalloc.take_snapshot()
-        top_stats = snapshot.statistics('lineno')
+        top_stats = snapshot.statistics("lineno")
         print("[ Top 10 ]")
         for stat in top_stats[:10]:
             print(stat)
-
-
-

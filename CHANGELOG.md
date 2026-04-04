@@ -13,11 +13,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ---
 
-## [0.0.x]
+## [Unreleased]
 
 ## [0.1.2]
 
 ### Added
+
+- Added mkdocs documentation site at <https://shakfu.github.io/cyfaust/>
+  - New Examples page with advanced usage patterns (parameter control, frame processing, cloning, timestamped compute, initialization lifecycle)
+  - New Building from Source page consolidating build instructions, platform prerequisites, build options, and LLVM backend details
+  - New Developer Notes section with validated internal references (resource cleanup, Box API design, Soundfile API, useful links)
+  - Complete CLI reference documenting all 10 commands (added play, params, validate, bitcode, json)
+  - Architecture diagram (d2/SVG) on the API Reference overview page
+  - Documented Box and Signal OO instance methods, operators, math methods, and type checking in API docs
+  - Documented `SType`/`SOperator` enums and DSP conversion functions in API docs
+- Added `.pyi` type stub files for all 5 Cython modules (`interp`, `box`, `signal`, `common`, `player`) with `py.typed` marker for mypy/IDE support
+- Added `test_box_coverage.py` with 171 tests covering primitives, composition, operators, arithmetic, bitwise, comparison, logical, math, UI elements, groups, selectors, tables, type checking, DSP conversion, and BoxVector (coverage ~12% -> ~65%)
+- Added `test_signal_coverage.py` with 153 tests covering primitives, arithmetic, bitwise, comparison, logical, math, delay, casting, tables, soundfiles, selectors, recursion, UI elements, attach, foreign functions, type checking with dict key validation, normalization, source generation, Signal OO interface, SignalVector, Interval, and enums (coverage ~6% -> ~65%)
+- Added `make docs-diagram` target to regenerate architecture diagram
+- Added `make qa` pipeline: ruff lint, mypy typecheck, ruff format
+- Added ruff and mypy configuration in `pyproject.toml`
+
+### Changed
+
+- Reorganized `docs/devnotes/` to `docs/dev/` and cleaned up stale files
+- Streamlined README.md to link to docs site for detailed build/CLI/API information
+- Updated documentation link in `pyproject.toml` to point to the docs site
+- Extracted duplicated UI regex patterns in `__main__.py` into module-level `_UI_PATTERNS`
+- Fixed Makefile lint target to reference `tests/` (was `test/`)
+- Fixed explicit re-export in `src/cyfaust/__init__.py` for ruff F401
+- Added `noqa` annotations for star imports in static build `__init__.py`
 
 - Added full Windows support for dynamic builds with `delvewheel` integration:
   - New `wheel-windows` Makefile target builds a complete Windows wheel in one shot
@@ -31,8 +56,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Added CMake build-time check that prevents LLVM builds on Windows with helpful error message
 
-### Changed
-
 - Updated Makefile for Windows compatibility:
   - Auto-detect platform and use `python` instead of `python3` on Windows
   - Use `.lib` extension for static libraries on Windows
@@ -41,7 +64,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - Updated CMakeLists.txt for Windows:
   - Added libsndfile and libsamplerate static library linking on Windows
 
+- Removed stale developer docs: `debug_mode_anaysis.md`, `x86_errors.md`, `ci/` directory, `faust-gui.md`, `universal2.md`
+
 ### Fixed
+
+- Fixed `is_sig_doc_access_tbl` using wrong dict keys (`n`/`widx` instead of `tbl`/`ridx`) -- copy-paste error from `is_sig_doc_write_tbl`
 
 - Fixed Variable Length Array (VLA) usage in `include/faust/dsp/sound-player.h`:
   - MSVC does not support VLAs; replaced with `std::vector` for cross-platform compatibility
@@ -178,7 +205,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - Added Windows support (MSVC): both dynamic and static variants can now be built on Windows with 100% tests passing (only WASAPI audio has been tested so far).
 
-- Added  `manage.py`, a cross-platform python build management script for cyfaust, which consolidates and replaces all prior build-related scripts. It is used by the `Makefile` frontend and can also be used on its own to facilitate cross-platform build operations.
+- Added `manage.py`, a cross-platform python build management script for cyfaust, which consolidates and replaces all prior build-related scripts. It is used by the `Makefile` frontend and can also be used on its own to facilitate cross-platform build operations.
 
 - Added enhancements to `gen_htmldoc.py` python script and makefile target, `make docs`, to generate api docs in html for both build variants.
 

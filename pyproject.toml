@@ -1,6 +1,6 @@
 [project]
 name = "cyfaust"
-version = "0.1.1"
+version = "0.1.2"
 description = "A Cython wrapper of the Faust interpreter and signal processing library with RtAudio support."
 readme = "README.md"
 license = "MIT"
@@ -52,7 +52,7 @@ cyfaust = "cyfaust.__main__:main"
 [project.urls]
 Homepage = "https://github.com/shakfu/cyfaust"
 Repository = "https://github.com/shakfu/cyfaust"
-Documentation = "https://github.com/shakfu/cyfaust#readme"
+Documentation = "https://shakfu.github.io/cyfaust/"
 Issues = "https://github.com/shakfu/cyfaust/issues"
 Changelog = "https://github.com/shakfu/cyfaust/blob/main/CHANGELOG.md"
 
@@ -66,6 +66,8 @@ dev = [
     "auditwheel>=6.6.0; os_name == 'linux'",
     "mkdocs>=1.6.1",
     "mkdocs-material>=9.7.6",
+    "ruff>=0.15.9",
+    "mypy>=1.20.0",
 ]
 
 [build-system]
@@ -106,6 +108,18 @@ JACK = "OFF"
 ASIO = "OFF"
 WASAPI = "ON"
 DSOUND = "OFF"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["F401", "F841", "F821", "E402", "E501", "W191", "W291", "W293"]
+
+[tool.mypy]
+exclude = ["src/static"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -45,6 +45,73 @@ from cyfaust.signal import Signal
 | `from_read_only_table(n, init, ridx)` | `Signal` | Read-only table |
 | `from_write_read_table(n, init, widx, wsig, ridx)` | `Signal` | Read/write table |
 
+#### Instance Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `to_string(shared, max_size)` | `str` | Convert to string representation |
+| `print(shared, max_size)` | | Print signal expression |
+| `create_source(name_app, lang, *args)` | `str` | Generate source code |
+| `simplify_to_normal_form()` | `Signal` | Simplify to normal form |
+| `ffname()` | `str` | Foreign function name |
+| `ffarity()` | `int` | Foreign function arity |
+
+#### Composition Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `attach(other)` | `Signal` | Attach signal |
+| `delay(d)` | `Signal` | Delay by `d` samples |
+| `select2(s1, s2)` | `Signal` | 2-way selector |
+| `select3(s1, s2, s3)` | `Signal` | 3-way selector |
+| `int_cast()` | `Signal` | Cast to integer |
+| `float_cast()` | `Signal` | Cast to float |
+| `recursion()` | `Signal` | Create recursive signal |
+| `self_rec()` | `Signal` | Self-reference for recursion |
+| `self_n(id)` | `Signal` | Multi-output self-reference |
+| `recursion_n(rf)` | `SignalVector` | Multi-output recursive signal |
+| `vbargraph(label, min, max)` | `Signal` | Vertical bargraph |
+| `hbargraph(label, min, max)` | `Signal` | Horizontal bargraph |
+
+#### Operators
+
+`Signal` supports Python operators that map to Faust operations:
+
+| Operator | Faust equivalent |
+|----------|-----------------|
+| `a + b` | `sig_add(a, b)` |
+| `a - b` | `sig_sub(a, b)` |
+| `a * b` | `sig_mul(a, b)` |
+| `a / b` | `sig_div(a, b)` |
+| `a % b` | `sig_rem(a, b)` |
+| `a == b` | `sig_eq(a, b)` |
+| `a != b` | `sig_ne(a, b)` |
+| `a > b` | `sig_gt(a, b)` |
+| `a >= b` | `sig_ge(a, b)` |
+| `a < b` | `sig_lt(a, b)` |
+| `a <= b` | `sig_le(a, b)` |
+| `a & b` | `sig_and(a, b)` |
+| `a \| b` | `sig_or(a, b)` |
+| `a ^ b` | `sig_xor(a, b)` |
+| `a << b` | `sig_leftshift(a, b)` |
+| `a >> b` | `sig_lrightshift(a, b)` |
+
+Reverse operators (`__radd__`, etc.) are supported for `int` and `float` left operands.
+
+#### Math Methods
+
+Unary: `abs()`, `acos()`, `asin()`, `atan()`, `ceil()`, `cos()`, `exp()`, `exp10()`, `floor()`, `log()`, `log10()`, `rint()`, `sin()`, `sqrt()`, `tan()`
+
+Binary: `delay()`, `remainder()`, `pow()`, `min()`, `max()`, `fmod()`
+
+All return `Signal`.
+
+#### Type Checking Methods
+
+`is_int()`, `is_float()`, `is_input()`, `is_output()`, `is_delay1()`, `is_delay()`, `is_prefix()`, `is_read_table()`, `is_write_table()`, `is_gen()`, `is_doc_constant_tbl()`, `is_doc_write_tbl()`, `is_doc_access_tbl()`, `is_select2()`, `is_assert_bounds()`, `is_highest()`, `is_lowest()`, `is_bin_op()`, `is_ffun()`, `is_fconst()`, `is_fvar()`, `is_proj()`, `is_rec()`, `is_int_cast()`, `is_float_cast()`, `is_button()`, `is_checkbox()`, `is_waveform()`, `is_hslider()`, `is_vslider()`, `is_num_entry()`, `is_hbargraph()`, `is_vbargraph()`, `is_attach()`, `is_enable()`, `is_control()`, `is_soundfile()`, `is_soundfile_length()`, `is_soundfile_rate()`, `is_soundfile_buffer()`
+
+All return `dict` with extracted parameters (or empty `dict` if type doesn't match), except `is_waveform()` which returns `bool`.
+
 ---
 
 ### SignalVector
@@ -83,6 +150,18 @@ ival = Interval(lo=0.0, hi=1.0, lsb=0)
 
 ---
 
+## Enums
+
+### SType
+
+Signal type: `kSInt` (integer), `kSReal` (float). Used with `sig_fconst`, `sig_fvar`.
+
+### SOperator
+
+Binary operator type: `kAdd`, `kSub`, `kMul`, `kDiv`, `kRem`, `kLsh`, `kARsh`, `kLRsh`, `kGT`, `kLT`, `kGE`, `kLE`, `kEQ`, `kNE`, `kAND`, `kOR`, `kXOR`. Used with `sig_bin_op`.
+
+---
+
 ## Module-Level Functions
 
 ### Primitives
@@ -91,6 +170,7 @@ ival = Interval(lo=0.0, hi=1.0, lsb=0)
 |----------|---------|-------------|
 | `sig_int(n)` | `Signal` | Integer constant |
 | `sig_real(n)` | `Signal` | Float constant |
+| `sig_float(n)` | `Signal` | Alias for `sig_real` |
 | `sig_input(idx)` | `Signal` | Input channel signal |
 
 ### Delay

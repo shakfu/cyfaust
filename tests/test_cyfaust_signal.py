@@ -1,20 +1,22 @@
-import os, sys, time
+import os
 
 
 try:
     from cyfaust.interp import create_dsp_factory_from_signals
-    from cyfaust.signal import (
-        signal_context, SignalVector, sig_input,
-        sig_real, sig_int, sig_delay
-    )
+    from cyfaust.signal import signal_context, SignalVector, sig_input, sig_real, sig_int, sig_delay
 except (ModuleNotFoundError, ImportError):
     from cyfaust.cyfaust import (
         create_dsp_factory_from_signals,
-        signal_context, SignalVector, sig_input,
-        sig_real, sig_int, sig_delay
+        signal_context,
+        SignalVector,
+        sig_input,
+        sig_real,
+        sig_int,
+        sig_delay,
     )
 
 from testutils import print_section, print_entry
+
 
 def test_create_source_from_signals1():
     print_entry("test_create_source_from_signals1")
@@ -24,6 +26,7 @@ def test_create_source_from_signals1():
         code = sv.create_source("test1", "cpp")
         assert len(code) > 0
         # print(code)
+
 
 def test_create_source_from_signals2():
     print_entry("test_create_source_from_signals2")
@@ -35,6 +38,7 @@ def test_create_source_from_signals2():
         code = sv.create_source("test2", "cpp")
         assert len(code) > 0
         # print(code)
+
 
 def test_create_dsp_factory_from_signals1():
     print_entry("test_create_dsp_factory_from_signals1")
@@ -68,20 +72,18 @@ def test_create_dsp_factory_from_signals2():
         assert dsp
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print_section("testing cyfaust.signal")
-    if 'TRACE' in os.environ:
+    if "TRACE" in os.environ:
         import tracemalloc
     test_create_source_from_signals1()
     test_create_source_from_signals2()
     test_create_dsp_factory_from_signals1()
     test_create_dsp_factory_from_signals2()
-    if 'TRACE' in os.environ:
+    if "TRACE" in os.environ:
         print_entry("TRACEMALLOC ANALYSIS")
         snapshot = tracemalloc.take_snapshot()
-        top_stats = snapshot.statistics('lineno')
+        top_stats = snapshot.statistics("lineno")
         print("[ Top 10 ]")
         for stat in top_stats[:10]:
             print(stat)
-
-

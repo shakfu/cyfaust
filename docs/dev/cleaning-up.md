@@ -1,31 +1,33 @@
-# Resource cleanup of factory created dsp instances
+# Resource Cleanup of Factory-Created DSP Instances
 
 ## The Problem
 
-- `interpreter_dsp` objects are allocated using `interpreter_dsp_factory::createDSPInstance()`:
+`interpreter_dsp` objects are allocated via `interpreter_dsp_factory::createDSPInstance()`:
 
 ```c++
 /* Create a new DSP instance, to be deleted with C++ 'delete' */
 interpreter_dsp* interpreter_dsp_factory::createDSPInstance();
 ```
 
-- To create an `interpreter_dsp_factory`, for example, using `createInterpreterDSPFactoryFromString(..)`
+Factories are created using functions like `createInterpreterDSPFactoryFromString(..)`.
+The library keeps an internal cache of all allocated factories so that the
+compilation of the same DSP code (same source and same normalized compilation
+options) returns the same reference-counted factory pointer. You must explicitly
+call `deleteDSPFactory` to decrement the reference counter when the factory is no
+longer needed.
 
-  Create a Faust DSP factory from a DSP source code as a string.
+An `interpreter_dsp` instance depends on the factory that created it. If the
+factory is deleted (or garbage collected) before a DSP instance is deallocated,
+the result is a segfault.
 
-  Note that the library keeps an internal cache of all allocated factories so that the compilation of same DSP code (that is same source code and same set of 'normalized' compilations options) will return the same (reference counted) factory pointer.
+Note: `interpreter_dsp_factory` does track its `interpreter_dsp` pointers and
+cleans them up when `deleteInterpreterDSPFactory` is called, but the solution
+below provides explicit Cython-level lifecycle management as well.
 
-  You will have to explicitly use `deleteDSPFactory` to properly decrement reference counter when the factory is no more needed.
+## Solution
 
-- Therefore, a `interpreter_dsp` instance depends on the factory instance `interpreter_dsp_factory` which created it.
-
-- If the factory is deleted (or garbage collected) before a dsp instance is deallocated, you have a segfault.
-
-- It was not known at the time that the above was written that an `interpreter_dsp_factory` keeps track of `interpreter_dsp` pointers and cleans them up when `deleteInterpreterDSPFactory` is called (docs have been updated since to make this point clearer).
-
-## Current Solution
-
-The solution below makes an `InterpreterDspFactory` instance keep track of created `InterpreterDsp` instances and ensures that they are cleaned up before the factory instance is deallocated. This works well and resolves this issue.
+`InterpreterDspFactory` keeps track of created `InterpreterDsp` instances in a
+set and ensures they are cleaned up before the factory is deallocated:
 
 ```python
 cdef class InterpreterDspFactory:
@@ -48,7 +50,6 @@ cdef class InterpreterDspFactory:
                 i.delete()
             fi.deleteInterpreterDSPFactory(self.ptr)
             self.ptr = NULL
-    # ...
 
     def create_dsp_instance(self) -> InterpreterDsp:
         """Create a new DSP instance, to be deleted with C++ 'delete'"""
@@ -57,7 +58,6 @@ cdef class InterpreterDspFactory:
         self.instances.add(instance)
         return instance
 
-    # ...
 
 cdef class InterpreterDsp:
     """DSP instance class with methods."""
@@ -65,14 +65,14 @@ cdef class InterpreterDsp:
     cdef fi.interpreter_dsp* ptr
     cdef bint ptr_owner
 
+    def __cinit__(self):
+        self.ptr = NULL
+        self.ptr_owner = False
+
     def __dealloc__(self):
         if self.ptr and self.ptr_owner:
             del self.ptr
             self.ptr = NULL
-
-    def __cinit__(self):
-        self.ptr = NULL
-        self.ptr_owner = False
 
     def delete(self):
         del self.ptr
@@ -84,6 +84,4 @@ cdef class InterpreterDsp:
         dsp.ptr_owner = owner
         dsp.ptr = ptr
         return dsp
-
-    # ...
 ```

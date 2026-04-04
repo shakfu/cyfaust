@@ -61,6 +61,72 @@ Box(value=None)
 | `inputs` | `int` | Number of inputs |
 | `outputs` | `int` | Number of outputs |
 
+#### Instance Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `is_valid()` | `bool` | Check if the box is valid |
+| `to_string(shared, max_size)` | `str` | Convert to string representation |
+| `print(shared, max_size)` | | Print box expression |
+| `create_source(name_app, lang, *args)` | `str` | Generate source code |
+| `tree2str()` | `str` | Convert tree to string |
+| `tree2int()` | `int` | Convert tree to integer |
+| `get_def_name_property()` | `Box \| None` | Get definition name property |
+| `extract_name()` | `str` | Extract name from label |
+
+#### Composition Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `seq(other)` | `Box` | Sequential composition |
+| `par(other)` | `Box` | Parallel composition |
+| `par3(b, c)` | `Box` | Parallel composition (3) |
+| `par4(b, c, d)` | `Box` | Parallel composition (4) |
+| `par5(b, c, d, e)` | `Box` | Parallel composition (5) |
+| `split(other)` | `Box` | Split composition |
+| `merge(other)` | `Box` | Merge composition |
+| `rec(other)` | `Box` | Recursive composition |
+| `delay(d)` | `Box` | Delay by `d` samples (`int` or `Box`) |
+| `select2(b1, b2)` | `Box` | 2-way selector |
+| `select3(b1, b2, b3)` | `Box` | 3-way selector |
+| `int_cast()` | `Box` | Cast to int |
+| `float_cast()` | `Box` | Cast to float |
+
+#### Operators
+
+`Box` supports Python operators that map to Faust operations:
+
+| Operator | Faust equivalent |
+|----------|-----------------|
+| `a + b` | `box_add(a, b)` |
+| `a - b` | `box_sub(a, b)` |
+| `a * b` | `box_mul(a, b)` |
+| `a / b` | `box_div(a, b)` |
+| `a % b` | `box_rem(a, b)` |
+| `a == b` | `box_eq(a, b)` |
+| `a != b` | `box_ne(a, b)` |
+| `a > b` | `box_gt(a, b)` |
+| `a >= b` | `box_ge(a, b)` |
+| `a < b` | `box_lt(a, b)` |
+| `a <= b` | `box_le(a, b)` |
+| `a & b` | `box_and(a, b)` |
+| `a \| b` | `box_or(a, b)` |
+| `a ^ b` | `box_xor(a, b)` |
+| `a << b` | `box_leftshift(a, b)` |
+| `a >> b` | `box_lrightshift(a, b)` |
+
+#### Math Methods
+
+Unary: `abs()`, `acos()`, `asin()`, `atan()`, `ceil()`, `cos()`, `exp()`, `exp10()`, `floor()`, `log()`, `log10()`, `rint()`, `round()`, `sin()`, `sqrt()`, `tan()`
+
+All return `Box`.
+
+#### Type Checking Methods
+
+`is_nil()`, `is_abstr()`, `is_appl()`, `is_button()`, `is_case()`, `is_checkbox()`, `is_cut()`, `is_environment()`, `is_error()`, `is_fconst()`, `is_ffun()`, `is_fvar()`, `is_hbargraph()`, `is_hgroup()`, `is_hslider()`, `is_ident()`, `is_int()`, `is_numentry()`, `is_prim0()` .. `is_prim5()`, `is_real()`, `is_slot()`, `is_soundfile()`, `is_symbolic()`, `is_tgroup()`, `is_vbargraph()`, `is_vgroup()`, `is_vslider()`, `is_waveform()`, `is_wire()`
+
+All return `bool`.
+
 ---
 
 ### BoxVector
@@ -78,7 +144,28 @@ Supports iteration via `for box in box_vector`.
 
 ---
 
+## Enums
+
+### SType
+
+Signal type: `kSInt` (integer), `kSReal` (float). Used with `box_fconst`, `box_fvar`.
+
+### SOperator
+
+Binary operator type: `kAdd`, `kSub`, `kMul`, `kDiv`, `kRem`, `kLsh`, `kARsh`, `kLRsh`, `kGT`, `kLT`, `kGE`, `kLE`, `kEQ`, `kNE`, `kAND`, `kOR`, `kXOR`. Used with `box_bin_op`.
+
+---
+
 ## Module-Level Functions
+
+### DSP Conversion
+
+| Function | Returns | Description |
+|----------|---------|-------------|
+| `dsp_to_boxes(name_app, dsp_content, *args)` | `Box \| None` | Parse Faust DSP code to a Box expression |
+| `get_box_type(b)` | `tuple[int, int] \| None` | Get (inputs, outputs) of a Box |
+| `boxes_to_signals(b)` | `SignalVector \| None` | Convert Box to signals |
+| `create_source_from_boxes(name_app, box, lang, *args)` | `str \| None` | Generate source code from a Box |
 
 ### Primitives
 
@@ -86,6 +173,7 @@ Supports iteration via `for box in box_vector`.
 |----------|---------|-------------|
 | `box_int(n)` | `Box` | Integer constant |
 | `box_float(n)` | `Box` | Float constant |
+| `box_real(n)` | `Box` | Alias for `box_float` |
 | `box_wire()` | `Box` | Wire (identity) |
 | `box_cut()` | `Box` | Cut (terminate signal) |
 

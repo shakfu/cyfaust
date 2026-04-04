@@ -29,4 +29,4 @@ if sys.platform == "win32":
             os.add_dll_directory(_dll_path)
             break
 
-from .interp import get_version
+from .interp import get_version as get_version

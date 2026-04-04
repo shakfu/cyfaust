@@ -1,6 +1,6 @@
 # faust2teensy
 
-The **faust2teensy** tool can be used to fully program the Teensy microcontroller and to generate DSP objects compatible with the Teensy audio library. In both cases, we strongly recommend to use the Teensy 3.6 which hosts an FPU (i.e., the Teensy 3.2 doesn't have one). 
+The **faust2teensy** tool can be used to fully program the Teensy microcontroller and to generate DSP objects compatible with the Teensy audio library. In both cases, we strongly recommend to use the Teensy 3.6 which hosts an FPU (i.e., the Teensy 3.2 doesn't have one).
 
 `faust2teensy [-lib] [-midi] [-nvoices <num>] [Faust options (-vec -vs 8...)] <file.dsp>`
 

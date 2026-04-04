@@ -83,9 +83,11 @@ DSP instance created from a factory. Provides audio computation and control.
 | `clone()` | `InterpreterDsp` | Clone the DSP instance |
 | `build_user_interface(sound_directory, sample_rate)` | | Build UI and load soundfiles |
 | `compute(count, inputs, outputs)` | | Compute audio frames |
+| `compute_timestamped(date_usec, count, inputs, outputs)` | | Compute with microsecond timestamp |
 | `frame(inputs, outputs)` | | Compute a single frame (requires `-os` option) |
 | `control()` | | Read controllers and update state (requires `-ec` option) |
 | `metadata()` | `dict` | Get DSP metadata (name, author, etc.) |
+| `delete()` | | Explicitly delete the underlying DSP instance |
 
 #### Audio Computation
 

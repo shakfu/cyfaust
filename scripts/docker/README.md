@@ -4,7 +4,6 @@
 
 - [docker reference docs](https://docs.docker.com/reference/)
 
-
 ## Usage patterns
 
 Pull image from docker hub
@@ -21,13 +20,11 @@ docker images
 
 Execute a command in a running container
 
-
 ```bash
 
 # insert here
 
 ```
-
 
 Create and run a new container from an image
 
@@ -47,13 +44,11 @@ Use mount instead of `-v` volumes
 docker run --mount type=bind,src=`pwd`/wheels,dst=/cyfaust/wheels -it --rm cyfaust:bookwork make wheel
 ```
 
-
 Remove specific image
 
 ```bash
 docker rmi <image-id>
 ```
-
 
 Remove dangling images
 
@@ -72,4 +67,3 @@ To prune everything
 ```bash
 docker system prune -a
 ```
-

@@ -55,7 +55,8 @@ export CMAKE_ARGS := $(CMAKE_OPTS)
         generate-static release verify-sync pytest clean distclean reset help \
         wheel-static wheel-dynamic wheel-windows wheel-llvm wheel-repair wheel-check \
         publish publish-test build-llvm test-llvm \
-        docs docs-serve docs-deploy docs-clean
+        docs docs-serve docs-deploy docs-diagram docs-clean \
+        typecheck lint format qa
 
 # Default target
 all: build
@@ -214,9 +215,29 @@ docs-serve:
 docs-deploy:
 	uv run mkdocs gh-deploy --force
 
+# Regenerate architecture diagram (requires d2: https://d2lang.com)
+docs-diagram:
+	d2 docs/assets/architecture.d2 docs/assets/architecture.svg
+
 # Clean built documentation
 docs-clean:
 	@rm -rf site/
+
+# ----------------------------------------------------------------------------
+# QA
+# ----------------------------------------------------------------------------
+
+typecheck:
+	@uv run mypy src/
+
+lint:
+	@uv run ruff check --fix src/ tests/
+
+format:
+	@uv run ruff format src/ tests/
+
+qa: lint typecheck format
+
 
 # ----------------------------------------------------------------------------
 # Cleanup
@@ -281,6 +302,7 @@ help:
 	@echo "  docs        - Build documentation site"
 	@echo "  docs-serve  - Serve docs locally with live reload"
 	@echo "  docs-deploy - Deploy docs to GitHub Pages"
+	@echo "  docs-diagram- Regenerate architecture diagram (requires d2)"
 	@echo "  docs-clean  - Remove built documentation"
 	@echo ""
 	@echo "Cleanup targets:"

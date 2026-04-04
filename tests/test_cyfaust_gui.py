@@ -3,21 +3,13 @@ Test suite for cyfaust GUI API bindings.
 Tests the newly added C interface structures, soundfile functionality, and UI components.
 """
 
-import os
-import sys
-import pytest
-from pathlib import Path
-
-
 try:
     from cyfaust.interp import InterpreterDspFactory, create_dsp_factory_from_string
     from cyfaust.common import PACKAGE_RESOURCES
     from cyfaust.signal import SignalVector, sig_rint, sig_real, signal_context
 
 except (ModuleNotFoundError, ImportError):
-    from cyfaust.cyfaust import (
-        InterpreterDspFactory, create_dsp_factory_from_string, PACKAGE_RESOURCES
-    )
+    from cyfaust.cyfaust import create_dsp_factory_from_string
     from cyfaust.cyfaust import SignalVector, sig_rint, sig_real, signal_context
 
 
@@ -26,28 +18,28 @@ from testutils import print_section, print_entry
 
 class TestUIInterface:
     """Test UI interface functionality"""
-    
+
     def test_dsp_buildUserInterface(self):
         """Test that DSP can build user interface"""
         print_entry("test_dsp_buildUserInterface")
-        
+
         # Simple DSP with slider
         dsp_code = """
         import("stdfaust.lib");
         freq = hslider("frequency", 440, 50, 2000, 1);
         process = os.osc(freq) * 0.1;
         """
-        
+
         factory = create_dsp_factory_from_string("test_ui", dsp_code)
         assert factory is not None, "Failed to create DSP factory"
-        
+
         dsp = factory.create_dsp_instance()
         assert dsp is not None, "Failed to create DSP instance"
-        
+
         # Test basic properties
         assert dsp.get_numinputs() >= 0
         assert dsp.get_numoutputs() >= 0
-        
+
         # Clean up
         del dsp
         del factory
@@ -55,16 +47,16 @@ class TestUIInterface:
 
 class TestSoundfileSupport:
     """Test soundfile functionality"""
-    
+
     def test_soundfile_box_creation(self):
         """Test soundfile box creation"""
         print_entry("test_soundfile_box_creation")
-        
+
         try:
             from cyfaust.box import box_soundfile, box_context, box_int
         except (ModuleNotFoundError, ImportError):
             from cyfaust.cyfaust import box_soundfile, box_context, box_int
-        
+
         with box_context():
             # Test soundfile box creation with basic parameters
             sf_box = box_soundfile("test_sound", box_int(2), None, None)  # 2 channels
@@ -74,12 +66,12 @@ class TestSoundfileSupport:
     def test_soundfile_signal_creation(self):
         """Test soundfile signal creation"""
         print_entry("test_soundfile_signal_creation")
-        
+
         try:
             from cyfaust.signal import sig_soundfile, signal_context
         except (ModuleNotFoundError, ImportError):
             from cyfaust.cyfaust import sig_soundfile, signal_context
-        
+
         with signal_context():
             # Test soundfile signal creation
             sf_signal = sig_soundfile("test_sound")
@@ -88,16 +80,16 @@ class TestSoundfileSupport:
 
 class TestMemoryManager:
     """Test memory manager interface"""
-    
+
     def test_dsp_memory_manager_interface(self):
         """Test DSP memory manager methods are accessible"""
         print_entry("test_dsp_memory_manager_interface")
-        
+
         # Create a simple DSP to test memory manager interface
         dsp_code = "process = _;"
         factory = create_dsp_factory_from_string("test_memory", dsp_code)
         assert factory is not None, "Failed to create DSP factory"
-        
+
         # Note: get_memory_manager() is not implemented in cyfaust Python interface
         # This is expected as it's a lower-level C++ feature
         try:
@@ -106,10 +98,10 @@ class TestMemoryManager:
         except AttributeError:
             # This is expected - the method is not exposed in Python
             pass
-        
+
         dsp = factory.create_dsp_instance()
         assert dsp is not None, "Failed to create DSP instance"
-        
+
         # Clean up
         del dsp
         del factory
@@ -117,27 +109,27 @@ class TestMemoryManager:
 
 class TestAdvancedDSPMethods:
     """Test advanced DSP methods that were recently added"""
-    
+
     def test_dsp_control_and_frame_methods(self):
         """Test control() and frame() methods are available"""
         print_entry("test_dsp_control_and_frame_methods")
-        
+
         # Simple oscillator DSP
         dsp_code = """
         import("stdfaust.lib");
         process = os.osc(440) * 0.1;
         """
-        
+
         factory = create_dsp_factory_from_string("test_advanced", dsp_code)
         assert factory is not None, "Failed to create DSP factory"
-        
+
         dsp = factory.create_dsp_instance()
         assert dsp is not None, "Failed to create DSP instance"
-        
+
         # Initialize DSP
         sample_rate = 44100
         dsp.init(sample_rate)
-        
+
         # Note: control() method is not implemented in cyfaust Python interface
         # This is expected as it requires specific compilation options
         try:
@@ -146,19 +138,20 @@ class TestAdvancedDSPMethods:
         except AttributeError:
             # This is expected - the method is not exposed in Python
             pass
-        
+
         # Note: frame() method is not implemented in cyfaust Python interface
         # This is expected as it requires specific compilation options (-os flag)
         try:
             import array
-            inputs = array.array('f', [0.0])
-            outputs = array.array('f', [0.0])
+
+            inputs = array.array("f", [0.0])
+            outputs = array.array("f", [0.0])
             dsp.frame(inputs, outputs)
             # If this works, it's a bonus, but not expected
         except AttributeError:
             # This is expected - the method is not exposed in Python
             pass
-        
+
         # Clean up
         del dsp
         del factory
@@ -166,44 +159,44 @@ class TestAdvancedDSPMethods:
     def test_timestamped_compute(self):
         """Test timestamped compute method"""
         print_entry("test_timestamped_compute")
-        
+
         dsp_code = "process = _;"
         factory = create_dsp_factory_from_string("test_timestamped", dsp_code)
         assert factory is not None, "Failed to create DSP factory"
-        
+
         dsp = factory.create_dsp_instance()
         assert dsp is not None, "Failed to create DSP instance"
-        
+
         # Initialize DSP
         sample_rate = 44100
         dsp.init(sample_rate)
-        
+
         # Test timestamped compute method exists
         try:
             import array
-            
+
             # Create input/output buffers
             buffer_size = 64
             num_inputs = dsp.get_numinputs()
             num_outputs = dsp.get_numoutputs()
-            
+
             if num_inputs > 0 and num_outputs > 0:
                 # Create buffers (simplified for testing)
-                input_buffers = [array.array('f', [0.0] * buffer_size) for _ in range(num_inputs)]
-                output_buffers = [array.array('f', [0.0] * buffer_size) for _ in range(num_outputs)]
-                
+                input_buffers = [array.array("f", [0.0] * buffer_size) for _ in range(num_inputs)]
+                output_buffers = [array.array("f", [0.0] * buffer_size) for _ in range(num_outputs)]
+
                 # Note: timestamped compute is not implemented in cyfaust Python interface
         # The regular compute() method is also not exposed at Python level
-                # timestamp = 1000000.0  # 1 second in microseconds
-                # dsp.compute(timestamp, buffer_size, input_buffers, output_buffers)  # Not implemented
-                
+        # timestamp = 1000000.0  # 1 second in microseconds
+        # dsp.compute(timestamp, buffer_size, input_buffers, output_buffers)  # Not implemented
+
         except AttributeError:
             # This is expected - compute methods are not exposed in Python
             pass
         except Exception:
             # Other exceptions are acceptable - method exists but implementation details vary
             pass
-        
+
         # Clean up
         del dsp
         del factory
@@ -211,25 +204,25 @@ class TestAdvancedDSPMethods:
 
 class TestSignalRintFunction:
     """Test the sigRint function (round to integer nearest)"""
-    
+
     def test_sig_rint_function(self):
         """Test sigRint function"""
-        
+
         with signal_context():
             # Test sigRint with a real signal
             input_signal = sig_real(3.7)
             rounded_signal = sig_rint(input_signal)
-            
+
             assert rounded_signal is not None, "Failed to create rint signal"
-            
+
             # Test Signal.rint() method
             rounded_method = input_signal.rint()
             assert rounded_method is not None, "Failed to create rint signal via method"
-            
+
             # Test that we can use it in a signal vector
             sv = SignalVector()
             sv.add(rounded_signal)
-            
+
             # Verify we can generate code with it
             code = sv.create_source("test_rint", "cpp")
             assert len(code) > 0, "Failed to generate code with sigRint"
@@ -239,7 +232,7 @@ class TestSignalRintFunction:
 def test_gui_api_coverage():
     """Integration test to verify GUI API coverage"""
     print_entry("test_gui_api_coverage")
-    
+
     # Test that we can create a DSP with multiple UI elements
     dsp_code = """
     import("stdfaust.lib");
@@ -250,42 +243,42 @@ def test_gui_api_coverage():
     
     process = os.osc(freq) * gain * gate * 0.1;
     """
-    
+
     factory = create_dsp_factory_from_string("test_gui_coverage", dsp_code)
     assert factory is not None, "Failed to create DSP factory"
-    
+
     dsp = factory.create_dsp_instance()
     assert dsp is not None, "Failed to create DSP instance"
-    
+
     # Verify basic properties
     assert dsp.get_numoutputs() > 0, "DSP should have outputs"
-    
+
     # Clean up
     del dsp
     del factory
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print_section("Testing cyfaust GUI API")
-    
+
     # Run tests
     test_ui = TestUIInterface()
     test_ui.test_dsp_buildUserInterface()
-    
+
     test_sf = TestSoundfileSupport()
     test_sf.test_soundfile_box_creation()
     test_sf.test_soundfile_signal_creation()
-    
+
     test_mm = TestMemoryManager()
     test_mm.test_dsp_memory_manager_interface()
-    
+
     test_adv = TestAdvancedDSPMethods()
     test_adv.test_dsp_control_and_frame_methods()
     test_adv.test_timestamped_compute()
-    
+
     test_rint = TestSignalRintFunction()
     test_rint.test_sig_rint_function()
-    
+
     test_gui_api_coverage()
-    
+
     print_entry("All GUI API tests completed")

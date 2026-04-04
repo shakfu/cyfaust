@@ -1,5 +1,11 @@
 # API Reference
 
+## Architecture
+
+![cyfaust architecture](../assets/architecture.svg)
+
+## Modules
+
 cyfaust provides Python bindings for the Faust DSP language through the following modules:
 
 | Module | Description |

@@ -15,7 +15,7 @@ Faust DSP code classically produces audio signals in the [-1..1] range. Since VC
 
 ## Polyphony support
 
-Polyphonic modules can be created using the  `-nvoices <num>` parameter up to 16 voices. The  `freq/gate/gain` convention can be used in the DSP code. VCV Rack follows the 1V/octave convention for MIDI pitch values, so the MIDI signals are automatically converted to `freq` using this convention. Gain and gates signals (using the [0v..10v] range) are converted to [0..1] values.
+Polyphonic modules can be created using the `-nvoices <num>` parameter up to 16 voices. The `freq/gate/gain` convention can be used in the DSP code. VCV Rack follows the 1V/octave convention for MIDI pitch values, so the MIDI signals are automatically converted to `freq` using this convention. Gain and gates signals (using the [0v..10v] range) are converted to [0..1] values.
 
 Note that **creating polyphonic effects** also makes sense in VCV Rack. For instance a reverb connected to a polyphonic instrument would need to be polyphonic. Thus the `-nvoices <num>` parameter can also be used in this case.
 
@@ -29,7 +29,7 @@ Controllers (typically *buttons*, *sliders*, *nentry* or *bargraph*) will be aut
 
 Here is a simple example showing how oscillators can be controlled by UI items. One switch, one button and two knobs will be created in the GUI:
 
-```
+```text
 import("stdfaust.lib");
 
 freq = hslider("freq", 200, 50, 5000, 0.01);
@@ -43,7 +43,7 @@ process = os.osc(freq) * gain * gate, os.sawtooth(freq) * gain * check;
 
 A polyphonic instrument with `freq/gate/gain` controllers associated with CV MIDI inputs, using the `[CV:N]` metadata, to be compiled with the `-nvoices <num>` option:
 
-```
+```text
 import("stdfaust.lib");
 
 // control variables
@@ -69,10 +69,10 @@ process = sum(i, 3, partial(i))
 * (gate : vgroup("1-adsr", en.adsr(0.05, 0.1, 0.1, 0.1)))
 * gain : vgroup("2-master", *(master) : panner(pan));
 ```
- 
+
 This polyphonic instrument can then be connected to a polyphonic reverb, to be also compiled with the `-nvoices <num>` option:
 
-```
+```text
 import("stdfaust.lib");
 process = dm.freeverb_demo;
 ```

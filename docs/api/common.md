@@ -35,6 +35,8 @@ Used internally by factory creation functions to pass compiler options to libfau
 | `dump()` | | Print all parameters |
 | `as_list()` | `list[str]` | Return parameters as a list of strings |
 
+Supports iteration via `for param in param_array`.
+
 #### Example
 
 ```python

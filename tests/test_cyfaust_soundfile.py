@@ -1,5 +1,4 @@
 import os
-import sys
 
 
 import time
@@ -9,7 +8,7 @@ try:
     from cyfaust.interp import (
         RtAudioDriver,
         InterpreterDspFactory,
-        get_version, 
+        get_version,
         create_dsp_factory_from_file,
         create_dsp_factory_from_string,
         create_dsp_factory_from_boxes,
@@ -18,18 +17,23 @@ try:
         get_all_dsp_factories,
         get_dsp_factory_from_sha_key,
         delete_all_dsp_factories,
-
         generate_sha1,
         expand_dsp_from_file,
         expand_dsp_from_string,
         generate_auxfiles_from_file,
     )
     from cyfaust.signal import (
-        signal_context, SignalVector, 
-        sig_input, sig_int, sig_delay, sig_real,
+        signal_context,
+        SignalVector,
+        sig_input,
+        sig_int,
+        sig_delay,
+        sig_real,
     )
     from cyfaust.box import (
-        box_context, box_float, box_int,
+        box_context,
+        box_float,
+        box_int,
     )
 except (ModuleNotFoundError, ImportError):
     from cyfaust.cyfaust import (
@@ -53,13 +57,14 @@ SKIP_AUDIO = False
 ## ---------------------------------------------------------------------------
 ## utility testing functions
 
+
 def dsp_from_file(testname, dsp_path, skip_audio=False, *args):
 
     print_entry(testname)
 
     factory = create_dsp_factory_from_file(dsp_path, *args)
     assert factory
-    
+
     print("compile options:", factory.get_compile_options())
     print("library list:", factory.get_library_list())
     print("sha key", factory.get_sha_key())
@@ -70,7 +75,7 @@ def dsp_from_file(testname, dsp_path, skip_audio=False, *args):
     # FIXME: doesn't work!!
     # ui = PrintUI()
     # dsp.build_user_interface(ui)
-    
+
     # bypass
     dsp.build_user_interface()
 
@@ -85,7 +90,8 @@ def dsp_from_file(testname, dsp_path, skip_audio=False, *args):
 
     return True
 
-def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=False, *args):
+
+def dsp_from_string(testname, dsp_string, dump_to_bitcode=False, skip_audio=False, *args):
     print_entry(testname)
 
     factory = create_dsp_factory_from_string("FaustDSP", dsp_string, *args)
@@ -93,7 +99,7 @@ def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=Fal
 
     if dump_to_bitcode:
         factory.write_to_bitcode_file(TEMP_PATH)
-        
+
     print("compile options:", factory.get_compile_options())
     print("library list:", factory.get_library_list())
     print("include pathnames:", factory.get_include_pathnames())
@@ -102,7 +108,7 @@ def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=Fal
 
     dsp = factory.create_dsp_instance()
     assert dsp
-    
+
     dsp.build_user_interface()
 
     if not skip_audio:
@@ -119,6 +125,7 @@ def dsp_from_string(testname, dsp_string, dump_to_bitcode=False,  skip_audio=Fal
 ## ---------------------------------------------------------------------------
 ## faust/dsp/interpreter-dsp
 
+
 def test_soundfile_from_file1():
     assert dsp_from_file(
         testname="test_soundfile_from_file1",
@@ -126,13 +133,15 @@ def test_soundfile_from_file1():
         skip_audio=False,
     )
 
+
 def test_interp_create_dsp_factory_from_string2():
     print_entry("test_interp_create_dsp_factory_from_string2")
 
-    factory = create_dsp_factory_from_string("FaustDSP", 
-        """process = 0,0 : soundfile("sound[url:{'tests/wav/amen.wav'}]", 0);""")
+    factory = create_dsp_factory_from_string(
+        "FaustDSP", """process = 0,0 : soundfile("sound[url:{'tests/wav/amen.wav'}]", 0);"""
+    )
     assert factory
-        
+
     print("compile options:", factory.get_compile_options())
     print("library list:", factory.get_library_list())
     print("include pathnames:", factory.get_include_pathnames())
@@ -141,7 +150,7 @@ def test_interp_create_dsp_factory_from_string2():
 
     dsp = factory.create_dsp_instance()
     assert dsp
-    
+
     dsp.build_user_interface()
 
     if not SKIP_AUDIO:
@@ -152,8 +161,3 @@ def test_interp_create_dsp_factory_from_string2():
         audio.start()
         time.sleep(1)
         audio.stop()
-
-
-
-
-

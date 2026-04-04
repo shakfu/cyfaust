@@ -59,8 +59,6 @@ A script to generate the faust backend.cmake and target.cmake configuration file
 
 A script to use pydoc to generate html documentation of the cyfaust api writing to `docs/api`. (may be integrated into `manage.py` at some point.)
 
-
-
 ## Testing
 
 - `setup_debug_python.py`: builds a local debug python and installs it into `cyfaust/python` for additional debugging capabilities.

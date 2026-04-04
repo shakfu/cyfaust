@@ -237,14 +237,21 @@ cdef class Signal:
         """Return the arity of a foreign function."""
         return ffarity(self)
 
+    # get_interval / set_interval: These require signals that have been
+    # through type inference (e.g. after compilation). Calling them on raw
+    # signal trees causes a null dereference abort in libfaust's smart
+    # pointer layer. Uncomment when there's a safe way to check whether
+    # a signal has been type-annotated.
+    #
     # def get_interval(self) -> Interval:
-    #     """Get the signal interval."""
-    #     cdef fs.Interval *ival = <fs.Interval*>fs.getSigInterval(self.ptr)
-    #     return Interval.from_ptr(ival)
-
+    #     """Get the signal interval (lo, hi, lsb)."""
+    #     cdef fs.Interval* heap_ival = new fs.Interval(0, 0.0, 0)
+    #     heap_ival[0] = fs.getSigInterval(self.ptr)
+    #     return Interval.from_ptr(heap_ival)
+    #
     # def set_interval(self, Interval iv):
     #     """Set the signal interval."""
-    #     fs.setSigInterval(self.ptr, iv.ptr)
+    #     fs.setSigInterval(self.ptr, iv.ptr[0])
 
     def attach(self, Signal other) -> Signal:
         """Create an attached signal from another signal
@@ -1584,8 +1591,8 @@ def is_sig_doc_access_tbl(Signal t) -> dict:
     cdef fs.Signal ridx = NULL
     if fs.isSigDocAccessTbl(t.ptr, tbl, ridx):
         return dict(
-            n=Signal.from_ptr(tbl),
-            widx=Signal.from_ptr(ridx),
+            tbl=Signal.from_ptr(tbl),
+            ridx=Signal.from_ptr(ridx),
         )
     else:
         return {}

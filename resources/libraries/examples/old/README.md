@@ -2,4 +2,4 @@ This folder contains some of the old Faust examples that were using functions fr
 
 ## Thoughts
 
-* Maybe the examples based on maxmsp.lib should be in a separate library 
+* Maybe the examples based on maxmsp.lib should be in a separate library

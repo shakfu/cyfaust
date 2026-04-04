@@ -4,7 +4,7 @@ site_url: https://github.com/shakfu/cyfaust
 repo_url: https://github.com/shakfu/cyfaust
 repo_name: shakfu/cyfaust
 
-docs_dir: docs/mkdocs
+docs_dir: docs
 
 theme:
   name: material
@@ -43,6 +43,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+  - Examples: examples.md
   - API Reference:
     - Overview: api/index.md
     - cyfaust.interp: api/interp.md
@@ -51,3 +52,9 @@ nav:
     - cyfaust.common: api/common.md
     - cyfaust.player: api/player.md
   - CLI: cli.md
+  - Building from Source: building.md
+  - Developer Notes:
+    - Resource Cleanup: dev/cleaning-up.md
+    - Box API Design: dev/cyfaust_block_api.md
+    - Soundfile API: dev/soundfile.md
+    - Useful Links: dev/links.md

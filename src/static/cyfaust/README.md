@@ -2,11 +2,9 @@
 
 A cython c++ wrapper for the faust interpreter.
 
-
 ## package design
 
-
-```
+```text
 cyfaust
 	__init__.py
 	cyfaust.so
@@ -16,7 +14,6 @@ cyfaust
 	faust_signal.pxd
 	faust_signal.pxi
 ```
-
 
 ## Symbols
 

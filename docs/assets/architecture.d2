@@ -1,0 +1,117 @@
+direction: down
+
+title: {
+  label: cyfaust Architecture
+  near: top-center
+  shape: text
+  style.font-size: 28
+  style.bold: true
+}
+
+# -------------------------------------------------------
+# Python API Layer
+# -------------------------------------------------------
+python: "Python API" {
+  style.fill: "#e8eaf6"
+  style.border-radius: 8
+
+  interp: "interp\nDSP compilation & execution" {
+    shape: rectangle
+    style.fill: "#bbdefb"
+  }
+
+  box: "box\nBox algebra (functional DSP)" {
+    shape: rectangle
+    style.fill: "#bbdefb"
+  }
+
+  signal: "signal\nSignal algebra (low-level DSP)" {
+    shape: rectangle
+    style.fill: "#bbdefb"
+  }
+
+  player: "player\nSoundfile playback" {
+    shape: rectangle
+    style.fill: "#bbdefb"
+  }
+
+  common: "common\nUtilities & resource paths" {
+    shape: rectangle
+    style.fill: "#c5cae9"
+  }
+
+  cli: "CLI\n10 commands" {
+    shape: rectangle
+    style.fill: "#c5cae9"
+  }
+}
+
+# -------------------------------------------------------
+# Cython Binding Layer
+# -------------------------------------------------------
+cython: "Cython Bindings (.pxd | .pyx)" {
+  style.fill: "#fff3e0"
+  style.border-radius: 8
+
+  dsp_bindings: "DSP & GUI\nfaust_interp, faust_gui" {
+    shape: rectangle
+    style.fill: "#ffe0b2"
+  }
+
+  box_bindings: "Box & Signal\nfaust_box, faust_signal" {
+    shape: rectangle
+    style.fill: "#ffe0b2"
+  }
+
+  player_bindings: "Player\nfaust_player" {
+    shape: rectangle
+    style.fill: "#ffe0b2"
+  }
+}
+
+# -------------------------------------------------------
+# C++ Library Layer
+# -------------------------------------------------------
+cpp: "C++ Libraries" {
+  style.fill: "#e8f5e9"
+  style.border-radius: 8
+
+  libfaust: "libfaust\nInterpreter or LLVM JIT" {
+    shape: rectangle
+    style.fill: "#a5d6a7"
+  }
+
+  rtaudio: "RtAudio\nCoreAudio / ALSA / WASAPI / JACK" {
+    shape: rectangle
+    style.fill: "#a5d6a7"
+  }
+
+  sndfile: "libsndfile + libsamplerate" {
+    shape: rectangle
+    style.fill: "#a5d6a7"
+  }
+}
+
+# -------------------------------------------------------
+# Connections
+# -------------------------------------------------------
+
+# Python layer internal
+python.interp -> python.box
+python.interp -> python.signal
+python.box -> python.signal
+python.cli -> python.interp {style.stroke-dash: 3}
+
+# Python -> Cython
+python.interp -> cython.dsp_bindings
+python.box -> cython.box_bindings
+python.signal -> cython.box_bindings
+python.player -> cython.player_bindings
+
+# Cython -> C++
+cython.dsp_bindings -> cpp.libfaust
+cython.box_bindings -> cpp.libfaust
+cython.player_bindings -> cpp.libfaust
+cython.dsp_bindings -> cpp.rtaudio
+cython.player_bindings -> cpp.rtaudio
+cpp.libfaust -> cpp.sndfile: "optional" {style.stroke-dash: 3}

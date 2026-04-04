@@ -70,7 +70,7 @@ p.add_line(gain, dac, inlet=1)
 p.save()
 ```
 
-With builtin aliases (`.add` for `.add_*`  type methods and `.link` for `.add_line`), the above example can be written in an even more abbreviated form (and with a vertical layout) as:
+With builtin aliases (`.add` for `.add_*` type methods and `.link` for `.add_line`), the above example can be written in an even more abbreviated form (and with a vertical layout) as:
 
 ```python
 p = Patcher('out_vertical.maxpat', layout='vertical')
@@ -238,7 +238,7 @@ A growing list of patcher methods have been implemented to specialize and facili
 
 This is a short list, but the `add_textbox` method alone can handle almost all case. The others are really just there for convenience and to save typing.
 
-Generally, it is recommended to start using `py2max`'s via these `add_<type>` methods, since they have most of the required parameters built into the methods and you can get IDE completion support.  Once you are comfortable with the parameters, then use the generic abbreviated form: `add`, which is less typing but tbe tradeoff is you lose the IDE parameter completion support.
+Generally, it is recommended to start using `py2max`'s via these `add_<type>` methods, since they have most of the required parameters built into the methods and you can get IDE completion support. Once you are comfortable with the parameters, then use the generic abbreviated form: `add`, which is less typing but tbe tradeoff is you lose the IDE parameter completion support.
 
 ## Scripts
 

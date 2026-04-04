@@ -14,7 +14,7 @@ Here are the available options:
 - `-bs <num>`: to specify buffer size (default 16)
 - `-source`: to only create the source folder
 
-The generated folder has to be moved in the *DaisyExamples/DaisySP/examples* folder and compiled from there. 
+The generated folder has to be moved in the *DaisyExamples/DaisySP/examples* folder and compiled from there.
 
 The current **faust2daisy** tool can only be used to program the [POD](https://www.electro-smith.com/daisy/pod). On this board, the 2 *switches* and 2 *knobs* can be connected to UI controllers using metadata:
 
@@ -29,7 +29,7 @@ Other metadata:
 
 Here is a simple example showing how oscillators can be controlled by physical items and MIDI messages:
 
-```
+```text
 import("stdfaust.lib");
 
 // UI controllers connected using metadata

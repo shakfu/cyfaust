@@ -26,11 +26,27 @@ Examples:
 
 import argparse
 import json as json_module
+import re
 import signal
 import sys
 import os
 import time
 from pathlib import Path
+
+# Regex patterns for parsing Faust UI elements from expanded DSP code
+_SLIDER_RE = (
+    r'{kind}\s*\(\s*"([^"]+)"\s*,'
+    r"\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)"
+)
+_UI_PATTERNS = [
+    (_SLIDER_RE.format(kind="vslider"), "vslider"),
+    (_SLIDER_RE.format(kind="hslider"), "hslider"),
+    (_SLIDER_RE.format(kind="nentry"), "nentry"),
+    (r'button\s*\(\s*"([^"]+)"\s*\)', "button"),
+    (r'checkbox\s*\(\s*"([^"]+)"\s*\)', "checkbox"),
+    (r'vbargraph\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^)]+)\)', "vbargraph"),
+    (r'hbargraph\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^)]+)\)', "hbargraph"),
+]
 
 
 def get_cyfaust_imports():
@@ -51,21 +67,22 @@ def get_cyfaust_imports():
             create_lib_context,
             destroy_lib_context,
         )
+
         return {
-            'get_version': get_version,
-            'create_dsp_factory_from_file': create_dsp_factory_from_file,
-            'create_dsp_factory_from_string': create_dsp_factory_from_string,
-            'expand_dsp_from_file': expand_dsp_from_file,
-            'generate_auxfiles_from_file': generate_auxfiles_from_file,
-            'create_source_from_boxes': create_source_from_boxes,
-            'dsp_to_boxes': dsp_to_boxes,
-            'create_lib_context': create_lib_context,
-            'destroy_lib_context': destroy_lib_context,
-            'RtAudioDriver': RtAudioDriver,
-            'read_dsp_factory_from_bitcode_file': read_dsp_factory_from_bitcode_file,
+            "get_version": get_version,
+            "create_dsp_factory_from_file": create_dsp_factory_from_file,
+            "create_dsp_factory_from_string": create_dsp_factory_from_string,
+            "expand_dsp_from_file": expand_dsp_from_file,
+            "generate_auxfiles_from_file": generate_auxfiles_from_file,
+            "create_source_from_boxes": create_source_from_boxes,
+            "dsp_to_boxes": dsp_to_boxes,
+            "create_lib_context": create_lib_context,
+            "destroy_lib_context": destroy_lib_context,
+            "RtAudioDriver": RtAudioDriver,
+            "read_dsp_factory_from_bitcode_file": read_dsp_factory_from_bitcode_file,
         }
     except ImportError:
-        from cyfaust.cyfaust import (
+        from cyfaust.cyfaust import (  # type: ignore[import-untyped]
             get_version,
             create_dsp_factory_from_file,
             create_dsp_factory_from_string,
@@ -78,25 +95,26 @@ def get_cyfaust_imports():
             RtAudioDriver,
             read_dsp_factory_from_bitcode_file,
         )
+
         return {
-            'get_version': get_version,
-            'create_dsp_factory_from_file': create_dsp_factory_from_file,
-            'create_dsp_factory_from_string': create_dsp_factory_from_string,
-            'expand_dsp_from_file': expand_dsp_from_file,
-            'generate_auxfiles_from_file': generate_auxfiles_from_file,
-            'create_source_from_boxes': create_source_from_boxes,
-            'dsp_to_boxes': dsp_to_boxes,
-            'create_lib_context': create_lib_context,
-            'destroy_lib_context': destroy_lib_context,
-            'RtAudioDriver': RtAudioDriver,
-            'read_dsp_factory_from_bitcode_file': read_dsp_factory_from_bitcode_file,
+            "get_version": get_version,
+            "create_dsp_factory_from_file": create_dsp_factory_from_file,
+            "create_dsp_factory_from_string": create_dsp_factory_from_string,
+            "expand_dsp_from_file": expand_dsp_from_file,
+            "generate_auxfiles_from_file": generate_auxfiles_from_file,
+            "create_source_from_boxes": create_source_from_boxes,
+            "dsp_to_boxes": dsp_to_boxes,
+            "create_lib_context": create_lib_context,
+            "destroy_lib_context": destroy_lib_context,
+            "RtAudioDriver": RtAudioDriver,
+            "read_dsp_factory_from_bitcode_file": read_dsp_factory_from_bitcode_file,
         }
 
 
 def cmd_version(args):
     """Show version information."""
     imports = get_cyfaust_imports()
-    print(f"cyfaust CLI")
+    print("cyfaust CLI")
     print(f"libfaust version: {imports['get_version']()}")
     return 0
 
@@ -111,42 +129,44 @@ def cmd_compile(args):
 
     # Map backend names
     backend_map = {
-        'cpp': 'cpp',
-        'c++': 'cpp',
-        'c': 'c',
-        'rust': 'rust',
-        'codebox': 'codebox',
+        "cpp": "cpp",
+        "c++": "cpp",
+        "c": "c",
+        "rust": "rust",
+        "codebox": "codebox",
     }
 
     backend = backend_map.get(args.backend.lower())
     if not backend:
-        print(f"Error: Unknown backend '{args.backend}'. "
-              f"Choose from: cpp, c, rust, codebox", file=sys.stderr)
+        print(
+            f"Error: Unknown backend '{args.backend}'. Choose from: cpp, c, rust, codebox",
+            file=sys.stderr,
+        )
         return 1
 
     # Read DSP file content
     name = Path(args.input).stem
-    with open(args.input, 'r') as f:
+    with open(args.input, "r") as f:
         dsp_content = f.read()
 
     # Initialize library context for box operations
-    imports['create_lib_context']()
+    imports["create_lib_context"]()
     try:
         # Create box from DSP content
-        box = imports['dsp_to_boxes'](name, dsp_content)
+        box = imports["dsp_to_boxes"](name, dsp_content)
         if box is None:
             print(f"Error: Failed to parse DSP file: {args.input}", file=sys.stderr)
             return 1
 
         # Generate source code
-        source = imports['create_source_from_boxes'](name, box, backend)
+        source = imports["create_source_from_boxes"](name, box, backend)
         if source is None:
             print(f"Error: Failed to generate {backend} code", file=sys.stderr)
             return 1
 
         # Output
         if args.output:
-            with open(args.output, 'w') as f:
+            with open(args.output, "w") as f:
                 f.write(source)
             print(f"Generated {backend} code: {args.output}")
         else:
@@ -154,7 +174,7 @@ def cmd_compile(args):
 
         return 0
     finally:
-        imports['destroy_lib_context']()
+        imports["destroy_lib_context"]()
 
 
 def cmd_diagram(args):
@@ -167,21 +187,19 @@ def cmd_diagram(args):
 
     # Determine output directory
     if args.output:
-        output_dir = str(Path(args.output).parent or '.')
-        svg_option = f"-svg"
-        output_option = f"-O"
+        output_dir = str(Path(args.output).parent or ".")
+        svg_option = "-svg"
+        output_option = "-O"
         output_path = output_dir
     else:
-        output_dir = '.'
+        output_dir = "."
         svg_option = "-svg"
         output_option = "-O"
         output_path = output_dir
 
     # Generate SVG using auxfiles
-    result = imports['generate_auxfiles_from_file'](
-        args.input,
-        svg_option,
-        output_option, output_path
+    result = imports["generate_auxfiles_from_file"](
+        args.input, svg_option, output_option, output_path
     )
 
     if result:
@@ -202,7 +220,7 @@ def cmd_expand(args):
         print(f"Error: File not found: {args.input}", file=sys.stderr)
         return 1
 
-    result = imports['expand_dsp_from_file'](args.input)
+    result = imports["expand_dsp_from_file"](args.input)
     if result is None:
         print("Error: Failed to expand DSP", file=sys.stderr)
         return 1
@@ -210,7 +228,7 @@ def cmd_expand(args):
     sha_key, expanded_code = result
 
     if args.output:
-        with open(args.output, 'w') as f:
+        with open(args.output, "w") as f:
             f.write(expanded_code)
         print(f"Expanded DSP written to: {args.output}")
         print(f"SHA1 key: {sha_key}")
@@ -232,7 +250,7 @@ def cmd_info(args):
         print(f"Error: File not found: {args.input}", file=sys.stderr)
         return 1
 
-    factory = imports['create_dsp_factory_from_file'](args.input)
+    factory = imports["create_dsp_factory_from_file"](args.input)
     if factory is None:
         print(f"Error: Failed to create DSP factory from: {args.input}", file=sys.stderr)
         return 1
@@ -287,7 +305,7 @@ def cmd_play(args):
         print(f"Error: File not found: {args.input}", file=sys.stderr)
         return 1
 
-    factory = imports['create_dsp_factory_from_file'](args.input)
+    factory = imports["create_dsp_factory_from_file"](args.input)
     if factory is None:
         print(f"Error: Failed to create DSP factory from: {args.input}", file=sys.stderr)
         return 1
@@ -310,7 +328,7 @@ def cmd_play(args):
         pass  # May not be needed for all DSPs
 
     # Create and initialize audio driver
-    driver = imports['RtAudioDriver'](sample_rate, buffer_size)
+    driver = imports["RtAudioDriver"](sample_rate, buffer_size)
     if not driver.init(dsp):
         print("Error: Failed to initialize audio driver", file=sys.stderr)
         return 1
@@ -363,7 +381,7 @@ def cmd_params(args):
         return 1
 
     # Expand DSP to get all UI elements
-    result = imports['expand_dsp_from_file'](args.input)
+    result = imports["expand_dsp_from_file"](args.input)
     if result is None:
         print("Error: Failed to expand DSP", file=sys.stderr)
         return 1
@@ -371,43 +389,36 @@ def cmd_params(args):
     sha_key, expanded_code = result
 
     # Parse the expanded code to find UI elements
-    import re
-
-    # Find sliders, buttons, etc.
-    ui_patterns = [
-        (r'vslider\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'vslider'),
-        (r'hslider\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'hslider'),
-        (r'nentry\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'nentry'),
-        (r'button\s*\(\s*"([^"]+)"\s*\)', 'button'),
-        (r'checkbox\s*\(\s*"([^"]+)"\s*\)', 'checkbox'),
-        (r'vbargraph\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'vbargraph'),
-        (r'hbargraph\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'hbargraph'),
-    ]
-
     params = []
-    for pattern, ui_type in ui_patterns:
+    for pattern, ui_type in _UI_PATTERNS:
         for match in re.finditer(pattern, expanded_code):
-            if ui_type in ['vslider', 'hslider', 'nentry']:
-                params.append({
-                    'type': ui_type,
-                    'label': match.group(1),
-                    'init': match.group(2).strip(),
-                    'min': match.group(3).strip(),
-                    'max': match.group(4).strip(),
-                    'step': match.group(5).strip(),
-                })
-            elif ui_type in ['button', 'checkbox']:
-                params.append({
-                    'type': ui_type,
-                    'label': match.group(1),
-                })
-            elif ui_type in ['vbargraph', 'hbargraph']:
-                params.append({
-                    'type': ui_type,
-                    'label': match.group(1),
-                    'min': match.group(2).strip(),
-                    'max': match.group(3).strip(),
-                })
+            if ui_type in ["vslider", "hslider", "nentry"]:
+                params.append(
+                    {
+                        "type": ui_type,
+                        "label": match.group(1),
+                        "init": match.group(2).strip(),
+                        "min": match.group(3).strip(),
+                        "max": match.group(4).strip(),
+                        "step": match.group(5).strip(),
+                    }
+                )
+            elif ui_type in ["button", "checkbox"]:
+                params.append(
+                    {
+                        "type": ui_type,
+                        "label": match.group(1),
+                    }
+                )
+            elif ui_type in ["vbargraph", "hbargraph"]:
+                params.append(
+                    {
+                        "type": ui_type,
+                        "label": match.group(1),
+                        "min": match.group(2).strip(),
+                        "max": match.group(3).strip(),
+                    }
+                )
 
     if not params:
         print(f"No parameters found in: {args.input}")
@@ -418,9 +429,9 @@ def cmd_params(args):
 
     for i, p in enumerate(params):
         print(f"  [{i}] {p['label']} ({p['type']})")
-        if 'init' in p:
+        if "init" in p:
             print(f"      Init: {p['init']}, Range: [{p['min']}, {p['max']}], Step: {p['step']}")
-        elif 'min' in p:
+        elif "min" in p:
             print(f"      Range: [{p['min']}, {p['max']}]")
 
     return 0
@@ -435,7 +446,7 @@ def cmd_validate(args):
         return 1
 
     # Try to create factory - this will catch compile errors
-    factory = imports['create_dsp_factory_from_file'](args.input)
+    factory = imports["create_dsp_factory_from_file"](args.input)
 
     if factory is None:
         print(f"INVALID: {args.input}")
@@ -483,13 +494,13 @@ def cmd_bitcode(args):
     """Save or load DSP factory as bitcode."""
     imports = get_cyfaust_imports()
 
-    if args.mode == 'save':
+    if args.mode == "save":
         # Save DSP to bitcode
         if not os.path.exists(args.input):
             print(f"Error: File not found: {args.input}", file=sys.stderr)
             return 1
 
-        factory = imports['create_dsp_factory_from_file'](args.input)
+        factory = imports["create_dsp_factory_from_file"](args.input)
         if factory is None:
             print(f"Error: Failed to create DSP factory from: {args.input}", file=sys.stderr)
             return 1
@@ -505,13 +516,13 @@ def cmd_bitcode(args):
             print("Error: Failed to write bitcode file", file=sys.stderr)
             return 1
 
-    elif args.mode == 'load':
+    elif args.mode == "load":
         # Load bitcode and show info
         if not os.path.exists(args.input):
             print(f"Error: File not found: {args.input}", file=sys.stderr)
             return 1
 
-        factory = imports['read_dsp_factory_from_bitcode_file'](args.input)
+        factory = imports["read_dsp_factory_from_bitcode_file"](args.input)
         if factory is None:
             print(f"Error: Failed to load bitcode from: {args.input}", file=sys.stderr)
             return 1
@@ -537,13 +548,12 @@ def cmd_bitcode(args):
 def cmd_json(args):
     """Export DSP metadata as JSON."""
     imports = get_cyfaust_imports()
-    import re
 
     if not os.path.exists(args.input):
         print(f"Error: File not found: {args.input}", file=sys.stderr)
         return 1
 
-    factory = imports['create_dsp_factory_from_file'](args.input)
+    factory = imports["create_dsp_factory_from_file"](args.input)
     if factory is None:
         print(f"Error: Failed to create DSP factory from: {args.input}", file=sys.stderr)
         return 1
@@ -575,44 +585,40 @@ def cmd_json(args):
         data["metadata"] = {}
 
     # Parse parameters from expanded code
-    result = imports['expand_dsp_from_file'](args.input)
+    result = imports["expand_dsp_from_file"](args.input)
     if result:
         sha_key, expanded_code = result
 
-        ui_patterns = [
-            (r'vslider\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'vslider'),
-            (r'hslider\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'hslider'),
-            (r'nentry\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'nentry'),
-            (r'button\s*\(\s*"([^"]+)"\s*\)', 'button'),
-            (r'checkbox\s*\(\s*"([^"]+)"\s*\)', 'checkbox'),
-            (r'vbargraph\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'vbargraph'),
-            (r'hbargraph\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^)]+)\)', 'hbargraph'),
-        ]
-
         params = []
-        for pattern, ui_type in ui_patterns:
+        for pattern, ui_type in _UI_PATTERNS:
             for match in re.finditer(pattern, expanded_code):
-                if ui_type in ['vslider', 'hslider', 'nentry']:
-                    params.append({
-                        'type': ui_type,
-                        'label': match.group(1),
-                        'init': match.group(2).strip(),
-                        'min': match.group(3).strip(),
-                        'max': match.group(4).strip(),
-                        'step': match.group(5).strip(),
-                    })
-                elif ui_type in ['button', 'checkbox']:
-                    params.append({
-                        'type': ui_type,
-                        'label': match.group(1),
-                    })
-                elif ui_type in ['vbargraph', 'hbargraph']:
-                    params.append({
-                        'type': ui_type,
-                        'label': match.group(1),
-                        'min': match.group(2).strip(),
-                        'max': match.group(3).strip(),
-                    })
+                if ui_type in ["vslider", "hslider", "nentry"]:
+                    params.append(
+                        {
+                            "type": ui_type,
+                            "label": match.group(1),
+                            "init": match.group(2).strip(),
+                            "min": match.group(3).strip(),
+                            "max": match.group(4).strip(),
+                            "step": match.group(5).strip(),
+                        }
+                    )
+                elif ui_type in ["button", "checkbox"]:
+                    params.append(
+                        {
+                            "type": ui_type,
+                            "label": match.group(1),
+                        }
+                    )
+                elif ui_type in ["vbargraph", "hbargraph"]:
+                    params.append(
+                        {
+                            "type": ui_type,
+                            "label": match.group(1),
+                            "min": match.group(2).strip(),
+                            "max": match.group(3).strip(),
+                        }
+                    )
 
         if params:
             data["parameters"] = params
@@ -632,7 +638,7 @@ def cmd_json(args):
     json_str = json_module.dumps(data, indent=indent)
 
     if args.output:
-        with open(args.output, 'w') as f:
+        with open(args.output, "w") as f:
             f.write(json_str)
         print(f"JSON written to: {args.output}")
     else:
@@ -644,10 +650,10 @@ def cmd_json(args):
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        prog='cyfaust',
-        description='cyfaust command-line interface for Faust DSP processing',
+        prog="cyfaust",
+        description="cyfaust command-line interface for Faust DSP processing",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
+        epilog="""
 Examples:
   cyfaust version
   cyfaust compile noise.dsp -b cpp -o noise.cpp
@@ -656,153 +662,92 @@ Examples:
   cyfaust validate filter.dsp
   cyfaust bitcode save synth.dsp -o synth.fbc
   cyfaust json instrument.dsp --pretty
-'''
+""",
     )
 
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # version command
-    version_parser = subparsers.add_parser('version', help='Show version information')
+    version_parser = subparsers.add_parser("version", help="Show version information")
     version_parser.set_defaults(func=cmd_version)
 
     # compile command
-    compile_parser = subparsers.add_parser(
-        'compile',
-        help='Compile Faust DSP to target backend'
-    )
-    compile_parser.add_argument('input', help='Input Faust DSP file')
+    compile_parser = subparsers.add_parser("compile", help="Compile Faust DSP to target backend")
+    compile_parser.add_argument("input", help="Input Faust DSP file")
     compile_parser.add_argument(
-        '-b', '--backend',
-        default='cpp',
-        choices=['cpp', 'c++', 'c', 'rust', 'codebox'],
-        help='Target backend (default: cpp)'
+        "-b",
+        "--backend",
+        default="cpp",
+        choices=["cpp", "c++", "c", "rust", "codebox"],
+        help="Target backend (default: cpp)",
     )
-    compile_parser.add_argument(
-        '-o', '--output',
-        help='Output file (default: stdout)'
-    )
+    compile_parser.add_argument("-o", "--output", help="Output file (default: stdout)")
     compile_parser.set_defaults(func=cmd_compile)
 
     # diagram command
-    diagram_parser = subparsers.add_parser(
-        'diagram',
-        help='Generate SVG block diagram'
-    )
-    diagram_parser.add_argument('input', help='Input Faust DSP file')
-    diagram_parser.add_argument(
-        '-o', '--output',
-        help='Output directory for SVG files'
-    )
+    diagram_parser = subparsers.add_parser("diagram", help="Generate SVG block diagram")
+    diagram_parser.add_argument("input", help="Input Faust DSP file")
+    diagram_parser.add_argument("-o", "--output", help="Output directory for SVG files")
     diagram_parser.set_defaults(func=cmd_diagram)
 
     # expand command
-    expand_parser = subparsers.add_parser(
-        'expand',
-        help='Expand Faust DSP to self-contained code'
-    )
-    expand_parser.add_argument('input', help='Input Faust DSP file')
-    expand_parser.add_argument(
-        '-o', '--output',
-        help='Output file (default: stdout)'
-    )
-    expand_parser.add_argument(
-        '--sha-only',
-        action='store_true',
-        help='Only output the SHA1 key'
-    )
+    expand_parser = subparsers.add_parser("expand", help="Expand Faust DSP to self-contained code")
+    expand_parser.add_argument("input", help="Input Faust DSP file")
+    expand_parser.add_argument("-o", "--output", help="Output file (default: stdout)")
+    expand_parser.add_argument("--sha-only", action="store_true", help="Only output the SHA1 key")
     expand_parser.set_defaults(func=cmd_expand)
 
     # info command
-    info_parser = subparsers.add_parser(
-        'info',
-        help='Show DSP information'
-    )
-    info_parser.add_argument('input', help='Input Faust DSP file')
+    info_parser = subparsers.add_parser("info", help="Show DSP information")
+    info_parser.add_argument("input", help="Input Faust DSP file")
     info_parser.set_defaults(func=cmd_info)
 
     # play command
-    play_parser = subparsers.add_parser(
-        'play',
-        help='Play a Faust DSP file with RtAudio'
-    )
-    play_parser.add_argument('input', help='Input Faust DSP file')
+    play_parser = subparsers.add_parser("play", help="Play a Faust DSP file with RtAudio")
+    play_parser.add_argument("input", help="Input Faust DSP file")
     play_parser.add_argument(
-        '-d', '--duration',
-        type=float,
-        help='Duration in seconds (default: play until Ctrl+C)'
+        "-d", "--duration", type=float, help="Duration in seconds (default: play until Ctrl+C)"
     )
     play_parser.add_argument(
-        '-r', '--samplerate',
-        type=int,
-        default=44100,
-        help='Sample rate in Hz (default: 44100)'
+        "-r", "--samplerate", type=int, default=44100, help="Sample rate in Hz (default: 44100)"
     )
     play_parser.add_argument(
-        '-b', '--buffersize',
-        type=int,
-        default=512,
-        help='Buffer size in samples (default: 512)'
+        "-b", "--buffersize", type=int, default=512, help="Buffer size in samples (default: 512)"
     )
     play_parser.set_defaults(func=cmd_play)
 
     # params command
-    params_parser = subparsers.add_parser(
-        'params',
-        help='List all DSP parameters'
-    )
-    params_parser.add_argument('input', help='Input Faust DSP file')
+    params_parser = subparsers.add_parser("params", help="List all DSP parameters")
+    params_parser.add_argument("input", help="Input Faust DSP file")
     params_parser.add_argument(
-        '-v', '--verbose',
-        action='store_true',
-        help='Show additional parameter details'
+        "-v", "--verbose", action="store_true", help="Show additional parameter details"
     )
     params_parser.set_defaults(func=cmd_params)
 
     # validate command
-    validate_parser = subparsers.add_parser(
-        'validate',
-        help='Check a Faust DSP file for errors'
-    )
-    validate_parser.add_argument('input', help='Input Faust DSP file')
-    validate_parser.add_argument(
-        '--strict',
-        action='store_true',
-        help='Treat warnings as errors'
-    )
+    validate_parser = subparsers.add_parser("validate", help="Check a Faust DSP file for errors")
+    validate_parser.add_argument("input", help="Input Faust DSP file")
+    validate_parser.add_argument("--strict", action="store_true", help="Treat warnings as errors")
     validate_parser.set_defaults(func=cmd_validate)
 
     # bitcode command
-    bitcode_parser = subparsers.add_parser(
-        'bitcode',
-        help='Save/load DSP factory as bitcode'
-    )
+    bitcode_parser = subparsers.add_parser("bitcode", help="Save/load DSP factory as bitcode")
     bitcode_parser.add_argument(
-        'mode',
-        choices=['save', 'load'],
-        help='Operation mode: save DSP to bitcode, or load and display info'
+        "mode",
+        choices=["save", "load"],
+        help="Operation mode: save DSP to bitcode, or load and display info",
     )
-    bitcode_parser.add_argument('input', help='Input file (DSP for save, bitcode for load)')
+    bitcode_parser.add_argument("input", help="Input file (DSP for save, bitcode for load)")
     bitcode_parser.add_argument(
-        '-o', '--output',
-        help='Output bitcode file (for save mode, default: <name>.fbc)'
+        "-o", "--output", help="Output bitcode file (for save mode, default: <name>.fbc)"
     )
     bitcode_parser.set_defaults(func=cmd_bitcode)
 
     # json command
-    json_parser = subparsers.add_parser(
-        'json',
-        help='Export DSP metadata as JSON'
-    )
-    json_parser.add_argument('input', help='Input Faust DSP file')
-    json_parser.add_argument(
-        '-o', '--output',
-        help='Output JSON file (default: stdout)'
-    )
-    json_parser.add_argument(
-        '-p', '--pretty',
-        action='store_true',
-        help='Pretty-print JSON output'
-    )
+    json_parser = subparsers.add_parser("json", help="Export DSP metadata as JSON")
+    json_parser.add_argument("input", help="Input Faust DSP file")
+    json_parser.add_argument("-o", "--output", help="Output JSON file (default: stdout)")
+    json_parser.add_argument("-p", "--pretty", action="store_true", help="Pretty-print JSON output")
     json_parser.set_defaults(func=cmd_json)
 
     # Parse arguments
@@ -815,5 +760,5 @@ Examples:
     return args.func(args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

@@ -3,11 +3,7 @@ Test suite for newly implemented methods in cyfaust.
 Tests control(), frame(), compute() variants and factory methods.
 """
 
-import os
-import sys
-import pytest
 import numpy as np
-from pathlib import Path
 
 
 # Import testing utilities
@@ -16,44 +12,40 @@ from testutils import print_section, print_entry
 # Try importing from both build variants
 try:
     # Dynamic build imports
-    from cyfaust.interp import (
-        RtAudioDriver, InterpreterDspFactory,
-        create_dsp_factory_from_string
-    )
+    from cyfaust.interp import RtAudioDriver, InterpreterDspFactory, create_dsp_factory_from_string
+
     DYNAMIC_BUILD = True
 except (ModuleNotFoundError, ImportError):
     # Static build imports
-    from cyfaust.cyfaust import (
-        RtAudioDriver, InterpreterDspFactory,
-        create_dsp_factory_from_string
-    )
+    from cyfaust.cyfaust import create_dsp_factory_from_string
+
     DYNAMIC_BUILD = False
 
 
 class TestNewDSPMethods:
     """Test newly implemented DSP methods"""
-    
+
     def test_control_method(self):
         """Test control() method implementation"""
         print_entry("test_control_method")
-        
+
         dsp_code = """
         import("stdfaust.lib");
         freq = hslider("frequency", 440, 50, 2000, 1);
         gain = hslider("gain", 0.5, 0, 1, 0.01);
         process = os.osc(freq) * gain * 0.1;
         """
-        
+
         factory = create_dsp_factory_from_string("test_control", dsp_code)
         assert factory is not None, "Failed to create factory"
-        
+
         dsp = factory.create_dsp_instance()
         assert dsp is not None, "Failed to create DSP instance"
-        
+
         # Initialize DSP
         sample_rate = 44100
         dsp.init(sample_rate)
-        
+
         # Test control method
         try:
             dsp.control()  # Should not raise exception
@@ -61,7 +53,7 @@ class TestNewDSPMethods:
         except AttributeError:
             print("× control() method not available")
             raise
-        
+
         # Clean up
         del dsp
         del factory
@@ -69,39 +61,39 @@ class TestNewDSPMethods:
     def test_frame_method(self):
         """Test frame() method for single-frame processing"""
         print_entry("test_frame_method")
-        
+
         # Simple pass-through DSP
         dsp_code = "process = _;"
-        
+
         factory = create_dsp_factory_from_string("test_frame", dsp_code)
         assert factory is not None, "Failed to create factory"
-        
+
         dsp = factory.create_dsp_instance()
         assert dsp is not None, "Failed to create DSP instance"
-        
+
         # Initialize DSP
         sample_rate = 44100
         dsp.init(sample_rate)
-        
+
         num_inputs = dsp.get_numinputs()
         num_outputs = dsp.get_numoutputs()
-        
+
         if num_inputs > 0 and num_outputs > 0:
             # Test frame method with numpy arrays
             try:
                 inputs = np.zeros(num_inputs, dtype=np.float32)
                 outputs = np.zeros(num_outputs, dtype=np.float32)
-                
+
                 # Fill inputs with test signal
                 if num_inputs > 0:
                     inputs[0] = 0.5
-                
+
                 dsp.frame(inputs, outputs)
-                
+
                 print(f"✓ frame() method processed {num_inputs} → {num_outputs} channels")
                 print(f"  Input: {inputs[0] if num_inputs > 0 else 'N/A'}")
                 print(f"  Output: {outputs[0] if num_outputs > 0 else 'N/A'}")
-                
+
             except AttributeError:
                 print("× frame() method not available")
                 raise
@@ -110,7 +102,7 @@ class TestNewDSPMethods:
                 raise
         else:
             print("⚠ Skipping frame test - no inputs or outputs")
-        
+
         # Clean up
         del dsp
         del factory
@@ -219,14 +211,14 @@ class TestNewDSPMethods:
         print_entry("test_metadata_method")
 
         # DSP with metadata declarations
-        dsp_code = '''
+        dsp_code = """
         declare name "TestSynth";
         declare author "Test Author";
         declare version "1.0";
         declare license "MIT";
         import("stdfaust.lib");
         process = os.osc(440) * 0.1;
-        '''
+        """
 
         factory = create_dsp_factory_from_string("test_metadata", dsp_code)
         assert factory is not None, "Failed to create factory"
@@ -251,7 +243,9 @@ class TestNewDSPMethods:
             assert meta["name"] == "TestSynth", f"Expected name='TestSynth', got '{meta['name']}'"
 
             assert "author" in meta, "Expected 'author' in metadata"
-            assert meta["author"] == "Test Author", f"Expected author='Test Author', got '{meta['author']}'"
+            assert meta["author"] == "Test Author", (
+                f"Expected author='Test Author', got '{meta['author']}'"
+            )
 
         except AttributeError:
             print("x metadata() method not available")
@@ -265,72 +259,71 @@ class TestNewDSPMethods:
         del factory
 
 
-
 class TestNewFactoryMethods:
     """Test newly implemented factory methods"""
-    
+
     def test_memory_manager_methods(self):
         """Test memory manager methods"""
         print_entry("test_memory_manager_methods")
-        
+
         dsp_code = "process = _;"
-        
+
         factory = create_dsp_factory_from_string("test_memory_manager", dsp_code)
         assert factory is not None, "Failed to create factory"
-        
+
         try:
             # Test get_memory_manager
             manager = factory.get_memory_manager()
             print(f"✓ get_memory_manager() returned: {manager}")
-            
+
             # Test set_memory_manager (with None for Python interface)
             factory.set_memory_manager(None)
             print("✓ set_memory_manager() completed")
-            
+
         except AttributeError as e:
             print(f"× Memory manager methods not available: {e}")
             raise
         except Exception as e:
             print(f"⚠ Memory manager methods available but limited in Python: {e}")
-        
+
         # Clean up
         del factory
 
     def test_class_init_method(self):
         """Test class_init() method"""
         print_entry("test_class_init_method")
-        
+
         dsp_code = """
         import("stdfaust.lib");
         process = no.noise * 0.1;
         """
-        
+
         factory = create_dsp_factory_from_string("test_class_init", dsp_code)
         assert factory is not None, "Failed to create factory"
-        
+
         try:
             sample_rate = 48000
             factory.class_init(sample_rate)
             print(f"✓ class_init({sample_rate}) completed successfully")
-            
+
         except AttributeError:
             print("× class_init() method not available")
             raise
         except Exception as e:
             print(f"× class_init() method error: {e}")
             raise
-        
+
         # Clean up
         del factory
 
 
 class TestIntegrationWithNewMethods:
     """Integration tests using the new methods"""
-    
+
     def test_complete_dsp_workflow(self):
         """Test complete DSP workflow with new methods"""
         print_entry("test_complete_dsp_workflow")
-        
+
         dsp_code = """
         import("stdfaust.lib");
         freq = hslider("frequency", 440, 50, 2000, 1);
@@ -342,57 +335,58 @@ class TestIntegrationWithNewMethods:
         
         process = oscillator * gain * envelope;
         """
-        
+
         factory = create_dsp_factory_from_string("test_workflow", dsp_code)
         assert factory is not None, "Failed to create factory"
-        
+
         # Test factory methods
         factory.class_init(44100)
         manager = factory.get_memory_manager()
         factory.set_memory_manager(manager)
-        
+
         dsp = factory.create_dsp_instance()
         assert dsp is not None, "Failed to create DSP instance"
-        
+
         # Initialize DSP
         sample_rate = 44100
         dsp.init(sample_rate)
         dsp.instance_init(sample_rate)
         dsp.instance_constants(sample_rate)
         dsp.instance_clear()
-        
+
         # Test control method
         dsp.control()
-        
+
         num_inputs = dsp.get_numinputs()
         num_outputs = dsp.get_numoutputs()
-        
+
         if num_outputs > 0:
             # Test frame processing
             if num_inputs > 0:
                 inputs = np.zeros(num_inputs, dtype=np.float32)
                 outputs = np.zeros(num_outputs, dtype=np.float32)
                 dsp.frame(inputs, outputs)
-            
+
             # Test buffer processing
             buffer_size = 64
             inputs_2d = np.zeros((max(1, num_inputs), buffer_size), dtype=np.float32)
             outputs_2d = np.zeros((num_outputs, buffer_size), dtype=np.float32)
-            
+
             dsp.compute(buffer_size, inputs_2d, outputs_2d)
-            
-            
-            print(f"✓ Complete workflow test successful")
+
+            print("✓ Complete workflow test successful")
             print(f"  DSP: {num_inputs} inputs → {num_outputs} outputs")
             print(f"  Processed {buffer_size} frames")
-        
+
         # Clean up
         del dsp
         del factory
 
 
-if __name__ == '__main__':
-    print_section(f"Testing New Methods Implementation ({'dynamic' if DYNAMIC_BUILD else 'static'} build)")
+if __name__ == "__main__":
+    print_section(
+        f"Testing New Methods Implementation ({'dynamic' if DYNAMIC_BUILD else 'static'} build)"
+    )
 
     # Test DSP methods
     test_dsp = TestNewDSPMethods()
