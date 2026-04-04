@@ -473,7 +473,7 @@ factory = cyfaust.create_dsp_factory_from_string(
 
 # Create DSP instance
 dsp = factory.create_dsp_instance()
-print(f"Inputs: {dsp.get_num_inputs()}, Outputs: {dsp.get_num_outputs()}")
+print(f"Inputs: {dsp.get_numinputs()}, Outputs: {dsp.get_numoutputs()}")
 ```
 
 #### Detecting Backend at Runtime
