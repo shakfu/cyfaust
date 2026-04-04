@@ -145,7 +145,44 @@ try:
     )
     from cyfaust.interp import create_dsp_factory_from_signals
 except (ModuleNotFoundError, ImportError):
-    pytest.skip("cyfaust not available", allow_module_level=True)
+    try:
+        from cyfaust.cyfaust import (  # static build fallback
+            signal_context,
+            sig_int, sig_real, sig_float, sig_input,
+            sig_delay, sig_delay1, sig_int_cast, sig_float_cast,
+            sig_readonly_table, sig_write_read_table,
+            sig_waveform_int, sig_waveform_float,
+            sig_soundfile, sig_soundfile_length, sig_soundfile_rate, sig_soundfile_buffer,
+            sig_select2, sig_select3,
+            sig_add, sig_sub, sig_mul, sig_div, sig_rem, sig_bin_op,
+            sig_leftshift, sig_lrightshift, sig_arightshift,
+            sig_gt, sig_lt, sig_ge, sig_le, sig_eq, sig_ne,
+            sig_and, sig_or, sig_xor,
+            sig_abs, sig_acos, sig_asin, sig_atan, sig_ceil, sig_cos,
+            sig_exp, sig_exp10, sig_floor, sig_log, sig_log10,
+            sig_rint, sig_sin, sig_sqrt, sig_tan,
+            sig_remainder, sig_pow, sig_min, sig_max, sig_fmod, sig_atan2,
+            sig_self, sig_recursion, sig_self_n, sig_recursion_n,
+            sig_button, sig_checkbox, sig_vslider, sig_hslider, sig_numentry,
+            sig_vbargraph, sig_hbargraph,
+            sig_attach, sig_fconst, sig_fvar,
+            sig_or_float, sig_or_int,
+            print_signal, is_nil,
+            simplify_to_normal_form, simplify_to_normal_form2,
+            create_source_from_signals, create_dsp_factory_from_signals,
+            is_sig_int, is_sig_float, is_sig_input,
+            is_sig_delay, is_sig_delay1, is_sig_bin_op,
+            is_sig_int_cast, is_sig_float_cast,
+            is_sig_button, is_sig_checkbox, is_sig_hslider, is_sig_vslider,
+            is_sig_numentry, is_sig_hbargraph, is_sig_vbargraph,
+            is_sig_attach, is_sig_fconst, is_sig_fvar,
+            is_sig_select2, is_sig_readonly_table, is_sig_read_write_table,
+            is_sig_soundfile, is_sig_soundfile_length,
+            is_sig_soundfile_rate, is_sig_soundfile_buffer, is_sig_waveform,
+            Signal, SignalVector, Interval, SType, SOperator,
+        )
+    except (ModuleNotFoundError, ImportError):
+        pytest.skip("cyfaust not available", allow_module_level=True)
 
 
 # ---------------------------------------------------------------------------

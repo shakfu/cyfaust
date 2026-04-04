@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ### Changed
 
 - Extracted `patch_headers_for_msvc()` from `FaustLLVMBuilder` into a standalone idempotent function in `manage.py`, now called from both `FaustBuilder` and `FaustLLVMBuilder` on Windows
+- Added static build (`cyfaust.cyfaust`) import fallbacks to `test_box_coverage.py` and `test_signal_coverage.py` so they work on Windows CI
 
 - Reorganized `docs/devnotes/` to `docs/dev/` and cleaned up stale files
 - Streamlined README.md to link to docs site for detailed build/CLI/API information

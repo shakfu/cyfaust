@@ -77,7 +77,7 @@ jobs:
       run: |
         pip install (Get-ChildItem dist/*.whl).FullName
         python -c "import cyfaust; print('cyfaust imported successfully')"
-        python -c "from cyfaust.interp import get_version; print('libfaust version:', get_version())"
+        python -c "from cyfaust import get_version; print('libfaust version:', get_version())"
       shell: pwsh
 
     - name: Run tests (non-audio)

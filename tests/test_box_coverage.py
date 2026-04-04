@@ -172,7 +172,47 @@ try:
     )
     from cyfaust.signal import SignalVector
 except (ModuleNotFoundError, ImportError):
-    pytest.skip("cyfaust not available", allow_module_level=True)
+    try:
+        from cyfaust.cyfaust import (  # static build fallback
+            box_context, create_lib_context, destroy_lib_context,
+            box_int, box_float, box_real, box_wire, box_cut,
+            box_seq, box_par, box_par3, box_par4, box_par5,
+            box_split, box_merge, box_rec, box_route,
+            box_delay, box_delay_op, box_int_cast, box_int_cast_op,
+            box_float_cast, box_float_cast_op,
+            box_readonly_table, box_readonly_table_op,
+            box_write_read_table, box_write_read_table_op,
+            box_waveform, box_soundfile,
+            box_select2, box_select2_op, box_select3,
+            box_add, box_add_op, box_sub, box_sub_op,
+            box_mul, box_mul_op, box_div, box_div_op, box_rem, box_rem_op,
+            box_leftshift, box_leftshift_op, box_lrightshift, box_lrightshift_op,
+            box_arightshift, box_arightshift_op,
+            box_gt, box_gt_op, box_lt, box_lt_op, box_ge, box_ge_op,
+            box_le, box_le_op, box_eq, box_eq_op, box_ne, box_ne_op,
+            box_and, box_and_op, box_or, box_or_op, box_xor, box_xor_op,
+            box_abs, box_acos, box_asin, box_atan, box_ceil, box_cos,
+            box_exp, box_exp10, box_floor, box_log, box_log10,
+            box_rint, box_round, box_sin, box_sqrt, box_tan,
+            box_remainder, box_pow, box_min, box_max, box_fmod, box_atan2,
+            box_button, box_checkbox, box_vslider, box_hslider, box_numentry,
+            box_vbargraph, box_vbargraph2, box_hbargraph, box_hbargraph2,
+            box_vgroup, box_hgroup, box_tgroup,
+            box_attach, box_attach_op,
+            box_fconst, box_fvar, box_bin_op, box_bin_op0,
+            box_or_int, box_or_float, box_or_number, box_is_nil,
+            to_string, print_box, get_def_name_property, extract_name,
+            tree2str, tree2int,
+            is_box_int, is_box_abstr, is_box_appl, is_box_button,
+            is_box_checkbox, is_box_cut, is_box_environment, is_box_error,
+            is_box_fconst, is_box_fvar, is_box_hbargraph, is_box_hgroup,
+            is_box_hslider, is_box_ident,
+            getparams_box_button, getparams_box_hslider,
+            dsp_to_boxes, get_box_type, boxes_to_signals, create_source_from_boxes,
+            Box, BoxVector, SignalVector, SType, SOperator,
+        )
+    except (ModuleNotFoundError, ImportError):
+        pytest.skip("cyfaust not available", allow_module_level=True)
 
 
 # ---------------------------------------------------------------------------
