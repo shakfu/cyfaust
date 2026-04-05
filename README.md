@@ -150,6 +150,29 @@ Build options (set via `make VAR=1`):
 | `ASIO` | 0 | ASIO (Windows) |
 | `DSOUND` | 0 | DirectSound (Windows) |
 
+### Windows
+
+On Windows, use the provided build script instead of `make`:
+
+```bash
+# Full build (checks deps, generates static sources, builds wheel)
+python scripts/build_windows.py
+
+# Clean build artifacts first
+python scripts/build_windows.py --clean
+
+# Skip dependency builds (if libs already exist in lib/static/)
+python scripts/build_windows.py --skip-deps
+
+# Force rebuild all dependencies
+python scripts/build_windows.py --rebuild-deps
+
+# Build + install + run tests
+python scripts/build_windows.py --test
+```
+
+Prerequisites: Visual Studio 2022 (or MSVC Build Tools), Python 3.10+, [uv](https://docs.astral.sh/uv/), and CMake.
+
 See the full [Building from Source](https://shakfu.github.io/cyfaust/building/) guide for platform prerequisites, LLVM backend details, and wheel building instructions.
 
 ## Platform Support

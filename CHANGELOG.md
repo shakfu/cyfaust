@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Added
 
+- Added `scripts/build_windows.py` for local Windows wheel builds, replicating the CI workflow steps (dependency checks, static source generation, wheel build with `STATIC=ON`)
 - Re-enabled Windows in `cyfaust-release.yml` workflow (static interpreter wheels for Python 3.10-3.14, with sndfile/samplerate built from source and non-audio test suite)
 
 ### Changed
