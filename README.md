@@ -152,24 +152,16 @@ Build options (set via `make VAR=1`):
 
 ### Windows
 
-On Windows, use the provided build script instead of `make`:
+On Windows, use the provided build script:
 
 ```bash
-# Full build (checks deps, generates static sources, builds wheel)
-python scripts/build_windows.py
-
-# Clean build artifacts first
-python scripts/build_windows.py --clean
-
-# Skip dependency builds (if libs already exist in lib/static/)
-python scripts/build_windows.py --skip-deps
-
-# Force rebuild all dependencies
-python scripts/build_windows.py --rebuild-deps
-
-# Build + install + run tests
-python scripts/build_windows.py --test
+python scripts/build_windows.py              # static wheel (default)
+python scripts/build_windows.py --dynamic    # dynamic wheel (bundles faust.dll)
+python scripts/build_windows.py --clean      # clean first, then build
+python scripts/build_windows.py --test       # build + install + run tests
 ```
+
+If you have GNU Make installed, `make wheel-windows` also works for dynamic wheels.
 
 Prerequisites: Visual Studio 2022 (or MSVC Build Tools), Python 3.10+, [uv](https://docs.astral.sh/uv/), and CMake.
 
