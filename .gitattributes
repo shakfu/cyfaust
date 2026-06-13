@@ -1,0 +1,39 @@
+# Normalize line endings to LF in the repository and on checkout for ALL
+# platforms. Without this, GitHub's Windows runners check out text files with
+# CRLF (autocrlf=true), so the Windows wheels shipped CRLF-terminated copies of
+# the bundled Faust libraries and Python sources -- inconsistent with the
+# macOS/Linux wheels. Forcing eol=lf keeps every wheel's text payload identical
+# regardless of the build host.
+* text=auto eol=lf
+
+# Faust sources are text. NOTE: ".lib" here is a Faust standard-library source
+# file, not a static library (static libs are gitignored), so it must stay text.
+*.dsp  text eol=lf
+*.lib  text eol=lf
+
+# Known-binary assets: never apply line-ending conversion.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.icns  binary
+*.wav   binary
+*.aiff  binary
+*.mp3   binary
+*.flac  binary
+*.ogg   binary
+*.mid   binary
+*.midi  binary
+*.wasm  binary
+*.pdf   binary
+*.zip   binary
+*.gz    binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.so    binary
+*.dylib binary
+*.a     binary
+*.lib-static binary

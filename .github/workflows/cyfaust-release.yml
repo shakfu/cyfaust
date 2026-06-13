@@ -11,7 +11,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        # Linux wheels are built separately in the build_linux_wheels job via
+        # cibuildwheel (manylinux_2_28). This native matrix is macOS + Windows
+        # only -- a bare ubuntu-latest build links against glibc 2.39 and won't
+        # install on older distros.
+        os: [macos-latest, windows-latest]
         py_version: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
@@ -143,10 +147,31 @@ jobs:
         name: dist-${{ matrix.os }}-py${{ matrix.py_version }}
         path: ./dist/*.whl
 
+  build_linux_wheels:
+    name: Build Linux wheels (manylinux_2_28)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+        fetch-depth: '1'
+
+    # Builds cp310-cp314 inside the manylinux_2_28 container. All build config
+    # (image, before-all faust build, CMAKE_ARGS, test) lives in
+    # [tool.cibuildwheel] in pyproject.toml. auditwheel repair to manylinux_2_28
+    # and vendoring of libsndfile/libsamplerate/alsa happen automatically.
+    - name: Build wheels
+      uses: pypa/cibuildwheel@v2.23.3
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: dist-linux-manylinux_2_28
+        path: ./wheelhouse/*.whl
+
   collect-artifacts:
     name: Collect all artifacts
     runs-on: ubuntu-latest
-    needs: build_wheels
+    needs: [build_wheels, build_linux_wheels]
     steps:
     - name: Download all artifacts
       uses: actions/download-artifact@v4

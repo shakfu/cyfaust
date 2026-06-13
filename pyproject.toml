@@ -109,6 +109,34 @@ ASIO = "OFF"
 WASAPI = "ON"
 DSOUND = "OFF"
 
+# ----------------------------------------------------------------------------
+# cibuildwheel: builds the Linux wheels inside a manylinux_2_28 container
+# (glibc 2.28) so they install on RHEL/Rocky/Alma 8+, Debian 10+, Ubuntu 18.04+,
+# and Amazon Linux 2023 -- unlike a bare ubuntu-latest build (glibc 2.39), which
+# only installs on distros from ~2024 on. macOS/Windows wheels are still built
+# natively in CI (see cyfaust-release.yml), not through cibuildwheel.
+# ----------------------------------------------------------------------------
+[tool.cibuildwheel]
+build = "cp310-* cp311-* cp312-* cp313-* cp314-*"
+build-frontend = "build"
+# Smoke-test each built wheel; keep deps to none so it runs everywhere.
+test-command = 'python -c "import cyfaust; from cyfaust import get_version; print(get_version())"'
+
+[tool.cibuildwheel.linux]
+manylinux-x86_64-image = "manylinux_2_28"
+environment = { CMAKE_ARGS = "-DSTATIC=ON" }
+# Run once per container before building any wheel: install the audio dev
+# libraries auditwheel will vendor into cyfaust.libs/ (libsndfile/libsamplerate/
+# alsa, which pull in FLAC/ogg/vorbis/opus/mp3lame/mpg123), then build libfaust
+# from source and generate the static-variant sources. manylinux_2_28 is
+# AlmaLinux 8, so packages come from dnf/yum (libsndfile/samplerate via EPEL).
+before-all = [
+    "dnf -y install epel-release || yum -y install epel-release",
+    "dnf -y install libsndfile-devel libsamplerate-devel alsa-lib-devel cmake git make gcc-c++ || yum -y install libsndfile-devel libsamplerate-devel alsa-lib-devel cmake git make gcc-c++",
+    "python3 scripts/manage.py setup --faust",
+    "python3 scripts/generate_static.py",
+]
+
 [tool.ruff]
 line-length = 100
 
