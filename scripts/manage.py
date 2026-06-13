@@ -856,8 +856,12 @@ class FaustBuilder(Builder):
             self.copy_stdlib()
             self.copy_examples()
             self.copy_architecture()
-        if PLATFORM == "Windows":
-            patch_headers_for_msvc(self.project.include)
+        # keep the bundled sound-player.h MSVC-safe (VLA -> std::vector). Applied
+        # unconditionally and idempotently: on Unix it re-patches after
+        # copy_headers() refreshed the header from upstream faust -- which would
+        # otherwise re-introduce the VLAs and break the Windows static build (MSVC
+        # C2131); on Windows it patches the committed header in place.
+        patch_headers_for_msvc(self.project.include)
         self.log.info("faust build DONE")
 
 
@@ -1236,9 +1240,10 @@ class FaustLLVMBuilder(Builder):
         self.install_staticlib()
         self.install_headers()
 
-        # Apply MSVC-specific patches on Windows
-        if PLATFORM == "Windows":
-            patch_headers_for_msvc(self.project.include)
+        # keep the bundled sound-player.h MSVC-safe (VLA -> std::vector) after
+        # install_headers() refreshed it from the downloaded faust source --
+        # unconditional and idempotent, see FaustBuilder.process().
+        patch_headers_for_msvc(self.project.include)
 
         self.log.info("FaustLLVMBuilder DONE: %s installed", self.staticlib_name)
 
