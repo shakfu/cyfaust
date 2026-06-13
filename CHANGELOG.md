@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - Fixed `make` failing from a clean checkout with `LNK1181: cannot open input file ...\lib\static\sndfile.lib`. With `INCLUDE_SNDFILE=1` (the default) the link step pulls in `sndfile.lib` and `samplerate.lib` (see `CMakeLists.txt`), but the `build`/`sync`/`pytest` targets declared only `faust` as a prerequisite, so those libs were never provisioned -- only `wheel-windows` listed them. A new `SNDFILE_DEPS` variable (the samplerate/sndfile libs when `INCLUDE_SNDFILE=1`, empty otherwise) is now a prerequisite of `build`, `sync`, and `pytest`, so a plain `make` builds them before the link step
 - Fixed `python scripts/manage.py setup --all` building only the first prerequisite: the `sys.exit()` was indented inside the builder loop, so it ran `DependencyMgr` and quit before faust/sndfile/samplerate. The exit now runs after the full loop completes
 - Fixed `SndfileBuilder`/`SamplerateBuilder` re-cloning their source trees unconditionally on every run -- a `git clone` into an existing directory that failed silently (since `ShellCmd.cmd` does not check exit codes). Both now skip the clone when the source already exists, mirroring `FaustLLVMBuilder`
+- Fixed `scripts/generate_static.py` emitting CRLF line endings on Windows: it wrote `src/static/cyfaust/cyfaust.pyx` and the synced `.pxd` files via `Path.write_text()`, which translates `\n` to the platform line ending, so regenerating on Windows produced CRLF files that conflict with the repo's `.gitattributes` (`eol=lf`) and showed up as phantom diffs. Both writes now pass `newline=""` to force LF on every platform
 
 ### Removed
 
@@ -27,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
+- Ported `scripts/verify_build_sync.sh` to `scripts/verify_build_sync.py` (the `verify-sync` make target now invokes `$(PYTHON)`), removing the bash dependency. The shell script used bash arrays and failed under a POSIX `sh` with `syntax error: unexpected "("`; the Python port is portable across Windows/macOS/Linux and consistent with the other `scripts/*.py` invoked from the Makefile
 - Updated `docs/building.md` to drop the removed `manage.py build`/`wheel` examples (adding `setup --all`) and clarify that `manage.py` provisions the native dependencies while the `Makefile` builds cyfaust and its wheels
 
 ## [0.1.4]

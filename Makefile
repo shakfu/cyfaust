@@ -206,7 +206,7 @@ publish: wheel-check
 
 # Verify static/dynamic build sync
 verify-sync:
-	@./scripts/verify_build_sync.sh
+	@$(PYTHON) scripts/verify_build_sync.py
 
 # Verify the generated static source is not stale. Regenerates from the dynamic
 # modules and fails if src/static/cyfaust/cyfaust.pyx differs, i.e. someone
