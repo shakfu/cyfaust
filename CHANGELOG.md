@@ -15,6 +15,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed a double-free / segfault in `InterpreterDsp.delete()` (both the dynamic `interp.pyx` and static `cyfaust.pyx` variants). `delete()` called `del self.ptr` but left `self.ptr` non-null, so when the parent `InterpreterDspFactory.__dealloc__` later freed its tracked instances on teardown, an instance the user had already deleted explicitly was freed a second time (reproducible as create -> init -> `delete()` -> interpreter exit, giving exit code 139). `delete()` now mirrors `__dealloc__` (frees `sound_ui` and the dsp pointer, then nulls both), making a second `delete()` or the factory's teardown a safe no-op. With thanks to [@olilarkin](https://github.com/olilarkin) for the report and fix ([#1](https://github.com/shakfu/cyfaust/pull/1))
+- Fixed stale generated source in the static build variant: `src/static/cyfaust/cyfaust.pyx` had drifted from its dynamic sources and was regenerated via `make generate-static`, correcting `is_sig_doc_access_tbl()` to return `tbl`/`ridx` dict keys (previously the stale `n`/`widx`) in the static build
+
+### Added
+
+- Added a `verify-generated` make target (wired into `test`) that regenerates the static source and fails if `src/static/cyfaust/cyfaust.pyx` is stale, preventing the dynamic and static variants from silently diverging
+- Added `build-static` and `test-static` make targets to build and run the test suite against the static (monolithic) variant, which the default `test` target does not exercise
+
 ## [0.1.4]
 
 ### Fixed

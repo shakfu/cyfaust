@@ -52,9 +52,9 @@ CMAKE_OPTS += -DDSOUND=$(if $(filter 1,$(DSOUND)),ON,OFF)
 export CMAKE_ARGS := $(CMAKE_OPTS)
 
 .PHONY: all sync faust faustwithllvm samplerate sndfile build rebuild test wheel sdist \
-        generate-static release verify-sync pytest clean distclean reset help \
+        generate-static release verify-sync verify-generated pytest clean distclean reset help \
         wheel-static wheel-dynamic wheel-windows wheel-llvm wheel-repair wheel-check \
-        publish publish-test build-llvm test-llvm \
+        publish publish-test build-llvm test-llvm build-static test-static \
         docs docs-serve docs-deploy docs-diagram docs-clean \
         typecheck lint format qa
 
@@ -104,7 +104,7 @@ build: faust
 rebuild: build
 
 # Run tests
-test: build verify-sync
+test: build verify-sync verify-generated
 	uv run pytest tests/ -v
 	@rm -f DumpCode-*.txt DumpMem-*.txt
 
@@ -141,6 +141,16 @@ build-llvm: faustwithllvm generate-static
 
 # Test LLVM build
 test-llvm: build-llvm
+	uv run pytest tests/ -v
+	@rm -f DumpCode-*.txt DumpMem-*.txt
+
+# Build the static variant (statically linked, no external dylib) for development
+build-static: faust generate-static
+	CMAKE_ARGS="-DSTATIC=ON" uv sync --reinstall-package cyfaust
+
+# Test the static build. The default 'test' target only exercises the dynamic
+# variant, so run this to actually execute the compiled static (monolithic) build.
+test-static: build-static
 	uv run pytest tests/ -v
 	@rm -f DumpCode-*.txt DumpMem-*.txt
 
@@ -193,6 +203,26 @@ publish: wheel-check
 # Verify static/dynamic build sync
 verify-sync:
 	@./scripts/verify_build_sync.sh
+
+# Verify the generated static source is not stale. Regenerates from the dynamic
+# modules and fails if src/static/cyfaust/cyfaust.pyx differs, i.e. someone
+# hand-edited it or forgot to run 'make generate-static'. Compares against the
+# working-tree file (not git) so a correct-but-uncommitted regeneration passes;
+# non-mutating: the original is restored on mismatch. Pairs with verify-sync,
+# which guards the .pxd files the generator also rewrites.
+verify-generated:
+	@cp src/static/cyfaust/cyfaust.pyx src/static/cyfaust/cyfaust.pyx.orig
+	@$(PYTHON) scripts/generate_static.py >/dev/null
+	@if diff -q src/static/cyfaust/cyfaust.pyx.orig src/static/cyfaust/cyfaust.pyx >/dev/null; then \
+		rm -f src/static/cyfaust/cyfaust.pyx.orig; \
+		echo "OK: generated static source is up to date"; \
+	else \
+		diff -u src/static/cyfaust/cyfaust.pyx.orig src/static/cyfaust/cyfaust.pyx | head -40; \
+		mv -f src/static/cyfaust/cyfaust.pyx.orig src/static/cyfaust/cyfaust.pyx; \
+		echo "ERROR: src/static/cyfaust/cyfaust.pyx is stale."; \
+		echo "Edit only src/cyfaust/*.pyx, then run 'make generate-static' and commit."; \
+		exit 1; \
+	fi
 
 # Run pytest directly
 pytest: faust
