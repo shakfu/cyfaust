@@ -108,7 +108,8 @@ def process_module(module_name: str) -> str:
 
 
 def generate_header() -> str:
-    """Generate the file header with collected imports."""
+    """Generate the file header, re-emitting any standard imports collected from
+    the source modules that the hardcoded block below does not already provide."""
     header = '''# distutils: language = c++
 #
 # THIS FILE IS AUTO-GENERATED - DO NOT EDIT DIRECTLY
@@ -168,6 +169,24 @@ cpdef enum SOperator:
     kXOR = 16
 
 '''
+    # Re-emit standard imports collected from the dynamic modules that the
+    # hardcoded block above does not already provide (e.g. a new `import weakref`
+    # added to a module). process_module() strips these from the module bodies;
+    # without re-emitting them here they are silently dropped, breaking the
+    # static build with "undeclared name not builtin: ...". A collected import is
+    # considered already provided if it appears as a substring of the header
+    # (which also covers a partial cimport like ".. cimport deref" being a prefix
+    # of the fuller ".. cimport deref, preincrement as inc" line above).
+    extra = sorted(imp for imp in COLLECTED_IMPORTS if imp not in header)
+    if extra:
+        anchor = "from cython.operator cimport dereference as deref, preincrement as inc\n"
+        block = (
+            anchor
+            + "\n# Imports collected from source modules\n"
+            + "\n".join(extra)
+            + "\n"
+        )
+        header = header.replace(anchor, block, 1)
     return header
 
 
