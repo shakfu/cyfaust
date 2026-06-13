@@ -118,6 +118,11 @@ DSOUND = "OFF"
 # ----------------------------------------------------------------------------
 [tool.cibuildwheel]
 build = "cp310-* cp311-* cp312-* cp313-* cp314-*"
+# Skip musllinux (Alpine/musl): the before-all hook installs deps with dnf and
+# builds a glibc libfaust, neither of which works in a musl container. Build
+# manylinux only (matching prior releases); add a musl-specific override if
+# Alpine wheels are ever needed.
+skip = "*-musllinux*"
 build-frontend = "build"
 # Smoke-test each built wheel; keep deps to none so it runs everywhere.
 test-command = 'python -c "import cyfaust; from cyfaust import get_version; print(get_version())"'
