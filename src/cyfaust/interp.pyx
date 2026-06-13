@@ -473,7 +473,18 @@ cdef class InterpreterDsp:
         self.sound_ui = NULL
 
     def delete(self):
-        del self.ptr
+        """Delete the underlying DSP instance.
+
+        Idempotent: nulls the pointer after freeing so a second call -- e.g. the
+        parent factory deleting its tracked instances on teardown after the user
+        already called delete() -- is a safe no-op rather than a double free.
+        """
+        if self.sound_ui:
+            del self.sound_ui
+            self.sound_ui = NULL
+        if self.ptr:
+            del self.ptr
+            self.ptr = NULL
 
     @staticmethod
     cdef InterpreterDsp from_ptr(fi.interpreter_dsp* ptr, bint owner=False):
