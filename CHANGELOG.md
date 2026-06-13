@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [0.1.4]
+
 ### Fixed
 
 - Fixed a double-free / segfault in `InterpreterDsp.delete()` (both the dynamic `interp.pyx` and static `cyfaust.pyx` variants). `delete()` called `del self.ptr` but left `self.ptr` non-null, so when the parent `InterpreterDspFactory.__dealloc__` later freed its tracked instances on teardown, an instance the user had already deleted explicitly was freed a second time (reproducible as create -> init -> `delete()` -> interpreter exit, giving exit code 139). `delete()` now mirrors `__dealloc__` (frees `sound_ui` and the dsp pointer, then nulls both), making a second `delete()` or the factory's teardown a safe no-op. With thanks to [@olilarkin](https://github.com/olilarkin) for the report and fix ([#1](https://github.com/shakfu/cyfaust/pull/1))
@@ -23,16 +25,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 - Fixed `scripts/generate_static.py` silently dropping new top-level imports: it collected standard imports from the dynamic modules but never emitted them, so the hardcoded header was the only import source. Any import not already hardcoded (e.g. the `import weakref` added for the factory fix above) was lost, breaking the static build with `undeclared name not builtin`. The generator now re-emits collected imports the header does not already provide
 - Fixed a memory leak in `InterpreterDsp.clone()`: the cloned instance was created with `ptr_owner=False` and, unlike a `create_dsp_instance()` result, was tracked by no factory, so its C++ pointer was freed by nobody on garbage collection (leaking unless the caller manually called `delete()`). Clones now hold a weak reference to their parent's factory and register themselves in that factory's tracked instances, so they are freed on the factory's ordered teardown like any other instance. The weak backref keeps this cycle-free
 
+- Fixed Windows CI build failure introduced in 0.1.3: the bundled-resources refresh (`copy_stdlib()`, `copy_examples()`, `copy_architecture()`) was called unconditionally in `FaustBuilder.process()`, but it sources from the install prefix populated by `make install`, which the Windows build skips. The refresh is now gated to Linux/macOS; Windows consumes the committed `resources` as-is, mirroring how the committed headers are handled
+
 ### Added
 
 - Added a `verify-generated` make target (wired into `test`) that regenerates the static source and fails if `src/static/cyfaust/cyfaust.pyx` is stale, preventing the dynamic and static variants from silently diverging
 - Added `build-static` and `test-static` make targets to build and run the test suite against the static (monolithic) variant, which the default `test` target does not exercise
-
-## [0.1.4]
-
-### Fixed
-
-- Fixed Windows CI build failure introduced in 0.1.3: the bundled-resources refresh (`copy_stdlib()`, `copy_examples()`, `copy_architecture()`) was called unconditionally in `FaustBuilder.process()`, but it sources from the install prefix populated by `make install`, which the Windows build skips. The refresh is now gated to Linux/macOS; Windows consumes the committed `resources` as-is, mirroring how the committed headers are handled
 
 ## [0.1.3]
 
