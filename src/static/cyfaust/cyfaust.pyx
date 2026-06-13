@@ -10,11 +10,17 @@
 #
 
 import os
+import weakref
 from libc.stdlib cimport malloc, free
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp.map cimport map
 from cython.operator cimport dereference as deref, preincrement as inc
+
+# Every live InterpreterDspFactory wrapper, weakly referenced. delete_all_dsp_
+# factories() uses this to invalidate wrappers whose C++ factory it destroys, so
+# their __dealloc__ cannot double-free (see delete_all_dsp_factories).
+cdef object _live_factories = weakref.WeakSet()
 
 # -----------------------------------------------------------------------------
 # Backend Selection (compile-time)
@@ -293,11 +299,13 @@ cdef class InterpreterDspFactory:
     cdef fi.interpreter_dsp_factory* ptr
     cdef bint ptr_owner
     cdef set instances
+    cdef object __weakref__          # make wrappers weak-referenceable
 
     def __cinit__(self):
         self.ptr = NULL
         self.ptr_owner = False
         self.instances = set()
+        _live_factories.add(self)
 
     def __dealloc__(self):
         if self.ptr and self.ptr_owner:
@@ -307,6 +315,12 @@ cdef class InterpreterDspFactory:
                 i.delete()
             fi.deleteInterpreterDSPFactory(self.ptr)
             self.ptr = NULL
+
+    cdef void _invalidate(self):
+        """Drop our reference to a C++ factory destroyed out-of-band (e.g. by
+        delete_all_dsp_factories) so __dealloc__ won't delete it a second time."""
+        self.ptr = NULL
+        self.ptr_owner = False
 
     def get_name(self) -> str:
         """Return factory name."""
@@ -775,7 +789,15 @@ def create_dsp_factory_from_boxes(str name_app, Box box, *args) -> InterpreterDs
     return InterpreterDspFactory.from_boxes(name_app, box, *args)
 
 def delete_all_dsp_factories():
-    """Delete all Faust DSP factories kept in the library cache."""
+    """Delete all Faust DSP factories kept in the library cache.
+
+    Invalidates every live Python factory wrapper first. delete_all destroys the
+    underlying C++ factories in libfaust's cache, so without this each wrapper's
+    __dealloc__ would later call deleteInterpreterDSPFactory() on an already-freed
+    factory -- a double free that aborts with 'deleteDSPFactory factory not found!'.
+    """
+    for f in list(_live_factories):
+        (<InterpreterDspFactory>f)._invalidate()
     fi.deleteAllInterpreterDSPFactories()
 
 def get_all_dsp_factories():
