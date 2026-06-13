@@ -156,12 +156,27 @@ jobs:
         submodules: true
         fetch-depth: '1'
 
+    # Extract FAUST_VERSION so the libfaust cache invalidates on a faust bump.
+    - name: Get faust version
+      id: faust
+      run: echo "version=$(grep -oP 'FAUST_VERSION = \"\K[^\"]+' scripts/manage.py)" >> "$GITHUB_OUTPUT"
+
+    # Cache the libfaust static lib built inside the manylinux container. The
+    # cibuildwheel before-all hook skips the (slow) source build when this file
+    # is restored (see pyproject.toml [tool.cibuildwheel.linux]). The file is
+    # built in-container into the host-mounted workspace, so it persists here.
+    - name: Cache libfaust (manylinux_2_28)
+      uses: actions/cache@v4
+      with:
+        path: lib/static/libfaust.a
+        key: linux-manylinux_2_28-libfaust-${{ steps.faust.outputs.version }}
+
     # Builds cp310-cp314 inside the manylinux_2_28 container. All build config
     # (image, before-all faust build, CMAKE_ARGS, test) lives in
     # [tool.cibuildwheel] in pyproject.toml. auditwheel repair to manylinux_2_28
     # and vendoring of libsndfile/libsamplerate/alsa happen automatically.
     - name: Build wheels
-      uses: pypa/cibuildwheel@v2.23.3
+      uses: pypa/cibuildwheel@v4.1.0
 
     - uses: actions/upload-artifact@v4
       with:

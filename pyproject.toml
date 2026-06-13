@@ -133,7 +133,10 @@ environment = { CMAKE_ARGS = "-DSTATIC=ON" }
 before-all = [
     "dnf -y install epel-release || yum -y install epel-release",
     "dnf -y install libsndfile-devel libsamplerate-devel alsa-lib-devel cmake git make gcc-c++ || yum -y install libsndfile-devel libsamplerate-devel alsa-lib-devel cmake git make gcc-c++",
-    "python3 scripts/manage.py setup --faust",
+    # Build libfaust only if the CI cache did not already restore it (manage.py
+    # setup --faust is not idempotent -- it re-clones and rebuilds). The
+    # build_linux_wheels job caches lib/static/libfaust.a across runs.
+    "test -f lib/static/libfaust.a || python3 scripts/manage.py setup --faust",
     "python3 scripts/generate_static.py",
 ]
 
