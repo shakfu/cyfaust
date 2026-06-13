@@ -3,6 +3,7 @@
 ## cyfaust - Core API
 
 - [ ] Add additional Python debug/validation checks
+- [ ] Guard instance methods against a destroyed backing factory (try option B and verify it is effective). After `delete_all_dsp_factories()` (or the owning factory being otherwise destroyed) any `InterpreterDsp` method that dereferences `self.ptr` -- `clone()`, `init()`, `compute()`, etc. -- is a use-after-free that segfaults (e.g. `clone()` exits 139). `clone()` already holds a weakref to its factory; investigate a shared `_check_live()` helper that raises a catchable `RuntimeError` when the factory weakref is dead or `factory.ptr == NULL`, used across the instance methods, turning the crash into a clean exception. Confirm it actually prevents the segfault (the naive `owner=True` fallback in `clone()` did not -- the crash is in `self.ptr.clone()` before teardown). Note the consistency cost: either guard all such methods or none.
 
 ## cyfaust.box
 

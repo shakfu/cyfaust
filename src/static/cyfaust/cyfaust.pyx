@@ -360,7 +360,8 @@ cdef class InterpreterDspFactory:
     def create_dsp_instance(self) -> InterpreterDsp:
         """Create a new DSP instance, to be deleted with C++ 'delete'"""
         cdef fi.interpreter_dsp* dsp = self.ptr.createDSPInstance()
-        instance = InterpreterDsp.from_ptr(dsp)
+        cdef InterpreterDsp instance = InterpreterDsp.from_ptr(dsp)
+        instance._factory_ref = weakref.ref(self)
         self.instances.add(instance)
         return instance
 
@@ -587,6 +588,7 @@ cdef class InterpreterDsp:
     cdef fi.interpreter_dsp* ptr
     cdef bint ptr_owner
     cdef fg.SoundUI* sound_ui
+    cdef object _factory_ref         # weakref to the owning factory (or None)
 
     def __dealloc__(self):
         if self.sound_ui:
@@ -600,6 +602,7 @@ cdef class InterpreterDsp:
         self.ptr = NULL
         self.ptr_owner = False
         self.sound_ui = NULL
+        self._factory_ref = None
 
     def delete(self):
         """Delete the underlying DSP instance.
@@ -656,9 +659,22 @@ cdef class InterpreterDsp:
         self.ptr.instanceClear()
 
     def clone(self) -> InterpreterDsp:
-        """Return a clone of the instance."""
+        """Return a clone of the instance.
+
+        The clone is registered with the same factory as this instance so its
+        C++ pointer is freed on the factory's ordered teardown -- exactly like a
+        create_dsp_instance() result. Without this a clone (ptr_owner=False, and
+        tracked by no factory) would leak, since its __dealloc__ frees nothing.
+        """
         cdef fi.interpreter_dsp* dsp = self.ptr.clone()
-        return InterpreterDsp.from_ptr(dsp)
+        cdef InterpreterDsp instance = InterpreterDsp.from_ptr(dsp)
+        cdef InterpreterDspFactory factory
+        if self._factory_ref is not None:
+            factory = self._factory_ref()
+            if factory is not None:
+                instance._factory_ref = self._factory_ref
+                factory.instances.add(instance)
+        return instance
 
     def build_user_interface(self, str sound_directory="", int sample_rate=-1):
         """Trigger the ui_interface parameter with instance specific calls
