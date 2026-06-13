@@ -15,6 +15,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed `make` failing from a clean checkout with `LNK1181: cannot open input file ...\lib\static\sndfile.lib`. With `INCLUDE_SNDFILE=1` (the default) the link step pulls in `sndfile.lib` and `samplerate.lib` (see `CMakeLists.txt`), but the `build`/`sync`/`pytest` targets declared only `faust` as a prerequisite, so those libs were never provisioned -- only `wheel-windows` listed them. A new `SNDFILE_DEPS` variable (the samplerate/sndfile libs when `INCLUDE_SNDFILE=1`, empty otherwise) is now a prerequisite of `build`, `sync`, and `pytest`, so a plain `make` builds them before the link step
+- Fixed `python scripts/manage.py setup --all` building only the first prerequisite: the `sys.exit()` was indented inside the builder loop, so it ran `DependencyMgr` and quit before faust/sndfile/samplerate. The exit now runs after the full loop completes
+- Fixed `SndfileBuilder`/`SamplerateBuilder` re-cloning their source trees unconditionally on every run -- a `git clone` into an existing directory that failed silently (since `ShellCmd.cmd` does not check exit codes). Both now skip the clone when the source already exists, mirroring `FaustLLVMBuilder`
+
+### Removed
+
+- Removed the dead `build` and `wheel` subcommands from `scripts/manage.py` (and the supporting `WheelBuilder`/`WheelFilename` classes), which shelled out to `setup.py build_ext`/`bdist_wheel` -- `setup.py` was removed earlier, and building cyfaust and its wheels is driven by the `Makefile` via `uv` + scikit-build-core. The now-unused `re`, `dataclass`, and `List` imports were dropped. `manage.py` retains the `setup`, `python`, `test`, and `clean` subcommands that CI and the Makefile depend on
+
+### Changed
+
+- Updated `docs/building.md` to drop the removed `manage.py build`/`wheel` examples (adding `setup --all`) and clarify that `manage.py` provisions the native dependencies while the `Makefile` builds cyfaust and its wheels
+
 ## [0.1.4]
 
 ### Fixed

@@ -51,6 +51,10 @@ CMAKE_OPTS += -DDSOUND=$(if $(filter 1,$(DSOUND)),ON,OFF)
 
 export CMAKE_ARGS := $(CMAKE_OPTS)
 
+# When INCLUDE_SNDFILE=1, the CMake link step pulls in sndfile.lib and
+# samplerate.lib (see CMakeLists.txt), so the build targets must provision them.
+SNDFILE_DEPS := $(if $(filter 1,$(INCLUDE_SNDFILE)),$(LIBSAMPLERATE) $(LIBSNDFILE),)
+
 .PHONY: all sync faust faustwithllvm samplerate sndfile build rebuild test wheel sdist \
         generate-static release verify-sync verify-generated pytest clean distclean reset help \
         wheel-static wheel-dynamic wheel-windows wheel-llvm wheel-repair wheel-check \
@@ -93,11 +97,11 @@ sndfile: $(LIBSAMPLERATE) $(LIBSNDFILE)
 # ----------------------------------------------------------------------------
 
 # Sync environment (initial setup, uses dynamic build for development)
-sync: faust
+sync: faust $(SNDFILE_DEPS)
 	CMAKE_ARGS="-DSTATIC=OFF" uv sync
 
 # Build/rebuild the extension after code changes (dynamic for development)
-build: faust
+build: faust $(SNDFILE_DEPS)
 	CMAKE_ARGS="-DSTATIC=OFF" uv sync --reinstall-package cyfaust
 
 # Alias for build
@@ -225,7 +229,7 @@ verify-generated:
 	fi
 
 # Run pytest directly
-pytest: faust
+pytest: faust $(SNDFILE_DEPS)
 	uv run pytest tests/ -vv
 	@rm -f DumpCode-*.txt DumpMem-*.txt
 

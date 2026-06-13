@@ -189,7 +189,9 @@ if cyfaust.LLVM_BACKEND:
 
 ## Build Management Script
 
-For finer control, use `scripts/manage.py` directly:
+`scripts/manage.py` provisions the native dependencies (libfaust, sndfile,
+samplerate, LLVM). Building cyfaust itself and the wheels is driven by the
+`Makefile` (via `uv` + scikit-build-core) — see the targets above.
 
 ```bash
 python3 scripts/manage.py setup --deps       # install prerequisites
@@ -197,10 +199,8 @@ python3 scripts/manage.py setup --faust      # build libfaust
 python3 scripts/manage.py setup --samplerate # build libsamplerate
 python3 scripts/manage.py setup --sndfile    # build libsndfile
 python3 scripts/manage.py setup --llvm       # download libfaustwithllvm
-python3 scripts/manage.py build              # build cyfaust (dynamic)
-python3 scripts/manage.py build --static     # build cyfaust (static)
+python3 scripts/manage.py setup --all        # all of the above
 python3 scripts/manage.py test               # run tests
-python3 scripts/manage.py wheel --release    # build release wheels
 ```
 
 ## Platform Support
