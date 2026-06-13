@@ -10,17 +10,14 @@
 #
 
 import os
-import weakref
 from libc.stdlib cimport malloc, free
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp.map cimport map
 from cython.operator cimport dereference as deref, preincrement as inc
 
-# Every live InterpreterDspFactory wrapper, weakly referenced. delete_all_dsp_
-# factories() uses this to invalidate wrappers whose C++ factory it destroys, so
-# their __dealloc__ cannot double-free (see delete_all_dsp_factories).
-cdef object _live_factories = weakref.WeakSet()
+# Imports collected from source modules
+import weakref
 
 # -----------------------------------------------------------------------------
 # Backend Selection (compile-time)
@@ -136,6 +133,12 @@ from libc.stdlib cimport malloc, free
 
 
 
+
+
+# Every live InterpreterDspFactory wrapper, weakly referenced. delete_all_dsp_
+# factories() uses this to invalidate wrappers whose C++ factory it destroys, so
+# their __dealloc__ cannot double-free (see delete_all_dsp_factories).
+cdef object _live_factories = weakref.WeakSet()
 
 
 ## ---------------------------------------------------------------------------
