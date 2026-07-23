@@ -375,6 +375,12 @@ class TestJsonCommand:
         # Check for our volume slider
         param_labels = [p["label"] for p in data["parameters"]]
         assert "volume" in param_labels
+        # Runtime-derived fields: full path, widget kind, i/o flag, value.
+        vol = next(p for p in data["parameters"] if p["label"] == "volume")
+        assert vol["type"] == "hslider"
+        assert vol["is_input"] is True
+        assert vol["path"].endswith("/volume")
+        assert "value" in vol
 
     def test_json_nonexistent_file(self):
         """Test JSON for non-existent file."""

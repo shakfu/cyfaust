@@ -26,27 +26,11 @@ Examples:
 
 import argparse
 import json as json_module
-import re
 import signal
 import sys
 import os
 import time
 from pathlib import Path
-
-# Regex patterns for parsing Faust UI elements from expanded DSP code
-_SLIDER_RE = (
-    r'{kind}\s*\(\s*"([^"]+)"\s*,'
-    r"\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*([^)]+)\)"
-)
-_UI_PATTERNS = [
-    (_SLIDER_RE.format(kind="vslider"), "vslider"),
-    (_SLIDER_RE.format(kind="hslider"), "hslider"),
-    (_SLIDER_RE.format(kind="nentry"), "nentry"),
-    (r'button\s*\(\s*"([^"]+)"\s*\)', "button"),
-    (r'checkbox\s*\(\s*"([^"]+)"\s*\)', "checkbox"),
-    (r'vbargraph\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^)]+)\)', "vbargraph"),
-    (r'hbargraph\s*\(\s*"([^"]+)"\s*,\s*([^,]+)\s*,\s*([^)]+)\)', "hbargraph"),
-]
 
 
 def get_cyfaust_imports():
@@ -261,7 +245,7 @@ def cmd_info(args):
         return 1
 
     # Initialize to get proper info
-    dsp.init(44100)
+    dsp.init(48000)
 
     print(f"File: {args.input}")
     print(f"Name: {factory.get_name()}")
@@ -469,7 +453,7 @@ def cmd_validate(args):
         return 1
 
     # Initialize and check basic properties
-    dsp.init(44100)
+    dsp.init(48000)
     num_inputs = dsp.get_numinputs()
     num_outputs = dsp.get_numoutputs()
 
@@ -537,7 +521,7 @@ def cmd_bitcode(args):
             print("Error: Failed to create DSP instance from bitcode", file=sys.stderr)
             return 1
 
-        dsp.init(44100)
+        dsp.init(48000)
 
         print(f"Loaded bitcode: {args.input}")
         print(f"  Name: {factory.get_name()}")
@@ -568,7 +552,7 @@ def cmd_json(args):
         print("Error: Failed to create DSP instance", file=sys.stderr)
         return 1
 
-    dsp.init(44100)
+    dsp.init(48000)
 
     # Build JSON structure
     data = {
@@ -589,44 +573,28 @@ def cmd_json(args):
     except Exception:
         data["metadata"] = {}
 
-    # Parse parameters from expanded code
-    result = imports["expand_dsp_from_file"](args.input)
-    if result:
-        sha_key, expanded_code = result
+    # Parameters from the runtime UI (APIUI), replacing the earlier regex parse
+    # of the expanded source: full UI path, widget kind, input/output flag,
+    # range, and current value -- exactly what the compiled DSP exposes.
+    params = []
+    for p in dsp.params():
+        entry = {
+            "path": p.path,
+            "label": p.label,
+            "type": p.kind,
+            "is_input": p.is_input,
+            "value": dsp.get_param(p.path),
+            "min": p.min,
+            "max": p.max,
+        }
+        if p.is_input:
+            # init/step are meaningful for settable controls, not bargraphs.
+            entry["init"] = p.init
+            entry["step"] = p.step
+        params.append(entry)
 
-        params = []
-        for pattern, ui_type in _UI_PATTERNS:
-            for match in re.finditer(pattern, expanded_code):
-                if ui_type in ["vslider", "hslider", "nentry"]:
-                    params.append(
-                        {
-                            "type": ui_type,
-                            "label": match.group(1),
-                            "init": match.group(2).strip(),
-                            "min": match.group(3).strip(),
-                            "max": match.group(4).strip(),
-                            "step": match.group(5).strip(),
-                        }
-                    )
-                elif ui_type in ["button", "checkbox"]:
-                    params.append(
-                        {
-                            "type": ui_type,
-                            "label": match.group(1),
-                        }
-                    )
-                elif ui_type in ["vbargraph", "hbargraph"]:
-                    params.append(
-                        {
-                            "type": ui_type,
-                            "label": match.group(1),
-                            "min": match.group(2).strip(),
-                            "max": match.group(3).strip(),
-                        }
-                    )
-
-        if params:
-            data["parameters"] = params
+    if params:
+        data["parameters"] = params
 
     # Add libraries
     libs = factory.get_library_list()
