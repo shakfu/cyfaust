@@ -9,7 +9,7 @@ A minimal, modular, self-contained, cross-platform [Cython](https://github.com/c
 - **Signal API**: Fully wrapped with both functional and object-oriented interfaces
 - **Platform Support**: macOS, Linux, and Windows
 - **Build Variants**: Dynamic (`libfaust.so|dylib`) and static (`libfaust.a|lib`)
-- **Faust Version**: `2.83.1`
+- **Faust Version**: `2.85.9`
 
 ## Quick Example
 

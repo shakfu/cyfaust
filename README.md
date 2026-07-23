@@ -7,7 +7,7 @@ The cyfaust project provides a minimal, modular, self-contained, cross-platform 
 - **Signal API**: Fully wrapped with both functional and object-oriented interfaces
 - **Platform Support**: macOS, Linux, and Windows
 - **Build Variants**: Dynamic (`libfaust.so|dylib`) and static (`libfaust.a|lib`)
-- **Faust Version**: `2.85.5`
+- **Faust Version**: `2.85.9`
 - **Documentation**: [cyfaust-docs](https://shakfu.github.io/cyfaust/)
 
 ## Installation
