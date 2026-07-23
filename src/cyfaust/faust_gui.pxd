@@ -259,3 +259,24 @@ cdef extern from "faust/gui/MapUI.h":
         FAUSTFLOAT* getParamZone(int index)
         @staticmethod
         bint endsWith(const string& str, const string& end)
+
+cdef extern from "faust/gui/APIUI.h":
+    # Ready-made UI subclass that captures every control's zone plus its full
+    # metadata (path, label, widget type, init/min/max/step). Built onto a DSP
+    # instance via `buildUserInterface`, then queried/driven by parameter index.
+    # `getParamItemType` returns the `ItemType` enum:
+    #   0 kButton, 1 kCheckButton, 2 kVSlider, 3 kHSlider, 4 kNumEntry,
+    #   5 kHBargraph, 6 kVBargraph.
+    cdef cppclass APIUI(UI):
+        APIUI() except +
+        int getParamsCount()
+        const char* getParamAddress(int index)
+        const char* getParamLabel(int index)
+        FAUSTFLOAT getParamInit(int index)
+        FAUSTFLOAT getParamMin(int index)
+        FAUSTFLOAT getParamMax(int index)
+        FAUSTFLOAT getParamStep(int index)
+        FAUSTFLOAT getParamValue(int index)
+        void setParamValue(int index, FAUSTFLOAT value)
+        FAUSTFLOAT* getParamZone(int index)
+        int getParamItemType(int index)

@@ -373,66 +373,71 @@ def cmd_play(args):
 
 
 def cmd_params(args):
-    """List all DSP parameters by parsing the expanded code."""
+    """List DSP parameters, and optionally get/set control values.
+
+    Uses the runtime UI parameter API (`InterpreterDsp.params` / `get_param` /
+    `set_param`), which builds an APIUI onto a live instance, so paths, widget
+    kinds, ranges, and current values are exactly what the compiled DSP exposes.
+    (This replaces the earlier approach of regex-parsing the expanded source.)
+    """
     imports = get_cyfaust_imports()
 
     if not os.path.exists(args.input):
         print(f"Error: File not found: {args.input}", file=sys.stderr)
         return 1
 
-    # Expand DSP to get all UI elements
-    result = imports["expand_dsp_from_file"](args.input)
-    if result is None:
-        print("Error: Failed to expand DSP", file=sys.stderr)
+    factory = imports["create_dsp_factory_from_file"](args.input)
+    if factory is None:
+        print(f"Error: Failed to create DSP factory from: {args.input}", file=sys.stderr)
         return 1
 
-    sha_key, expanded_code = result
+    dsp = factory.create_dsp_instance()
+    if dsp is None:
+        print("Error: Failed to create DSP instance", file=sys.stderr)
+        return 1
+    dsp.init(args.sample_rate)
 
-    # Parse the expanded code to find UI elements
-    params = []
-    for pattern, ui_type in _UI_PATTERNS:
-        for match in re.finditer(pattern, expanded_code):
-            if ui_type in ["vslider", "hslider", "nentry"]:
-                params.append(
-                    {
-                        "type": ui_type,
-                        "label": match.group(1),
-                        "init": match.group(2).strip(),
-                        "min": match.group(3).strip(),
-                        "max": match.group(4).strip(),
-                        "step": match.group(5).strip(),
-                    }
-                )
-            elif ui_type in ["button", "checkbox"]:
-                params.append(
-                    {
-                        "type": ui_type,
-                        "label": match.group(1),
-                    }
-                )
-            elif ui_type in ["vbargraph", "hbargraph"]:
-                params.append(
-                    {
-                        "type": ui_type,
-                        "label": match.group(1),
-                        "min": match.group(2).strip(),
-                        "max": match.group(3).strip(),
-                    }
-                )
+    # Apply any `--set PATH VALUE` pairs first, so a subsequent list or get
+    # reflects them. Address a control by full UI path or unambiguous leaf label.
+    if args.set_params:
+        for path, value in args.set_params:
+            try:
+                dsp.set_param(path, float(value))
+                print(f"set {path} = {dsp.get_param(path)}")
+            except ValueError as e:
+                print(f"Error: {e}", file=sys.stderr)
+                return 1
 
+    # `--get PATH` prints just the requested controls, then we are done.
+    if args.get_params:
+        for path in args.get_params:
+            try:
+                print(f"{path} = {dsp.get_param(path)}")
+            except ValueError as e:
+                print(f"Error: {e}", file=sys.stderr)
+                return 1
+        return 0
+
+    # A bare `--set` (no `--get`) has already reported each change.
+    if args.set_params:
+        return 0
+
+    # Default: list every parameter with its metadata and current value.
+    params = dsp.params()
     if not params:
         print(f"No parameters found in: {args.input}")
         return 0
 
     print(f"Parameters ({len(params)}):")
     print("-" * 60)
-
-    for i, p in enumerate(params):
-        print(f"  [{i}] {p['label']} ({p['type']})")
-        if "init" in p:
-            print(f"      Init: {p['init']}, Range: [{p['min']}, {p['max']}], Step: {p['step']}")
-        elif "min" in p:
-            print(f"      Range: [{p['min']}, {p['max']}]")
+    for p in params:
+        io = "input" if p.is_input else "output"
+        print(f"  [{p.index}] {p.path} ({p.kind}, {io}) = {dsp.get_param(p.path)}")
+        if args.verbose:
+            if p.is_input:
+                print(f"      init={p.init}, range=[{p.min}, {p.max}], step={p.step}")
+            else:
+                print(f"      range=[{p.min}, {p.max}]")
 
     return 0
 
@@ -717,10 +722,34 @@ Examples:
     play_parser.set_defaults(func=cmd_play)
 
     # params command
-    params_parser = subparsers.add_parser("params", help="List all DSP parameters")
+    params_parser = subparsers.add_parser(
+        "params", help="List DSP parameters, or get/set control values"
+    )
     params_parser.add_argument("input", help="Input Faust DSP file")
     params_parser.add_argument(
         "-v", "--verbose", action="store_true", help="Show additional parameter details"
+    )
+    params_parser.add_argument(
+        "--get",
+        metavar="PATH",
+        action="append",
+        dest="get_params",
+        help="Get a control value by full path or unambiguous label (repeatable)",
+    )
+    params_parser.add_argument(
+        "--set",
+        nargs=2,
+        metavar=("PATH", "VALUE"),
+        action="append",
+        dest="set_params",
+        help="Set a control value by full path or unambiguous label (repeatable)",
+    )
+    params_parser.add_argument(
+        "--sample-rate",
+        type=int,
+        default=48000,
+        dest="sample_rate",
+        help="Sample rate used to initialize the DSP (default: 48000)",
     )
     params_parser.set_defaults(func=cmd_params)
 

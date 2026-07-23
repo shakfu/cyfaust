@@ -52,6 +52,8 @@ pip install cyfaust-llvm
 
 - Implements [Memoryviews](https://cython.readthedocs.io/en/latest/src/userguide/memoryviews.html) for read/write buffer using `numpy` or `array.array`
 
+- Runtime UI parameter control: enumerate a DSP's controls and get/set their values by full path or label (`params()`, `get_param()`, `set_param()`)
+
 - Both dynamic and static build variants can be packaged as a self-contained python wheel
 
 - Command-line interface for common operations
@@ -81,6 +83,31 @@ time.sleep(2)
 driver.stop()
 ```
 
+### Runtime parameters
+
+A DSP's UI controls (sliders, buttons, checkboxes, nentries, bargraphs) can be
+enumerated and driven at runtime:
+
+```python
+from cyfaust.interp import create_dsp_factory_from_string
+
+factory = create_dsp_factory_from_string(
+    "gain", 'process = _ * hslider("gain", 1, 0, 2, 0.01);'
+)
+dsp = factory.create_dsp_instance()
+dsp.init(48000)
+
+for p in dsp.params():
+    print(p.path, p.kind, p.init, p.min, p.max)  # /gain/gain hslider 1.0 0.0 2.0
+
+dsp.set_param("gain", 0.5)   # address by leaf label or full path; takes effect on the next compute
+dsp.get_param("gain")        # 0.5
+```
+
+Buttons, checkboxes, sliders, and nentries are settable inputs; bargraphs are
+read-only outputs (`set_param` on one raises `ValueError`, as do unknown or
+ambiguous keys).
+
 See the [Getting Started](https://shakfu.github.io/cyfaust/getting-started/) guide and [Examples](https://shakfu.github.io/cyfaust/examples/) for more usage patterns including the Box API, Signal API, buffer computation, and serialization.
 
 ## Command-Line Interface
@@ -99,7 +126,7 @@ cyfaust <command> [options]
 | `expand` | Expand Faust DSP to self-contained code with all imports resolved |
 | `diagram` | Generate SVG block diagrams |
 | `play` | Play a DSP file with RtAudio |
-| `params` | List all DSP parameters (sliders, buttons, etc.) |
+| `params` | List DSP parameters, or get/set control values by path/label |
 | `validate` | Check a DSP file for errors |
 | `bitcode` | Save/load compiled DSP as bitcode for faster loading |
 | `json` | Export DSP metadata as JSON |
@@ -109,7 +136,9 @@ Examples:
 ```bash
 cyfaust play osc.dsp -d 5                     # play for 5 seconds
 cyfaust compile synth.dsp -b cpp -o synth.cpp  # compile to C++
-cyfaust params synth.dsp                       # list parameters
+cyfaust params synth.dsp                       # list parameters (path, kind, range, value)
+cyfaust params synth.dsp --get gain            # read a control value
+cyfaust params synth.dsp --set gain 0.5        # set a control value
 cyfaust json instrument.dsp --pretty           # export metadata
 cyfaust validate filter.dsp --strict           # check for errors
 ```

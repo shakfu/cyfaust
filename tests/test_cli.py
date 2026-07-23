@@ -238,6 +238,41 @@ class TestParamsCommand:
         result = run_cli("params", "/nonexistent/file.dsp", check=False)
         assert result.returncode != 0
 
+    def test_params_lists_path_kind_and_value(self, sample_dsp):
+        """Default listing uses the runtime API: full path, kind, current value."""
+        result = run_cli("params", str(sample_dsp))
+        assert result.returncode == 0
+        assert "volume" in result.stdout
+        assert "hslider" in result.stdout
+        assert "input" in result.stdout
+        assert "0.5" in result.stdout  # current (init) value
+
+    def test_params_get_by_label(self, sample_dsp):
+        """--get reads a control value by leaf label."""
+        result = run_cli("params", str(sample_dsp), "--get", "volume")
+        assert result.returncode == 0
+        assert "volume = 0.5" in result.stdout
+
+    def test_params_set_reports_new_value(self, sample_dsp):
+        """--set applies a value and confirms it via get_param."""
+        result = run_cli("params", str(sample_dsp), "--set", "volume", "0.25")
+        assert result.returncode == 0
+        assert "0.25" in result.stdout
+
+    def test_params_get_unknown_errors(self, sample_dsp):
+        """--get on an unknown key fails."""
+        result = run_cli("params", str(sample_dsp), "--get", "nope", check=False)
+        assert result.returncode != 0
+
+    def test_params_set_output_errors(self, temp_dir):
+        """--set on a bargraph (output) is rejected."""
+        dsp_file = temp_dir / "bar.dsp"
+        dsp_file.write_text('process = _ <: attach(_, hbargraph("meter", 0, 1));')
+        result = run_cli(
+            "params", str(dsp_file), "--set", "meter", "0.3", check=False
+        )
+        assert result.returncode != 0
+
 
 class TestValidateCommand:
     """Tests for the validate command."""
