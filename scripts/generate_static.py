@@ -196,10 +196,13 @@ def sync_pxd_files():
     pxd_files = list(DYNAMIC_DIR.glob("*.pxd"))
     for pxd_file in pxd_files:
         dest = STATIC_DIR / pxd_file.name
-        # newline="" disables newline translation on write so generated files
-        # always use LF, matching the repo's .gitattributes (eol=lf) regardless
-        # of host OS. Without this, write_text on Windows emits CRLF.
-        dest.write_text(pxd_file.read_text(), newline="")
+        # Write raw bytes so no text-mode newline translation happens: the
+        # generated files always use LF, matching the repo's .gitattributes
+        # (eol=lf) regardless of host OS (write_text would emit CRLF on Windows).
+        # read_text() normalizes any CRLF source to LF via universal newlines.
+        # Note: write_text(newline=...) is Python 3.10+, but this script also
+        # runs under the manylinux container's Python 3.6, so bytes it is.
+        dest.write_bytes(pxd_file.read_text().encode("utf-8"))
         print(f"  Copied {pxd_file.name}")
     print(f"  Synced {len(pxd_files)} .pxd files")
 
@@ -236,8 +239,9 @@ def generate_static_pyx():
 
     # Write output
     output_file = STATIC_DIR / "cyfaust.pyx"
-    # newline="" keeps LF endings on all platforms (see sync_pxd_files).
-    output_file.write_text(output, newline="")
+    # Write raw bytes to keep LF endings on all platforms and stay compatible
+    # with the manylinux container's Python 3.6 (see sync_pxd_files).
+    output_file.write_bytes(output.encode("utf-8"))
     print(f"  Written to {output_file}")
 
     # Show collected imports (for debugging)
