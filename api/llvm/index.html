@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://github.com/shakfu/cyfaust/api/interp/">
+        <link rel="canonical" href="https://github.com/shakfu/cyfaust/api/llvm/">
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../interp/">
       
       
-        <link rel="next" href="../llvm/">
+        <link rel="next" href="../box/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>cyfaust.interp - cyfaust</title>
+        <title>LLVM Backend - cyfaust</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#cyfaustinterp" class="md-skip">
+        <a href="#llvm-backend" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              cyfaust.interp
+              LLVM Backend
             
           </span>
         </div>
@@ -420,6 +420,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../interp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cyfaust.interp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -439,7 +467,7 @@
   <span class="md-ellipsis">
     
   
-    cyfaust.interp
+    LLVM Backend
   
 
     
@@ -457,7 +485,7 @@
   <span class="md-ellipsis">
     
   
-    cyfaust.interp
+    LLVM Backend
   
 
     
@@ -483,6 +511,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Availability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -495,15 +534,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#interpreterdspfactory" class="md-nav__link">
+  <a href="#llvmdspfactory" class="md-nav__link">
     <span class="md-ellipsis">
       
-        InterpreterDspFactory
+        LlvmDspFactory
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="InterpreterDspFactory">
+    <nav class="md-nav" aria-label="LlvmDspFactory">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -545,15 +584,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#interpreterdsp" class="md-nav__link">
+  <a href="#llvmdsp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        InterpreterDsp
+        LlvmDsp
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="InterpreterDsp">
+    <nav class="md-nav" aria-label="LlvmDsp">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -561,17 +600,6 @@
     <span class="md-ellipsis">
       
         Methods
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#audio-computation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Audio Computation
       
     </span>
   </a>
@@ -595,71 +623,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#rtaudiodriver" class="md-nav__link">
+  <a href="#llvmrtaudiodriver" class="md-nav__link">
     <span class="md-ellipsis">
       
-        RtAudioDriver
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="RtAudioDriver">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#constructor" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Constructor
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#methods_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Methods
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#properties" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Properties
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#metacollector" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MetaCollector
+        LlvmRtAudioDriver
       
     </span>
   </a>
@@ -717,21 +684,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#dsp-expansion" class="md-nav__link">
+  <a href="#multi-threading" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DSP Expansion
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#auxiliary-file-generation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Auxiliary File Generation
+        Multi-Threading
       
     </span>
   </a>
@@ -749,17 +705,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#multi-threading" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Multi-Threading
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -769,34 +714,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../llvm/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    LLVM Backend
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1175,6 +1092,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Availability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#classes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1187,15 +1115,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#interpreterdspfactory" class="md-nav__link">
+  <a href="#llvmdspfactory" class="md-nav__link">
     <span class="md-ellipsis">
       
-        InterpreterDspFactory
+        LlvmDspFactory
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="InterpreterDspFactory">
+    <nav class="md-nav" aria-label="LlvmDspFactory">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1237,15 +1165,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#interpreterdsp" class="md-nav__link">
+  <a href="#llvmdsp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        InterpreterDsp
+        LlvmDsp
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="InterpreterDsp">
+    <nav class="md-nav" aria-label="LlvmDsp">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1253,17 +1181,6 @@
     <span class="md-ellipsis">
       
         Methods
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#audio-computation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Audio Computation
       
     </span>
   </a>
@@ -1287,71 +1204,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#rtaudiodriver" class="md-nav__link">
+  <a href="#llvmrtaudiodriver" class="md-nav__link">
     <span class="md-ellipsis">
       
-        RtAudioDriver
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="RtAudioDriver">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#constructor" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Constructor
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#methods_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Methods
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#properties" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Properties
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#metacollector" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        MetaCollector
+        LlvmRtAudioDriver
       
     </span>
   </a>
@@ -1409,21 +1265,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#dsp-expansion" class="md-nav__link">
+  <a href="#multi-threading" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DSP Expansion
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#auxiliary-file-generation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Auxiliary File Generation
+        Multi-Threading
       
     </span>
   </a>
@@ -1435,17 +1280,6 @@
     <span class="md-ellipsis">
       
         Utilities
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#multi-threading" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Multi-Threading
       
     </span>
   </a>
@@ -1477,12 +1311,28 @@
   
 
 
-<h1 id="cyfaustinterp">cyfaust.interp<a class="headerlink" href="#cyfaustinterp" title="Permanent link">&para;</a></h1>
-<p>The interpreter module provides the core Faust DSP compilation and audio playback functionality.</p>
+<h1 id="llvm-backend">LLVM Backend<a class="headerlink" href="#llvm-backend" title="Permanent link">&para;</a></h1>
+<p>The LLVM backend compiles Faust DSP to <strong>native machine code</strong> via the LLVM
+JIT, in contrast to the <a href="../interp/"><code>cyfaust.interp</code></a> bytecode interpreter. It
+provides <code>LlvmDspFactory</code>, <code>LlvmDsp</code>, and <code>LlvmRtAudioDriver</code>, mirroring the
+interpreter classes with the same method names, plus factory serialization to
+LLVM IR, machine code, and object files.</p>
+<h2 id="availability">Availability<a class="headerlink" href="#availability" title="Permanent link">&para;</a></h2>
+<p>The LLVM classes exist only in a static build compiled with <code>-DLLVM=ON</code> (see
+<a href="../../building/#llvm-backend">Building from Source</a>). Guard on the
+<code>LLVM_BACKEND</code> flag before using them:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">cyfaust</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">if</span> <span class="n">cyfaust</span><span class="o">.</span><span class="n">LLVM_BACKEND</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust</span><span class="w"> </span><span class="kn">import</span> <span class="n">LlvmDspFactory</span><span class="p">,</span> <span class="n">LlvmDsp</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">cyfaust</span><span class="o">.</span><span class="n">get_dsp_machine_target</span><span class="p">())</span>  <span class="c1"># e.g. arm64-apple-darwin...</span>
+</code></pre></div>
+<p>When the backend is absent, <code>cyfaust.LLVM_BACKEND</code> is <code>False</code> and the classes
+are not importable.</p>
 <h2 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h2>
-<h3 id="interpreterdspfactory">InterpreterDspFactory<a class="headerlink" href="#interpreterdspfactory" title="Permanent link">&para;</a></h3>
-<p>Factory class for creating DSP instances from Faust code.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust.interp</span><span class="w"> </span><span class="kn">import</span> <span class="n">InterpreterDspFactory</span>
+<h3 id="llvmdspfactory">LlvmDspFactory<a class="headerlink" href="#llvmdspfactory" title="Permanent link">&para;</a></h3>
+<p>Factory that JIT-compiles Faust code to a native DSP.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust</span><span class="w"> </span><span class="kn">import</span> <span class="n">LlvmDspFactory</span>
 </code></pre></div>
 <h4 id="static-factory-methods">Static Factory Methods<a class="headerlink" href="#static-factory-methods" title="Permanent link">&para;</a></h4>
 <table>
@@ -1494,19 +1344,19 @@
 </thead>
 <tbody>
 <tr>
-<td><code>from_file(filepath, *args)</code></td>
+<td><code>from_file(filepath, target="", opt_level=-1, *args)</code></td>
 <td>Create factory from a <code>.dsp</code> file</td>
 </tr>
 <tr>
-<td><code>from_string(name_app, code, *args)</code></td>
-<td>Create factory from Faust source code string</td>
+<td><code>from_string(name_app, code, target="", opt_level=-1, *args)</code></td>
+<td>Create factory from Faust source string</td>
 </tr>
 <tr>
-<td><code>from_signals(name_app, signals, *args)</code></td>
+<td><code>from_signals(name_app, signals, target="", opt_level=-1, *args)</code></td>
 <td>Create factory from a <code>SignalVector</code></td>
 </tr>
 <tr>
-<td><code>from_boxes(name_app, box, *args)</code></td>
+<td><code>from_boxes(name_app, box, target="", opt_level=-1, *args)</code></td>
 <td>Create factory from a <code>Box</code> expression</td>
 </tr>
 <tr>
@@ -1514,16 +1364,35 @@
 <td>Retrieve cached factory by SHA key</td>
 </tr>
 <tr>
-<td><code>from_bitcode(bitcode)</code></td>
+<td><code>from_bitcode(bitcode, target="", opt_level=-1)</code></td>
 <td>Create factory from a bitcode string</td>
 </tr>
 <tr>
-<td><code>from_bitcode_file(path)</code></td>
+<td><code>from_bitcode_file(path, target="", opt_level=-1)</code></td>
 <td>Create factory from a bitcode file</td>
+</tr>
+<tr>
+<td><code>from_ir(ir_code, target="", opt_level=-1)</code></td>
+<td>Create factory from LLVM IR text</td>
+</tr>
+<tr>
+<td><code>from_ir_file(path, target="", opt_level=-1)</code></td>
+<td>Create factory from an LLVM IR file</td>
+</tr>
+<tr>
+<td><code>from_machine(machine_code, target="")</code></td>
+<td>Create factory from machine code</td>
+</tr>
+<tr>
+<td><code>from_machine_file(path, target="")</code></td>
+<td>Create factory from a machine-code file</td>
 </tr>
 </tbody>
 </table>
-<p>All factory methods accept optional <code>*args</code> for Faust compiler options (e.g., <code>"-vec"</code>, <code>"-vs"</code>, <code>"512"</code>).</p>
+<p><code>target</code> selects the machine target (empty for the host; see
+<code>get_dsp_machine_target()</code>), <code>opt_level</code> is the LLVM optimization level
+(<code>-1</code> for the default), and <code>*args</code> are Faust compiler options (e.g. <code>"-vec"</code>,
+<code>"-vs"</code>, <code>"512"</code>).</p>
 <h4 id="instance-methods">Instance Methods<a class="headerlink" href="#instance-methods" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -1550,6 +1419,11 @@
 <td>Expanded DSP source code</td>
 </tr>
 <tr>
+<td><code>get_json()</code></td>
+<td><code>str</code></td>
+<td>DSP metadata/UI as a JSON string</td>
+</tr>
+<tr>
 <td><code>get_compile_options()</code></td>
 <td><code>str</code></td>
 <td>Compile options used</td>
@@ -1571,18 +1445,13 @@
 </tr>
 <tr>
 <td><code>create_dsp_instance()</code></td>
-<td><code>InterpreterDsp</code></td>
+<td><code>LlvmDsp</code></td>
 <td>Create a new DSP instance</td>
 </tr>
 <tr>
-<td><code>write_to_bitcode()</code></td>
-<td><code>str</code></td>
-<td>Serialize to bitcode string</td>
-</tr>
-<tr>
-<td><code>write_to_bitcode_file(path)</code></td>
-<td><code>bool</code></td>
-<td>Serialize to bitcode file</td>
+<td><code>class_init(sample_rate)</code></td>
+<td></td>
+<td>Initialize static tables for all instances</td>
 </tr>
 <tr>
 <td><code>set_memory_manager(manager)</code></td>
@@ -1595,30 +1464,62 @@
 <td>Get current memory manager</td>
 </tr>
 <tr>
-<td><code>class_init(sample_rate)</code></td>
-<td></td>
-<td>Initialize static tables for all instances</td>
+<td><code>write_to_bitcode()</code></td>
+<td><code>str</code></td>
+<td>Serialize to a bitcode string</td>
+</tr>
+<tr>
+<td><code>write_to_bitcode_file(path)</code></td>
+<td><code>bool</code></td>
+<td>Serialize to a bitcode file</td>
+</tr>
+<tr>
+<td><code>write_to_ir()</code></td>
+<td><code>str</code></td>
+<td>Serialize to an LLVM IR string</td>
+</tr>
+<tr>
+<td><code>write_to_ir_file(path)</code></td>
+<td><code>bool</code></td>
+<td>Serialize to an LLVM IR file</td>
+</tr>
+<tr>
+<td><code>write_to_machine(target="")</code></td>
+<td><code>str</code></td>
+<td>Serialize to machine code</td>
+</tr>
+<tr>
+<td><code>write_to_machine_file(path, target="")</code></td>
+<td><code>bool</code></td>
+<td>Serialize to a machine-code file</td>
+</tr>
+<tr>
+<td><code>write_to_objectcode_file(path, target="")</code></td>
+<td><code>bool</code></td>
+<td>Write a native object file</td>
 </tr>
 </tbody>
 </table>
 <h4 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust.interp</span><span class="w"> </span><span class="kn">import</span> <span class="n">InterpreterDspFactory</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># From string</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">InterpreterDspFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;osc&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="s2">&quot;import(</span><span class="se">\&quot;</span><span class="s2">stdfaust.lib</span><span class="se">\&quot;</span><span class="s2">); process = os.osc(440);&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># From file</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">InterpreterDspFactory</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="s2">&quot;synth.dsp&quot;</span><span class="p">)</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># With compiler options</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">InterpreterDspFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;osc&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="s2">&quot;import(</span><span class="se">\&quot;</span><span class="s2">stdfaust.lib</span><span class="se">\&quot;</span><span class="s2">); process = os.osc(440);&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="s2">&quot;-vec&quot;</span><span class="p">,</span> <span class="s2">&quot;-vs&quot;</span><span class="p">,</span> <span class="s2">&quot;512&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust</span><span class="w"> </span><span class="kn">import</span> <span class="n">LlvmDspFactory</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">LlvmDspFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;osc&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="s2">&quot;import(</span><span class="se">\&quot;</span><span class="s2">stdfaust.lib</span><span class="se">\&quot;</span><span class="s2">); process = os.osc(440);&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Cross-compile with an explicit target and optimization level</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">LlvmDspFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;osc&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="s2">&quot;import(</span><span class="se">\&quot;</span><span class="s2">stdfaust.lib</span><span class="se">\&quot;</span><span class="s2">); process = os.osc(440);&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">opt_level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># Persist the JIT result for faster reloads</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="n">factory</span><span class="o">.</span><span class="n">write_to_bitcode_file</span><span class="p">(</span><span class="s2">&quot;osc.bc&quot;</span><span class="p">)</span>
 </code></pre></div>
 <hr />
-<h3 id="interpreterdsp">InterpreterDsp<a class="headerlink" href="#interpreterdsp" title="Permanent link">&para;</a></h3>
-<p>DSP instance created from a factory. Provides audio computation and control.</p>
+<h3 id="llvmdsp">LlvmDsp<a class="headerlink" href="#llvmdsp" title="Permanent link">&para;</a></h3>
+<p>DSP instance created from an <code>LlvmDspFactory</code>. Its API matches
+<a href="../interp/#interpreterdsp"><code>InterpreterDsp</code></a>, with the exception of
+<code>control()</code>, <code>frame()</code>, and the timestamped <code>compute()</code> overload, which the
+<code>llvm_dsp</code> binding does not expose.</p>
 <h4 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -1671,7 +1572,7 @@
 </tr>
 <tr>
 <td><code>clone()</code></td>
-<td><code>InterpreterDsp</code></td>
+<td><code>LlvmDsp</code></td>
 <td>Clone the DSP instance</td>
 </tr>
 <tr>
@@ -1683,21 +1584,6 @@
 <td><code>compute(count, inputs, outputs)</code></td>
 <td></td>
 <td>Compute audio frames</td>
-</tr>
-<tr>
-<td><code>compute_timestamped(date_usec, count, inputs, outputs)</code></td>
-<td></td>
-<td>Compute with microsecond timestamp</td>
-</tr>
-<tr>
-<td><code>frame(inputs, outputs)</code></td>
-<td></td>
-<td>Compute a single frame (requires <code>-os</code> option)</td>
-</tr>
-<tr>
-<td><code>control()</code></td>
-<td></td>
-<td>Read controllers and update state (requires <code>-ec</code> option)</td>
 </tr>
 <tr>
 <td><code>metadata()</code></td>
@@ -1726,147 +1612,105 @@
 </tr>
 </tbody>
 </table>
-<h4 id="audio-computation">Audio Computation<a class="headerlink" href="#audio-computation" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">dsp</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_dsp_instance</span><span class="p">()</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">dsp</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="mi">48000</span><span class="p">)</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">dsp</span><span class="o">.</span><span class="n">build_user_interface</span><span class="p">()</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">n_frames</span> <span class="o">=</span> <span class="mi">1024</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">inputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dsp</span><span class="o">.</span><span class="n">get_numinputs</span><span class="p">(),</span> <span class="n">n_frames</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dsp</span><span class="o">.</span><span class="n">get_numoutputs</span><span class="p">(),</span> <span class="n">n_frames</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">dsp</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">n_frames</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
-</code></pre></div>
 <h4 id="runtime-parameters">Runtime Parameters<a class="headerlink" href="#runtime-parameters" title="Permanent link">&para;</a></h4>
-<p>Enumerate the DSP's UI controls and read or set their values at runtime. Each
-entry from <code>params()</code> is a <code>Param</code> namedtuple with fields <code>path</code>, <code>label</code>,
-<code>kind</code> (<code>button</code>, <code>checkbox</code>, <code>hslider</code>, <code>vslider</code>, <code>nentry</code>, <code>hbargraph</code>,
-<code>vbargraph</code>), <code>is_input</code>, <code>init</code>, <code>min</code>, <code>max</code>, <code>step</code>, and <code>index</code>. Controls
-are addressed by full UI path or unambiguous leaf label:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">dsp</span><span class="o">.</span><span class="n">params</span><span class="p">():</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">init</span><span class="p">)</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">dsp</span><span class="o">.</span><span class="n">set_param</span><span class="p">(</span><span class="s2">&quot;gain&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>   <span class="c1"># takes effect on the next compute()</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">dsp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;gain&quot;</span><span class="p">)</span>        <span class="c1"># 0.5</span>
+<p>Identical to the interpreter's
+<a href="../interp/#runtime-parameters">runtime parameter API</a>: <code>params()</code> returns
+<code>Param</code> namedtuples (<code>path</code>, <code>label</code>, <code>kind</code>, <code>is_input</code>, <code>init</code>, <code>min</code>,
+<code>max</code>, <code>step</code>, <code>index</code>), and controls are addressed by full UI path or
+unambiguous leaf label.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust</span><span class="w"> </span><span class="kn">import</span> <span class="n">LlvmDspFactory</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">LlvmDspFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="s2">&quot;gain&quot;</span><span class="p">,</span> <span class="s1">&#39;process = _ * hslider(&quot;gain&quot;, 1, 0, 2, 0.01);&#39;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">dsp</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_dsp_instance</span><span class="p">()</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">dsp</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="mi">48000</span><span class="p">)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">dsp</span><span class="o">.</span><span class="n">params</span><span class="p">():</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">init</span><span class="p">)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="n">dsp</span><span class="o">.</span><span class="n">set_param</span><span class="p">(</span><span class="s2">&quot;gain&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>   <span class="c1"># takes effect on the next compute()</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">dsp</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;gain&quot;</span><span class="p">)</span>        <span class="c1"># 0.5</span>
 </code></pre></div>
 <p>Buttons, checkboxes, sliders, and nentries are settable inputs; bargraphs are
 read-only outputs (<code>set_param</code> on one raises <code>ValueError</code>), as do unknown or
-ambiguous keys. The identical API is available on the LLVM backend's <code>LlvmDsp</code>.</p>
+ambiguous keys.</p>
 <hr />
-<h3 id="rtaudiodriver">RtAudioDriver<a class="headerlink" href="#rtaudiodriver" title="Permanent link">&para;</a></h3>
-<p>Real-time audio driver using the RtAudio cross-platform library.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust.interp</span><span class="w"> </span><span class="kn">import</span> <span class="n">RtAudioDriver</span>
+<h3 id="llvmrtaudiodriver">LlvmRtAudioDriver<a class="headerlink" href="#llvmrtaudiodriver" title="Permanent link">&para;</a></h3>
+<p>Real-time audio driver (RtAudio) for the LLVM backend, matching
+<a href="../interp/#rtaudiodriver"><code>RtAudioDriver</code></a> but bound to <code>LlvmDsp</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">LlvmRtAudioDriver</span><span class="p">(</span><span class="n">srate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bsize</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
 </code></pre></div>
-<h4 id="constructor">Constructor<a class="headerlink" href="#constructor" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">RtAudioDriver</span><span class="p">(</span><span class="n">srate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bsize</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
-</code></pre></div>
-<ul>
-<li><code>srate</code>: Sample rate in Hz</li>
-<li><code>bsize</code>: Buffer size in frames</li>
-</ul>
-<h4 id="methods_1">Methods<a class="headerlink" href="#methods_1" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
-<th>Method</th>
-<th>Returns</th>
+<th>Member</th>
+<th>Kind</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>init(dsp)</code></td>
-<td><code>bool</code></td>
-<td>Initialize with a DSP instance</td>
+<td>method → <code>bool</code></td>
+<td>Initialize with an <code>LlvmDsp</code> instance</td>
 </tr>
 <tr>
 <td><code>set_dsp(dsp)</code></td>
-<td></td>
-<td>Set DSP instance</td>
+<td>method</td>
+<td>Set the DSP instance</td>
 </tr>
 <tr>
 <td><code>start()</code></td>
-<td></td>
+<td>method</td>
 <td>Start audio playback</td>
 </tr>
 <tr>
 <td><code>stop()</code></td>
-<td></td>
+<td>method</td>
 <td>Stop audio playback</td>
 </tr>
-</tbody>
-</table>
-<h4 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">&para;</a></h4>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
 <tr>
 <td><code>buffersize</code></td>
-<td><code>int</code></td>
+<td>property</td>
 <td>Buffer size</td>
 </tr>
 <tr>
 <td><code>samplerate</code></td>
-<td><code>int</code></td>
+<td>property</td>
 <td>Sample rate</td>
 </tr>
 <tr>
 <td><code>numinputs</code></td>
-<td><code>int</code></td>
+<td>property</td>
 <td>Number of inputs</td>
 </tr>
 <tr>
 <td><code>numoutputs</code></td>
-<td><code>int</code></td>
+<td>property</td>
 <td>Number of outputs</td>
 </tr>
 </tbody>
 </table>
-<h4 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust.interp</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_dsp_factory_from_string</span><span class="p">,</span> <span class="n">RtAudioDriver</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">create_dsp_factory_from_string</span><span class="p">(</span><span class="s2">&quot;osc&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="s2">&quot;import(</span><span class="se">\&quot;</span><span class="s2">stdfaust.lib</span><span class="se">\&quot;</span><span class="s2">); process = os.osc(440);&quot;</span><span class="p">)</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">dsp</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_dsp_instance</span><span class="p">()</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">dsp</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="mi">48000</span><span class="p">)</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">dsp</span><span class="o">.</span><span class="n">build_user_interface</span><span class="p">()</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">driver</span> <span class="o">=</span> <span class="n">RtAudioDriver</span><span class="p">(</span><span class="mi">48000</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="n">driver</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">dsp</span><span class="p">)</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="n">driver</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="n">driver</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cyfaust</span><span class="w"> </span><span class="kn">import</span> <span class="n">LlvmDspFactory</span><span class="p">,</span> <span class="n">LlvmRtAudioDriver</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">factory</span> <span class="o">=</span> <span class="n">LlvmDspFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;osc&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="s2">&quot;import(</span><span class="se">\&quot;</span><span class="s2">stdfaust.lib</span><span class="se">\&quot;</span><span class="s2">); process = os.osc(440);&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">dsp</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_dsp_instance</span><span class="p">()</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">dsp</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="mi">48000</span><span class="p">)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">dsp</span><span class="o">.</span><span class="n">build_user_interface</span><span class="p">()</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">driver</span> <span class="o">=</span> <span class="n">LlvmRtAudioDriver</span><span class="p">(</span><span class="mi">48000</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="n">driver</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">dsp</span><span class="p">)</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="n">driver</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="n">driver</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 </code></pre></div>
 <hr />
-<h3 id="metacollector">MetaCollector<a class="headerlink" href="#metacollector" title="Permanent link">&para;</a></h3>
-<p>Collects DSP metadata into a Python dictionary. Used internally by <code>InterpreterDsp.metadata()</code>.</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Returns</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>get_metadata()</code></td>
-<td><code>dict</code></td>
-<td>Collected metadata key-value pairs</td>
-</tr>
-</tbody>
-</table>
-<hr />
 <h2 id="module-level-functions">Module-Level Functions<a class="headerlink" href="#module-level-functions" title="Permanent link">&para;</a></h2>
+<p>The LLVM factory functions mirror the interpreter's, prefixed with <code>llvm_</code>, so
+both backends can coexist in one static build.</p>
 <h3 id="factory-creation">Factory Creation<a class="headerlink" href="#factory-creation" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1878,23 +1722,23 @@ ambiguous keys. The identical API is available on the LLVM backend's <code>LlvmD
 </thead>
 <tbody>
 <tr>
-<td><code>create_dsp_factory_from_file(filename, *args)</code></td>
-<td><code>InterpreterDspFactory</code></td>
+<td><code>llvm_create_dsp_factory_from_file(filename, target="", opt_level=-1, *args)</code></td>
+<td><code>LlvmDspFactory</code></td>
 <td>Create factory from a <code>.dsp</code> file</td>
 </tr>
 <tr>
-<td><code>create_dsp_factory_from_string(name_app, code, *args)</code></td>
-<td><code>InterpreterDspFactory</code></td>
+<td><code>llvm_create_dsp_factory_from_string(name_app, code, target="", opt_level=-1, *args)</code></td>
+<td><code>LlvmDspFactory</code></td>
 <td>Create factory from source string</td>
 </tr>
 <tr>
-<td><code>create_dsp_factory_from_signals(name_app, signals, *args)</code></td>
-<td><code>InterpreterDspFactory</code></td>
+<td><code>llvm_create_dsp_factory_from_signals(name_app, signals, target="", opt_level=-1, *args)</code></td>
+<td><code>LlvmDspFactory</code></td>
 <td>Create factory from signals</td>
 </tr>
 <tr>
-<td><code>create_dsp_factory_from_boxes(name_app, box, *args)</code></td>
-<td><code>InterpreterDspFactory</code></td>
+<td><code>llvm_create_dsp_factory_from_boxes(name_app, box, target="", opt_level=-1, *args)</code></td>
+<td><code>LlvmDspFactory</code></td>
 <td>Create factory from boxes</td>
 </tr>
 </tbody>
@@ -1910,17 +1754,17 @@ ambiguous keys. The identical API is available on the LLVM backend's <code>LlvmD
 </thead>
 <tbody>
 <tr>
-<td><code>get_dsp_factory_from_sha_key(sha_key)</code></td>
-<td><code>InterpreterDspFactory</code></td>
+<td><code>llvm_get_dsp_factory_from_sha_key(sha_key)</code></td>
+<td><code>LlvmDspFactory</code></td>
 <td>Retrieve cached factory</td>
 </tr>
 <tr>
-<td><code>get_all_dsp_factories()</code></td>
+<td><code>llvm_get_all_dsp_factories()</code></td>
 <td><code>list[str]</code></td>
 <td>List all cached factory SHA keys</td>
 </tr>
 <tr>
-<td><code>delete_all_dsp_factories()</code></td>
+<td><code>llvm_delete_all_dsp_factories()</code></td>
 <td></td>
 <td>Clear factory cache</td>
 </tr>
@@ -1937,80 +1781,34 @@ ambiguous keys. The identical API is available on the LLVM backend's <code>LlvmD
 </thead>
 <tbody>
 <tr>
-<td><code>read_dsp_factory_from_bitcode(bitcode)</code></td>
-<td><code>InterpreterDspFactory</code></td>
-<td>Deserialize from bitcode string</td>
+<td><code>llvm_read_dsp_factory_from_bitcode(bitcode, target="", opt_level=-1)</code></td>
+<td><code>LlvmDspFactory</code></td>
+<td>Deserialize from a bitcode string</td>
 </tr>
 <tr>
-<td><code>read_dsp_factory_from_bitcode_file(path)</code></td>
-<td><code>InterpreterDspFactory</code></td>
-<td>Deserialize from bitcode file</td>
-</tr>
-</tbody>
-</table>
-<h3 id="dsp-expansion">DSP Expansion<a class="headerlink" href="#dsp-expansion" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Function</th>
-<th>Returns</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>expand_dsp_from_file(filename, *args)</code></td>
-<td><code>tuple[str, str]</code></td>
-<td>Expand DSP file to <code>(sha_key, code)</code></td>
+<td><code>llvm_read_dsp_factory_from_bitcode_file(path, target="", opt_level=-1)</code></td>
+<td><code>LlvmDspFactory</code></td>
+<td>Deserialize from a bitcode file</td>
 </tr>
 <tr>
-<td><code>expand_dsp_from_string(name_app, code, *args)</code></td>
-<td><code>tuple[str, str]</code></td>
-<td>Expand DSP string to <code>(sha_key, code)</code></td>
-</tr>
-</tbody>
-</table>
-<h3 id="auxiliary-file-generation">Auxiliary File Generation<a class="headerlink" href="#auxiliary-file-generation" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Function</th>
-<th>Returns</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>generate_auxfiles_from_file(filename, *args)</code></td>
-<td><code>bool</code></td>
-<td>Generate SVG, XML, JSON, etc. from file</td>
+<td><code>llvm_read_dsp_factory_from_ir(ir_code, target="", opt_level=-1)</code></td>
+<td><code>LlvmDspFactory</code></td>
+<td>Deserialize from LLVM IR text</td>
 </tr>
 <tr>
-<td><code>generate_auxfiles_from_string(name_app, code, *args)</code></td>
-<td><code>bool</code></td>
-<td>Generate auxiliary files from string</td>
-</tr>
-</tbody>
-</table>
-<h3 id="utilities">Utilities<a class="headerlink" href="#utilities" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Function</th>
-<th>Returns</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>get_version()</code></td>
-<td><code>str</code></td>
-<td>Library version string</td>
+<td><code>llvm_read_dsp_factory_from_ir_file(path, target="", opt_level=-1)</code></td>
+<td><code>LlvmDspFactory</code></td>
+<td>Deserialize from an LLVM IR file</td>
 </tr>
 <tr>
-<td><code>generate_sha1(data)</code></td>
-<td><code>str</code></td>
-<td>Generate SHA1 hash from string</td>
+<td><code>llvm_read_dsp_factory_from_machine(machine_code, target="")</code></td>
+<td><code>LlvmDspFactory</code></td>
+<td>Deserialize from machine code</td>
+</tr>
+<tr>
+<td><code>llvm_read_dsp_factory_from_machine_file(path, target="")</code></td>
+<td><code>LlvmDspFactory</code></td>
+<td>Deserialize from a machine-code file</td>
 </tr>
 </tbody>
 </table>
@@ -2025,14 +1823,41 @@ ambiguous keys. The identical API is available on the LLVM backend's <code>LlvmD
 </thead>
 <tbody>
 <tr>
-<td><code>start_multithreaded_access_mode()</code></td>
+<td><code>llvm_start_multithreaded_access_mode()</code></td>
 <td><code>bool</code></td>
 <td>Enable multi-thread factory access</td>
 </tr>
 <tr>
-<td><code>stop_multithreaded_access_mode()</code></td>
+<td><code>llvm_stop_multithreaded_access_mode()</code></td>
 <td></td>
 <td>Disable multi-thread factory access</td>
+</tr>
+</tbody>
+</table>
+<h3 id="utilities">Utilities<a class="headerlink" href="#utilities" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>llvm_get_version()</code></td>
+<td><code>str</code></td>
+<td>LLVM backend version string</td>
+</tr>
+<tr>
+<td><code>get_dsp_machine_target()</code></td>
+<td><code>str</code></td>
+<td>Default machine target triple for the host</td>
+</tr>
+<tr>
+<td><code>register_foreign_function(function_name)</code></td>
+<td></td>
+<td>Register a foreign function for JIT linkage</td>
 </tr>
 </tbody>
 </table>
