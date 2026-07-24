@@ -135,6 +135,38 @@ from libc.stdlib cimport malloc, free
 
 
 
+from collections import namedtuple
+
+# Widget kind strings indexed by APIUI ItemType enum value (see faust_gui.pxd).
+_PARAM_KINDS = (
+    "button",     # 0 kButton
+    "checkbox",   # 1 kCheckButton
+    "vslider",    # 2 kVSlider
+    "hslider",    # 3 kHSlider
+    "nentry",     # 4 kNumEntry
+    "hbargraph",  # 5 kHBargraph
+    "vbargraph",  # 6 kVBargraph
+)
+
+# Bargraphs (ItemType 5, 6) are read-only outputs; all other kinds are settable
+# input controls.
+_BARGRAPH_TYPES = frozenset((5, 6))
+
+Param = namedtuple(
+    "Param",
+    ["path", "label", "kind", "is_input", "init", "min", "max", "step", "index"],
+)
+Param.__doc__ = """One DSP control parameter, mirroring py-faust-rs's Param.
+
+path  -- full UI path, e.g. /Oscillator/freq
+label -- leaf label, e.g. freq
+kind  -- button, checkbox, hslider, vslider, nentry, hbargraph, or vbargraph
+is_input -- False for bargraphs (metering outputs), True otherwise
+init/min/max/step -- declared range metadata
+index -- APIUI parameter index used to address the control (the cyfaust
+         analogue of py-faust-rs's real-heap zone offset)
+"""
+
 # Every live InterpreterDspFactory wrapper, weakly referenced. delete_all_dsp_
 # factories() uses this to invalidate wrappers whose C++ factory it destroys, so
 # their __dealloc__ cannot double-free (see delete_all_dsp_factories).
@@ -588,12 +620,17 @@ cdef class InterpreterDsp:
     cdef fi.interpreter_dsp* ptr
     cdef bint ptr_owner
     cdef fg.SoundUI* sound_ui
+    cdef fg.APIUI* api_ui            # lazily built zone map for get/set_param
+    cdef object _params_cache        # cached list[Param] once the UI is built
     cdef object _factory_ref         # weakref to the owning factory (or None)
 
     def __dealloc__(self):
         if self.sound_ui:
             del self.sound_ui
             self.sound_ui = NULL
+        if self.api_ui:
+            del self.api_ui
+            self.api_ui = NULL
         if self.ptr and self.ptr_owner:
             del self.ptr
             self.ptr = NULL
@@ -602,6 +639,8 @@ cdef class InterpreterDsp:
         self.ptr = NULL
         self.ptr_owner = False
         self.sound_ui = NULL
+        self.api_ui = NULL
+        self._params_cache = None
         self._factory_ref = None
 
     def delete(self):
@@ -614,6 +653,9 @@ cdef class InterpreterDsp:
         if self.sound_ui:
             del self.sound_ui
             self.sound_ui = NULL
+        if self.api_ui:
+            del self.api_ui
+            self.api_ui = NULL
         if self.ptr:
             del self.ptr
             self.ptr = NULL
@@ -702,6 +744,97 @@ cdef class InterpreterDsp:
             False  # is_double=False for float audio
         )
         self.ptr.buildUserInterface(<fg.UI*>self.sound_ui)
+
+    cdef _ensure_param_ui(self):
+        """Build the APIUI zone map onto this instance once (idempotent).
+
+        `buildUserInterface` can be called for several UI objects independently,
+        so this coexists with `build_user_interface`'s SoundUI. The captured
+        zone pointers stay valid for the instance's lifetime.
+        """
+        if self.api_ui is NULL:
+            self.api_ui = new fg.APIUI()
+            self.ptr.buildUserInterface(<fg.UI*>self.api_ui)
+            self._params_cache = None
+
+    cdef list _collect_params(self):
+        cdef int n = self.api_ui.getParamsCount()
+        cdef int i
+        cdef int itype
+        cdef list out = []
+        for i in range(n):
+            itype = self.api_ui.getParamItemType(i)
+            kind = _PARAM_KINDS[itype] if 0 <= itype < len(_PARAM_KINDS) else "unknown"
+            out.append(Param(
+                path=self.api_ui.getParamAddress(i).decode('utf8'),
+                label=self.api_ui.getParamLabel(i).decode('utf8'),
+                kind=kind,
+                is_input=itype not in _BARGRAPH_TYPES,
+                init=float(self.api_ui.getParamInit(i)),
+                min=float(self.api_ui.getParamMin(i)),
+                max=float(self.api_ui.getParamMax(i)),
+                step=float(self.api_ui.getParamStep(i)),
+                index=i,
+            ))
+        return out
+
+    def params(self) -> list:
+        """List the DSP's UI control parameters as `Param` objects.
+
+        Mirrors py-faust-rs's `params()`: each entry carries the full UI path,
+        leaf label, widget kind, input/output flag, and init/min/max/step range,
+        in UI-declaration order. Buttons, checkboxes, sliders and nentries are
+        settable inputs; bargraphs are read-only outputs.
+        """
+        self._ensure_param_ui()
+        if self._params_cache is None:
+            self._params_cache = self._collect_params()
+        return list(self._params_cache)
+
+    cdef _resolve(self, str key):
+        """Resolve a full UI path or unambiguous leaf label to its `Param`.
+
+        Matches py-faust-rs's resolution order: an exact path wins first;
+        otherwise a unique leaf label is accepted; unknown or ambiguous keys
+        raise `ValueError`.
+        """
+        self._ensure_param_ui()
+        if self._params_cache is None:
+            self._params_cache = self._collect_params()
+        params = self._params_cache
+        for p in params:
+            if p.path == key:
+                return p
+        by_label = [p for p in params if p.label == key]
+        if len(by_label) == 1:
+            return by_label[0]
+        if len(by_label) > 1:
+            raise ValueError(
+                f"ambiguous parameter label {key!r}; use the full path")
+        available = [p.path for p in params]
+        raise ValueError(f"unknown parameter {key!r}; available: {available}")
+
+    def get_param(self, str key) -> float:
+        """Read a control parameter by full path or unambiguous leaf label.
+
+        Works for input controls and output bargraphs (the latter reflect the
+        most recent `compute`).
+        """
+        p = self._resolve(key)
+        return float(self.api_ui.getParamValue(<int>p.index))
+
+    def set_param(self, str key, float value):
+        """Set an input control parameter; takes effect on the next `compute`.
+
+        Bargraphs (outputs) cannot be set. `key` is a full UI path or an
+        unambiguous leaf label. The value is not clamped to the declared
+        `[min, max]` range (matching Faust's `setParamValue` semantics).
+        """
+        p = self._resolve(key)
+        if not p.is_input:
+            raise ValueError(
+                f"parameter {p.path!r} is an output ({p.kind}) and cannot be set")
+        self.api_ui.setParamValue(<int>p.index, value)
 
     def control(self):
         """Read all controllers (buttons, sliders, etc.), and update the DSP state.

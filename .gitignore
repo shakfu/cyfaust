@@ -119,6 +119,15 @@ venv.bak/
 # faust
 Dump*.txt
 
+# LLVM-only faust headers provisioned on demand by `make faustwithllvm`.
+# The interpreter header set under include/faust is vendored/tracked; the LLVM
+# distribution wipes and rewrites include/faust with a superset that adds these
+# OSC/JSON files, so ignore them to keep the tree clean after an LLVM build.
+include/faust/gui/OSCControler.h
+include/faust/gui/OSCIO.h
+include/faust/gui/jsonfaustui.h
+include/faust/osc/
+
 # claude
 .claude
 CLAUDE.md
