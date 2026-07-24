@@ -47,6 +47,7 @@ nav:
   - API Reference:
     - Overview: api/index.md
     - cyfaust.interp: api/interp.md
+    - LLVM Backend: api/llvm.md
     - cyfaust.box: api/box.md
     - cyfaust.signal: api/signal.md
     - cyfaust.common: api/common.md

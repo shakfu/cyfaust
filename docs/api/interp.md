@@ -87,6 +87,9 @@ DSP instance created from a factory. Provides audio computation and control.
 | `frame(inputs, outputs)` | | Compute a single frame (requires `-os` option) |
 | `control()` | | Read controllers and update state (requires `-ec` option) |
 | `metadata()` | `dict` | Get DSP metadata (name, author, etc.) |
+| `params()` | `list[Param]` | List UI controls with path, label, kind, i/o flag, and range |
+| `get_param(key)` | `float` | Read a control by full path or unambiguous label |
+| `set_param(key, value)` | | Set an input control (takes effect on next `compute`) |
 | `delete()` | | Explicitly delete the underlying DSP instance |
 
 #### Audio Computation
@@ -104,6 +107,26 @@ outputs = np.zeros((dsp.get_numoutputs(), n_frames), dtype=np.float32)
 
 dsp.compute(n_frames, inputs, outputs)
 ```
+
+#### Runtime Parameters
+
+Enumerate the DSP's UI controls and read or set their values at runtime. Each
+entry from `params()` is a `Param` namedtuple with fields `path`, `label`,
+`kind` (`button`, `checkbox`, `hslider`, `vslider`, `nentry`, `hbargraph`,
+`vbargraph`), `is_input`, `init`, `min`, `max`, `step`, and `index`. Controls
+are addressed by full UI path or unambiguous leaf label:
+
+```python
+for p in dsp.params():
+    print(p.path, p.kind, p.init)
+
+dsp.set_param("gain", 0.5)   # takes effect on the next compute()
+dsp.get_param("gain")        # 0.5
+```
+
+Buttons, checkboxes, sliders, and nentries are settable inputs; bargraphs are
+read-only outputs (`set_param` on one raises `ValueError`), as do unknown or
+ambiguous keys. The identical API is available on the LLVM backend's `LlvmDsp`.
 
 ---
 

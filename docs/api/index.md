@@ -11,6 +11,7 @@ cyfaust provides Python bindings for the Faust DSP language through the followin
 | Module | Description |
 |--------|-------------|
 | [`cyfaust.interp`](interp.md) | Faust interpreter backend, DSP factory/instance creation, RtAudio driver |
+| [LLVM Backend](llvm.md) | LLVM JIT backend (`LlvmDspFactory`/`LlvmDsp`), native codegen, IR/machine-code serialization |
 | [`cyfaust.box`](box.md) | Box API for functional signal composition |
 | [`cyfaust.signal`](signal.md) | Signal API for lower-level DSP composition |
 | [`cyfaust.common`](common.md) | Shared utilities (ParamArray, resource paths) |

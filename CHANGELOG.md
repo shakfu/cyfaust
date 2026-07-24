@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [0.2.0]
+
 ### Added
 
 - Added a runtime UI parameter API to `InterpreterDsp`: `params()`, `get_param(key)`, and `set_param(key, value)`. `params()` lists the DSP's controls as `Param` namedtuples (full UI path, leaf label, widget kind, input/output flag, and `init`/`min`/`max`/`step` range, in UI-declaration order); `get_param`/`set_param` address a control by full UI path or unambiguous leaf label, with a set taking effect on the next `compute`. Buttons, checkboxes, sliders, and nentries are settable inputs; bargraphs are read-only outputs (setting one raises `ValueError`), and unknown or ambiguous keys raise `ValueError`. Backed by Faust's `APIUI` (newly declared in `faust_gui.pxd`), built lazily onto the instance via `buildUserInterface` alongside the existing `SoundUI` and freed with it. Previously control values could not be read or set at runtime -- the `cyfaust params`/`json` CLI only regex-parsed the expanded DSP source. Adds `tests/test_cyfaust_params.py`
