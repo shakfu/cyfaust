@@ -28,7 +28,7 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         submodules: true
         fetch-depth: '1'
@@ -44,7 +44,7 @@ jobs:
         key: ${{ runner.os }}-libfaust
 
     - name: Setup python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ github.event.inputs.py_version }}
 
@@ -94,7 +94,7 @@ jobs:
         pip install dist/*.whl
         python -c "import cyfaust; print('cyfaust imported successfully')"
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: dist-${{ matrix.os }}-py${{ github.event.inputs.py_version }}
         path: ./dist/*.whl
