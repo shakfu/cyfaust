@@ -36,13 +36,3 @@
 ### cyfaust.signal
 
 - [ ] Uncomment and expose `getUserData` wrapper (declared in .pxd, commented out in .pyx) in cyfaust.signal
-
-## Done
-
-### cyfaust.box
-
-- [x] Add more box API tests to improve coverage (~12% currently)
-
-### cyfaust.signal
-
-- [x] Add more signal API tests to improve coverage (~6% currently)
