@@ -151,13 +151,6 @@ def test_interp_create_dsp_factory_from_string2():
     dsp = factory.create_dsp_instance()
     assert dsp
 
+    # No playback: the two outputs are the soundfile's (length, rate), a
+    # constant ~1e5 offset that plays as a loud crack.
     dsp.build_user_interface()
-
-    if not SKIP_AUDIO:
-        audio = RtAudioDriver(48000, 256)
-
-        audio.init(dsp)
-
-        audio.start()
-        time.sleep(1)
-        audio.stop()

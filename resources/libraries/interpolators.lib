@@ -154,10 +154,10 @@ ma = library("maths.lib");
 si = library("signals.lib");
 
 declare name "Faust Interpolator Library";
-declare version "1.4.0";
+declare version "1.6.0";
 
 // Produces 0 until the first trig, then 1 until the next trig (which outputs a 0 sample to reset), and so on
-reset(trig) = hold * (trig <= trig')
+_reset(trig) = hold * (trig <= trig')
 with {
     hold = select2(trig,_,trig) ~ _;
 };
@@ -170,15 +170,15 @@ singleprecision make_idv(id) = int(id), ma.frac(id);
 // Infinite raising index
 singleprecision raise(trig, step, length) = id, dv
 letrec {
-    'id = (id + int(step) + int(dv + ma.frac(step))) * reset(trig);
-    'dv = ma.frac(dv + ma.frac(step)) * reset(trig);
+    'id = (id + int(step) + int(dv + ma.frac(step))) * _reset(trig);
+    'dv = ma.frac(dv + ma.frac(step)) * _reset(trig);
 };
 
 // Modulo based raising index
 singleprecision raise_modulo(trig, step, length) = id, dv
 letrec {
-    'id = fmod(id + int(step) + int(dv + ma.frac(step)), length) * reset(trig);
-    'dv = ma.frac(dv + ma.frac(step)) * reset(trig);
+    'id = fmod(id + int(step) + int(dv + ma.frac(step)), length) * _reset(trig);
+    'dv = ma.frac(dv + ma.frac(step)) * _reset(trig);
 };
 
 // Decreasing index starting at 'length'
@@ -196,13 +196,13 @@ doubleprecision quadprecision make_idv(id) = id;
 // Infinite raising index
 doubleprecision quadprecision raise(trig, step, length) = idv
 letrec {
-    'idv = (idv + step) * reset(trig);
+    'idv = (idv + step) * _reset(trig);
 };
 
 // Modulo based raising index
 doubleprecision quadprecision raise_modulo(trig, step, length) = idv
 letrec {
-    'idv = fmod(idv + step, length) * reset(trig);
+    'idv = fmod(idv + step, length) * _reset(trig);
 };
 
 // Decreasing index starting at 'length'
@@ -274,6 +274,216 @@ declare interpolate_cosine author "Stéphane Letz";
 declare interpolate_cosine licence "MIT";
 
 interpolate_cosine(dv,v0,v1) = v0 + a2*(v1-v0) with { a2 = 0.5 * (1.0 - cos(dv*ma.PI)); };
+
+
+//-------`(it.)interpolate_logarithmic`----------
+// Logarithmic (exponential) interpolation between 2 values.
+// The output traces a constant-ratio (geometric) curve from `v0` to `v1`, so it is
+// the natural choice for perceptually even sweeps of quantities such as frequency or
+// amplitude. Both bounds must be strictly positive and have the same sign.
+// Used for pitch and frequency sweeps and for octave-spaced oscillator or filter
+// banks, where equal steps should mean equal pitch ratios rather than equal Hz.
+//
+// #### Usage
+//
+// ```
+// interpolate_logarithmic(dv,v0,v1) : _
+// ```
+//
+// Where:
+//
+// * `dv`: in the fractional value in [0..1] range
+// * `v0`: is the first value (same sign as `v1`, != 0)
+// * `v1`: is the second value (same sign as `v0`, != 0)
+//
+// #### Test
+// ```
+// it = library("interpolators.lib");
+// interpolate_logarithmic_test = it.interpolate_logarithmic(0.5, 100.0, 10000.0);
+// ```
+//--------------------------------------------
+declare interpolate_logarithmic author "Bart Brouns";
+declare interpolate_logarithmic licence "MIT";
+
+interpolate_logarithmic(dv,v0,v1) = v0*pow(v1/v0, dv);
+
+
+//-------`(it.)interpolate_power`----------
+// Power (skewed) interpolation between 2 values.
+// Linear interpolation shaped by raising the fraction to the power `p`: `p = 1` is
+// linear, `p > 1` biases the curve toward `v0`, and `0 < p < 1` biases it toward `v1`.
+// Unlike `interpolate_logarithmic`, the bounds may be any values (including 0 and
+// opposite signs). `p` is the first argument so it can be partially applied to obtain a
+// `(dv,v0,v1)` interpolator.
+// Used for fader and volume taper laws (an audio-taper pot is roughly `p = 2..3`) and
+// for velocity- or expression-to-amplitude curves.
+//
+// #### Usage
+//
+// ```
+// interpolate_power(p,dv,v0,v1) : _
+// ```
+//
+// Where:
+//
+// * `p`: the skew exponent (p > 0); 1 is linear, > 1 biases toward `v0`, < 1 toward `v1`
+// * `dv`: in the fractional value in [0..1] range
+// * `v0`: is the first value
+// * `v1`: is the second value
+//
+// #### Test
+// ```
+// it = library("interpolators.lib");
+// interpolate_power_test = it.interpolate_power(2.0, 0.5, 0.0, 1.0);
+// ```
+//--------------------------------------------
+declare interpolate_power author "Bart Brouns";
+declare interpolate_power licence "MIT";
+
+interpolate_power(p,dv,v0,v1) = v0+(v1-v0)*pow(dv, p);
+
+
+//-------`(it.)interpolate_exponential`----------
+// Exponential (constant-rate) interpolation between 2 values.
+// Shapes the fraction through `(exp(k*dv)-1)/(exp(k)-1)` and then interpolates
+// linearly between `v0` and `v1` by that shaped fraction. `k` sets the curvature:
+// `k > 0` clusters the values near `v0`, `k < 0` clusters them near `v1`, and as
+// `k -> 0` the curve approaches `interpolate_linear` (guarded so exactly 0 does not
+// divide by 0). Because it shapes the fraction rather than the ratio, the bounds may
+// be any values (including 0 and opposite signs), unlike `interpolate_logarithmic`.
+// `k` is the first argument so it can be partially applied to obtain a `(dv,v0,v1)`
+// interpolator.
+// Used for natural-sounding envelope segments: the curve matches RC capacitor
+// charge/discharge, giving analog-style attack and decay/release shapes.
+//
+// #### Usage
+//
+// ```
+// interpolate_exponential(k,dv,v0,v1) : _
+// ```
+//
+// Where:
+//
+// * `k`: the curvature; > 0 clusters near `v0`, < 0 near `v1`, -> 0 approaches linear
+// * `dv`: in the fractional value in [0..1] range
+// * `v0`: is the first value
+// * `v1`: is the second value
+//
+// #### Test
+// ```
+// it = library("interpolators.lib");
+// interpolate_exponential_test = it.interpolate_exponential(3.0, 0.5, 0.0, 1.0);
+// ```
+//--------------------------------------------
+declare interpolate_exponential author "Bart Brouns";
+declare interpolate_exponential licence "MIT";
+
+interpolate_exponential(k,dv,v0,v1) = v0+(v1-v0)*shaped
+with {
+    // avoid k==0 -> 0/0 by clamping |k| to a small floor, keeping its sign
+    safeK = select2(abs(k)>1e-9, 1e-9*((k>=0)*2-1), k);
+    shaped = (exp(safeK*dv)-1.0)/(exp(safeK)-1.0);
+};
+
+
+//-------`(it.)interpolate_smoothstep`----------
+// Smoothstep (3rd-order, C1) interpolation between 2 values.
+// Eases in and out with zero slope at both ends, using the classic polynomial
+// `3*dv^2 - 2*dv^3`. Similar in spirit to `interpolate_cosine` but polynomial rather
+// than trigonometric, with slightly gentler shoulders. This is the curve most people
+// mean by "ease in/out".
+// Used to de-zipper control signals (gain, pan, cutoff) without clicks: the zero slope
+// at each end removes the discontinuity a linear ramp leaves at its corners.
+//
+// #### Usage
+//
+// ```
+// interpolate_smoothstep(dv,v0,v1) : _
+// ```
+//
+// Where:
+//
+// * `dv`: in the fractional value in [0..1] range
+// * `v0`: is the first value
+// * `v1`: is the second value
+//
+// #### Test
+// ```
+// it = library("interpolators.lib");
+// interpolate_smoothstep_test = it.interpolate_smoothstep(0.5, 0.0, 1.0);
+// ```
+//--------------------------------------------
+declare interpolate_smoothstep author "Bart Brouns";
+declare interpolate_smoothstep licence "MIT";
+
+interpolate_smoothstep(dv,v0,v1) = v0+(v1-v0)*(dv*dv*(3.0-2.0*dv));
+
+
+//-------`(it.)interpolate_smootherstep`----------
+// Smootherstep (5th-order, C2) interpolation between 2 values.
+// Like `interpolate_smoothstep` but with zero first AND second derivative at both
+// ends, using `6*dv^5 - 15*dv^4 + 10*dv^3`. The smoothest of the symmetric S-curves;
+// use it when even the rate of change should have no visible kink at the bounds.
+// Used for morphs or long automation moves where smoothstep is not enough: the
+// continuous acceleration keeps a slow filter or crossfade from audibly snapping into
+// motion or to a stop.
+//
+// #### Usage
+//
+// ```
+// interpolate_smootherstep(dv,v0,v1) : _
+// ```
+//
+// Where:
+//
+// * `dv`: in the fractional value in [0..1] range
+// * `v0`: is the first value
+// * `v1`: is the second value
+//
+// #### Test
+// ```
+// it = library("interpolators.lib");
+// interpolate_smootherstep_test = it.interpolate_smootherstep(0.5, 0.0, 1.0);
+// ```
+//--------------------------------------------
+declare interpolate_smootherstep author "Bart Brouns";
+declare interpolate_smootherstep licence "MIT";
+
+interpolate_smootherstep(dv,v0,v1) = v0+(v1-v0)*(dv*dv*dv*(dv*(dv*6.0-15.0)+10.0));
+
+
+//-------`(it.)interpolate_mel`----------
+// Mel-scale (perceptual pitch) interpolation between 2 frequencies.
+// Unlike the other interpolators, `v0` and `v1` are frequencies in Hz: they are
+// converted to the mel scale with `ba.hz2mel`, interpolated linearly there, and
+// converted back with `ba.mel2hz`. This spreads frequencies the way the ear hears
+// pitch, which is the right spacing for filterbank or oscillator-bank center
+// frequencies.
+// Used to choose band center frequencies for a filterbank or vocoder, or bin
+// groupings for spectral analysis, so the bands track perceived pitch.
+//
+// #### Usage
+//
+// ```
+// interpolate_mel(dv,v0,v1) : _
+// ```
+//
+// Where:
+//
+// * `dv`: in the fractional value in [0..1] range
+// * `v0`: is the first frequency in Hz
+// * `v1`: is the second frequency in Hz
+//
+// #### Test
+// ```
+// it = library("interpolators.lib");
+// interpolate_mel_test = it.interpolate_mel(0.5, 100.0, 8000.0);
+// ```
+//--------------------------------------------
+declare interpolate_mel author "Bart Brouns";
+declare interpolate_mel licence "MIT";
+
+interpolate_mel(dv,v0,v1) = ba.mel2hz(interpolate_linear(dv, ba.hz2mel(v0), ba.hz2mel(v1)));
 
 
 //=========================Four points interpolation functions============================
@@ -423,7 +633,35 @@ declare interpolator_cosine licence "MIT";
 interpolator_cosine(gen, idv) = interpolator_two_points(gen, idv, interpolate_cosine);
 
 
-// To be used in 'interpolator_select'
+//-------`(it.)interpolator_null`--------------------------------------
+// Interpolator with no interpolation: reads the table at the truncated
+// index. To be used in `interpolator_select` (this is the `nointerp`
+// choice of the interpolation enum).
+//
+// #### Usage
+//
+// ```
+// interpolator_null(gen, idv) : _
+// ```
+//
+// Where:
+//
+// * `gen`: a table content generator function
+// * `idv`: a fractional read index
+//
+// #### Test
+// ```
+// it = library("interpolators.lib");
+// ma = library("maths.lib");
+// interpolator_null_test = it.interpolator_null(gen, idv)
+// with {
+//     gen(idx) = waveform {0.0, 1.0, 4.0, 9.0, 16.0}, int(ma.modulo(idx, 5)) : rdtable;
+//     step = 0.25;
+//     idxFloat = ma.modulo((+(step)~_) - step, 4.0);
+//     idv = it.make_idv(idxFloat);
+// };
+// ```
+//----------------------------------------------------------
 interpolator_null(gen, idv) = interpolator_two_points(gen, idv, \(dv,v0,v1).(v0));
 
 
@@ -505,7 +743,24 @@ declare interpolator_cubic licence "MIT";
 
 interpolator_cubic(gen, idv) = interpolator_four_points(gen, idv, interpolate_cubic);
 
-// Enum of interpolation algorithms
+//-------`(it.)linear`, `(it.)cosine`, `(it.)cubic`, `(it.)nointerp`, `(it.)MAX_INTER`--------------------------------------
+// Enum of the interpolation algorithms, to be given to functions taking
+// an interpolation-choice parameter (like `frdtable`, `frwtable`, or the
+// soundfiles `play_interp` players): `linear` (0), `cosine` (1), `cubic`
+// (2), and `nointerp` (3). `MAX_INTER` is the number of choices.
+//
+// #### Usage
+//
+// ```
+// sample.play_interp(length, freq, gain, trig, it.cubic)
+// ```
+//
+// #### Test
+// ```
+// it = library("interpolators.lib");
+// linear_test = it.linear, it.cosine, it.cubic, it.nointerp, it.MAX_INTER;
+// ```
+//----------------------------------------------------------
 MAX_INTER = 4;
 
 linear = 0;
@@ -638,10 +893,12 @@ piecewise(xList, yList, x) = y , assert
 //=========================Lagrange based interpolators====================================
 //========================================================================================
 
-//-------`(it.)lagrangeCoeffs`---------------------------------------------
+//-------`(it.)lagrangeCoeffs`, `(it.)lagrange_h`---------------------------------------------
 //
 // This is a function to generate N + 1 coefficients for an Nth-order Lagrange
 // basis polynomial with arbitrary spacing of the points.
+// `lagrange_h(N, x)` is the uniformly-spaced specialization
+// (points at 0,1,...,N), kept for back-compatibility.
 //
 // #### Usage
 //
@@ -669,7 +926,7 @@ piecewise(xList, yList, x) = y , assert
 declare lagrangeCoeffs author "Dario Sanfilippo";
 declare lagrangeCoeffs copyright "Copyright (C) 2021 Dario Sanfilippo
     <sanfilippo.dario@gmail.com>";
-declare lagrangeCoeffs license "MIT license";
+declare lagrangeCoeffs license "MIT";
 lagrangeCoeffs(N, xCoords, x) = par(n, N + 1, prod(k, N + 1, f(n, k)))
     with {
         xVals(i) = ba.take(i + 1, xCoords);
@@ -683,7 +940,11 @@ lagrange_h(N, x) = lagrangeCoeffs(N, xCoord, x)
     };
 
 
-//-------`(it.)lagrangeInterpolation`--------------------------------------
+//-------`(it.)lagrangeInterpolation`, `(it.)lagrangeN`--------------------------------------
+//
+// Nth-order Lagrange interpolation of a value `x` between input points.
+// `lagrangeN(N, x)` is the uniformly-spaced specialization
+// (points at 0,1,...,N), kept for back-compatibility.
 //
 // Nth-order Lagrange interpolator to interpolate between a set of arbitrarily spaced N + 1 points.
 //
@@ -747,7 +1008,7 @@ lagrange_h(N, x) = lagrangeCoeffs(N, xCoord, x)
 declare lagrangeInterpolation author "Dario Sanfilippo";
 declare lagrangeInterpolation copyright "Copyright (C) 2021 Dario Sanfilippo
     <sanfilippo.dario@gmail.com>";
-declare lagrangeInterpolation license "MIT license";
+declare lagrangeInterpolation license "MIT";
 lagrangeInterpolation(N, xCoords, x) = si.dot(N + 1, lagrangeCoeffs(N, xCoords, x));
 // The following definition for uniformely-spaced points interpolation is kept for back-compatibility
 lagrangeN(N, x) = si.dot(N + 1, lagrange_h(N, x));
@@ -795,7 +1056,7 @@ lagrangeN(N, x) = si.dot(N + 1, lagrange_h(N, x));
 declare frdtable author "Dario Sanfilippo";
 declare frdtable copyright "Copyright (C) 2021 Dario Sanfilippo
     <sanfilippo.dario@gmail.com>";
-declare frdtable license "LGPL v3.0 license";
+declare frdtable license "LGPL-3.0-only";
 frdtable(N, S, init, idx) =
     lagrangeN(N, f_idx, par(i, N + 1, table(i_idx - int(N / 2) + i)))
     with {
@@ -851,7 +1112,7 @@ frdtable(N, S, init, idx) =
 declare frwtable author "Dario Sanfilippo";
 declare frwtable copyright "Copyright (C) 2021 Dario Sanfilippo
     <sanfilippo.dario@gmail.com>";
-declare frwtable license "LGPL v3.0 license";
+declare frwtable license "LGPL-3.0-only";
 frwtable(N, S, init, w_idx, x, r_idx) =
     lagrangeN(N, f_idx, par(i, N + 1, table(i_idx - int(N / 2) + i)))
     with {
@@ -897,3 +1158,10 @@ frwtable(N, S, init, w_idx, x, r_idx) =
 declare remap author "David Braun";
 
 remap(from1, from2, to1, to2, x) = to1 + (x-from1)*(to2-to1)/(from2-from1);
+
+
+// Deprecated backward-compatibility alias, kept for one version and
+// scheduled for removal: the canonical name now carries the internal
+// underscore prefix (see CONTRIBUTING.md, "Variables and identifiers scoping").
+declare reset deprecated "internal helper, renamed _reset";
+reset = _reset;

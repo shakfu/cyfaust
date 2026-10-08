@@ -1,4 +1,4 @@
-// WARNING: This a "legacy example based on a deprecated library". Check misceffects.lib
+// WARNING: This is a "legacy example based on a deprecated library". Check misceffects.lib
 // for more accurate examples of echo functions
 
 declare name 		"quadEcho";
@@ -14,8 +14,7 @@ declare copyright 	"(c)GRAME 2007";
 import("stdfaust.lib");
 
 process = vgroup("stereo echo", multi(ef.echo1s, 4))
-	with { 
-		multi(f,1) = f;
-		multi(f,n) = f,multi(f,n-1);
-	};							
-	
+    with {
+        multi(f, 1) = f;
+        multi(f, n) = f, multi(f, n-1);
+    };

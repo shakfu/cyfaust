@@ -7,14 +7,18 @@
 // computing statistics useful in visualization, diagnostics,
 // adaptive processing, and music information retrieval.
 //
-// The Analyzers library is organized into 7 sections:
+// The Analyzers library is organized into 11 sections:
 //
 // * [Amplitude Tracking](#amplitude-tracking)
 // * [Adaptive Frequency Analysis](#adaptive-frequency-analysis)
 // * [Spectrum-Analyzers](#spectrum-analyzers)
 // * [Mth-Octave Spectral Level](#mth-octave-spectral-level)
-// * [Arbritary-Crossover Filter-Banks and Spectrum Analyzers](#arbritary-crossover-filter-banks-and-spectrum-analyzers)
+// * [Arbitrary-Crossover Filter-Banks and Spectrum Analyzers](#arbitrary-crossover-filter-banks-and-spectrum-analyzers)
 // * [Fast Fourier Transform (fft) and its Inverse (ifft)](#fast-fourier-transform-fft-and-its-inverse-ifft)
+// * [Window Functions](#window-functions)
+// * [FFT Subsystem](#fft-subsystem)
+// * [Spectral Descriptors (filter-bank based)](#spectral-descriptors-filter-bank-based)
+// * [Loudness Metering (EBU R128 / ITU-R BS.1770)](#loudness-metering-ebu-r128-itu-r-bs1770)
 // * [Test signal generators](#test-signal-generators)
 // 
 // #### References
@@ -32,7 +36,7 @@ os = library("oscillators.lib");
 an = library("analyzers.lib"); // for compatible copy/paste out of this file
 
 declare name "Faust Analyzer Library";
-declare version "1.3.0";
+declare version "1.4.0";
 
 /************************************************************************
 FAUST library file, jos section
@@ -76,7 +80,7 @@ declare abs_envelope_rect author "Dario Sanfilippo and Julius O. Smith III";
 declare abs_envelope_rect copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare abs_envelope_rect license "MIT-style STK-4.3 license";
+declare abs_envelope_rect license "LicenseRef-STK-4.3";
 abs_envelope_rect(period, x) = abs(x) : fi.avg_rect(period);
 
 
@@ -106,7 +110,7 @@ declare abs_envelope_tau author "Dario Sanfilippo and Julius O. Smith III";
 declare abs_envelope_tau copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare abs_envelope_tau license "MIT-style STK-4.3 license";
+declare abs_envelope_tau license "LicenseRef-STK-4.3";
 abs_envelope_tau(period, x) = abs(x) : fi.avg_tau(period);
 
 
@@ -136,7 +140,7 @@ declare abs_envelope_t60 author "Dario Sanfilippo and Julius O. Smith III";
 declare abs_envelope_t60 copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare abs_envelope_t60 license "MIT-style STK-4.3 license";
+declare abs_envelope_t60 license "LicenseRef-STK-4.3";
 abs_envelope_t60(period, x) = abs(x) : fi.avg_t60(period);
 
 
@@ -166,11 +170,11 @@ declare abs_envelope_t19 author "Dario Sanfilippo and Julius O. Smith III";
 declare abs_envelope_t19 copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare abs_envelope_t19 license "MIT-style STK-4.3 license";
+declare abs_envelope_t19 license "LicenseRef-STK-4.3";
 abs_envelope_t19(period, x) = abs(x) : fi.avg_t19(period);
 
 
-//---------------------------`(an.)amp_follower`---------------------------
+//---------------------`(an.)amp_follower`, `(an.)peak_envelope`---------------------
 // Classic analog audio envelope follower with infinitely fast rise and
 // exponential decay.  The amplitude envelope instantaneously follows
 // the absolute value going up, but then floats down exponentially.
@@ -299,7 +303,7 @@ declare ms_envelope_rect author "Dario Sanfilippo and Julius O. Smith III";
 declare ms_envelope_rect copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare ms_envelope_rect license "MIT-style STK-4.3 license";
+declare ms_envelope_rect license "LicenseRef-STK-4.3";
 ms_envelope_rect(period, x) = x * x : fi.avg_rect(period);
 
 
@@ -329,7 +333,7 @@ declare ms_envelope_tau author "Dario Sanfilippo and Julius O. Smith III";
 declare ms_envelope_tau copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare ms_envelope_tau license "MIT-style STK-4.3 license";
+declare ms_envelope_tau license "LicenseRef-STK-4.3";
 ms_envelope_tau(period, x) = x * x : fi.avg_tau(period);
 
 
@@ -359,7 +363,7 @@ declare ms_envelope_t60 author "Dario Sanfilippo and Julius O. Smith III";
 declare ms_envelope_t60 copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare ms_envelope_t60 license "MIT-style STK-4.3 license";
+declare ms_envelope_t60 license "LicenseRef-STK-4.3";
 ms_envelope_t60(period, x) = x * x : fi.avg_t60(period);
 
 
@@ -389,7 +393,7 @@ declare ms_envelope_t19 author "Dario Sanfilippo and Julius O. Smith III";
 declare ms_envelope_t19 copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare ms_envelope_t19 license "MIT-style STK-4.3 license";
+declare ms_envelope_t19 license "LicenseRef-STK-4.3";
 ms_envelope_t19(period, x) = x * x : fi.avg_t19(period);
 
 
@@ -418,7 +422,7 @@ declare rms_envelope_rect author "Dario Sanfilippo and Julius O. Smith III";
 declare rms_envelope_rect copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare rms_envelope_rect license "MIT-style STK-4.3 license";
+declare rms_envelope_rect license "LicenseRef-STK-4.3";
 rms_envelope_rect(period, x) = ms_envelope_rect(period, x) : sqrt;
 
 
@@ -448,7 +452,7 @@ declare rms_envelope_tau author "Dario Sanfilippo and Julius O. Smith III";
 declare rms_envelope_tau copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare rms_envelope_tau license "MIT-style STK-4.3 license";
+declare rms_envelope_tau license "LicenseRef-STK-4.3";
 rms_envelope_tau(period, x) = ms_envelope_tau(period, x) : sqrt;
 
 
@@ -478,7 +482,7 @@ declare rms_envelope_t60 author "Dario Sanfilippo and Julius O. Smith III";
 declare rms_envelope_t60 copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare rms_envelope_t60 license "MIT-style STK-4.3 license";
+declare rms_envelope_t60 license "LicenseRef-STK-4.3";
 rms_envelope_t60(period, x) = ms_envelope_t60(period, x) : sqrt;
 
 
@@ -508,7 +512,7 @@ declare rms_envelope_t19 author "Dario Sanfilippo and Julius O. Smith III";
 declare rms_envelope_t19 copyright "Copyright (C) 2020 Dario Sanfilippo 
       <sanfilippo.dario@gmail.com> and 
        2003-2020 by Julius O. Smith III <jos@ccrma.stanford.edu>";
-declare rms_envelope_t19 license "MIT-style STK-4.3 license";
+declare rms_envelope_t19 license "LicenseRef-STK-4.3";
 rms_envelope_t19(period, x) = ms_envelope_t19(period, x) : sqrt;
 
 
@@ -543,7 +547,7 @@ rms_envelope_t19(period, x) = ms_envelope_t19(period, x) : sqrt;
 declare zcr author "Dario Sanfilippo";
 declare zcr copyright "Copyright (C) 2020 Dario Sanfilippo
       <sanfilippo.dario@gmail.com>";
-declare zcr license "MIT-style STK-4.3 license";
+declare zcr license "LicenseRef-STK-4.3";
 zcr(period, x) = ma.zc(x) : fi.lptau(period);
 
 
@@ -580,7 +584,7 @@ zcr(period, x) = ma.zc(x) : fi.lptau(period);
 declare pitchTracker author "Dario Sanfilippo";
 declare pitchTracker copyright "Copyright (C) 2022 Dario Sanfilippo
       <sanfilippo.dario@gmail.com>";
-declare pitchTracker license "MIT License";
+declare pitchTracker license "MIT";
 pitchTracker(N, t, x) = loop ~ _
     with {
         xHighpassed = fi.highpass(1, 20.0, x);
@@ -636,7 +640,7 @@ pitchTracker(N, t, x) = loop ~ _
 declare spectralCentroid author "Dario Sanfilippo";
 declare spectralCentroid copyright "Copyright (C) 2022 Dario Sanfilippo
       <sanfilippo.dario@gmail.com>";
-declare spectralCentroid license "MIT License";
+declare spectralCentroid license "MIT";
 spectralCentroid(nonlinearity, t, x) = loop ~ _
     with {
         loop(fb) = centroid
@@ -702,7 +706,7 @@ spectralCentroid(nonlinearity, t, x) = loop ~ _
 //========================================================================================
 
 
-//-------------------------`(an.)mth_octave_analyzer`----------------------------
+//---`(an.)mth_octave_analyzer`, `(an.)mth_octave_analyzer3`, `(an.)mth_octave_analyzer5`, `(an.)mth_octave_analyzer6e`, `(an.)mth_octave_analyzer_default`---
 // Octave analyzer.
 // `mth_octave_analyzer[N]` are standard Faust functions.
 //
@@ -763,7 +767,7 @@ mth_octave_analyzer_default = mth_octave_analyzer6e; // default analyzer
 //========================================================================================
 
 
-//------------------------`(an.)mth_octave_spectral_level6e`-------------------------
+//---`(an.)mth_octave_spectral_level6e`, `(an.)mth_octave_spectral_level_default`, `(an.)spectral_level`---
 // Spectral level display.
 //
 // #### Usage:
@@ -813,7 +817,7 @@ mth_octave_spectral_level_default = mth_octave_spectral_level6e;
 spectral_level = mth_octave_spectral_level(2,10000,20);  // simple default
 
 
-//---------------`(an.)[third|half]_octave_[analyzer|filterbank]`----------------
+//---`(an.)octave_analyzer`, `(an.)half_octave_analyzer`, `(an.)third_octave_analyzer`, `(an.)octave_filterbank`, `(an.)half_octave_filterbank`, `(an.)third_octave_filterbank`---
 // A bunch of special cases based on the different analyzer functions described above:
 //
 // ```
@@ -846,7 +850,7 @@ octave_filterbank(N) = mth_octave_filterbank_default(1,10000,N);
 octave_analyzer(N) = mth_octave_analyzer_default(1,10000,N);
 
 
-//===============Arbritary-Crossover Filter-Banks and Spectrum Analyzers==================
+//===============Arbitrary-Crossover Filter-Banks and Spectrum Analyzers==================
 // These are similar to the Mth-octave analyzers above, except that the
 // band-split frequencies are passed explicitly as arguments.
 //========================================================================================
@@ -1091,14 +1095,281 @@ with {
     ang = atan2;
 };
 
-// Undocumented utility functions used by fft and ifft:
+//==================================== Window Functions ==================================
+// Continuous window functions, defined on the normalized abscissa x in [0,1]
+// and evaluating to their peak at x = 1/2. Each is a pure arithmetic
+// expression, so it can be applied to a constant (to weight the taps of an
+// FIR or the grains of a granular engine at compile time) as well as to a
+// signal (a phase ramp, for run-time windowing):
+//
+// ```
+// // N compile-time weights (symmetric window):
+// w(i) = an.window_hann(i/(N-1));
+// // run-time windowing of a stream, with ph a 0..1 phase ramp:
+// process = _ * an.window_hann(ph);
+// ```
+//
+// For DFT-even (periodic) windows, evaluate at i/N instead of i/(N-1).
+//========================================================================================
+
+//---------------`(an.)window_rect`, `(an.)window_hann`, `(an.)window_hamming`, `(an.)window_blackman`, `(an.)window_blackman_harris`, `(an.)window_nuttall`, `(an.)window_flattop`, `(an.)window_bartlett`--------------------------
+// The classic fixed window functions:
+//
+// * `window_rect`: rectangular (boxcar) window, 1 inside [0,1], 0 outside
+// * `window_hann`: Hann (raised cosine), -31.5 dB first sidelobe
+// * `window_hamming`: Hamming (0.54/0.46), -42.7 dB first sidelobe
+// * `window_blackman`: Blackman (3-term, exact 0.42/0.50/0.08), -58 dB
+// * `window_blackman_harris`: minimum 4-term Blackman-Harris, -92 dB
+// * `window_nuttall`: Nuttall's continuous-first-derivative 4-term, -93 dB
+// * `window_flattop`: 5-term flat-top (amplitude-accurate spectral peaks,
+//    scalloping loss < 0.01 dB, very wide main lobe)
+// * `window_bartlett`: Bartlett (triangular, reaching 0 at both ends)
+//
+// #### Usage
+//
+// ```
+// window_hann(x) : _
+// ```
+//
+// Where:
+//
+// * `x`: normalized abscissa, the window support being [0,1]
+//   (values outside [0,1] return 0)
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// window_hann_test = an.window_hann(os.lf_sawpos(100));
+// ```
+//
+// #### References
+//
+// * F.J. Harris, "On the use of windows for harmonic analysis with the
+//   discrete Fourier transform", Proc. IEEE 66(1), 1978.
+// * A.H. Nuttall, "Some windows with very good sidelobe behavior",
+//   IEEE Trans. ASSP 29(1), 1981.
+// * <https://en.wikipedia.org/wiki/Window_function>
+//---------------------------------------------------
+window_rect(x) = in01(x)
+with { in01(x) = (x >= 0.0) & (x <= 1.0); };
+window_hann(x) = window_cosN((0.5, -0.5), x);
+window_hamming(x) = window_cosN((0.54, -0.46), x);
+window_blackman(x) = window_cosN((0.42, -0.50, 0.08), x);
+window_blackman_harris(x) = window_cosN((0.35875, -0.48829, 0.14128, -0.01168), x);
+window_nuttall(x) = window_cosN((0.355768, -0.487396, 0.144232, -0.012604), x);
+window_flattop(x) = window_cosN((0.21557895, -0.41663158, 0.277263158,
+                                 -0.083578947, 0.006947368), x);
+window_bartlett(x) = max(0.0, 1.0 - abs(2.0*x - 1.0)) * ((x >= 0.0) & (x <= 1.0));
+
+//---------------`(an.)window_cosN`--------------------------
+// Generic sum-of-cosines window: given the coefficient list `(a0, a1, ..., aK)`,
+// evaluates `a0 + a1*cos(2*PI*x) + a2*cos(4*PI*x) + ...` inside [0,1] and 0
+// outside. All the fixed windows above are instances of this function; use it
+// directly for custom sidelobe trade-offs.
+//
+// #### Usage
+//
+// ```
+// window_cosN((a0, a1, ..., aK), x) : _
+// ```
+//
+// Where:
+//
+// * `(a0, ..., aK)`: cosine-series coefficients, alternating in sign for the
+//   usual windows (peak value at x = 1/2 is a0 - a1 + a2 - ...)
+// * `x`: normalized abscissa in [0,1]
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// window_cosN_test = an.window_cosN((0.5, -0.5), os.lf_sawpos(100));
+// ```
+//---------------------------------------------------
+window_cosN(coeffs, x) = sum(k, K, ba.take(k+1, coeffs) * cos(k*ma.PI*2.0*x))
+                         * ((x >= 0.0) & (x <= 1.0))
+with { K = ba.count(coeffs); };
+window_cosN(a0, x) = a0 * ((x >= 0.0) & (x <= 1.0));
+
+//---------------`(an.)window_tukey`--------------------------
+// Tukey (cosine-tapered) window: flat at 1 over the central `1-a` fraction of
+// the support, with raised-cosine tapers of total length `a` at the edges.
+// `window_tukey(0)` degenerates to the rectangular window and
+// `window_tukey(1)` to the Hann window.
+//
+// #### Usage
+//
+// ```
+// window_tukey(a, x) : _
+// ```
+//
+// Where:
+//
+// * `a`: taper fraction between 0 and 1
+// * `x`: normalized abscissa in [0,1]
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// window_tukey_test = an.window_tukey(0.5, os.lf_sawpos(100));
+// ```
+//---------------------------------------------------
+window_tukey(a, x) = taper(min(x, 1.0 - x)) * ((x >= 0.0) & (x <= 1.0))
+with {
+    // distance d from the nearest edge; cosine taper while d < a/2
+    taper(d) = select2(2.0*d < a1, 1.0, 0.5*(1.0 + cos(ma.PI*(2.0*d/a1 - 1.0))));
+    a1 = max(a, ma.EPSILON);
+};
+
+//---------------`(an.)window_kaiser`--------------------------
+// Kaiser window of shape parameter `beta`, computed with a fixed-length
+// series for the modified Bessel function I0 (40 terms: exact to double
+// precision for any useful `beta`, and pure arithmetic, so usable at compile
+// time). Larger `beta` trades main-lobe width for sidelobe attenuation:
+// beta = 0 is rectangular, 5 approximates Hamming, 8.6 approximates
+// Blackman.
+//
+// #### Usage
+//
+// ```
+// window_kaiser(beta, x) : _
+// ```
+//
+// Where:
+//
+// * `beta`: shape parameter (>= 0), typically between 2 and 16
+// * `x`: normalized abscissa in [0,1]
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// window_kaiser_test = an.window_kaiser(8.6, os.lf_sawpos(100));
+// ```
+//
+// #### References
+//
+// * J.F. Kaiser and R.W. Schafer, "On the use of the I0-sinh window for
+//   spectrum analysis", IEEE Trans. ASSP 28(1), 1980.
+//---------------------------------------------------
+window_kaiser(beta, x) = besselI0(beta * sqrt(max(0.0, 1.0 - z*z))) / besselI0(beta)
+                         * ((x >= 0.0) & (x <= 1.0))
+with {
+    z = 2.0*x - 1.0;
+    // I0(v) = sum_k ((v/2)^k / k!)^2, truncated at 40 terms
+    besselI0(v) = 1.0 + sum(k, 40, pow(0.5*v, 2*(k+1)) / factsq(k+1))
+    with {
+        fact(0) = 1.0;
+        fact(n) = n * fact(n-1);
+        factsq(n) = fact(n) * fact(n);
+    };
+};
+
+//==================================== FFT Subsystem =====================================
+// Sliding FFT/IFFT for complex and real signals, with the conversion and display
+// helpers they rely on.
+//
+// **Complex vector representation.** Throughout this section, a *complex vector
+// signal* of length `N` is a bank of `2*N` parallel real signals holding
+// interleaved (real, imaginary) pairs: `(r0,i0), (r1,i1), ..., (rN-1,iN-1)`.
+// This is the convention enforced by `si.cbus(N)`, and it is the input and
+// output format of `an.fft` and `an.ifft`. A *real vector signal* of length `N`
+// is simply `N` parallel real signals (`si.bus(N)`). The `rtorv`/`rtocv`/`rvtocv`
+// functions convert a scalar signal or a real vector into these formats, and the
+// `c_*` functions operate on complex vectors.
+//========================================================================================
+
+//---------------`(an.)c_magsq`--------------------------
+// Squared magnitude of each bin of a complex vector signal.
+//
+// #### Usage
+//
+// ```
+// si.cbus(N) : c_magsq(N) : si.bus(N)
+// ```
+//
+// Where:
+//
+// * `N`: number of complex bins (power of 2 in FFT contexts)
+// * input: `N` complex signals as interleaved (real, imaginary) pairs
+// * output: `N` real signals, the `k`-th one being `r(k)^2 + i(k)^2`
+//---------------------------------------------------
 c_magsq(N) = si.cbus(N) : par(i,N,(par(j,2,abs<:_*_):>_)) :> si.bus(N);
+
+//---------------`(an.)c_magdb`--------------------------
+// Magnitude in dB (power) of each bin of a complex vector signal:
+// `10*log10(r^2 + i^2)`, floored at `ma.EPSILON` to avoid `log10(0)`.
+//
+// #### Usage
+//
+// ```
+// si.cbus(N) : c_magdb(N) : si.bus(N)
+// ```
+//
+// Where:
+//
+// * `N`: number of complex bins
+// * input: `N` complex signals as interleaved (real, imaginary) pairs
+// * output: `N` real signals giving the power of each bin in dB
+//---------------------------------------------------
 c_magdb(N) = si.cbus(N) : an.c_magsq(N) : par(i,N,(max(ma.EPSILON):log10:*(10.0)));
+
+//---------------`(an.)c_select_pos_freqs`--------------------------
+// Select the `N/2+1` non-negative-frequency bins (dc up to and including
+// Nyquist) out of an `N`-bin complex spectrum, discarding the redundant
+// negative-frequency bins of a real signal's spectrum.
+// `select_pos_freqs(N)` is the same selection for a real vector
+// (e.g. a power spectrum).
+//
+// #### Usage
+//
+// ```
+// si.cbus(N) : c_select_pos_freqs(N) : si.cbus(N/2+1)
+// si.bus(N) : select_pos_freqs(N) : si.bus(N/2+1)
+// ```
+//
+// Where:
+//
+// * `N`: full spectrum size (power of 2)
+// * output: bins `0..N/2` (dc and Nyquist included)
+//---------------------------------------------------
 c_select_pos_freqs(2) = (_,_), (_,_); // both dc and SR/2 included with "positive frequencies"
 c_select_pos_freqs(N) = si.cbus(N) : par(i,N/2+1,(_,_)),par(i,N/2-1,(!,!)) : si.cbus(N/2+1); // for complex spectra
   select_pos_freqs(2) = _,_; // both dc and SR/2 included
   select_pos_freqs(N) = si.bus(N) : par(i,N/2+1, _), par(i,N/2-1, !) : si. bus(N/2+1); // real power spectra etc.
 
+//---------------`(an.)rtorv`, `(an.)rtocv`, `(an.)rvtocv`--------------------------
+// Convert a real signal to the vector formats used by `an.fft`:
+//
+// * `rtorv(N,x)`: real scalar signal to length-`N` real vector holding the last
+//   `N` samples of `x`: `(x, x@1, ..., x@(N-1))`
+// * `rtocv(N,x)`: real scalar signal to length-`N` complex vector holding the
+//   last `N` samples of `x` with zero imaginary parts: `(x,0), (x@1,0), ...`
+// * `rvtocv(N)`: length-`N` real vector to length-`N` complex vector with zero
+//   imaginary parts
+//
+// #### Usage
+//
+// ```
+// rtorv(N,x) : si.bus(N)
+// rtocv(N,x) : si.cbus(N)
+// si.bus(N) : rvtocv(N) : si.cbus(N)
+// ```
+//
+// Where:
+//
+// * `N`: vector size (power of 2 in FFT contexts, known at compile time)
+// * `x`: a real (scalar) input signal
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// rtocv_test = an.rtocv(8, os.osc(220));
+// ```
+//---------------------------------------------------
 rtorv(N,x) = par(i,N,x@i); // convert real scalar signal to length N real vector
 rtocv(N,x) = par(i,N,(x@i,0)); // convert real scalar signal to length N complex vector with 0 imag part
 rvtocv(N) = si.bus(N), par(i,N,0) : ro.interleave(N,2); // convert real N-vector to complex with 0 imag part
@@ -1106,6 +1377,23 @@ rvtocv(N) = si.bus(N), par(i,N,0) : ro.interleave(N,2); // convert real N-vector
 bit_reverse_selector(N,0) = 0;
 bit_reverse_selector(N,i) = int(int(N)>>1)*(i&1) + bit_reverse_selector(int(N)>>1,(i>>1));
 
+//---`(an.)bit_reverse_shuffle`, `(an.)c_bit_reverse_shuffle`, `(an.)bit_reverse_selector`---
+// Bit-reversal permutation of a vector signal, as performed on the input of a
+// decimation-in-time radix-2 FFT. `bit_reverse_shuffle(N)` permutes a real
+// vector, `c_bit_reverse_shuffle(N)` a complex vector. Used internally by
+// `an.fft` and `an.ifft`.
+//
+// #### Usage
+//
+// ```
+// si.bus(N) : bit_reverse_shuffle(N) : si.bus(N)
+// si.cbus(N) : c_bit_reverse_shuffle(N) : si.cbus(N)
+// ```
+//
+// Where:
+//
+// * `N`: vector size (must be a power of 2)
+//---------------------------------------------------
 // decimation in time does this to the input:
 bit_reverse_shuffle(N) = si.bus(N) <: par(i,N,bit_reverse_permuter(N,i)) with {
     bit_reverse_permuter(N,k) = ba.selector(bit_reverse_selector(N,k),N);
@@ -1116,7 +1404,7 @@ c_bit_reverse_shuffle(N) = si.cbus(N) <: par(i,N,c_bit_reverse_permuter(N,i)) wi
 };
 
 
-//---------------`(an.)fft` --------------------------
+//---------------`(an.)fft`, `(an.)fftb`--------------------------
 // Fast Fourier Transform (FFT).
 //
 // #### Usage
@@ -1160,6 +1448,11 @@ c_bit_reverse_shuffle(N) = si.cbus(N) <: par(i,N,c_bit_reverse_permuter(N,i)) wi
 // #### References
 //
 // * [Decimation-in-time (DIT) Radix-2 FFT](https://cnx.org/contents/zmcmahhR@7/Decimation-in-time-DIT-Radix-2)
+//
+// #### Implementation notes
+//
+// `fft(N)` is `c_bit_reverse_shuffle(N)` followed by `fftb(N)`, the radix-2
+// butterfly core, which expects its input already in bit-reversed order.
 //---------------------------------------------------
 fft(N) = si.cbus(N) : an.c_bit_reverse_shuffle(N) : an.fftb(N); // shuffle off to the butterflies:
 fftb(1) = _,_; // each complex number is represented as (real,imag)
@@ -1179,7 +1472,7 @@ with {
 // Order of magnitude faster to compile but takes a scalar input, so too different from fft:
 // rfft(N) = an.rtocv(N) : an.fft(N);
 
-//---------------`(an.)ifft`--------------------------
+//---------------`(an.)ifft`, `(an.)ifftb`--------------------------
 // Inverse Fast Fourier Transform (IFFT).
 //
 // #### Usage
@@ -1203,6 +1496,12 @@ with {
 // mono = os.osc(220);
 // ifft_test = (an.rtocv(8, mono) : an.fft(8)) : an.ifft(8);
 // ```
+//
+// #### Implementation notes
+//
+// `ifft(N)` is `c_bit_reverse_shuffle(N)` followed by `ifftb(N)`, the
+// conjugate butterfly core (which also applies the `1/N` scaling), so that
+// `an.fft(N) : an.ifft(N)` is the identity.
 //---------------------------------------------------
 ifft(N) = si.cbus(N) : an.c_bit_reverse_shuffle(N) : an.ifftb(N); // input is shuffled off to the butterflies:
 ifftb(1) = _,_;
@@ -1219,10 +1518,62 @@ with {
 
 
 // ========== FFT Analyzers ==========
+
+//---`(an.)rfft_analyzer_c`, `(an.)rfft_analyzer_db`, `(an.)rfft_analyzer_magsq`---
+// Sliding FFT analyzers for a real input signal, built from `an.fft`:
+//
+// * `rfft_analyzer_c(N)`: complex spectrum, bins 0 to N/2 (dc to Nyquist)
+// * `rfft_analyzer_db(N)`: power of each bin in dB
+// * `rfft_analyzer_magsq(N)`: squared magnitude of each bin
+//
+// "Sliding" means the `N`-point FFT is recomputed every sample over the last
+// `N` input samples, with no windowing (rectangular window) and no hop.
+//
+// #### Usage
+//
+// ```
+// _ : rfft_analyzer_c(N) : si.cbus(N/2+1)
+// _ : rfft_analyzer_db(N) : si.bus(N/2+1)
+// _ : rfft_analyzer_magsq(N) : si.bus(N/2+1)
+// ```
+//
+// Where:
+//
+// * `N`: FFT size (must be a power of 2 known at compile time)
+// * input: a real (scalar) signal
+// * output: the `N/2+1` non-negative-frequency bins, complex for
+//   `rfft_analyzer_c` (interleaved real/imaginary pairs), real for the others
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// rfft_analyzer_db_test = os.osc(220) : an.rfft_analyzer_db(8);
+// ```
+//---------------------------------------------------
 rfft_analyzer_c(N) = an.rtocv(N) : an.fft(N) : an.c_select_pos_freqs(N); // complex spectral bins 0 to N/2
 rfft_analyzer_db(N) = an.rfft_analyzer_c(N) : an.c_magdb(N/2+1); // assumes real input
 rfft_analyzer_magsq(N) = an.rfft_analyzer_c(N) : an.c_magsq(N/2+1); // assumes real input
 
+//---------------`(an.)rfft_spectral_level`--------------------------
+// Real-signal FFT power spectrum display: passes the signal through unchanged
+// and shows the smoothed level of each of the `N/2+1` non-negative-frequency
+// bins in a bank of dB bargraphs.
+//
+// #### Usage
+//
+// ```
+// _ : rfft_spectral_level(N,tau,dB_offset) : _
+// ```
+//
+// Where:
+//
+// * `N`: FFT size (must be a power of 2 known at compile time)
+// * `tau`: display averaging-time (time constant) in seconds
+// * `dB_offset`: constant dB offset applied to all band level meters
+//
+// See `dm.fft_spectral_level_demo(N)` in `demos.lib` for an example GUI.
+//---------------------------------------------------
 rfft_spectral_level(N,tau,dB_offset) = _<: _, an.rfft_analyzer_db(N) : _,(display:>_):attach with {
   display = par(i,N/2+1,dbmeter(i));
   dbmeter(i) = si.smooth(ba.tau2pole(tau)) : +(dB_offset) : meter(i);
@@ -1234,6 +1585,266 @@ rfft_spectral_level(N,tau,dB_offset) = _<: _, an.rfft_analyzer_db(N) : _,(displa
 
 // end jos section
 
+
+//========================= Spectral Descriptors (filter-bank based) =====================
+// Low-level MIR descriptors computed on the constant-Q filter banks of this
+// library rather than on an FFT: monorate, sample-accurate, no framing. The
+// M-per-octave analyzer splits the signal into N bands (highest band first,
+// dc band last); the descriptors combine the smoothed band powers with the
+// geometric band-center frequencies.
+//========================================================================================
+
+//---------------`(an.)spectral_centroid`, `(an.)spectral_spread`--------------------------
+// Spectral centroid and spread of a signal, in Hz, computed from the band
+// powers of `an.mth_octave_analyzer(O,M,ftop,N)`: the centroid is the
+// power-weighted mean of the band center frequencies, the spread the
+// power-weighted standard deviation around it. Frequency resolution is that
+// of the filter bank (M bands per octave).
+//
+// #### Usage
+//
+// ```
+// _ : spectral_centroid(O,M,ftop,N,T) : _
+// _ : spectral_spread(O,M,ftop,N,T) : _
+// ```
+//
+// Where:
+//
+// * `O`: band-split filter order (a constant numerical expression)
+// * `M`: bands per octave (a constant numerical expression)
+// * `ftop`: highest band-split crossover frequency in Hz
+// * `N`: total number of bands, including dc and top (a constant numerical expression)
+// * `T`: power averaging time in seconds
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// spectral_centroid_test = os.osc(1000) : an.spectral_centroid(3, 1, 8000, 6, 0.1);
+// spectral_spread_test = os.osc(800) + os.osc(5000) : an.spectral_spread(3, 1, 8000, 6, 0.1);
+// ```
+//---------------------------------------------------
+declare spectral_centroid license "MIT";
+declare spectral_spread license "MIT";
+spectral_centroid(O,M,ftop,N,T) = band_powers(O,M,ftop,N,T) <: moment(M,ftop,N,1), moment(M,ftop,N,0) : safe_div;
+spectral_spread(O,M,ftop,N,T) = band_powers(O,M,ftop,N,T) <:
+    (moment(M,ftop,N,2), moment(M,ftop,N,0) : safe_div),
+    (moment(M,ftop,N,1), moment(M,ftop,N,0) : safe_div <: * ) : - : max(0.0) : sqrt;
+
+//---------------`(an.)band_powers`, `(an.)band_center`, `(an.)moment`, `(an.)safe_div`--------------------------
+// The machinery shared by the descriptors: `band_powers(O,M,ftop,N,T)` is
+// the bank of smoothed band powers (highest band first, like the analyzer
+// itself), `band_center(M,ftop,N,i)` the geometric center frequency in Hz
+// of band `i` (top and dc bands use their edges), `moment(M,ftop,N,K)` sums
+// N band powers weighted by `center^K`, and `safe_div` divides with an
+// epsilon-guarded denominator.
+//
+// #### Usage
+//
+// ```
+// _ : band_powers(O,M,ftop,N,T) : si.bus(N)
+// band_center(M,ftop,N,i) : _
+// si.bus(N) : moment(M,ftop,N,K) : _
+// ```
+//---------------------------------------------------
+// smoothed band powers (highest band first, like the analyzer itself)
+band_powers(O,M,ftop,N,T) = an.mth_octave_analyzer(O,M,ftop,N) : par(i, N, (_ <: *) : fi.avg_rect(T));
+// geometric center frequency of band i (top and dc bands use their edges)
+band_center(M,ftop,N,0) = sqrt(ftop * ma.SR/2.0);
+band_center(M,ftop,N,i) = ba.if(i == N-1,
+    0.5 * ftop * pow(2.0, (2.0-float(N))/float(M)),
+    ftop * pow(2.0, (1.0-2.0*float(i))/(2.0*float(M))));
+// sum of band powers weighted by center^K
+moment(M,ftop,N,K) = par(i, N, *(pow(band_center(M,ftop,N,i), K))) :> _;
+safe_div(num, den) = num / max(den, ma.EPSILON);
+
+//---------------`(an.)spectral_flux`--------------------------
+// Spectral flux: the half-wave-rectified increase of each band amplitude
+// over a `hop`-second interval, summed across the bands of
+// `an.mth_octave_analyzer(O,M,ftop,N)`. Rises sharply on note onsets and
+// broadband transients; threshold it for a simple onset detector.
+//
+// #### Usage
+//
+// ```
+// _ : spectral_flux(O,M,ftop,N,hop) : _
+// ```
+//
+// Where:
+//
+// * `O`, `M`, `ftop`, `N`: filter bank parameters as above
+// * `hop`: comparison interval in seconds (also used as the amplitude
+//   smoothing time; 10-50 ms typical)
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// ba = library("basics.lib");
+// spectral_flux_test = os.osc(1000) * ((ba.time % 24000) > 12000) : an.spectral_flux(3, 1, 8000, 6, 0.02);
+// ```
+//---------------------------------------------------
+declare spectral_flux license "MIT";
+spectral_flux(O,M,ftop,N,hop) = an.mth_octave_analyzer(O,M,ftop,N)
+    : par(i, N, abs : fi.avg_rect(hop) <: (_ - _@D) : max(0.0)) :> _
+with { D = int(hop * ma.SR); };
+
+//================== Loudness Metering (EBU R128 / ITU-R BS.1770) ========================
+// Multichannel loudness measurement after Recommendation ITU-R BS.1770-4 /
+// EBU R128: each channel is prefiltered with the K-filter
+// (`fi.itu_r_bs_1770_4_kfilter`, normalized so that no -0.691 dB correction
+// is needed), mean-squared over the measurement window, channel-weighted
+// (1.0 for the first three channels, 1.41 for surround channels 4 and 5,
+// LFE not handled) and summed; loudness is `10*log10` of that sum, in LUFS.
+//========================================================================================
+
+//---------------`(an.)loudness_momentary`, `(an.)loudness_shortterm`--------------------------
+// Momentary (400 ms window) and short-term (3 s window) loudness of an
+// N-channel signal, in LUFS, per ITU-R BS.1770-4.
+//
+// A 997 Hz full-scale sine reads -3.01 LUFS on one channel and 0.0 LUFS on
+// two channels, matching the BS.1770 compliance points.
+//
+// #### Usage
+//
+// ```
+// si.bus(N) : loudness_momentary(N) : _
+// si.bus(N) : loudness_shortterm(N) : _
+// ```
+//
+// Where:
+//
+// * `N`: number of channels, in BS.1770 order (L, R, C, Ls, Rs), a constant numerical expression
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// loudness_momentary_test = os.osc(997), os.osc(997) : an.loudness_momentary(2);
+// loudness_shortterm_test = os.osc(997), os.osc(997) : an.loudness_shortterm(2);
+// ```
+//
+// #### References
+//
+// * <https://www.itu.int/rec/R-REC-BS.1770>
+// * EBU R128 / EBU Tech 3341.
+//---------------------------------------------------
+declare loudness_momentary license "MIT";
+declare loudness_shortterm license "MIT";
+loudness_momentary(N) = loudness_meansquare(0.400, N) : meansquare2lufs;
+loudness_shortterm(N) = loudness_meansquare(3.000, N) : meansquare2lufs;
+
+//---------------`(an.)loudness_meansquare`, `(an.)meansquare2lufs`--------------------------
+// The machinery shared by the loudness meters: `loudness_meansquare(T,N)`
+// is the channel-weighted, K-filtered mean square of an N-channel signal
+// over a `T`-second rectangular window (the linear-domain quantity BS.1770
+// calls the sum of `G_i z_i`), and `meansquare2lufs` converts it to LUFS
+// (`10*log10`, floored at -100).
+//
+// #### Usage
+//
+// ```
+// si.bus(N) : loudness_meansquare(T,N) : _
+// _ : meansquare2lufs : _
+// ```
+//
+// Where:
+//
+// * `T`: averaging window in seconds
+// * `N`: number of channels, in BS.1770 order, a constant numerical expression
+//---------------------------------------------------
+loudness_meansquare(T, N) = par(i, N, fi.itu_r_bs_1770_4_kfilter <: * : fi.avg_rect(T) : *(weight(i))) :> _
+with { weight(i) = ba.if(i >= 3, 1.41, 1.0); };
+meansquare2lufs = max(1e-10) : log10 : *(10.0);
+
+//---------------`(an.)loudness_integrated`--------------------------
+// Streaming approximation of the gated integrated (programme) loudness of
+// EBU R128, in LUFS: the 400 ms mean square is accumulated under the -70
+// LUFS absolute gate, a relative threshold is derived 10 LU below the
+// absolute-gated running mean, and a second accumulation under that
+// threshold yields the integrated value.
+//
+// This is the usual real-time meter construction: it differs from the
+// offline two-pass measurement in that already-accumulated blocks are not
+// re-gated when the relative threshold later moves, and gating is applied
+// per sample rather than on 75%-overlapped 400 ms blocks. On programme
+// material the deviation is typically well under 0.5 LU.
+//
+// The measurement starts at power-up and never resets; restart the DSP to
+// restart the measurement.
+//
+// #### Usage
+//
+// ```
+// si.bus(N) : loudness_integrated(N) : _
+// ```
+//
+// Where:
+//
+// * `N`: number of channels, in BS.1770 order, a constant numerical expression
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// loudness_integrated_test = os.osc(997), os.osc(997) : an.loudness_integrated(2);
+// ```
+//
+// #### References
+//
+// * <https://www.itu.int/rec/R-REC-BS.1770> (gating: BS.1770-4, section 2)
+// * EBU Tech 3341, "Loudness Metering: 'EBU Mode' metering".
+//---------------------------------------------------
+declare loudness_integrated license "MIT";
+loudness_integrated(N) = loudness_meansquare(0.400, N) : gate : meansquare2lufs
+with {
+    gate(z) = sr / cr
+    with {
+        ga = z > 1e-7;               // absolute gate: -70 LUFS
+        ca = (ga : +~_) : max(1.0);
+        sa = (z*ga : +~_);
+        zthr = (sa/ca) * 0.1;        // relative gate: 10 LU below
+        gr = ga & (z > zthr);
+        cr = (gr : +~_) : max(1.0);
+        sr = (z*gr : +~_);
+    };
+};
+
+//---------------`(an.)true_peak`--------------------------
+// True-peak estimate per ITU-R BS.1770-4 Annex 2: the signal is 4x
+// oversampled with a 48-tap polyphase windowed-sinc interpolator (12 taps
+// per phase, Kaiser window beta = 10, each phase normalized to unity DC
+// gain, all weights computed at compile time with `an.window_kaiser`), and
+// the output is the largest absolute value among the four inter-sample
+// phases. Feed it to a max-hold for a dBTP meter reading:
+// `an.true_peak : max ~ _ : ba.linear2db`.
+//
+// #### Usage
+//
+// ```
+// _ : true_peak : _
+// ```
+//
+// #### Test
+// ```
+// an = library("analyzers.lib");
+// os = library("oscillators.lib");
+// true_peak_test = os.osc(12000)*0.97 : an.true_peak;
+// ```
+//
+// #### References
+//
+// * <https://www.itu.int/rec/R-REC-BS.1770> (Annex 2)
+//---------------------------------------------------
+declare true_peak license "MIT";
+true_peak(x) = max(max(ph(0, x), ph(1, x)), max(ph(2, x), ph(3, x)))
+with {
+    L = 12;                          // taps per phase
+    sinc(z) = sin(ma.PI*z) / (ma.PI*z);   // z is never 0 here (offsets are half-integer)
+    hh(j) = an.window_kaiser(10.0, j/47.0) * sinc((j - 23.5)/4.0);
+    psum(p) = sum(k, L, hh(4*k+p));
+    ph(p, x) = abs(sum(k, L, x@k * (hh(4*k+p)/psum(p))));
+};
 
 //================ Test signal generators ===================
 // Signal generators for testing purposes.

@@ -136,6 +136,26 @@ with{
     50,-50,100,1));
 };
 
+//------------------------`(dm.)spectral_level_demo`---------------------------
+// Spectral level display, 2/3 octave. Synonym for
+// `mth_octave_spectral_level_demo(1.5)`.
+//
+// #### Usage
+//
+// ```
+// _ : spectral_level_demo : _
+// ```
+//
+// #### Test
+// ```
+// dm = library("demos.lib");
+// no = library("noises.lib");
+// spectral_level_demo_test = no.noise : dm.spectral_level_demo;
+// ```
+//------------------------------------------------------------
+declare spectral_level_demo author "Julius O. Smith III and Yann Orlarey";
+declare spectral_level_demo licence "MIT";
+
 spectral_level_demo = mth_octave_spectral_level_demo(1.5); // 2/3 octave
 
 
@@ -692,7 +712,7 @@ with{
 //------------------------------------------------------------
 declare tapeStop_demo author "David Braun";
 declare tapeStop_demo copyright "Copyright (C) 2024 by David Braun <braun@ccrma.stanford.edu>";
-declare tapeStop_demo license "MIT-style STK-4.3 license";
+declare tapeStop_demo license "LicenseRef-STK-4.3";
 
 tapeStop_demo = hgroup("Tape Stop", ef.tapeStop(2, LAGRANGE_ORDER, MAX_TIME_SAMP, crossfade, gainAlpha, stopAlpha, stopTime, stop))
 with {
@@ -734,7 +754,7 @@ with {
 // ```
 //------------------------------------------------------------
 declare freeverb_demo author " Romain Michon";
-declare freeverb_demo licence "LGPL";
+declare freeverb_demo licence "LGPL-2.1-or-later";
 
 freeverb_demo = _,_ <: (*(g)*fixedgain,*(g)*fixedgain :
     re.stereo_freeverb(combfeed, allpassfeed, damping, spatSpread)),
@@ -1186,7 +1206,7 @@ with {
     mix = hslider("[4] Mix [style:knob]",  1, 0, 1, .01) : SMOO : aa.clip(0, 1);
 };
 declare vital_rev_demo author "David Braun";
-declare vital_rev_demo license "GPL-3.0";
+declare vital_rev_demo license "GPL-3.0-only";
 
 
 //--------------------------`(dm.)reverbTank_demo`---------------------------
@@ -1422,7 +1442,7 @@ with {
 
 declare reverbTank_demo author "David Braun";
 declare reverbTank_demo copyright "Copyright (C) 2024 by David Braun <braun@ccrma.stanford.edu>";
-declare reverbTank_demo license "MIT-style STK-4.3 license";
+declare reverbTank_demo license "LicenseRef-STK-4.3";
 
 
 //--------------------------`(dm.)kb_rom_rev1_demo`--------------------------
@@ -1444,7 +1464,7 @@ declare reverbTank_demo license "MIT-style STK-4.3 license";
 // ```
 //------------------------------------------------------------
 declare kb_rom_rev1_demo author "Luca Spanedda";
-declare kb_rom_rev1_demo licence "GPL-3.0";
+declare kb_rom_rev1_demo licence "GPL-3.0-only";
 
 kb_rom_rev1_demo = hgroup("Reverb", dryWetMix(re.kb_rom_rev1(rt, damp)))
 with {
@@ -1483,7 +1503,7 @@ with {
 // ```
 //------------------------------------------------------------
 declare dattorro_rev_demo author "Jakob Zerbian";
-declare dattorro_rev_demo license "MIT-style STK-4.3 license";
+declare dattorro_rev_demo license "LicenseRef-STK-4.3";
 
 dattorro_rev_demo = _,_ <: re.dattorro_rev(pre_delay, bw, i_diff1, i_diff2, decay, d_diff1, d_diff2, damping),_,_:
     dry_wet : out_level
@@ -1532,7 +1552,7 @@ with {
 // ```
 //------------------------------------------------------------
 declare jprev_demo author "Till Bovermann";
-declare jprev_demo license "GPL2+";
+declare jprev_demo license "GPL-2.0-or-later";
 
 jprev_demo = re.jpverb(t60, damp, size, early_diff, mod_depth, mod_freq, low, mid, high, low_cutoff, high_cutoff)
 with {
@@ -1576,7 +1596,7 @@ with {
 // ```
 //------------------------------------------------------------
 declare greyhole_demo author "Till Bovermann";
-declare greyhole_demo license "GPL2+";
+declare greyhole_demo license "GPL-2.0-or-later";
 
 greyhole_demo = re.greyhole(dt, damp, size, early_diff, feedback, mod_depth, mod_freq)
 with {
@@ -1859,6 +1879,25 @@ with{
     signal = amp * os.oscrs(sfreq);
 };
 
+//------------------------`(dm.)oscr_demo`---------------------------
+// Sine oscillator demo based on 2D vector rotation. Synonym for
+// `oscrs_demo`.
+//
+// #### Usage
+//
+// ```
+// oscr_demo : _
+// ```
+//
+// #### Test
+// ```
+// dm = library("demos.lib");
+// oscr_demo_test = dm.oscr_demo;
+// ```
+//------------------------------------------------------------
+declare oscr_demo author "Julius O. Smith III";
+declare oscr_demo licence "MIT";
+
 oscr_demo = oscrs_demo; // synonym
 
 
@@ -2006,7 +2045,7 @@ with{
         50,-50,100,1));
 };
 
-//-----------------`(dm.)reverse_echo_demo(nChans)`----------------
+//-----------------`(dm.)reverse_echo_demo`----------------
 // Multichannel echo effect with reverse delays.
 //
 // #### Usage
@@ -2174,7 +2213,7 @@ released under LGPL, STK-4.3, MIT, BSD, or a similar FOSS license.
 // * <https://www.researchgate.net/publication/258333577_Modeling_the_Harmonic_Exciter>
 //-------------------------------------------------------------------------------------
 declare exciter author "PPriyanka Shekar and Julius O. Smith III";
-declare exciter licence "STK-4.3";
+declare exciter licence "LicenseRef-STK-4.3";
 
 //-------------------------------------------------------------------------------------
 exciter = _ <: (fi.highpass(2, fc) : compressor : pregain : harmonicCreator :
@@ -2272,7 +2311,7 @@ with{
 // ```
 //------------------------------------------------------------
 declare vocoder_demo author "Romain Michon";
-declare vocoder_demo licence "LGPL";
+declare vocoder_demo licence "LGPL-2.1-or-later";
 
 vocoder_demo = hgroup("My Vocoder",_,os.lf_imptrain(freq)*gain :
     ve.vocoder(bands,att,rel,BWRatio) <: _,_)
@@ -2826,7 +2865,7 @@ with {
 // ```
 //------------------------------------------------------------
 declare ja_transformer_demo author "Thomas Mandolini";
-declare ja_transformer_demo licence "LGPLv2.1";
+declare ja_transformer_demo licence "LGPL-2.1-only";
 
 ja_transformer_demo = par(i, 2, transformer)
 with {

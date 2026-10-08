@@ -5,11 +5,12 @@
 // not included in other specialized Faust libraries. It includes filtering, mixing, time based, pitch shifters, 
 // and other creative or experimental signal processing components for sound design and musical applications.
 //
-// The library is organized into 7 sections:
+// The library is organized into 9 sections:
 //
 // * [Dynamic](#dynamic)
 // * [Fibonacci](#fibonacci)
 // * [Filtering](#filtering)
+// * [Dither and Noise Shaping](#dither-and-noise-shaping)
 // * [Meshes](#meshes)
 // * [Mixing](#mixing)
 // * [Time Based](#time-based)
@@ -58,6 +59,7 @@ ba = library("basics.lib");
 de = library("delays.lib");
 os = library("oscillators.lib");
 si = library("signals.lib");
+no = library("noises.lib");
 an = library("analyzers.lib");
 fi = library("filters.lib");
 ro = library("routes.lib");
@@ -65,13 +67,14 @@ aa = library("aanl.lib");
 ef = library("misceffects.lib"); // for compatible copy/paste out of this file
 
 declare name "Misc Effects Library";
-declare version "2.5.2"; 
+declare version "2.6.0"; 
 
 //======================================Dynamic===========================================
 //========================================================================================
 
-//---------------------`(ef.)cubicnl`-----------------------
-// Cubic nonlinearity distortion.
+//---------------------`(ef.)cubicnl`, `(ef.)cubicnl_nodc`-----------------------
+// Cubic nonlinearity distortion. The `cubicnl_nodc` variant adds a
+// `dcblocker` on the output.
 // `cubicnl` is a standard Faust function.
 //
 // #### Usage:
@@ -110,9 +113,9 @@ with {
 cubicnl_nodc(drive,offset) = cubicnl(drive,offset) : fi.dcblocker;
 
 declare cubicnl author "Julius O. Smith III";
-declare cubicnl license "STK-4.3";
+declare cubicnl license "LicenseRef-STK-4.3";
 declare cubicnl_nodc author "Julius O. Smith III";
-declare cubicnl_nodc license "STK-4.3";
+declare cubicnl_nodc license "LicenseRef-STK-4.3";
 
 //-----------------`(ef.)gate_mono`-------------------
 // Mono signal gate.
@@ -147,7 +150,7 @@ declare cubicnl_nodc license "STK-4.3";
 gate_mono(thresh,att,hold,rel,x) = x * gate_gain_mono(thresh,att,hold,rel,x);
 
 declare gate_mono author "Julius O. Smith III";
-declare gate_mono license "STK-4.3";
+declare gate_mono license "LicenseRef-STK-4.3";
 
 //-----------------`(ef.)gate_stereo`-------------------
 // Stereo signal gates.
@@ -183,6 +186,34 @@ gate_stereo(thresh,att,hold,rel,x,y) = ggm*x, ggm*y with {
   ggm = gate_gain_mono(thresh,att,hold,rel,abs(x)+abs(y));
 };
 
+//-----------------`(ef.)gate_gain_mono`-------------------
+// The gain signal of the mono gate: the core shared by `gate_mono` and
+// `gate_stereo`, which multiply their input by it. Returns a smoothed
+// gain between 0 and 1 following the level of the input signal.
+//
+// #### Usage
+//
+// ```
+// _ : gate_gain_mono(thresh,att,hold,rel) : _
+// ```
+//
+// Where:
+//
+// * `thresh`: dB level threshold above which gate opens (e.g., -60 dB)
+// * `att`: attack time = time constant (sec) for gate to open (e.g., 0.0001 s = 0.1 ms)
+// * `hold`: hold time = time (sec) gate stays open after signal level < thresh (e.g., 0.1 s)
+// * `rel`: release time = time constant (sec) for gate to close (e.g., 0.020 s = 20 ms)
+//
+// #### Test
+// ```
+// ef = library("misceffects.lib");
+// os = library("oscillators.lib");
+// gate_gain_mono_test = os.osc(440) : ef.gate_gain_mono(-60, 0.0001, 0.1, 0.02);
+// ```
+//------------------------------------------------------------
+declare gate_gain_mono author "Julius O. Smith III";
+declare gate_gain_mono license "LicenseRef-STK-4.3";
+
 gate_gain_mono(thresh,att,hold,rel,x) = x : extendedrawgate : an.amp_follower_ar(att,rel) with {
   extendedrawgate(x) = max(float(rawgatesig(x)),holdsig(x));
   rawgatesig(x) = inlevel(x) > ba.db2linear(thresh);
@@ -195,9 +226,9 @@ gate_gain_mono(thresh,att,hold,rel,x) = x : extendedrawgate : an.amp_follower_ar
 };
 
 declare gate_stereo author "Julius O. Smith III";
-declare gate_stereo license "STK-4.3";
+declare gate_stereo license "LicenseRef-STK-4.3";
 declare gate_gain_mono author "Julius O. Smith III";
-declare gate_gain_mono license "STK-4.3";
+declare gate_gain_mono license "LicenseRef-STK-4.3";
 
 //=====================================Fibonacci==========================================
 //========================================================================================
@@ -344,7 +375,7 @@ declare fibonacciSeq author "Dario Sanfilippo";
 speakerbp(f1,f2) = fi.dcblockerat(f1) : fi.dcblockerat(f1) : fi.lowpass(4,f2);
 
 declare speakerbp author "Julius O. Smith III";
-declare speakerbp license "STK-4.3";
+declare speakerbp license "LicenseRef-STK-4.3";
 
 //------------`(ef.)piano_dispersion_filter`---------------
 // Piano dispersion allpass filter in closed form.
@@ -412,7 +443,7 @@ with {
 };
 
 declare piano_dispersion_filter author "Julius O. Smith III";
-declare piano_dispersion_filter license "STK-4.3";
+declare piano_dispersion_filter license "LicenseRef-STK-4.3";
 
 //-------------------------`(ef.)stereo_width`---------------------------
 // Stereo Width effect using the Blumlein Shuffler technique.
@@ -452,7 +483,134 @@ with {
 };
 
 declare stereo_width author "Julius O. Smith III";
-declare stereo_width license "STK-4.3";
+declare stereo_width license "LicenseRef-STK-4.3";
+
+//-------------------------`(ef.)ms_enc`, `(ef.)ms_dec`---------------------------
+// Mid/side encoder and decoder. `ms_enc` converts a left/right stereo pair
+// into mid = (l+r)/2 and side = (l-r)/2; `ms_dec` is its exact inverse
+// (l = m+s, r = m-s), so `ms_enc : ms_dec` is the identity. Process the mid
+// and side channels independently between the two (e.g. compress the mid,
+// EQ or widen the side) for classic M/S mastering.
+//
+// #### Usage
+//
+// ```
+// _,_ : ms_enc : _,_ // (l,r) to (m,s)
+// _,_ : ms_dec : _,_ // (m,s) to (l,r)
+// ```
+//
+// #### Test
+// ```
+// ef = library("misceffects.lib");
+// os = library("oscillators.lib");
+// ms_enc_test = os.osc(440), os.osc(550) : ef.ms_enc;
+// ms_dec_test = os.osc(440), os.osc(550) : ef.ms_enc : ef.ms_dec;
+// ```
+//------------------------------------------------------------
+declare ms_enc license "MIT";
+declare ms_dec license "MIT";
+ms_enc = _,_ <: +,- : *(0.5),*(0.5);
+ms_dec = _,_ <: +,-;
+
+
+//=================================Dither and Noise Shaping===============================
+// Requantization to a target bit depth, done properly: TPDF dither
+// decorrelates the quantization error from the signal, and error-feedback
+// noise shaping pushes it towards high frequencies where hearing is least
+// sensitive. Use these at the very end of a chain that feeds an integer
+// output format.
+//========================================================================================
+
+//-------------------------`(ef.)dither`---------------------------
+// TPDF-dithered requantizer to a given bit depth: adds triangular dither of
+// 2 LSB peak-to-peak (the sum of two independent uniform noises), then
+// rounds to the nearest of the `2^nbits` levels covering [-1,1). Unlike the
+// plain `ba.bitcrusher`, the quantization error is decorrelated from the
+// signal: low-level material fades into a constant noise floor instead of
+// developing correlated distortion.
+//
+// #### Usage
+//
+// ```
+// _ : dither(nbits) : _
+// ```
+//
+// Where:
+//
+// * `nbits`: target bit depth (e.g. 16), a constant numerical expression
+//
+// #### Test
+// ```
+// ef = library("misceffects.lib");
+// os = library("oscillators.lib");
+// dither_test = os.osc(440)*0.001 : ef.dither(16);
+// ```
+//
+// #### References
+//
+// * S.P. Lipshitz, R.A. Wannamaker, J. Vanderkooy, "Quantization and
+//   Dither: A Theoretical Survey", JAES vol. 40, no. 5, 1992.
+//------------------------------------------------------------
+declare dither license "MIT";
+dither(nbits) = +(dith) : quant
+with {
+    scaler = pow(2.0, float(nbits-1));
+    quant(v) = round(v*scaler)/scaler;
+    dith = (no.noises(2,0) + no.noises(2,1)) * (0.5/scaler);
+};
+
+//-------------------------`(ef.)dither_shaped`---------------------------
+// TPDF-dithered requantizer with error-feedback noise shaping: the
+// quantization error is fed back through `(1-z^-1)^K`, giving a noise
+// transfer function that rises at 6*K dB/octave and pushes the error energy
+// towards Nyquist. `K = 1` or `2` are the useful orders: higher plain
+// difference orders boost the total noise power faster than hearing
+// benefits (psychoacoustically weighted shapers need dedicated
+// coefficients).
+//
+// #### Usage
+//
+// ```
+// _ : dither_shaped(K,nbits) : _
+// ```
+//
+// Where:
+//
+// * `K`: noise shaping order, 1 or 2 (a constant numerical expression)
+// * `nbits`: target bit depth (e.g. 16), a constant numerical expression
+//
+// #### Test
+// ```
+// ef = library("misceffects.lib");
+// os = library("oscillators.lib");
+// dither_shaped_test = os.osc(440)*0.001 : ef.dither_shaped(2, 16);
+// ```
+//
+// #### References
+//
+// * S.P. Lipshitz, R.A. Wannamaker, J. Vanderkooy, "Quantization and
+//   Dither: A Theoretical Survey", JAES vol. 40, no. 5, 1992.
+// * R.A. Wannamaker, "Psychoacoustically Optimal Noise Shaping", JAES
+//   vol. 40, no. 7/8, 1992.
+//------------------------------------------------------------
+declare dither_shaped license "MIT";
+dither_shaped(K, nbits) = (body ~ (_,_)) : (!,!,_)
+with {
+    scaler = pow(2.0, float(nbits-1));
+    quant(v) = round(v*scaler)/scaler;
+    dith = (no.noises(2,0) + no.noises(2,1)) * (0.5/scaler);
+    // y = u + e with u = x - H(z)e, so NTF = 1 - H(z); H = 1 - (1-z^-1)^K
+    // K=1: H =  z^-1            -> u = x -  e[n-1]
+    // K=2: H = 2z^-1 - z^-2     -> u = x - 2e[n-1] + e[n-2]
+    c1(1) = -1.0; c2(1) = 0.0;
+    c1(2) = -2.0; c2(2) = 1.0;
+    body(e1, e2, x) = e, e1, y
+    with {
+        u = x + c1(K)*e1 + c2(K)*e2;
+        y = quant(u + dith);
+        e = y - u;
+    };
+};
 
 //===========================================Meshes=======================================
 //========================================================================================
@@ -589,14 +747,14 @@ with {
 };
 
 declare mesh_square author "Julius O. Smith III";
-declare mesh_square license "STK-4.3";
+declare mesh_square license "LicenseRef-STK-4.3";
 
 
 //=====================================Mixing=============================================
 //========================================================================================
 
 // Implementation to share common code
-dwmEnv(wetAmount, FX) = environment
+_dwmEnv(wetAmount, FX) = environment
 {
     N = inputs(FX);
     wet(wg) = FX : par(i, N, *(wg));
@@ -650,7 +808,7 @@ dwmEnv(wetAmount, FX) = environment
 //------------------------------------------------------------
 declare dryWetMixer author "David Braun, revised by Stéphane Letz";
 
-dryWetMixer(wetAmount, FX) = dwmEnv(wetAmount, FX).dryWetMixer;
+dryWetMixer(wetAmount, FX) = _dwmEnv(wetAmount, FX).dryWetMixer;
 
 
 //---------------`(ef.)dryWetMixerConstantPower`-------------------------------
@@ -702,7 +860,7 @@ dryWetMixer(wetAmount, FX) = dwmEnv(wetAmount, FX).dryWetMixer;
 //------------------------------------------------------------
 declare dryWetMixerConstantPower author "David Braun, revised by Stéphane Letz";
 
-dryWetMixerConstantPower(wetAmount, FX) = dwmEnv(wetAmount, FX).dryWetMixerConstantPower;
+dryWetMixerConstantPower(wetAmount, FX) = _dwmEnv(wetAmount, FX).dryWetMixerConstantPower;
 
 
 mixingEnv = environment
@@ -996,7 +1154,7 @@ with{
 reverseEchoN(N,delMax) = _<: par(i,N,ef.reverseDelayRamped(delMax,i/N));
 
 declare reverseEchoN author "Julius O. Smith III";
-declare reverseEchoN license "STK-4.3";
+declare reverseEchoN license "LicenseRef-STK-4.3";
 
 
 //-------------------`(ef.)reverseDelayRamped`------------------
@@ -1035,7 +1193,7 @@ reverseDelayRamped(delMax,phs) = rampGain * de.delay(delMax,del) with {
 };
 
 declare reverseDelayRamped author "Julius O. Smith III";
-declare reverseDelayRamped license "STK-4.3";
+declare reverseDelayRamped license "LicenseRef-STK-4.3";
 
 //-------------------`(ef.)uniformPanToStereo`------------------
 // Pan nChans channels to the stereo field, spread uniformly left to right.
@@ -1069,7 +1227,7 @@ uniformPanToStereo(N) = si.bus(N) <: par(i,2*N,_) :
               (par(i,N,*(1-i/(N-1))) :> _);
 
 declare uniformPanToStereo author "Julius O. Smith III";
-declare uniformPanToStereo license "STK-4.3";
+declare uniformPanToStereo license "LicenseRef-STK-4.3";
 
 //---------------------`(ef.)tapeStop`-----------------------------------------
 // A tape-stop effect, like putting a finger on a vinyl record player.
@@ -1153,7 +1311,7 @@ with {
 
 declare tapeStop author "David Braun";
 declare tapeStop copyright "Copyright (C) 2024 by David Braun <braun@ccrma.stanford.edu>";
-declare tapeStop license "MIT-style STK-4.3 license";
+declare tapeStop license "LicenseRef-STK-4.3";
 
 //=======================================Pitch Shifting===================================
 //========================================================================================
@@ -1187,6 +1345,102 @@ with {
     maxDelay = 65536;
     i = 1 - pow(2, s/12);
     d = i : (+ : +(w) : fmod(_,w)) ~ _;
+};
+
+//--------------`(ef.)transpose_windowed`----------------
+// Delay-line pitch shifter with `P` overlapping Hann-windowed read taps:
+// the windowed-tap refinement of `ef.transpose`. Each tap sweeps the same
+// `w`-sample window with a phase offset of `1/P`, weighted by
+// `an.window_hann` of its own phase; since Hann windows at any regular
+// overlap sum to a constant, the crossfade is click-free and
+// equal-amplitude by construction (with `s = 0` the output is exactly a
+// delayed copy). `P = 2` matches the classic two-tap topology; higher `P`
+// smears transients less at large shifts.
+//
+// #### Usage
+//
+// ```
+// _ : transpose_windowed(P, w, s) : _
+// ```
+//
+// Where:
+//
+// * `P`: number of overlapping taps, 2 or more (a constant numerical expression)
+// * `w`: window length in samples (up to 65536)
+// * `s`: shift in semitones (positive or negative, may vary at run time)
+//
+// #### Test
+// ```
+// ef = library("misceffects.lib");
+// os = library("oscillators.lib");
+// transpose_windowed_test = os.osc(440) : ef.transpose_windowed(2, 1024, 7);
+// ```
+//-----------------------------------------
+declare transpose_windowed license "MIT";
+transpose_windowed(P, w, s, sig) = sum(i, P, tap(i)) * (2.0/float(P))
+with {
+    maxDelay = 65536;
+    f = (1.0 - pow(2.0, s/12.0)) / w;          // phase increment per sample
+    ph = (+(f) ~ ma.frac);                     // master phase in [0,1)
+    phi(i) = ma.frac(ph + float(i)/float(P));
+    tap(i) = de.fdelay(maxDelay, w*phi(i), sig) * an.window_hann(phi(i));
+};
+
+//--------------`(ef.)granular`----------------
+// Live granulator on an internal delay line: `P` voices continuously replay
+// Hann-windowed grains of `dur` seconds taken `pos` seconds back in the
+// input, each voice offset by `1/P` of a grain so the voices overlap into a
+// continuous texture (Hann overlaps sum to a constant: with `ratio = 1`,
+// `jit = 0` the output is exactly the delayed input). The grain start
+// position is latched when each grain begins - `pos` and `jit` can move
+// freely without tearing grains. `ratio` repitches the material inside
+// each grain by resampling (2 = up an octave, 0.5 = down an octave), and
+// `jit` adds a per-grain random offset to the position for the classic
+// granular cloud.
+//
+// When repitching tonal material with `jit = 0`, note that the voices read
+// the source offset by `dur/P` seconds from one another: if that offset
+// lands near an odd half-period of a source partial, that partial cancels
+// between overlapping grains (ordinary granular phasiness). Choose `dur`
+// against the material, or add a little `jit`, to decorrelate the voices.
+//
+// #### Usage
+//
+// ```
+// _ : granular(P, dur, ratio, pos, jit) : _
+// ```
+//
+// Where:
+//
+// * `P`: number of overlapping grain voices, 2 or more (a constant numerical expression)
+// * `dur`: grain duration in seconds
+// * `ratio`: playback speed inside each grain (1 = unchanged pitch)
+// * `pos`: read position in seconds behind the write head
+// * `jit`: random position jitter in seconds, latched per grain
+//
+// The latched read offset `pos + jit + (ratio-1)*dur` must stay within the
+// 65536-sample internal line (about 1.36 s at 48 kHz).
+//
+// #### Test
+// ```
+// ef = library("misceffects.lib");
+// os = library("oscillators.lib");
+// granular_test = os.osc(440) : ef.granular(4, 0.05, 1.5, 0.2, 0.1);
+// ```
+//-----------------------------------------
+declare granular license "MIT";
+granular(P, dur, ratio, pos, jit, sig) = sum(i, P, voice(i)) * (2.0/float(P))
+with {
+    maxDelay = 65536;
+    durSamp = max(1.0, dur*ma.SR);
+    ph = (+(1.0/durSamp) ~ ma.frac);           // one grain per dur
+    phi(i) = ma.frac(ph + float(i)/float(P));
+    trig(i) = phi(i) < phi(i)';                // wrap = new grain
+    // per-grain latched start offset, in samples
+    start(i) = ba.sAndH(trig(i), (pos + jit*abs(no.noises(P, i)))*ma.SR);
+    dly(i) = start(i) + (1.0 - ratio)*phi(i)*durSamp;
+    voice(i) = de.fdelay(maxDelay, max(0.0, min(float(maxDelay-1), dly(i))), sig)
+               * an.window_hann(phi(i));
 };
 
 //--------------`(ef.)doppler_shift`----------------
@@ -1280,7 +1534,7 @@ nonlinearityEnv = environment
 //---------------------------------------------------------------------------------------
 declare softclipQuadratic author "David Braun";
 declare softclipQuadratic copyright "Copyright (C) 2024 David Braun";
-declare softclipQuadratic license "MIT license";
+declare softclipQuadratic license "MIT";
 
 softclipQuadratic(x) = ba.ifNcNo(2, 1, 
     absX < 1/3, 2*x,
@@ -1318,8 +1572,21 @@ wavefold = nonlinearityEnv.wavefold;
 
 //////////////////////////////////Deprecated Functions////////////////////////////////////
 // This section implements functions that used to be in music.lib but that are now
-// considered as "deprecated".
+// considered as "deprecated": kept for backward compatibility only, they should
+// not be used in new code.
+//
+// WARNING: despite their names, the '1s'/'2s'/.../'43s' suffixes do NOT denote
+// durations in seconds. They are fixed power-of-two sizes in SAMPLES (65536,
+// 131072, ..., 2097152), so the actual duration depends on the sampling rate:
+// 65536 samples last 1.49 s at 44.1 kHz but 1.37 s at 48 kHz.
 //////////////////////////////////////////////////////////////////////////////////////////
+
+declare echo1s deprecated "use ef.echo with explicit parameters; the 1s..43s names are power-of-two sample counts, not seconds";
+declare echo2s deprecated "use ef.echo with explicit parameters; the 1s..43s names are power-of-two sample counts, not seconds";
+declare echo5s deprecated "use ef.echo with explicit parameters; the 1s..43s names are power-of-two sample counts, not seconds";
+declare echo10s deprecated "use ef.echo with explicit parameters; the 1s..43s names are power-of-two sample counts, not seconds";
+declare echo21s deprecated "use ef.echo with explicit parameters; the 1s..43s names are power-of-two sample counts, not seconds";
+declare echo43s deprecated "use ef.echo with explicit parameters; the 1s..43s names are power-of-two sample counts, not seconds";
 
 echo1s  = vgroup("echo 1000", +~(de.delay(65536, int(hslider("millisecond", 0, 0, 1000, 0.10)*ba.millisec)-1) * (hslider("feedback", 0, 0, 100, 0.1)/100.0)));
 echo2s  = vgroup("echo 2000", +~(de.delay(131072, int(hslider("millisecond", 0, 0, 2000, 0.25)*ba.millisec)-1) * (hslider("feedback", 0, 0, 100, 0.1)/100.0)));
@@ -1327,3 +1594,10 @@ echo5s  = vgroup("echo 5000", +~(de.delay(262144, int(hslider("millisecond", 0, 
 echo10s = vgroup("echo 10000", +~(de.delay(524288, int(hslider("millisecond", 0, 0, 10000, 1.00)*ba.millisec)-1) * (hslider("feedback", 0, 0, 100, 0.1)/100.0)));
 echo21s = vgroup("echo 21000", +~(de.delay(1048576, int(hslider("millisecond", 0, 0, 21000, 1.00)*ba.millisec)-1) * (hslider("feedback", 0, 0, 100, 0.1)/100.0)));
 echo43s = vgroup("echo 43000", +~(de.delay(2097152, int(hslider("millisecond", 0, 0, 43000, 1.00)*ba.millisec)-1) * (hslider("feedback", 0, 0, 100, 0.1)/100.0)));
+
+
+// Deprecated backward-compatibility alias, kept for one version and
+// scheduled for removal: the canonical name now carries the internal
+// underscore prefix (see CONTRIBUTING.md, "Variables and identifiers scoping").
+declare dwmEnv deprecated "internal machinery, renamed _dwmEnv";
+dwmEnv = _dwmEnv;

@@ -66,43 +66,57 @@ fi = library("filters.lib");
 si = library("signals.lib");
 
 declare name "Faust Oscillator Library";
-declare version "1.7.0";
+declare version "1.8.0";
 
 // This library contains platform specific constants
 pl = library("platform.lib");
 
-//======================Oscillators based on mathematical functions===============
+//=========================Wave-Table-Based Oscillators===================================
+// Oscillators using tables. The table size is set by the
+// [pl.tablesize](https://github.com/grame-cncm/faustlibraries/blob/master/platform.lib) constant.
 //
 // Note that there is a numerical problem with several phasor functions built using the internal
-// `phasor_imp`. The reason is that the incremental step is smaller than `ma.EPSILON`, which happens with very small frequencies, 
-// so it will have no effect when summed to 1, but it will be enough to make the fractional function wrap 
+// `_phasor_imp`. The reason is that the incremental step is smaller than `ma.EPSILON`, which happens with very small frequencies,
+// so it will have no effect when summed to 1, but it will be enough to make the fractional function wrap
 // around when summed to 0. An example of this problem can be observed when running the following code:
 //
 // `process = os.phasor(1.0, -.001);`
 //
-// The output of this program is the sequence 1, 0, 1, 0, 1... This happens because the negative incremental 
-// step is greater than `-ma.EPSILON`, which will have no effect when summed to 1, but it will be significant 
+// The output of this program is the sequence 1, 0, 1, 0, 1... This happens because the negative incremental
+// step is greater than `-ma.EPSILON`, which will have no effect when summed to 1, but it will be significant
 // enough to make the fractional function  wrap around when summed to 0.
 //
-// The incremental step can be clipped to guarantee that the phasor will 
-// always run correctly for its full cycle, otherwise, for increments smaller than `ma.EPSILON`, 
+// The incremental step can be clipped to guarantee that the phasor will
+// always run correctly for its full cycle, otherwise, for increments smaller than `ma.EPSILON`,
 // phasor would initially run but it'd eventually get stuck once the output gets big enough.
-// 
-// All functions using `phasor_imp` are affected by this problem, but a safer
-// version is implemented, and can be used alternatively by setting `SAFE=1` in the environment using 
-// [explicit sustitution](https://faustdoc.grame.fr/manual/syntax/#explicit-substitution) syntax.
-// 
-// For example: `process = os[SAFE=1;].phasor(1.0, -.001);` will use the safer implementation of `phasor_imp`.
-//=================================================================================
-
-//=========================Wave-Table-Based Oscillators===================================
-// Oscillators using tables. The table size is set by the 
-// [pl.tablesize](https://github.com/grame-cncm/faustlibraries/blob/master/platform.lib) constant.
+//
+// All functions using `_phasor_imp` are affected by this problem, but a safer
+// version is implemented, and can be used alternatively by setting `SAFE=1` in the environment using
+// [explicit substitution](https://faustdoc.grame.fr/manual/syntax/#explicit-substitution) syntax.
+//
+// For example: `process = os[SAFE=1;].phasor(1.0, -.001);` will use the safer implementation of `_phasor_imp`.
 //========================================================================================
 
-// Global parameter to use the safer version of `phasor_imp`, but which
-// could be used in other functions as well.
-
+//-----------------------`(os.)SAFE`------------------------
+// Global parameter selecting the safer version of the internal phasor
+// implementation (0: faster version, 1: safer version, protecting
+// against the small-increment numerical problem described at the top of
+// this section). Meant to be overridden through
+// [explicit substitution](https://faustdoc.grame.fr/manual/syntax/#explicit-substitution)
+// syntax, and usable by other functions as well.
+//
+// #### Usage
+//
+// ```
+// os[SAFE=1;].phasor(1.0, -.001) : _
+// ```
+//
+// #### Test
+// ```
+// os = library("oscillators.lib");
+// SAFE_test = os.SAFE, os[SAFE=1;].phasor(1.0, -.001);
+// ```
+//------------------------------------------------------------
 SAFE = 0; // 0: use the faster version, 1: use the safer version
 
 //-----------------------`(os.)sinwaveform`------------------------
@@ -175,7 +189,7 @@ phasor_env(freq, N) = environment {
 declare phasor_env author "Pierre Mascarade Relano, Maxime Sirbu, Stéphane Letz";
 
 // Generic phasor with `reset` and `phase` parameters to be specialised in concrete use-cases.
-phasor_imp(freq, reset, phase) = (select2(hard_reset, +(incr(SAFE)), phase) : ma.decimal) ~ _
+_phasor_imp(freq, reset, phase) = (select2(hard_reset, +(incr(SAFE)), phase) : ma.decimal) ~ _
 with {
     incr_aux = freq/ma.SR;
 
@@ -195,7 +209,7 @@ with {
 // phasor_imp(freq, reset, phase) = phasor_env(freq, 16).hsp(reset, phase);
 
 // Version to be used with tables
-phasor_table(tablesize, freq, reset, phase) = phasor_imp(freq, reset, phase) : *(float(tablesize));
+_phasor_table(tablesize, freq, reset, phase) = _phasor_imp(freq, reset, phase) : *(float(tablesize));
 
 
 //-----------------------`(os.)phasor`------------------------
@@ -222,7 +236,7 @@ phasor_table(tablesize, freq, reset, phase) = phasor_imp(freq, reset, phase) : *
 // phasor_test = os.phasor(1024, 440);
 // ```
 //------------------------------------------------------------
-phasor(tablesize, freq) = phasor_table(tablesize, freq, 0, 0);
+phasor(tablesize, freq) = _phasor_table(tablesize, freq, 0, 0);
 
 
 //-----------------------`(os.)hs_phasor`------------------------
@@ -249,7 +263,7 @@ phasor(tablesize, freq) = phasor_table(tablesize, freq, 0, 0);
 //---------------------------------------------------------
 declare hs_phasor author "Mike Olsen, revised by Stéphane Letz";
 
-hs_phasor(tablesize, freq, reset) = phasor_table(tablesize, freq, reset, 0);
+hs_phasor(tablesize, freq, reset) = _phasor_table(tablesize, freq, reset, 0);
 
 
 //-----------------------`(os.)hsp_phasor`------------------------
@@ -276,7 +290,7 @@ hs_phasor(tablesize, freq, reset) = phasor_table(tablesize, freq, reset, 0);
 //---------------------------------------------------------
 declare hsp_phasor author "Christophe Lebreton, revised by Stéphane Letz";
 
-hsp_phasor(tablesize, freq, reset, phase) = phasor_table(tablesize, freq, reset, phase);
+hsp_phasor(tablesize, freq, reset, phase) = _phasor_table(tablesize, freq, reset, phase);
 
 
 //-----------------------`(os.)oscsin`------------------------
@@ -691,7 +705,7 @@ lf_trianglepos(freq) = 1.0-abs(saw1(freq)); // saw1 defined below
 // ```
 //------------------------------------------------------------
 declare lf_triangle author "Bart Brouns";
-declare lf_triangle licence "STK-4.3";
+declare lf_triangle licence "LicenseRef-STK-4.3";
 
 lf_triangle(freq) = 2.0*lf_trianglepos(freq) - 1.0;
 
@@ -752,9 +766,9 @@ lf_rawsaw(periodsamps) = (_,periodsamps : fmod) ~ +(1.0);
 // ```
 //---------------------------------------------------------
 declare lf_sawpos author "Bart Brouns, revised by Stéphane Letz";
-declare lf_sawpos licence "STK-4.3";
+declare lf_sawpos licence "LicenseRef-STK-4.3";
 
-lf_sawpos(freq) = phasor_imp(freq, 0, 0);
+lf_sawpos(freq) = _phasor_imp(freq, 0, 0);
 
 
 //-----------------`(os.)lf_sawpos_phase`--------------------
@@ -779,9 +793,9 @@ lf_sawpos(freq) = phasor_imp(freq, 0, 0);
 // ```
 //---------------------------------------------------------
 declare lf_sawpos_phase author "Bart Brouns, revised by Stéphane Letz";
-declare lf_sawpos_phase licence "STK-4.3";
+declare lf_sawpos_phase licence "LicenseRef-STK-4.3";
 
-lf_sawpos_phase(freq,phase) = phasor_imp(freq, 0, phase);
+lf_sawpos_phase(freq,phase) = _phasor_imp(freq, 0, phase);
 
 
 //-----------------`(os.)lf_sawpos_reset`--------------------
@@ -807,9 +821,9 @@ lf_sawpos_phase(freq,phase) = phasor_imp(freq, 0, phase);
 // ```
 //---------------------------------------------------------
 declare lf_sawpos_reset author "Bart Brouns, revised by Stéphane Letz";
-declare lf_sawpos_reset licence "STK-4.3";
+declare lf_sawpos_reset licence "LicenseRef-STK-4.3";
 
-lf_sawpos_reset(freq,reset) = phasor_imp(freq, reset, 0);
+lf_sawpos_reset(freq,reset) = _phasor_imp(freq, reset, 0);
 
 
 //-----------------`(os.)lf_sawpos_phase_reset`--------------------
@@ -835,12 +849,12 @@ lf_sawpos_reset(freq,reset) = phasor_imp(freq, reset, 0);
 // ```
 //---------------------------------------------------------
 declare lf_sawpos_phase_reset author "Bart Brouns, revised by Stéphane Letz";
-declare lf_sawpos_phase_reset licence "STK-4.3";
+declare lf_sawpos_phase_reset licence "LicenseRef-STK-4.3";
 
-lf_sawpos_phase_reset(freq,phase,reset) = phasor_imp(freq, reset, phase);
+lf_sawpos_phase_reset(freq,phase,reset) = _phasor_imp(freq, reset, phase);
 
 
-//-----------------`(os.)lf_saw`--------------------
+//-----------------`(os.)lf_saw`, `(os.)saw1`--------------------
 // Simple sawtooth waveform oscillator between -1 and 1.
 // `lf_saw` is a standard Faust function.
 //
@@ -861,15 +875,16 @@ lf_sawpos_phase_reset(freq,phase,reset) = phasor_imp(freq, reset, phase);
 // ```
 //---------------------------------------------------------
 declare saw1 author "Bart Brouns";
-declare saw1 licence "STK-4.3";
+declare saw1 licence "LicenseRef-STK-4.3";
 
 saw1(freq) = 2.0 * lf_sawpos(freq) - 1.0;
 lf_saw(freq) = saw1(freq);
 
 //================== Alias-Suppressed Sawtooth ====================
-//-----------------`(os.)sawN`--------------------
+//-----------------`(os.)sawN`, `(os.)MAX_SAW_ORDER`--------------------
 // Alias-Suppressed Sawtooth Audio-Frequency Oscillator using Nth-order polynomial transitions
-// to reduce aliasing.
+// to reduce aliasing. The maximum usable order is `MAX_SAW_ORDER` (4:
+// orders 5 and 6 have noise at low fundamentals).
 //
 // `sawN(N,freq)`, `sawNp(N,freq,phase)`, `saw2dpw(freq)`, `saw2(freq)`, `saw3(freq)`,
 // `saw4(freq)`, `sawtooth(freq)`, `saw2f2(freq)`, `saw2f4(freq)`
@@ -916,11 +931,11 @@ lf_saw(freq) = saw1(freq);
 // be generated using `lf_sawpos` instead.)
 //-----------------------------------------------------------------
 declare sawN author "Julius O. Smith III";
-declare sawN license "STK-4.3";
+declare sawN license "LicenseRef-STK-4.3";
 // --- sawN for N = 1 to 4 ---
-// Orders 5 and 6 have noise at low fundamentals: MAX_SAW_ORDER = 6; MAX_SAW_ORDER_NEXTPOW2 = 8;
+// Orders 5 and 6 have noise at low fundamentals: MAX_SAW_ORDER = 6; _MAX_SAW_ORDER_NEXTPOW2 = 8;
 MAX_SAW_ORDER = 4;
-MAX_SAW_ORDER_NEXTPOW2 = 8; // par cannot handle the case of 0 elements
+_MAX_SAW_ORDER_NEXTPOW2 = 8; // par cannot handle the case of 0 elements
 sawN(N,freq) = saw1l : poly(Nc) : D(Nc-1) : gate(Nc-1)
 with {
   Nc = max(1,min(N,MAX_SAW_ORDER));
@@ -972,7 +987,7 @@ with {
 //
 //-----------------------------------------------------------------
 declare sawNp author "Julius O. Smith III";
-declare sawNp license "STK-4.3";
+declare sawNp license "LicenseRef-STK-4.3";
 // --- sawNp for N = 1 to 4 ---
 // Phase offset = delay (max 8191 samples is more than one period of audio):
 sawNp(N,freq,phase) = sawN(N,freq) : @(max(0,min(8191,int(0.5+phase*ma.SR/freq))));
@@ -1099,7 +1114,7 @@ saw4 = sawN(4); // only choice available right now
 // * <http://research.spa.aalto.fi/publications/papers/spl-ptr/>
 //--------------------------------------------------------
 declare saw2ptr author "Julius O. Smith III";
-declare saw2ptr license "STK-4.3";
+declare saw2ptr license "LicenseRef-STK-4.3";
 // specialized reimplementation:
 saw2ptr(freq) = y with { // newer PTR version (stateless - freq can vary at any speed)
   p0 = float(ma.SR)/float(max(ma.EPSILON,abs(freq))); // period in samples
@@ -1135,7 +1150,7 @@ saw2ptr(freq) = y with { // newer PTR version (stateless - freq can vary at any 
 // ```
 //--------------------------------------------------------
 declare saw2dpw author "Julius O. Smith III";
-declare saw2dpw license "STK-4.3";
+declare saw2dpw license "LicenseRef-STK-4.3";
 saw2dpw(freq) = saw1(freq) <: * <: -(mem) : *(0.25'*ma.SR/freq);
 
 //------------------`(os.)sawtooth`--------------------------------
@@ -1185,7 +1200,7 @@ sawtooth = saw2; // default choice for sawtooth signal - see also sawN
 // ```
 //--------------------------------------------------------
 declare saw2f2 author "Julius O. Smith III";
-declare saw2f2 license "STK-4.3";
+declare saw2f2 license "LicenseRef-STK-4.3";
 // --- Correction-filtered versions of saw2: saw2f2, saw2f4 -----
 saw2f2 = saw2dpw : cf2 with {
   cf2 = fi.tf2(1.155704605878911, 0.745184288225518,0.040305967265900,
@@ -1216,7 +1231,7 @@ saw2f2 = saw2dpw : cf2 with {
 // ```
 //--------------------------------------------------------
 declare saw2f4 author "Julius O. Smith III";
-declare saw2f4 license "STK-4.3";
+declare saw2f4 license "LicenseRef-STK-4.3";
 saw2f4 = saw2dpw : cf4 with {
   cf4 = fi.iir((1.155727435125014, 2.285861038554662,
         1.430915027294021, 0.290713280893317, 0.008306401748854),
@@ -1609,6 +1624,31 @@ oscrs(f) = impulse : fi.nlf2(f,1) : _,!; // sine
 //------------------------------------------------------------
 oscrc(f) = impulse : fi.nlf2(f,1) : !,_; // cosine
 
+//--------------------------`(os.)oscrp`, `(os.)oscr`--------------------------------
+// Sinusoidal oscillators based on 2D vector rotation like `oscrs` and
+// `oscrc`: `oscrp(f,p)` gives an arbitrary initial phase (p=0 for sine,
+// PI/2 for cosine, etc.), and `oscr` is the default form, a synonym for
+// `oscrs` (sine, starts without a pop).
+//
+// #### Usage
+//
+// ```
+// oscrp(freq,phase) : _
+// oscr(freq) : _
+// ```
+//
+// Where:
+//
+// * `freq`: frequency in Hz
+// * `phase`: initial phase in radians
+//
+// #### Test
+// ```
+// os = library("oscillators.lib");
+// oscrp_test = os.oscrp(440, 0.5);
+// oscr_test = os.oscr(440);
+// ```
+//------------------------------------------------------------
 oscrp(f,p) = oscrq(f) : *(cos(p)), *(sin(p)) : + ; // p=0 for sine, p=PI/2 for cosine, etc.
 
 oscr = oscrs; // default = sine (starts without a pop)
@@ -1617,6 +1657,7 @@ oscr = oscrs; // default = sine (starts without a pop)
 // Sinusoidal oscillator based on the state variable filter
 // = undamped "modified-coupled-form" resonator
 // = "magic circle" algorithm used in graphics.
+// `oscs` is a standard Faust function.
 //
 // #### Usage
 //
@@ -2171,7 +2212,7 @@ released under LGPL, STK-4.3, MIT, BSD, or a similar FOSS license.
 // ```
 //------------------------------------------------------------
 declare CZsaw author "Bart Brouns";
-declare CZsaw licence "STK-4.3";
+declare CZsaw licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2202,7 +2243,7 @@ CZsaw(fund, index) = CZ.sawChooseP(fund, index, 0);
 // ```
 //------------------------------------------------------------
 declare CZsawP author "Bart Brouns";
-declare CZsawP licence "STK-4.3";
+declare CZsawP licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2232,7 +2273,7 @@ CZsawP(fund, index) = CZ.sawChooseP(fund, index, 1);
 // ```
 //------------------------------------------------------------
 declare CZsquare author "Bart Brouns";
-declare CZsquare licence "STK-4.3";
+declare CZsquare licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2263,7 +2304,7 @@ CZsquare(fund, index) = CZ.squareChooseP(fund, index, 0);
 // ```
 //------------------------------------------------------------
 declare CZsquareP author "Bart Brouns";
-declare CZsquareP licence "STK-4.3";
+declare CZsquareP licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2293,7 +2334,7 @@ CZsquareP(fund, index) = CZ.squareChooseP(fund, index, 1);
 // ```
 //------------------------------------------------------------
 declare CZpulse author "Bart Brouns";
-declare CZpulse licence "STK-4.3";
+declare CZpulse licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2324,7 +2365,7 @@ CZpulse(fund, index) = CZ.pulseChooseP(fund, index, 0);
 // ```
 //------------------------------------------------------------
 declare CZpulseP author "Bart Brouns";
-declare CZpulseP licence "STK-4.3";
+declare CZpulseP licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2354,7 +2395,7 @@ CZpulseP(fund, index) = CZ.pulseChooseP(fund, index, 1);
 // ```
 //------------------------------------------------------------
 declare CZsinePulse author "Bart Brouns";
-declare CZsinePulse licence "STK-4.3";
+declare CZsinePulse licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2385,7 +2426,7 @@ CZsinePulse(fund, index) = CZ.sinePulseChooseP(fund, index, 0);
 // ```
 //------------------------------------------------------------
 declare CZsinePulseP author "Bart Brouns";
-declare CZsinePulseP licence "STK-4.3";
+declare CZsinePulseP licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2415,7 +2456,7 @@ CZsinePulseP(fund, index) = CZ.sinePulseChooseP(fund, index, 1);
 // ```
 //------------------------------------------------------------
 declare CZhalfSine author "Bart Brouns";
-declare CZhalfSine licence "STK-4.3";
+declare CZhalfSine licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2446,7 +2487,7 @@ CZhalfSine(fund, index) = CZ.halfSineChooseP(fund, index, 0);
 // ```
 //------------------------------------------------------------
 declare CZhalfSineP author "Bart Brouns";
-declare CZhalfSineP licence "STK-4.3";
+declare CZhalfSineP licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2476,7 +2517,7 @@ CZhalfSineP(fund, index) = CZ.halfSineChooseP(fund, index, 1);
 // ```
 //------------------------------------------------------------
 declare CZresSaw author "Bart Brouns";
-declare CZresSaw licence "STK-4.3";
+declare CZresSaw licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2506,7 +2547,7 @@ CZresSaw(fund,res) = CZ.resSaw(fund,res);
 // ```
 //------------------------------------------------------------
 declare CZresTriangle author "Bart Brouns";
-declare CZresTriangle licence "STK-4.3";
+declare CZresTriangle licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2536,7 +2577,7 @@ CZresTriangle(fund,res) = CZ.resTriangle(fund,res);
 // ```
 //------------------------------------------------------------
 declare CZresTrap author "Bart Brouns";
-declare CZresTrap licence "STK-4.3";
+declare CZresTrap licence "LicenseRef-STK-4.3";
 
 // CZ oscillators by Mike Moser-Booth:
 // <https://forum.pdpatchrepo.info/topic/5992/casio-cz-oscillators>
@@ -2712,3 +2753,14 @@ polyblep_triangle(freq) = polyblep_square(freq) : fi.pole(0.999) : *(4 * freq / 
 
 // end further contributions section
 //########################################################################################
+
+
+// Deprecated backward-compatibility aliases, kept for one version and
+// scheduled for removal: the canonical names now carry the internal
+// underscore prefix (see CONTRIBUTING.md, "Variables and identifiers scoping").
+declare phasor_imp deprecated "internal machinery, renamed _phasor_imp";
+phasor_imp = _phasor_imp;
+declare phasor_table deprecated "internal machinery, renamed _phasor_table";
+phasor_table = _phasor_table;
+declare MAX_SAW_ORDER_NEXTPOW2 deprecated "internal constant, renamed _MAX_SAW_ORDER_NEXTPOW2";
+MAX_SAW_ORDER_NEXTPOW2 = _MAX_SAW_ORDER_NEXTPOW2;

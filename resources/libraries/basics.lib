@@ -66,7 +66,7 @@ it = library("interpolators.lib");
 si = library("signals.lib");
 
 declare name "Faust Basic Element Library";
-declare version "1.22.0";
+declare version "1.23.0";
 
 //=============================Conversion Tools===========================================
 //========================================================================================
@@ -96,7 +96,7 @@ samp2sec(n) = n/ma.SR;
 
 //-------`(ba.)sec2samp`----------
 // Converts a duration in seconds to a number of samples at the current sampling rate (see `ma.SR`).
-// `samp2sec` is a standard Faust function.
+// `sec2samp` is a standard Faust function.
 //
 // #### Usage
 //
@@ -321,6 +321,57 @@ midikey2hz(mk) = 440.0*pow(2.0, (mk-69.0)/12.0);
 // ```
 //----------------------------
 hz2midikey(freq) = 12.0*ma.log2(freq/440.0) + 69.0;
+
+
+//-------`(ba.)hz2mel`----------
+// Converts a frequency in Hz to the mel perceptual-pitch scale.
+// Uses the O'Shaughnessy (1987) formula `2595 * log10(1 + f/700)`. Useful with
+// `mel2hz` and `it.interpolate_mel` for spacing things the way the ear hears pitch.
+//
+// #### Usage
+//
+// ```
+// hz2mel(freq) : _
+// ```
+//
+// Where:
+//
+// * `freq`: frequency in Hz
+//
+// #### Test
+// ```
+// ba = library("basics.lib");
+// hz2mel_test = ba.hz2mel(440.0);
+// ```
+//----------------------------
+declare hz2mel author "Bart Brouns";
+declare hz2mel licence "MIT";
+hz2mel(freq) = 2595.0*log10(1.0+freq/700.0);
+
+
+//-------`(ba.)mel2hz`----------
+// Converts a value on the mel perceptual-pitch scale back to a frequency in Hz.
+// Inverse of `hz2mel`, using `700 * (10^(m/2595) - 1)`.
+//
+// #### Usage
+//
+// ```
+// mel2hz(mel) : _
+// ```
+//
+// Where:
+//
+// * `mel`: value on the mel scale
+//
+// #### Test
+// ```
+// ba = library("basics.lib");
+// mel2hz_test = ba.mel2hz(1000.0);
+// ```
+//----------------------------
+declare mel2hz author "Bart Brouns";
+declare mel2hz licence "MIT";
+mel2hz(mel) = 700.0*(pow(10.0, mel/2595.0)-1.0);
 
 
 //-------`(ba.)semi2ratio`----------
@@ -1119,6 +1170,130 @@ subseq((head, tail), P, N) = subseq(tail, P-1, N);
 subseq(head, 0, N)         = head;
 
 
+//----------------------------`(ba.)processArray`-------------------------------
+// Run `N` parallel copies of `processor`, interpolating its parameters across the copies.
+// Each input of `processor` is one of two kinds, depending on whether you supply bounds
+// for it: a *parameter input*, which `processArray` generates by interpolating across a
+// lo/hi range and smoothing, or a *signal input*, which you feed in and `processArray`
+// passes through to the copies untouched.
+//
+// For each parameter input of `processor` you give a low and a high bound; `processArray`
+// spreads that range across the `N` copies so the first copy gets the low bound,
+// the last copy gets the high bound, and the copies in between get values stepping
+// from low to high. Each per-input range is shaped by a supplied interpolator, so
+// the steps need not be evenly spaced. With several parameters interpolated at once,
+// each copy takes one value from every range: copy `j` gets the `j`-th value of each.
+//
+// If fewer parameter bounds are supplied than `processor` has inputs, the inputs left
+// without bounds are taken from `processArray`'s own signal inputs instead: one
+// `N`-wide bus per such input, so `(inputs(processor) - outputs(loBounds)) * N` signal
+// inputs in all. When every input is bounded, `processArray` has no signal input.
+//
+// #### Interpolators
+//
+// An interpolator is a function `interp(frac, lo, hi)` that maps a fraction `frac` in
+// `0..1` across the `lo`/`hi` range — the shape of every `interpolate_*` in
+// `interpolators.lib`. Pass one interpolator to shape every parameter the same way, or a
+// list of one per parameter to shape each differently.
+//
+// #### Smoothers
+//
+// `smoother` is a per-wire stage applied to the interpolated values, after
+// interpolation and before `processor`. It goes here, not on the bounds, because
+// some interpolators aren't cheap (`it.interpolate_logarithmic`,
+// `it.interpolate_power`): with slider bounds the interpolator folds to a block
+// constant, but smoothing the bounds first would force it to recompute per-sample.
+//
+// `smoother` follows the same one-or-list convention as `interp`: pass one stage to
+// apply to every parameter, or a list of one stage per parameter. For no smoothing,
+// pass `_` (the identity wire) — it broadcasts to a pass-through on every parameter.
+//
+// #### Usage
+//
+// ```
+// si.bus((inputs(processor)-outputs(loBounds))*N) : processArray(N, processor, interp, smoother, loBounds, hiBounds) : si.bus(N*outputs(processor))
+// ```
+//
+// Where:
+//
+// * `N`: number of parallel copies (int, known at compile time, `N >= 2`)
+// * `processor`: the function to replicate
+// * `interp`: interpolator function(s) of shape `interp(frac, lo, hi)`; either a
+//   single function applied to every array, or a list of one function per supplied array
+// * `smoother`: per-wire 1-in/1-out stage(s) applied to the interpolated values
+//   before `processor`; either a single stage for every array, or a list of one per
+//   supplied array. Use `_` for no smoothing.
+// * `loBounds`: list of low bounds, one per array (at most `inputs(processor)` of them)
+// * `hiBounds`: list of high bounds, matching `loBounds`
+//
+// #### Note:
+//
+// The number of supplied arrays is measured as `outputs(loBounds)`, so `loBounds`,
+// `hiBounds`, and (when passed as a list) `interp` and `smoother` must all have that
+// same length.
+//
+// #### Test
+// ```
+// ba = library("basics.lib");
+// it = library("interpolators.lib");
+// si = library("signals.lib");
+// // 3-input processor, 2 arrays supplied -> 1 N-wide bus input, sliders smoothed:
+// processArray_proc(a, b, c) = a + b + c;
+// processArray_test = si.bus(4) : ba.processArray(4, processArray_proc, it.interpolate_linear, si.smoo, (0.1, 1.0), (1.0, 10.0));
+// ```
+//----------------------------
+declare processArray author "Bart Brouns";
+declare processArray copyright "Copyright (C) 2026 Bart Brouns <bart@magnetophon.nl>";
+declare processArray license "AGPL-3.0-only";
+processArray(N, processor, interp, smoother, loBounds, hiBounds) = build(nSignalInputs)
+    with {
+        nIn = inputs(processor);
+        nArray = outputs(loBounds);
+        nSignalInputs = nIn-nArray;
+        // `interp` is either one interpolator or a list of one per array. Normalize to
+        // the list form so `ba.take` below can index it. Discriminate on
+        // `outputs(interp)` — 1 means a single interpolator (replicate it), nArray
+        // means a list (pass through). Not `outputs(par(i, nArray, interp))`: that is
+        // nArray for a single interp too, so it can't tell the cases apart once
+        // nArray > 1.
+        interps = broadcast(outputs(interp))
+            with {
+                broadcast = case{(1)=>par(i, nArray, interp);
+                (n)=>interp;
+                };
+            };
+        // `smoother` is broadcast the same way. `_` (identity) has 1 output, so it
+        // broadcasts to a pass-through on every parameter — i.e. no smoothing.
+        smoothers = broadcast(outputs(smoother))
+            with {
+                broadcast = case{(1)=>par(i, nArray, smoother);
+                (n)=>smoother;
+                };
+            };
+        // loBounds and hiBounds arrive as one flat list: every low bound first, then
+        // every high bound. interleave(nArray, 2) zips them back into nArray (lo, hi)
+        // pairs — one per array. oneArray then expands each pair into its own N-wide
+        // bus of interpolated values, then applies that parameter's smoother to all N.
+        allArrays = (loBounds, hiBounds):ro.interleave(nArray, 2):par(i, nArray, oneArray(ba.take(i+1, interps), ba.take(i+1, smoothers)));
+        // allArrays lays its output out parameter-by-parameter: all N values of
+        // parameter 0, then all N values of parameter 1, and so on. The processor
+        // instances need the opposite grouping — each instance wants one value from
+        // every parameter. interleave(N, nIn) performs that transpose, turning the nIn
+        // parameter-blocks into N per-copy blocks, which then feed the N processor
+        // instances. When signal inputs are present, their nSignalInputs*N buses (laid out
+        // the same parameter-by-parameter way) are appended first, so the same
+        // transpose lines everything up.
+        build = case{(0)=>allArrays:ro.interleave(N, nIn):par(i, N, processor);
+        (b)=>(allArrays, si.bus(nSignalInputs*N)):ro.interleave(N, nIn):par(i, N, processor);
+        };
+        // Replicate one array: interpolate at each frac step, then smooth all N wires
+        // of this parameter. Per-wire layout is parameter-major, matching allArrays.
+        oneArray(thisInterp, thisSmoother, lo, hi) = par(i, N, thisInterp(frac(i), lo, hi):thisSmoother);
+        // frac runs 0..1 across the N copies. NOTE: divides by N-1, so N must be >= 2.
+        frac(i) = i/(N-1);
+    };
+
+
 //============================Function tabulation=========================================
 // The purpose of function tabulation is to speed up the computation of heavy functions over an interval, 
 // so that the computation at runtime can be faster than directly using the function. 
@@ -1309,7 +1484,7 @@ tabulate_chebychev(C, FX, NX, CD, r0, r1, x) = y with {
 
 declare tabulate_chebychev author "Oleg Nesterov";
 declare tabulate_chebychev copyright "Copyright (C) 2022 Oleg Nesterov <oleg@redhat.com>";
-declare tabulate_chebychev license "MIT-style STK-4.3 license";
+declare tabulate_chebychev license "LicenseRef-STK-4.3";
 
 
 //-------`(ba.)tabulateNd`----------
@@ -1859,7 +2034,7 @@ tabulateNd(C,function,parameters) =
 
 declare tabulateNd author "Bart Brouns";
 declare tabulateNd copyright "Copyright (C) 2023 Bart Brouns <bart@magnetophon.nl>";
-declare tabulateNd license "AGPL-3.0";
+declare tabulateNd license "AGPL-3.0-only";
 
 //============================Selectors (Conditions)======================================
 //========================================================================================
@@ -1933,7 +2108,7 @@ ifNc(n) = _,_,ifNc(n-1) : ifNc(1);
 
 declare ifNc author "Oleg Nesterov";
 declare ifNc copyright "Copyright (C) 2023 Oleg Nesterov <oleg@redhat.com>";
-declare ifNc license "MIT-style STK-4.3 license";
+declare ifNc license "LicenseRef-STK-4.3";
 
 //-----------------------------`(ba.)ifNcNo`-------------------------------------
 // `ifNcNo(Nc,No)` is similar to `ifNc(Nc)` above but then/else branches have `No` outputs.
@@ -1977,7 +2152,7 @@ with {
 
 declare ifNcNo author "Oleg Nesterov";
 declare ifNcNo copyright "Copyright (C) 2023 Oleg Nesterov <oleg@redhat.com>";
-declare ifNcNo license "MIT-style STK-4.3 license";
+declare ifNcNo license "LicenseRef-STK-4.3";
 
 //-----------------------------`(ba.)selector`---------------------------------
 // Selects the ith input among N at compile time.
@@ -2004,6 +2179,29 @@ declare ifNcNo license "MIT-style STK-4.3 license";
 // ```
 //----------------------------
 selector(i,n) = par(j, n, S(i, j))    with { S(i,i) = _; S(i,j) = !; };
+
+//-----------------------------`(ba.)cselector`---------------------------------
+// Selects the ith complex input among N at compile time. The complex
+// version of `selector`: each input is a pair of (real,imag) signals.
+//
+// #### Usage
+//
+// ```
+// cselector(I,N)
+// _,_, _,_, _,_, _,_ : cselector(2,4) : _,_ // selects the 3rd complex input among 4
+// ```
+//
+// Where:
+//
+// * `I`: complex input to select (int, numbered from 0, known at compile time)
+// * `N`: number of complex inputs (int, known at compile time, N > I)
+//
+// #### Test
+// ```
+// ba = library("basics.lib");
+// cselector_test = (0.1, 0.2, 0.3, 0.4) : ba.cselector(1, 2);
+// ```
+//----------------------------
 cselector(i,n) = par(j, n, S(i, j))   with { S(i,i) = (_,_); S(i,j) = (!,!); }; // for complex numbers
 
 
@@ -2063,11 +2261,31 @@ with {
 };
 
 
-// The generic version with a 'sel' function to be applied on:
-// - the channel index as a (possibly) fractional value
-// - the next channel index as an integer value
-// - the 2 signals to be selected between
-
+//-----------------------------`(ba.)selectnX`---------------------------------
+// Generic form of `selectn`, with a `sel` function deciding how each pair
+// of candidate signals is combined. `selectn` specializes it with a hard
+// `select2`; a crossfading `sel` turns it into an interpolated selector.
+//
+// #### Usage
+//
+// ```
+// si.bus(N) : selectnX(N,i,sel) : _
+// ```
+//
+// Where:
+//
+// * `N`: number of inputs (int, known at compile time, N > 0)
+// * `i`: input to select (numbered from 0, possibly fractional)
+// * `sel`: selection function applied on: the channel index `i` as a
+// (possibly) fractional value, the next channel index as an integer value,
+// and the 2 signals to be selected between
+//
+// #### Test
+// ```
+// ba = library("basics.lib");
+// selectnX_test = (1,2,3,4) : ba.selectnX(4, 2, \(i,j,x,y).(select2((i >= j), x, y)));
+// ```
+//----------------------------
 selectnX(N,i,sel) = S(N,0)
 with {
     S(1,offset) = _;
@@ -2300,8 +2518,15 @@ sAndH(trig) = select2(trig) ~ _;
 tAndH(pred) = _ <: pred,_ : sAndH;
 
 //--------------------------`(ba.)downSample`-------------------------------
-// Down sample a signal. WARNING: this function doesn't change the
-// rate of a signal, it just holds samples...
+// Sample-and-hold "down sampling" effect: holds each sample for
+// `ma.SR/freq` samples, deliberately producing aliasing ("lo-fi"
+// decimator sound).
+//
+// WARNING: despite its name, this function performs NO sample rate
+// conversion and NO anti-aliasing filtering: the output stays at the
+// current sampling rate, and the held staircase folds all the aliased
+// images back into the band. Do not use it where a proper decimation
+// (lowpass filtering followed by rate reduction) is required.
 // `downSample` is a standard Faust function.
 //
 // #### Usage
@@ -2420,7 +2645,7 @@ peakhold = (*,_ : max) ~ _;
 declare peakholder author "Dario Sanfilippo";
 declare peakholder copyright
     "Copyright (C) 2022 Dario Sanfilippo <sanfilippo.dario@gmail.com>";
-declare peakholder license "MIT-style STK-4.3 license";
+declare peakholder license "LicenseRef-STK-4.3";
 peakholder(holdTime, x) = loop ~ si.bus(2) : ! , _
     with {
         loop(timerState, outState) = timer , output
@@ -2490,8 +2715,8 @@ kr2ar = + ~ *(0);
 //--------------------------`(ba.)impulsify`---------------------------
 // Turns a signal into an impulse with the value of the current sample
 // (0.3,0.2,0.1 becomes 0.3,0.0,0.0). This function is typically used with a
-// `button` to turn its output into an impulse. `impulsify` is a standard Faust
-// function.
+// `button` to turn its output into an impulse.
+// `impulsify` is a standard Faust function.
 //
 // #### Usage
 //
@@ -2549,6 +2774,8 @@ with {
 // * `start(x,y)` to start a break-point function
 // * `end(x,y)` to end a break-point function
 // * `point(x,y)` to add intermediate points to a break-point function, using linear interpolation
+//
+// #### Usage
 //
 // A minimal break-point function must contain at least a start and an end point:
 //
@@ -3423,7 +3650,7 @@ slidingRMSp(n,maxn) = pow(2) : slidingMeanp(n,maxn) : sqrt;
 //-----------------------------`(ba.)parallelOp`-----------------------------
 // Apply a commutative binary operation `op` to N parallel inputs.
 //
-// #### usage
+// #### Usage
 //
 // ```
 // si.bus(N) : parallelOp(op,N) : _
@@ -3445,7 +3672,7 @@ parallelOp(op,2) = op;
 parallelOp(op,n) = op(parallelOp(op,n-1));
 
 declare parallelOp author "Bart Brouns";
-declare parallelOp licence "GPL-3.0";
+declare parallelOp licence "GPL-3.0-only";
 declare parallelOp copyright "Copyright (c) 2020 Bart Brouns <bart@magnetophon.nl>";
 
 
@@ -3471,7 +3698,7 @@ declare parallelOp copyright "Copyright (c) 2020 Bart Brouns <bart@magnetophon.n
 parallelMax(n) = parallelOp(max,n);
 
 declare parallelMax author "Bart Brouns";
-declare parallelMax licence "GPL-3.0";
+declare parallelMax licence "GPL-3.0-only";
 declare parallelMax copyright "Copyright (c) 2020 Bart Brouns <bart@magnetophon.nl>";
 
 
@@ -3497,7 +3724,7 @@ declare parallelMax copyright "Copyright (c) 2020 Bart Brouns <bart@magnetophon.
 parallelMin(n) = parallelOp(min,n);
 
 declare parallelMin author "Bart Brouns";
-declare parallelMin licence "GPL-3.0";
+declare parallelMin licence "GPL-3.0-only";
 declare parallelMin copyright "Copyright (c) 2020 Bart Brouns <bart@magnetophon.nl>";
 
 
@@ -3523,7 +3750,7 @@ declare parallelMin copyright "Copyright (c) 2020 Bart Brouns <bart@magnetophon.
 parallelMean(n) = si.bus(n):>_/n;
 
 declare parallelMean author "Bart Brouns";
-declare parallelMean licence "GPL-3.0";
+declare parallelMean licence "GPL-3.0-only";
 declare parallelMean copyright "Copyright (c) 2020 Bart Brouns <bart@magnetophon.nl>";
 
 //---------------------------`(ba.)parallelRMS`---------------------------------
@@ -3548,14 +3775,44 @@ declare parallelMean copyright "Copyright (c) 2020 Bart Brouns <bart@magnetophon
 parallelRMS(n) = par(i, n, pow(2)) : parallelMean(n) : sqrt;
 
 declare parallelRMS author "Bart Brouns";
-declare parallelRMS licence "GPL-3.0";
+declare parallelRMS licence "GPL-3.0-only";
 declare parallelRMS copyright "Copyright (c) 2020 Bart Brouns <bart@magnetophon.nl>";
 
 //////////////////////////////////Deprecated Functions////////////////////////////////////
 // This section implements functions that used to be in music.lib but that are now
-// considered as "deprecated".
+// considered as "deprecated": kept for backward compatibility only, they should
+// not be used in new code.
+//
+// WARNING: despite their names, the '1s'/'2s'/.../'43s' suffixes do NOT denote
+// durations in seconds. They are fixed power-of-two sizes in SAMPLES (65536,
+// 131072, ..., 2097152), so the actual duration depends on the sampling rate:
+// 65536 samples last 1.49 s at 44.1 kHz but 1.37 s at 48 kHz.
 //////////////////////////////////////////////////////////////////////////////////////////
 
+declare millisec deprecated "the 1s..43s names are power-of-two related ranges in milliseconds of a fixed slider, not seconds";
+declare time1s deprecated "the 1s..43s names are power-of-two related ranges in milliseconds of a fixed slider, not seconds";
+declare time2s deprecated "the 1s..43s names are power-of-two related ranges in milliseconds of a fixed slider, not seconds";
+declare time5s deprecated "the 1s..43s names are power-of-two related ranges in milliseconds of a fixed slider, not seconds";
+declare time10s deprecated "the 1s..43s names are power-of-two related ranges in milliseconds of a fixed slider, not seconds";
+declare time21s deprecated "the 1s..43s names are power-of-two related ranges in milliseconds of a fixed slider, not seconds";
+declare time43s deprecated "the 1s..43s names are power-of-two related ranges in milliseconds of a fixed slider, not seconds";
+
+//-----------------------------`(ba.)millisec`---------------------------------
+// Number of samples in one millisecond at the current sampling rate.
+// Multiply a duration expressed in milliseconds by it to convert to samples.
+//
+// #### Usage
+//
+// ```
+// millisec : _
+// ```
+//
+// #### Test
+// ```
+// ba = library("basics.lib");
+// millisec_test = 10 * ba.millisec; // 10 ms as a number of samples
+// ```
+//----------------------------
 millisec = ma.SR/1000.0;
 
 time1s = hslider("time", 0, 0,  1000, 0.1)*millisec;

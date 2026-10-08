@@ -51,6 +51,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <mutex>
 
 #ifdef __APPLE__
 #include <Carbon/Carbon.h>
@@ -161,6 +162,19 @@ using namespace std;
 list<GUI*> GUI::fGuiList;
 ztimedmap GUI::gTimedZoneMap;
 
+#if defined(MIDICTRL) || defined(OSCCTRL)
+namespace {
+
+// GUI keeps a registry shared by every instance of this external, whereas each
+// object only owns a per-instance mutex. This lock serializes mutation of that
+// registry (MidiUI and OSCUI creation and destruction) with a global refresh.
+std::recursive_mutex gGUIRegistryMutex;
+using RecursiveLock = std::lock_guard<std::recursive_mutex>;
+using TryRecursiveLock = std::unique_lock<std::recursive_mutex>;
+
+}
+#endif
+
 static t_class* faust_class;
 
 /*--------------------------------------------------------------------------*/
@@ -182,6 +196,8 @@ typedef struct faust
     dsp* m_dsp;
 #ifdef MC_VERSION
     dsp* m_mc_dsp;
+    long m_mc_inputs;      // hardware inputs, kept to rebuild m_mc_dsp
+    long m_mc_vector_size; // max vector size, kept to rebuild m_mc_dsp
 #endif
     void* m_control_outlet;
     char* m_json;
@@ -205,10 +221,36 @@ typedef struct faust
 void faust_create_jsui(t_faust* x);
 void faust_make_json(t_faust* x);
 
+#ifdef MC_VERSION
+/*--------------------------------------------------------------------------*/
+// The multichannel adapter borrows x->m_dsp, so it has to be rebuilt whenever
+// that DSP is replaced. Does nothing until faust_dsp64 has given the actual
+// channel count and vector size.
+void faust_build_mc_dsp(t_faust* x)
+{
+    delete x->m_mc_dsp;
+    x->m_mc_dsp = nullptr;
+    if (x->m_dsp && x->m_mc_vector_size > 0) {
+        // x->m_mc_dsp will not delete the x->m_dsp object
+        x->m_mc_dsp = new dsp_adapter(x->m_dsp, x->m_mc_inputs, x->m_Outputs,
+                                      x->m_mc_vector_size, false);
+    }
+}
+#endif
+
 /*--------------------------------------------------------------------------*/
 void faust_allocate(t_faust* x, int nvoices)
 {
     // Delete old
+#ifdef OSCCTRL
+    {
+        // The OSCUI points at the zones of the DSP deleted below, and
+        // unregisters itself from the shared GUI registry
+        RecursiveLock gui_lock(gGUIRegistryMutex);
+        delete x->m_oscInterface;
+        x->m_oscInterface = nullptr;
+    }
+#endif
     delete x->m_dsp;
     delete x->m_dspUI;
     if (x->m_savedUI) {
@@ -268,12 +310,13 @@ void faust_allocate(t_faust* x, int nvoices)
     // Send JSON to JS script
     faust_create_jsui(x);
     
-#ifdef OSCCTRL
-    x->m_oscInterface = NULL;
-#endif
-    
     // Load old controller state
     x->m_dsp->buildUserInterface(x->m_savedUI);
+    
+#ifdef MC_VERSION
+    // x->m_dsp has just been replaced, the adapter still points at the old one
+    faust_build_mc_dsp(x);
+#endif
 }
 
 /*--------------------------------------------------------------------------*/
@@ -441,6 +484,10 @@ void* faust_new(t_symbol* s, short ac, t_atom* av)
     string bundle_path_str = SoundUI::getBinaryPathFrom(meta3.fName);
     if (bundle_path_str == "") {
         post("Bundle_path '%s' cannot be found!", meta3.fName.c_str());
+    } else {
+        // faust2max6 puts the soundfiles there: a bundle whose root holds
+        // unsealed contents cannot be code signed
+        bundle_path_str += "/Contents/Resources";
     }
     x->m_soundInterface = new SoundUI(bundle_path_str, -1, nullptr, sizeof(FAUSTFLOAT) == 8);
 #endif
@@ -452,6 +499,11 @@ void* faust_new(t_symbol* s, short ac, t_atom* av)
     x->m_dsp = NULL;
 #ifdef MC_VERSION
     x->m_mc_dsp = NULL;
+    x->m_mc_inputs = 0;
+    x->m_mc_vector_size = 0;
+#endif
+#ifdef OSCCTRL
+    x->m_oscInterface = NULL;
 #endif
     x->m_json = NULL;
     x->m_mute = false;
@@ -460,7 +512,12 @@ void* faust_new(t_symbol* s, short ac, t_atom* av)
 #ifdef MIDICTRL
     x->m_midi_outlet = outlet_new((t_pxobject*)x, NULL);
     x->m_midiHandler = new max_midi(x->m_midi_outlet);
-    x->m_midiUI = new MidiUI(x->m_midiHandler);
+    {
+        // MidiUI registers itself in GUI::fGuiList, which another instance of
+        // this external may be walking from its audio callback.
+        RecursiveLock gui_lock(gGUIRegistryMutex);
+        x->m_midiUI = new MidiUI(x->m_midiHandler);
+    }
 #endif
     
     faust_allocate(x, nvoices);
@@ -518,6 +575,10 @@ void faust_osc(t_faust* x, t_symbol* s, short ac, t_atom* av)
             return;
         }
         if (systhread_mutex_lock(x->m_mutex) == MAX_ERR_NONE) {
+            
+            // Both the destruction and the construction below mutate the
+            // process-wide GUI registry, which x->m_mutex does not cover.
+            RecursiveLock gui_lock(gGUIRegistryMutex);
             
             delete x->m_oscInterface;
             
@@ -692,7 +753,15 @@ long faust_multichanneloutputs(t_faust* x, long outletindex)
 /*--------------------------------------------------------------------------*/
 void faust_free(t_faust* x)
 {
+#if defined(MIDICTRL) || defined(OSCCTRL)
+    // Keep the GUI registry stable while this instance's entries are removed.
+    RecursiveLock gui_lock(gGUIRegistryMutex);
+#endif
     dsp_free((t_pxobject*)x);
+#ifdef MC_VERSION
+    // The adapter borrows x->m_dsp, so release it first
+    delete x->m_mc_dsp;     x->m_mc_dsp = nullptr;
+#endif
     delete x->m_dsp;        x->m_dsp = nullptr;
     delete x->m_dspUI;      x->m_dspUI = nullptr;
     delete x->m_savedUI;    x->m_savedUI = nullptr;
@@ -737,7 +806,12 @@ void faust_perform64(t_faust* x, t_object* dsp64, double** ins, long numins, dou
             faust_dump_outputs(x);
         }
     #if defined(MIDICTRL) || defined(OSCCTRL)
-        GUI::updateAllGuis();
+        // Do not ever block the audio callback. A concurrent UI reconfiguration
+        // in another instance simply defers this refresh to a later block.
+        TryRecursiveLock gui_lock(gGUIRegistryMutex, std::try_to_lock);
+        if (gui_lock.owns_lock()) {
+            GUI::updateAllGuis();
+        }
     #endif
         systhread_mutex_unlock(x->m_mutex);
     } else {
@@ -754,9 +828,9 @@ void faust_dsp64(t_faust* x, t_object* dsp64, short* count, double samplerate, l
 #ifdef MC_VERSION
     // We need to know the real number of inputs to adapt faust_perform64
     intptr_t inputs = (intptr_t)object_method(dsp64, gensym("getnuminputchannels"), x, 0);
-    delete x->m_mc_dsp;
-    // x->m_mc_dsp will not delete the x->m_dsp object
-    x->m_mc_dsp = new dsp_adapter(x->m_dsp, inputs, x->m_Outputs, maxvectorsize, false);
+    x->m_mc_inputs = long(inputs);
+    x->m_mc_vector_size = maxvectorsize;
+    faust_build_mc_dsp(x);
 #endif
     object_method(dsp64, gensym("dsp_add64"), x, faust_perform64, 0, NULL);
 }

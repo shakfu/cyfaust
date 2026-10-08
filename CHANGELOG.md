@@ -15,6 +15,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [0.2.1]
+
+### Changed
+
+- Built against Faust 2.88.0 (was 2.85.9), both the interpreter `libfaust` and the LLVM JIT `libfaustwithllvm`, with the bundled `include/faust` headers and `resources/libraries` refreshed. The public libfaust API headers are unchanged, so no new bindings were needed
+
+### Fixed
+
+- Fixed every test module failing to import against the 2.88.0 shared `libfaust` with `symbol not found in flat namespace '__Z10isSigBinOpP5CTreePiRS0_S2_'`. Faust 2.88.0 marks the C++ signal API with a new `SIGS_API` macro that defaults to empty, and `libfaust` builds with `-fvisibility=hidden`, so the dylib stopped exporting about 100 functions (`sigAdd`, `isSigBinOp`, ...). Upstream maps the sibling `TLIB_API` onto `LIBFAUST_API` but not `SIGS_API`. `scripts/manage.py` now adds that mapping to faust's `build/CMakeLists.txt` after cloning. Static builds were unaffected
+- Fixed a loud crack during `make test` from `test_cyfaust_soundfile.py::test_interp_create_dsp_factory_from_string2`. Its DSP, `soundfile(..., 0)`, requests no audio channels but still outputs the file's length and rate, so playback sent a constant offset of about 1e5 to the speakers. The test no longer plays audio. Silencing the outputs with `*(0)` was rejected because Faust then optimizes the soundfile out of the program
+
 ## [0.2.0]
 
 ### Added

@@ -60,7 +60,7 @@ PY_VER_MINOR = sys.version_info.minor
 
 DEBUG = True
 
-FAUST_VERSION = "2.85.9"
+FAUST_VERSION = "2.88.0"
 
 # ----------------------------------------------------------------------------
 # type aliases
@@ -550,6 +550,30 @@ class FaustBuilder(Builder):
                 self.fail("git clone faust failed.")
         # Fix invalid gitignore patterns that break scikit-build-core on Linux
         self.fix_gitignore_patterns()
+        self.fix_sigs_api_export()
+
+    def fix_sigs_api_export(self):
+        """Export the C++ signal API from the libfaust shared library.
+
+        Since 2.88 signals.hh marks the API with SIGS_API, which defaults to
+        empty. Under -fvisibility=hidden the dylib then omits isSigBinOp etc.
+        Upstream maps TLIB_API onto LIBFAUST_API but not SIGS_API.
+        """
+        cmakelists = self.sourcedir / "CMakeLists.txt"
+        content = cmakelists.read_text()
+        if "SIGS_API" in content:
+            return
+        anchor = "-DTLIB_API=LIBFAUST_API)"
+        if anchor not in content:
+            self.log.warning("SIGS_API not patched: anchor not in %s", cmakelists)
+            return
+        content = content.replace(
+            anchor,
+            "-DTLIB_API=LIBFAUST_API"
+            " -DSIGS_EXPORT_HEADER=<faust/export.h> -DSIGS_API=LIBFAUST_API)",
+        )
+        cmakelists.write_text(content)
+        self.log.info("mapped SIGS_API onto LIBFAUST_API in %s", cmakelists)
 
     def fix_gitignore_patterns(self):
         """Fix invalid gitignore syntax in Faust source tree.

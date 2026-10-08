@@ -22,7 +22,7 @@ os = library("oscillators.lib");
 no = library("noises.lib"); // for compatible copy/paste out of this file
 
 declare name "Faust Noise Generator Library";
-declare version "1.5.0";
+declare version "1.6.0";
 
 //=============================Functions Reference========================================
 //========================================================================================
@@ -63,7 +63,7 @@ closed source license or any other license if you decide so.
 ************************************************************************
 ************************************************************************/
 
-noise_env(seed) = environment {
+_noise_env(seed) = environment {
 
     RANDMAX = 2147483647.0; // = 2^31-1 = MAX_SIGNED_INT in 32 bits
     
@@ -110,7 +110,7 @@ noise_env(seed) = environment {
 // noise_test = no.noise;
 // ```
 //------------------------
-noise = noise_env(12345).noise;
+noise = _noise_env(12345).noise;
 
 
 //---------------------`(no.)multirandom`--------------------------
@@ -131,7 +131,7 @@ noise = noise_env(12345).noise;
 // multirandom_test = no.multirandom(3);
 // ```
 //-------------------------------------------------------------
-multirandom(N) = noise_env(12345).multirandom(N);
+multirandom(N) = _noise_env(12345).multirandom(N);
 
 
 //-----------------------`(no.)multinoise`------------------------
@@ -153,7 +153,7 @@ multirandom(N) = noise_env(12345).multirandom(N);
 // multinoise_test = no.multinoise(3);
 // ```
 //------------------------------------------------------------
-multinoise(N) = noise_env(12345).multinoise(N);
+multinoise(N) = _noise_env(12345).multinoise(N);
 
 
 //-----------------------`(no.)noises`------------------------
@@ -176,7 +176,7 @@ multinoise(N) = noise_env(12345).multinoise(N);
 // noises_test = no.noises(4, 2);
 // ```
 //----------------------------------------------------------
-noises(N,i) = noise_env(12345).noises(N,i);
+noises(N,i) = _noise_env(12345).noises(N,i);
 
 
 //-----------------------`(no.)dnoise`------------------------
@@ -209,7 +209,7 @@ noises(N,i) = noise_env(12345).noises(N,i);
 // This expression `sx = hslider("seed multiplier",1,1,1000,1)` allows 1000 distinct seed variations.
 // To generate a burst with a fixed length, use `ba.spulse(bLength, t)` (as trigger for the `t` parameter), where `bLength` is the burst duration in samples and `t` is a trigger.
 //----------------------------------------------------------
-dnoise(t,sx) = noise_env(12345).dnoise(t,sx);
+dnoise(t,sx) = _noise_env(12345).dnoise(t,sx);
 
 //-----------------------`(no.)randomseed`------------------------
 // A random seed based on the foreign function `arc4random`
@@ -254,7 +254,7 @@ randomseed = ffunction(int arc4random(), <stdlib.h>, ""), 12345 : select2(1');
 // rnoise_test = no.rnoise;
 // ```
 //------------------------
-rnoise = noise_env(randomseed).noise;
+rnoise = _noise_env(randomseed).noise;
 
 
 //---------------------`(no.)rmultirandom`--------------------------
@@ -277,7 +277,7 @@ rnoise = noise_env(randomseed).noise;
 // rmultirandom_test = no.rmultirandom(3);
 // ```
 //-------------------------------------------------------------
-rmultirandom(N) = noise_env(randomseed).multirandom(N);
+rmultirandom(N) = _noise_env(randomseed).multirandom(N);
 
 
 //-----------------------`(no.)rmultinoise`------------------------
@@ -301,7 +301,7 @@ rmultirandom(N) = noise_env(randomseed).multirandom(N);
 // rmultinoise_test = no.rmultinoise(3);
 // ```
 //------------------------------------------------------------
-rmultinoise(N) = noise_env(randomseed).multinoise(N);
+rmultinoise(N) = _noise_env(randomseed).multinoise(N);
 
 
 //-----------------------`(no.)rnoises`------------------------
@@ -326,7 +326,7 @@ rmultinoise(N) = noise_env(randomseed).multinoise(N);
 // rnoises_test = no.rnoises(4, 1);
 // ```
 //----------------------------------------------------------
-rnoises(N,i) = noise_env(randomseed).noises(N,i);
+rnoises(N,i) = _noise_env(randomseed).noises(N,i);
 
 
 //########################################################################################
@@ -344,9 +344,11 @@ Michon and/or Julius O. Smith III, and are released under the
 
 ************************************************************************/
 
-//---------------------------`(no.)pink_noise`--------------------------
+//---------------------------`(no.)pink_noise`, `(no.)pink_noise_m`--------------------------
 // Pink noise (1/f noise) generator (third-order approximation covering the audio band well).
-// `pink_noise` is a standard Faust function.
+// `pink_noise` is a standard Faust function. `pink_noise_m` is the same
+// generator with its loudness equalized to that of `no.noise` (beware of
+// clipping).
 //
 // #### Usage
 // ```
@@ -398,6 +400,24 @@ Michon and/or Julius O. Smith III, and are released under the
 // #### References
 //
 // * <https://ccrma.stanford.edu/~jos/sasp/Example_Synthesis_1_F_Noise.html>
+//------------------------------------------------------------
+//-------------------------`(no.)pink_filter`-------------------
+// The pinking filter used by `pink_noise`: a third-order IIR
+// approximating a -3 dB/octave spectral rolloff, designed with
+// `invfreqz` in Octave (see the `pink_noise` example, which compares it
+// against `fi.spectral_tilt` alternatives).
+//
+// #### Usage
+//
+// ```
+// _ : pink_filter : _
+// ```
+//
+// #### Test
+// ```
+// no = library("noises.lib");
+// pink_filter_test = no.noise : no.pink_filter;
+// ```
 //------------------------------------------------------------
 pink_filter = fi.iir((0.049922035, -0.095993537, 0.050612699, -0.004408786),
                     (-2.494956002, 2.017265875, -0.522189400));
@@ -463,7 +483,9 @@ with {
 // #### Test
 // ```
 // no = library("noises.lib");
-// lfnoise0_test = no.lfnoise0(10.0);
+// lfnoise0_test = no.lfnoise0(10.1);
+// lfnoiseN_test = no.lfnoiseN(3, 10.1);
+// lfnoise_test = no.lfnoise(10.1);
 // ```
 //------------------------------------------------------------
 lfnoise0(freq) = noise : ba.latch(os.oscrs(freq));
@@ -509,7 +531,7 @@ with {
 };
 
 
-//-------------------------`(no.)velvet_noise_vm`-------------------
+//-------------------------`(no.)velvet_noise`-------------------
 // Velvet noise generator.
 //
 // #### Usage
@@ -543,8 +565,10 @@ with {
 };
 
 
-//----------------------------`(no.)gnoise`------------------------
+//----------------------------`(no.)gnoise`, `(no.)gnoisem`------------------------
 // Approximate zero-mean, unit-variance Gaussian white noise generator.
+// `gnoisem` is the same generator with its loudness equalized to that of
+// `no.noise`.
 //
 // #### Usage
 //
@@ -623,7 +647,7 @@ released under LGPL, STK-4.3, MIT, BSD, or a similar FOSS license.
 //-------------------------------------------------
 declare colored_noise author "Constantinos Odysseas Economou";
 declare colored_noise copyright "Copyright (C) 2022 Constantinos Odysseas Economou <c.economou@sirenfx.io>";
-declare colored_noise license "MIT-style STK-4.3 license";
+declare colored_noise license "LicenseRef-STK-4.3";
 
 colored_noise(N,alpha) = no.noise : fi.dcblocker : fi.spectral_tilt(N,fmin,bw,alpha) : *(uniNorm(alpha * 2)) : max(-1.0) : min(1.0)
 with {
@@ -639,3 +663,10 @@ with {
         d = ba.if(ma.signum(alpha) > 0, 0, -0.7196);
     };
 };
+
+
+// Deprecated backward-compatibility alias, kept for one version and
+// scheduled for removal: the canonical name now carries the internal
+// underscore prefix (see CONTRIBUTING.md, "Variables and identifiers scoping").
+declare noise_env deprecated "internal machinery, renamed _noise_env";
+noise_env = _noise_env;
