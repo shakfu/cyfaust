@@ -25,6 +25,7 @@
 ### cyfaust.signal
 
 - [ ] Add thin wrapper classes around `Signal` for specific signal types
+
 - [ ] Improve docstrings throughout the signal module (~44% coverage vs box's ~98%)
 
 ## Low

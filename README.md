@@ -3,11 +3,17 @@
 The cyfaust project provides a minimal, modular, self-contained, cross-platform [cython](https://github.com/cython/cython) wrapper of the [Faust](https://github.com/grame-cncm/faust) DSP language and the [RtAudio](https://github.com/thestk/rtaudio) cross-platform audio driver.
 
 - **Dual Backends**: Interpreter (default, ~8MB) or LLVM JIT (~33MB, faster execution)
+
 - **Box API**: Fully wrapped with both functional and object-oriented interfaces
+
 - **Signal API**: Fully wrapped with both functional and object-oriented interfaces
+
 - **Platform Support**: macOS, Linux, and Windows
+
 - **Build Variants**: Dynamic (`libfaust.so|dylib`) and static (`libfaust.a|lib`)
+
 - **Faust Version**: `2.85.9`
+
 - **Documentation**: [cyfaust-docs](https://shakfu.github.io/cyfaust/)
 
 ## Installation
@@ -29,7 +35,9 @@ pip install cyfaust-llvm
 - Python-oriented cross-platform implementation of the [Faust](https://faustdoc.grame.fr/manual/embedding/) DSP language
 
 - **Two backend options**:
+
   - **Interpreter** (default): Compact ~8MB binary, good for development and most use cases
+
   - **LLVM JIT**: ~33MB binary with native code compilation for maximum performance
 
 - Provides the following submodules (in the default build):
@@ -85,8 +93,7 @@ driver.stop()
 
 ### Runtime parameters
 
-A DSP's UI controls (sliders, buttons, checkboxes, nentries, bargraphs) can be
-enumerated and driven at runtime:
+A DSP's UI controls (sliders, buttons, checkboxes, nentries, bargraphs) can be enumerated and driven at runtime:
 
 ```python
 from cyfaust.interp import create_dsp_factory_from_string
@@ -104,9 +111,7 @@ dsp.set_param("gain", 0.5)   # address by leaf label or full path; takes effect 
 dsp.get_param("gain")        # 0.5
 ```
 
-Buttons, checkboxes, sliders, and nentries are settable inputs; bargraphs are
-read-only outputs (`set_param` on one raises `ValueError`, as do unknown or
-ambiguous keys).
+Buttons, checkboxes, sliders, and nentries are settable inputs; bargraphs are read-only outputs (`set_param` on one raises `ValueError`, as do unknown or ambiguous keys).
 
 See the [Getting Started](https://shakfu.github.io/cyfaust/getting-started/) guide and [Examples](https://shakfu.github.io/cyfaust/examples/) for more usage patterns including the Box API, Signal API, buffer computation, and serialization.
 
