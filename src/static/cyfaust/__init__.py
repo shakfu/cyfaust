@@ -47,6 +47,7 @@ __all__ = [
     "InterpreterDsp",
     "MetaCollector",
     "RtAudioDriver",
+    "get_audio_device_count",
     "get_dsp_factory_from_sha_key",
     "create_dsp_factory_from_file",
     "create_dsp_factory_from_string",

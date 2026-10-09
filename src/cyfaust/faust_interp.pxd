@@ -147,6 +147,11 @@ cdef extern from "faust/dsp/interpreter-dsp.h":
     interpreter_dsp_factory* readInterpreterDSPFactoryFromBitcodeFile(const string& bit_code_path, string& error_msg)
     bint writeInterpreterDSPFactoryToBitcodeFile(interpreter_dsp_factory* factory, const string& bit_code_path)
 
+cdef extern from "rtaudio/RtAudio.h":
+    cdef cppclass RtAudio:
+        RtAudio() except +
+        unsigned int getDeviceCount()
+
 cdef extern from "faust/audio/rtaudio-dsp.h":
     cdef cppclass rtaudio:
         rtaudio(int srate, int bsize) except +

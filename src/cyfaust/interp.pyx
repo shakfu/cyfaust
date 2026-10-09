@@ -205,6 +205,15 @@ cdef class RtAudioDriver:
         """get number of outputs."""
         return self.ptr.getNumOutputs()
 
+
+def get_audio_device_count() -> int:
+    """Returns the number of audio devices visible to RtAudio."""
+    cdef fi.RtAudio *audio = new fi.RtAudio()
+    try:
+        return audio.getDeviceCount()
+    finally:
+        del audio
+
 ## ---------------------------------------------------------------------------
 ## faust/dsp/interpreter-dsp
 

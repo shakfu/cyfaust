@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- `get_audio_device_count()` returns the number of audio devices RtAudio can see. The CLI `play` tests use it to skip on hosts without audio, such as GitHub's Linux runners.
+
 ## [0.2.1]
 
 ### Changed

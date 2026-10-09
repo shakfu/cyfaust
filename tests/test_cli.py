@@ -8,6 +8,11 @@ from pathlib import Path
 
 import pytest
 
+try:
+    from cyfaust.interp import get_audio_device_count
+except ImportError:
+    from cyfaust.cyfaust import get_audio_device_count
+
 
 # Get the project root directory
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -195,6 +200,7 @@ class TestInfoCommand:
 class TestPlayCommand:
     """Tests for the play command."""
 
+    @pytest.mark.skipif(get_audio_device_count() == 0, reason="no audio device")
     def test_play_short_duration(self, sample_dsp):
         """Test play command with very short duration."""
         # Play for 0.1 seconds - just to verify it starts without error
@@ -203,6 +209,7 @@ class TestPlayCommand:
         assert "Playing" in result.stdout
         assert "Stopped" in result.stdout
 
+    @pytest.mark.skipif(get_audio_device_count() == 0, reason="no audio device")
     def test_play_with_samplerate(self, sample_dsp):
         """Test play command with custom sample rate."""
         result = run_cli("play", str(sample_dsp), "-d", "0.1", "-r", "48000")

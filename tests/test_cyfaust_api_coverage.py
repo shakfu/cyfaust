@@ -11,6 +11,7 @@ try:
     # Dynamic build imports
     from cyfaust.interp import (
         RtAudioDriver,
+        get_audio_device_count,
         InterpreterDspFactory,
         create_dsp_factory_from_string,
         create_dsp_factory_from_file,
@@ -51,6 +52,7 @@ except (ModuleNotFoundError, ImportError):
     # Static build imports
     from cyfaust.cyfaust import (
         RtAudioDriver,
+        get_audio_device_count,
         create_dsp_factory_from_string,
         create_dsp_factory_from_boxes,
         create_dsp_factory_from_signals,
@@ -340,6 +342,12 @@ class TestRtAudioDriver:
         except Exception as e:
             # RtAudio might not be available in all environments
             print(f"Note: RtAudio driver test skipped due to: {e}")
+
+    def test_get_audio_device_count(self):
+        """Device count is a non-negative int on any host."""
+        count = get_audio_device_count()
+        assert isinstance(count, int)
+        assert count >= 0
 
 
 class TestUtilityFunctions:
